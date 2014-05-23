@@ -1,0 +1,4 @@
+加入轉出後戶籍地址欄位 -- by infodaes (2010-09-28)
+
+ALTER TABLE `stud_move` ADD `new_address` VARCHAR(100);
+ 更新成功! 

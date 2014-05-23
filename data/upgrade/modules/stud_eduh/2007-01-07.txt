@@ -1,0 +1,16 @@
+新增符合 XML 3.0格式的心理測驗資料表 stud_psy_tes 失敗 !!,請手動更新下列語法
+ CREATE TABLE `stud_psy_test` (
+  `sn` int(10) unsigned NOT NULL auto_increment,
+  `year` tinyint(4) unsigned NOT NULL default '0',
+  `semester` tinyint(4) unsigned NOT NULL default '0',
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `item` varchar(60) NOT NULL default '',
+  `score` varchar(10) default NULL,
+  `model` varchar(30) NOT NULL default '',
+  `standard` varchar(10) NOT NULL default '',
+  `pr` varchar(10) NOT NULL default '',
+  `explanation` varchar(60) NOT NULL default '',
+  `teacher_sn` int(10) unsigned NOT NULL default '0',
+  `update_time` datetime default NULL,
+  PRIMARY KEY  (`sn`)
+);

@@ -1,0 +1,2 @@
+修改 book 唯一欄位為book_id,bookch1_id -- by jrh (2004-02-26)
+ ALTER TABLE `book` DROP PRIMARY KEY , ADD PRIMARY KEY ( `book_id` ,`bookch1_id`)

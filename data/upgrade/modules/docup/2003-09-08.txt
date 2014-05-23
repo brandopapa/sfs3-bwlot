@@ -1,0 +1,2 @@
+docup ¥[¤J url Äæ¦ì -- by hami (2003-06-08)
+ ALTER TABLE `docup` ADD `url` VARCHAR( 80 ) NOT NULL

@@ -1,0 +1,2 @@
+將有入學紀錄的學生設為入學學校設定的學校 stud_base ==> enroll_school_XX 將有入學紀錄的學生設為入學學校設定的學校 SUCESSED -- by infodaes 2009-07-29 
+SELECT student_sn,move_kind,school FROM stud_move WHERE move_kind=13

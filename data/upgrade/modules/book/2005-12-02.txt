@@ -1,0 +1,15 @@
+修改 book_name 的長度為100個字元 -- by brucelyc (2005-12-02)
+ALTER TABLE `book` CHANGE `book_name` `book_name` varchar(100) DEFAULT NULL; 
+更新成功 
+修改 book_author 的長度為50個字元 -- by brucelyc (2005-12-02)
+ALTER TABLE `book` CHANGE `book_author` `book_author` varchar(50) DEFAULT NULL; 
+更新成功 
+修改 book_maker 的長度為50個字元 -- by brucelyc (2005-12-02)
+ALTER TABLE `book` CHANGE `book_maker` `book_maker` varchar(50) DEFAULT NULL; 
+更新成功 
+修改 book_myear 的長度為10個字元 -- by brucelyc (2005-12-02)
+ALTER TABLE `book` CHANGE `book_myear` `book_myear` varchar(10) DEFAULT NULL; 
+更新成功 
+修改 book_isbn 的長度為13個字元 -- by brucelyc (2005-12-02)
+ALTER TABLE `book` CHANGE `book_isbn` `book_isbn` varchar(13) DEFAULT NULL; 
+更新成功 

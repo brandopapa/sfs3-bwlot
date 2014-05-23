@@ -1,0 +1,2 @@
+2012-08-25修正臺中市406-408 區域名! 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20120825.php

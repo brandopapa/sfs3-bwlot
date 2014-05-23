@@ -1,0 +1,4 @@
+新增轉出入原因欄位 -- by brucelyc (2005-10-07)
+
+ALTER TABLE `stud_move` ADD `reason` text NOT NULL default '';
+ 更新失敗 ! 

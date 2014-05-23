@@ -1,0 +1,2 @@
+2004-09-01 在score_course表中增加c_kind欄位 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040901.php

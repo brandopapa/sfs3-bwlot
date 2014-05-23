@@ -1,0 +1,2 @@
+2003-12-06 重建 course_table 表, 並建 time_table by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20031206.php

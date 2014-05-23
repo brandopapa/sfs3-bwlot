@@ -1,0 +1,2 @@
+增加細目收歸帳戶欄位，以利中商銀CSV匯出失敗 -- by infodaes(2010-08-27)
+ALTER TABLE `charge_detail` ADD `detail_type` TINYINT UNSIGNED DEFAULT '0' NOT NULL AFTER `item_id`;

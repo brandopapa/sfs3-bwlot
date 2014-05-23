@@ -1,0 +1,4 @@
+新增欄位 club_location  -- by smallduh (2012-10-12)
+
+ALTER TABLE `stud_club_base` ADD `club_location` VARCHAR( 20 ) NOT NULL AFTER `club_memo`
+ 更新失敗 ! 

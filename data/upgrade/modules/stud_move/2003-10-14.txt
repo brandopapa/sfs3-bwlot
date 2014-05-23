@@ -1,0 +1,4 @@
+新增轉出入學校欄位 -- by brucelyc (2003-10-14)
+
+ALTER TABLE `stud_move` ADD `school` VARCHAR(40) NOT NULL default '';
+ 更新失敗 ! 

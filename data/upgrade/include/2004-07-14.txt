@@ -1,0 +1,2 @@
+2004-07-14 修正期中成績表內的class_id錯誤 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040714.php

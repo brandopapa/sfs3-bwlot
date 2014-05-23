@@ -1,0 +1,4 @@
+新增週次計算模式  by chi (2007-03-04)
+
+ALTER TABLE `cal_elps_set` ADD `week_mode` TINYINT( 1 ) DEFAULT '0' NOT NULL 
+ 更新失敗 ! 

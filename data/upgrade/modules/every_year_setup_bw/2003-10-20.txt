@@ -1,0 +1,6 @@
+增加導師姓名欄位 -- by brucelyc (2003-10-20)
+
+ALTER TABLE `school_class` ADD `teacher_1` VARCHAR(20) NOT NULL DEFAULT '';
+ 更新失敗 ! 
+ALTER TABLE `school_class` ADD `teacher_2` VARCHAR(20) NOT NULL DEFAULT '';
+ 更新失敗 ! 

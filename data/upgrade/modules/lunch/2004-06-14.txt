@@ -1,0 +1,6 @@
+修改資料表 lunchtb，加入 pN 欄位，取消 pdate 索引值 -- by sula (2004-06-14)
+
+ALTER TABLE `lunchtb` DROP PRIMARY KEY
+ 更新成功 ! 
+ALTER TABLE `lunchtb` ADD `pN` INT( 11 ) DEFAULT '0' NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+ 更新失敗 ! 

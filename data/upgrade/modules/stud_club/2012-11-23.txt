@@ -1,0 +1,6 @@
+新增欄位, 因應學生自我省思與擔任職務-- by smallduh (2012-11-23)
+
+ALTER TABLE `association` ADD `stud_post` varchar(20) NULL
+ 更新成功 ! 
+ALTER TABLE `association` ADD `stud_feedback` text NULL
+ 更新成功 ! 

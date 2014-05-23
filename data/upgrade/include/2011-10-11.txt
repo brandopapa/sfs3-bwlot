@@ -1,0 +1,2 @@
+2011-10-11 補正增加平時成績項目參照功能SQL多了`字元以致無法正確更新問題! 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20111011.php

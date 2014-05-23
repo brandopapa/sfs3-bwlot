@@ -1,0 +1,2 @@
+2012-06-02增加模組認證強度欄位! 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20120602.php

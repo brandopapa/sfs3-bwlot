@@ -1,0 +1,4 @@
+專科教室唯一索引欄新增 -- by infodaes (2006-3-16) 
+
+ 先刪除索引再建立(hami 2013-09-13) ALTER TABLE `course_room` ADD UNIQUE `conflict` ( `date` , `sector` , `room` );
+ 專科教室新增唯一索引欄建立成功 ! 

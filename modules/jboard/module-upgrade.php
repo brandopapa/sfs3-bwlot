@@ -1,0 +1,104 @@
+<?php
+
+// $Id: module-upgrade.php 7779 2013-11-20 16:09:00Z smallduh $
+if (!$CONN) {
+    echo "go away !!";
+    exit;
+}
+
+// 檢查更新否
+// 更新記錄檔路徑
+$upgrade_path = "upgrade/" . get_store_path($path);
+$upgrade_str = set_upload_path("$upgrade_path");
+
+//修正職稱, 以代碼取代 2014-04-23
+$up_file_name = $upgrade_str . "2014-04-23.txt";
+if (!is_file($up_file_name)) {
+	//取出所有文章
+	$sql="select * from jboard_p";
+	$res=$CONN->Execute($sql);
+	while ($row=$res->fetchRow()) {
+	  $teacher_sn=$row['teacher_sn'];
+	  $b_id=$row['b_id'];
+	  $b_title=$row['b_title'];
+		//取得本職稱的id
+		$query = "select teach_title_id from teacher_title where title_name='".$b_title."'";
+		$result = $CONN->Execute($query) or die ($query);
+		if ($result->RecordCount()>0) {
+			$row_title = $result->fetchRow();
+			$b_title=$row_title['teach_title_id'];		//發文者職稱
+	  } else {
+	    $b_title="";
+	  }
+		//update寫入
+	 	$sql_update = "update jboard_p set b_title='$b_title' where b_id='$b_id' ";
+		$CONN->Execute($sql_update) or die ($sql_update);
+	}
+	
+	$fp = fopen($up_file_name, "w");
+	$temp_query = "將發表者的職稱以代碼取代 -- by smallduh (2014-04-23)";
+	fwrite($fp, $temp_query);
+	fclose($fp);
+}
+
+//修正發表者的處室 2014-04-22
+$up_file_name = $upgrade_str . "2014-04-22.txt";
+if (!is_file($up_file_name)) {
+	//取出所有文章
+	$sql="select * from jboard_p";
+	$res=$CONN->Execute($sql);
+	while ($row=$res->fetchRow()) {
+	  $teacher_sn=$row['teacher_sn'];
+	  $b_id=$row['b_id'];
+		//取得發表人的處室
+		$query = "select  a.post_office , b.title_name ,b.room_id,c.name from teacher_post a ,teacher_title b ,teacher_base c  where a.teacher_sn = c.teacher_sn and  a.teach_title_id =b.teach_title_id  and a.teacher_sn='$teacher_sn' ";
+		$result = $CONN->Execute($query) or die ($query);
+		$row_room = $result->fetchRow();
+		$b_unit=$row_room['room_id'];		//發文者所在處室
+		//update寫入
+	 	$sql_update = "update jboard_p set b_unit='$b_unit' where b_id='$b_id' ";
+		$CONN->Execute($sql_update) or die ($sql_update);
+	}
+	
+	$fp = fopen($up_file_name, "w");
+	$temp_query = "修正發表者的處室資料 -- by smallduh (2014-04-22)";
+	fwrite($fp, $temp_query);
+	fclose($fp);
+}
+
+$up_file_name = $upgrade_str . "2014-04-16.txt";
+if (!is_file($up_file_name)) {
+	//增加
+	$query = "ALTER TABLE `jboard_kind` ADD board_is_coop_edit tinyint(1) NOT NULL";
+	$CONN->Execute($query);
+	$fp = fopen($up_file_name, "w");
+	$temp_query = "增加欄位選項「是否允許共編文件」	-- by smallduh (2014-04-16)";
+	fwrite($fp, $temp_query);
+	fclose($fp);
+}
+
+$up_file_name = $upgrade_str . "2013-12-17.txt";
+if (!is_file($up_file_name)) {
+	//增加
+	$query = "ALTER TABLE `jboard_kind` ADD position tinyint(1) NOT NULL";
+	$CONN->Execute($query);
+	$fp = fopen($up_file_name, "w");
+	$temp_query = "分類列表加入「層級」欄位	-- by smallduh (2013-12-17)";
+	fwrite($fp, $temp_query);
+	fclose($fp);
+}
+
+$up_file_name = $upgrade_str . "2013-12-16.txt";
+if (!is_file($up_file_name)) {
+    //增加
+    $query = "ALTER TABLE `jboard_kind` ADD board_is_sort tinyint NOT NULL";
+    $CONN->Execute($query);
+    $fp = fopen($up_file_name, "w");
+    $temp_query = "文章分類設定，加入「是否允許自訂排序」欄位	-- by smallduh (2013-12-16)";
+    fwrite($fp, $temp_query);
+    $query = "ALTER TABLE `jboard_kind` CHANGE `bk_order` `bk_order` INT(5) NOT NULL ";
+    $CONN->Execute($query);
+    $temp_query = "修改 bk_order 分類排序欄位	-- by smallduh (2013-12-16)";
+    fwrite($fp, $temp_query);    
+    fclose($fp);
+}

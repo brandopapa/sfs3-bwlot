@@ -1,0 +1,2 @@
+新增 highest 欄位以紀錄最高分項測驗項目 失敗！ 請手動更新下列語法
+ ALTER TABLE `career_test` ADD `highest` VARCHAR(100) NULL AFTER `content`;

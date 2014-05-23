@@ -1,0 +1,2 @@
+2004-12-01 修正專科教室新增限制節次欄未建立的錯誤 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20041201.php

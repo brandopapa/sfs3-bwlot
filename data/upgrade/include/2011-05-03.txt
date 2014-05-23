@@ -1,0 +1,3 @@
+2011-05-03 更改teach_id為teacher_sn 
+ 增加學生訪談記錄表student_sn、interview欄位 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20110503.php

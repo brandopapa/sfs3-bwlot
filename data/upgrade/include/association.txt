@@ -1,0 +1,2 @@
+增加 association 資料表 (社團參加紀錄用) by infodaes 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/association.php

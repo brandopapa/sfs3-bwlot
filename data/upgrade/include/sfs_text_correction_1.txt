@@ -1,0 +1,2 @@
+修正sfs_text 資料表內   殘障==>身障 (XML3.0定義) by infodaes 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/sfs_text_correction_1.php

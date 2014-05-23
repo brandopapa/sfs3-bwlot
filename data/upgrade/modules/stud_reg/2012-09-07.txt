@@ -1,0 +1,2 @@
+修正父母電子郵件資料長度到varchar(60) SUCESSED stud_domicile ==> fath_email, moth_email, guardian_email Shengche Hsiao 2012-09-07 
+ALTER table stud_domicile MODIFY fath_email varchar(60), MODIFY moth_email varchar(60), MODIFY guardian_email varchar(60)

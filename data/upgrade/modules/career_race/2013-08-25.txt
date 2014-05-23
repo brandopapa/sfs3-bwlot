@@ -1,0 +1,4 @@
+競賽記錄權重欄位weight預設值改為1 -- by infodaes (2013-08-25)
+
+ALTER TABLE `career_race` CHANGE `weight` `weight` FLOAT NOT NULL DEFAULT '1'
+ 更新成功 ! 

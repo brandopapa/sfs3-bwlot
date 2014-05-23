@@ -1,0 +1,2 @@
+在新生資料表中新增學生類別欄位與雙胞胎欄位 -- by chi (2005-06-23)
+ALTER TABLE new_stud ADD bao_id VARCHAR(10) NOT NULL  default '' AFTER stud_kind 

@@ -1,0 +1,2 @@
+2008-03-22 修正stud_addr_zip表內三筆資料, 分別將北屯, 西屯, 南屯改成北屯區, 西屯區及南屯區 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20080322.php

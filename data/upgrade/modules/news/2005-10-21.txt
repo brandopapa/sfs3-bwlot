@@ -1,0 +1,6 @@
+新增發佈者資料欄位 -- by prolin (2005-10-21)
+
+ALTER TABLE `school_board` ADD `poster_name` VARCHAR(20) NOT NULL default '';
+ 更新失敗 ! 
+ALTER TABLE `school_board` ADD `poster_job` VARCHAR(20) NOT NULL default '';
+ 更新失敗 ! 

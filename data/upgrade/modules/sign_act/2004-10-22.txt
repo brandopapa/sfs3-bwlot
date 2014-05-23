@@ -1,0 +1,4 @@
+校際報名新增欄位新增 -- by prolin (2004-10-22)
+
+ ALTER TABLE sign_act_kind ADD school_list  TEXT NOT NULL  ; 
+ 校際報名新增 school_list 欄建立失敗 ! 

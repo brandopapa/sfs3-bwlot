@@ -1,0 +1,2 @@
+更改索引型態成功-- by infodaes (2013-04-18)
+ ALTER TABLE career_self_ponder DROP INDEX `student_sn`,ADD UNIQUE `student_sn` (`student_sn` ,`id`)

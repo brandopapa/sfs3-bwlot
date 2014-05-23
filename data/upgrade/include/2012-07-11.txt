@@ -1,0 +1,2 @@
+2012-07-11修正個資記錄表pipa索引 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20120711.php

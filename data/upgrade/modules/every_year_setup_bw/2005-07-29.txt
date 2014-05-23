@@ -1,0 +1,4 @@
+新增教師代碼欄位 -- by chi (2005-07-29)
+
+ ALTER TABLE `school_class` ADD `tea_sn_1` VARCHAR( 20 ) NOT NULL ,ADD `tea_sn_2` VARCHAR( 20 ) NOT NULL ; 
+ 新增教師代碼欄位建立失敗 ! 

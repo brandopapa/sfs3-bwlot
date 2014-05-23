@@ -1,0 +1,4 @@
+修正primary key -- by brucelyc (2008-10-17)
+
+ALTER TABLE `seme_course_date` ADD primary key (seme_year_seme,class_year)
+ 修正primary key成功 ! 

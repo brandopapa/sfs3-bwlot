@@ -1,0 +1,2 @@
+更新學習描述指令,讓系統可以自動取得各科描述資料 -- by hami (2003-06-08)
+update score_input_col set interface_sn=1,col_text='學習描述文字說明',col_value='',col_type='text',col_fn='get_ss_score_memo',col_ss='y',col_comment='n',col_check='0',col_date=now() where col_sn = '27'

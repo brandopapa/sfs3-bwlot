@@ -1,0 +1,4 @@
+新增教育部學校代碼欄位 -- by infodaes (2009-5-7)
+
+ALTER TABLE `stud_move` ADD `school_id` VARCHAR(6) AFTER `school` ;
+ 更新成功 ! 

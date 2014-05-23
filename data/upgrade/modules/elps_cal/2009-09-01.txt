@@ -1,0 +1,4 @@
+新增學校大事記錄欄位(important)  by infodaes (2009-09-01)
+
+ALTER TABLE `cal_elps` ADD `important` TINYINT DEFAULT '0' NOT NULL ;
+ 更新失敗 ! 

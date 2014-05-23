@@ -1,0 +1,2 @@
+2003-06-24 更新學生學期記錄表 stud_seme , 加入 student_sn 欄位,使 stud_base與stud_seme 兩個表同步,方便資料查詢 - by hami 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20030624.php

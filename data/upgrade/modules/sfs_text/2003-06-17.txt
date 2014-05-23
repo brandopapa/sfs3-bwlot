@@ -1,0 +1,3 @@
+刪除學習領域及科目名稱(已在新成績系統中設定),更改不顯示目錄到程式模組選項 -- by hami (2003-06-17)
+delete from sfs_text where t_kind='course9' or t_kind='subject_kind' 
+update sfs_text set g_id=4 where t_kind='non_display'

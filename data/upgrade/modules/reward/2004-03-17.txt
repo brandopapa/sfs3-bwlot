@@ -1,0 +1,5 @@
+ALTER TABLE `reward` CHANGE `move_year_seme` `reward_year_seme` VARCHAR(6) DEFAULT NULL 更新失敗 !
+ALTER TABLE `reward` CHANGE `move_date` `reward_date` DATE DEFAULT '0000-00-00' 更新失敗 !
+ALTER TABLE `reward` CHANGE `move_c_date` `reward_c_date` DATE DEFAULT '0000-00-00' 更新失敗 !
+ALTER TABLE `reward` ADD `dep_id` BIGINT(20) DEFAULT '0' 更新失敗 !
+ALTER TABLE `reward` ADD `student_sn` INT(10) DEFAULT '0' 更新失敗 !

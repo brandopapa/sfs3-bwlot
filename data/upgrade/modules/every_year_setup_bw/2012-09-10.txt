@@ -1,0 +1,4 @@
+修正 專科教室名稱長度為20  -- by infodaes (2012-09-10)
+
+ALTER TABLE `score_course` CHANGE `room` `room` VARCHAR(20);
+ 修正 專科教室名稱長度為20 成功 ! 

@@ -1,0 +1,4 @@
+專科教室欄位新增 -- by brucelyc (2005-10-13)
+
+ALTER TABLE `course_room` ADD `seme_class` VARCHAR(10) NOT NULL default ''
+ 專科教室新增預約班級欄建立成功 ! 

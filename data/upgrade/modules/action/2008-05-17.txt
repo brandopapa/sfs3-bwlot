@@ -1,0 +1,2 @@
+改變上傳檔案為text型態 actiontb  失敗 !!,請手動更新下列語法
+ ALTER TABLE `actiontb` CHANGE `act_info` `act_info` TEXT NOT NULL 

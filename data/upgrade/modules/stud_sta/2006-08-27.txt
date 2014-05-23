@@ -1,0 +1,2 @@
+新增 student_sn 欄位資料表 stud_sta -- by chi (2006-08-27)
+ ALTER TABLE `stud_sta` ADD `student_sn` INT( 10 ) UNSIGNED DEFAULT '0' NOT NULL AFTER `prove_id` 

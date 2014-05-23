@@ -1,0 +1,4 @@
+新增欄位, 編班時可忽略性別編班-- by smallduh (2013-02-08)
+
+ALTER TABLE `stud_club_base` ADD `ignore_sex` tinyint(1) not NULL default '0'
+ 更新成功 ! 

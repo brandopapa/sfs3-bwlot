@@ -1,0 +1,2 @@
+2010-08-02 把sfs_text 改 系統選項值 唱歌->歌唱 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20100802.php

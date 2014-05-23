@@ -1,0 +1,2 @@
+2007-01-05 加入自動修正檢核表資料表 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20070105.php

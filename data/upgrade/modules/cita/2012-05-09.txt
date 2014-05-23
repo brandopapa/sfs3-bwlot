@@ -1,0 +1,2 @@
+於 cita_data 資料表加入指導者(guidance_name)欄位失敗 -- by infodaes (2012-05-09)
+ALTER TABLE `cita_data` ADD `guidance_name` VARCHAR(20) NULL AFTER `stud_name`

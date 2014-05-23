@@ -1,0 +1,2 @@
+2004-04-19 修改 seme_score_nor 表中 score1~score7 的屬性 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040419.php

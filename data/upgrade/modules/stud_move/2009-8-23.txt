@@ -1,0 +1,4 @@
+加入學校學期異動流水號欄位 -- by infodaes (2009-8-23)
+
+ALTER TABLE `stud_move` ADD `school_move_num` INT AFTER `move_year_seme` ;
+ 更新成功! 

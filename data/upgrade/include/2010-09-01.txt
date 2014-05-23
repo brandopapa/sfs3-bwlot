@@ -1,0 +1,2 @@
+2010-09-01 把data目錄中的php檔刪除 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20100901.php

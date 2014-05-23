@@ -1,0 +1,2 @@
+於 stud_domicile 資料表新增父母畢修業別欄位以符合XML 3.0新增畢修業別欄位失敗 -- by infodaes 2009-02-02 
+ALTER TABLE `stud_domicile` ADD `fath_grad_kind` TINYINT( 4 ) DEFAULT '1' AFTER `fath_education` , ADD `moth_grad_kind` TINYINT( 4 ) DEFAULT '1' AFTER `moth_education` ;

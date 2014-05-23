@@ -1,0 +1,2 @@
+於 stud_base 資料表新增入學時學校欄位 以符合95格式學籍表  增加入學時學校欄位 SUCESSED -- by infodaes 2009-07-28 
+ALTER TABLE stud_base ADD enroll_school VARCHAR(30);

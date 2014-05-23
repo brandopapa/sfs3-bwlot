@@ -1,0 +1,2 @@
+新增學期上課日數資料表年級欄位  -- by hami (2003-09-26)
+ALTER TABLE `seme_course_date` DROP PRIMARY KEY ,ADD PRIMARY KEY ( seme_year_seme, `class_year` ) 

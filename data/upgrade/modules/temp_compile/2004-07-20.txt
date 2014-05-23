@@ -1,0 +1,2 @@
+在新生資料表中新增學藝活動班級, 學藝活動座號欄 -- by brucelyc (2004-05-20)
+alter table new_stud add sure_oth enum('0','1') NOT NULL default '0'

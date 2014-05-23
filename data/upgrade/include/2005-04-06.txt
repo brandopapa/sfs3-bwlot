@@ -1,0 +1,2 @@
+2005-04-06  修正系統調整欄位格式 by hami 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20050406.php

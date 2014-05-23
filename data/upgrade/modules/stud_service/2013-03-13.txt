@@ -1,0 +1,4 @@
+修改資料表 stud_service (記錄主辦單位)-- by smallduh (2013-03-13)
+
+ALTER TABLE stud_service add sponsor varchar(64) 
+ 更新成功 ! 

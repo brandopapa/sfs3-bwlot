@@ -1,0 +1,4 @@
+新增欄位, 是否允許一個學生同時選修多個社團-- by smallduh (2013-09-10)
+
+ALTER TABLE `stud_club_setup` ADD `multi_join` tinyint(1) not NULL default '0'
+ 更新成功 ! 

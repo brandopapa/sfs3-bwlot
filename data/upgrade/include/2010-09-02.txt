@@ -1,0 +1,2 @@
+2010-09-02 增加 stud_move_import、stud_seme_import、stud_seme_final_score資料表 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20100902.php

@@ -1,0 +1,1 @@
+update `reward` set reward_div='1' WHERE reward_div='2' AND reward_kind>0  修正獎懲錯誤資料 成功 !

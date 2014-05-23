@@ -1,0 +1,2 @@
+2006-10-28 在stud_domicile 中補 student_sn 資料 by hami 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20061028.php

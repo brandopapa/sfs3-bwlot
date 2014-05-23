@@ -1,0 +1,2 @@
+2003-12-05 因 course_table 表會再重建, 故本更新取消 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20031205.php

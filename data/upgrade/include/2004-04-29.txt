@@ -1,0 +1,2 @@
+2004-04-29 在 stud_base 表中增加 addr_zip 欄 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040429.php

@@ -1,0 +1,13 @@
+新增資料表 score_eduh_teacher2  -- by smallduh (2012-10-30)
+
+CREATE TABLE IF NOT EXISTS `score_eduh_teacher2` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `year_seme` varchar(4) NOT NULL,
+  `teacher_sn` int(10) unsigned NOT NULL,
+  `class_id` varchar(11) NOT NULL,
+  `update_sn` int(10) unsigned NOT NULL,
+  `update_time` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+	
+ 更新成功 ! 

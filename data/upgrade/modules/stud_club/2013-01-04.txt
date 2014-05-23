@@ -1,0 +1,15 @@
+調整欄位, 開班人數的設定改為分別設定男生和女生人數 
+新增欄位, 設定學生分數必須達此標準才能獲得社團認證
+新增記欄位,可記錄編班記錄
+-- by smallduh (2013-01-04)
+
+ALTER TABLE `stud_club_base` ADD `stud_boy_num` int(3) not NULL
+ 更新成功 ! 
+ALTER TABLE `stud_club_base` ADD `stud_girl_num` int(3) not NULL
+ 更新成功 ! 
+ALTER TABLE `stud_club_base` ADD `pass_score` int(3) not NULL default '60'
+ 更新成功 ! 
+ALTER TABLE `stud_club_setup` ADD `arrange_record` text NULL
+ 更新成功 ! 
+ALTER TABLE `stud_club_setup` ADD `teacher_double` tinyint(1) not NULL default '0'
+ 更新成功 ! 

@@ -1,0 +1,7 @@
+更改紀錄欄位寬度-- by infodaes (2008-01-10)
+ALTER TABLE `stud_psy_test` CHANGE `item` `item` VARCHAR( 60 ) ,
+CHANGE `score` `score` VARCHAR( 40 ) DEFAULT NULL ,
+CHANGE `model` `model` VARCHAR( 40 ) ,
+CHANGE `standard` `standard` VARCHAR( 40 ) ,
+CHANGE `pr` `pr` VARCHAR( 40 ) ,
+CHANGE `explanation` `explanation` VARCHAR( 100 )

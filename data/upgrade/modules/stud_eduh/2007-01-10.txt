@@ -1,0 +1,2 @@
+新增XML 3.0格式的心理測驗資料表 -- 測驗日期 欄位 失敗 !!,請手動更新下列語法
+ ALTER TABLE `stud_psy_test` ADD `test_date` DATE AFTER `semester`

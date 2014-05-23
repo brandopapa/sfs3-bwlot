@@ -1,0 +1,4 @@
+新增 student_sn 欄位 -- by hami (2011-05-06)
+
+ALTER TABLE `grad_stud` ADD `student_sn` INT NOT NULL , ADD INDEX ( `student_sn` ) 
+ 更新成功 ! 

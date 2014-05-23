@@ -1,0 +1,2 @@
+在新生資料表中新增英文姓名、戶籍遷入日期、聯絡住址、聯絡手機欄 -- by smallduh (2012-05-04)
+ALTER TABLE `new_stud` ADD `stud_name_eng` VARCHAR(30) NULL DEFAULT NULL , ADD `addr_move_in` DATE NULL DEFAULT NULL , ADD `stud_addr_2` VARCHAR(200) NULL DEFAULT NULL , ADD `stud_tel_3` VARCHAR(20) NULL DEFAULT NULL 

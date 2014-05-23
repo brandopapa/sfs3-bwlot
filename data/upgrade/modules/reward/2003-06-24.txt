@@ -1,0 +1,2 @@
+ALTER TABLE `reward` CHANGE `reward_base` `reward_base` TEXT DEFAULT NULL 更新成功 !
+ALTER TABLE `reward` CHANGE `reward_reason` `reward_reason` TEXT DEFAULT NULL 更新成功 !

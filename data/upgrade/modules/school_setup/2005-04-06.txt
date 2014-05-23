@@ -1,0 +1,4 @@
+更改學校英文名長度 -- by brucelyc (2005-04-06)
+
+ALTER TABLE `school_base` change `sch_ename` `sch_ename` varchar(60) NOT NULL default ''
+ 更新成功 ! 

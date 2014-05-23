@@ -1,0 +1,8 @@
+取出專科教室名 -- by brucelyc (2004-9-25)
+
+CREATE TABLE if not exists spec_classroom (
+		room_id smallint(5) unsigned NOT NULL auto_increment,
+		room_name varchar(20) NOT NULL default '',
+		enable enum('0','1') NOT NULL default '1',
+		PRIMARY KEY (room_id))
+ 專科教室表建立成功 ! 

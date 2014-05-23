@@ -1,0 +1,1 @@
+ALTER TABLE `reward_exchange` ADD `reward_bonus` FLOAT NOT NULL DEFAULT '1' 增加積分採計欄位reward_bonus資料 成功 !

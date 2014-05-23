@@ -1,0 +1,2 @@
+增加 reward_exchange 資料表(XML交換 期中獎懲暫存用) by infodaes 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/reward_exchange.php

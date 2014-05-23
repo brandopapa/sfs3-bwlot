@@ -1,0 +1,4 @@
+修改資料表 lunchtb，加入 pNutrition 欄位 -- by yjtzeng (2010-05-16)
+
+ALTER TABLE `lunchtb` ADD `pNutrition` VARCHAR( 255 ) NULL;
+ 更新成功 ! 

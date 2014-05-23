@@ -1,0 +1,8 @@
+修正成績設定錯誤 -- by brucelyc (2008-06-12)
+
+update score_setup set rule='優_>=_90
+甲_>=_80
+乙_>=_70
+丙_>=_60
+丁_<_60' where rule like '優_>=90%'
+ 修正成績設定錯誤成功 ! 

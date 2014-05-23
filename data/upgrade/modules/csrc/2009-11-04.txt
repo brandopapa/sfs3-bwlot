@@ -1,0 +1,2 @@
+­×§ïidÄÝ©Ê -- by brucelyc (2009-11-04)
+ALTER TABLE `csrc_record` change `id` `id` int(10) unsigned NOT NULL auto_increment

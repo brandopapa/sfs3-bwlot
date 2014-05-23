@@ -1,0 +1,2 @@
+增加教師證登記日期、教師類別、登記學科領域欄位 master_subjects -- by Infodaes(2011-11-22)
+ALTER TABLE `teacher_base` ADD `certdate` DATE NULL AFTER `teach_check_word`, ADD `certgroup` VARCHAR( 40 ) NULL AFTER `certdate`,ADD `certarea` VARCHAR( 40 ) NULL AFTER `certgroup`;

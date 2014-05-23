@@ -1,0 +1,2 @@
+於健檢醫院醫師記錄表中加入年級 -- by brucelyc (2008-10-14)
+ALTER TABLE `health_checks_doctor` add cyear tinyint(4) not NULL default '0'

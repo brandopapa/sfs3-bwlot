@@ -1,0 +1,2 @@
+2011-08-11 修正縣市合併後郵政區號地址參照表 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20110811.php

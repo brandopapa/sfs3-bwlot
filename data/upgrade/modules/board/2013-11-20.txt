@@ -1,0 +1,9 @@
+改變上傳檔案記錄儲存方式，增加 table: board_files 失敗 !!,請手動更新下列語法
+ 
+create table board_files (
+id int(5) not null auto_increment,
+b_id int(5) not null,
+org_filename text not null,
+new_filename text not null,
+primary key (id)
+) ENGINE=MyISAM;

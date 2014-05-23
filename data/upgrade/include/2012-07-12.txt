@@ -1,0 +1,2 @@
+2012-07-12增加個資記錄表pipa! 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20120712.php

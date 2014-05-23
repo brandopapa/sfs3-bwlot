@@ -1,0 +1,2 @@
+更改新生資料表中的就讀標記種類 -- by brucelyc (2005-07-04)
+ALTER TABLE new_stud change sure_study sure_study enum('0','1','2')

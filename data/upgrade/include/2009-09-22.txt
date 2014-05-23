@@ -1,0 +1,2 @@
+2009-09-22 在login_log_new表新增ip欄位 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20090922.php

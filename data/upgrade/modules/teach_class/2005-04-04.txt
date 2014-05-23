@@ -1,0 +1,2 @@
+§ó·steacher_pconnect  primary key ­È -- by hami (2005-04-04)
+ ALTER TABLE `teacher_connect` ADD PRIMARY KEY ( `teacher_sn` ) 

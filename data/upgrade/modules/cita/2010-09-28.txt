@@ -1,0 +1,2 @@
+於 cita_data 資料表補入 bonus 欄位失敗 -- by infodaes (2010-09-28)
+ALTER TABLE `cita_data` ADD `bonus` TINYINT UNSIGNED NULL

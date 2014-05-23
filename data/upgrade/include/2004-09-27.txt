@@ -1,0 +1,1 @@
+2004-09-27 步學生異動檔 (stud_move) 與學籍記錄檔 (stud_base) 資料 /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040927.php

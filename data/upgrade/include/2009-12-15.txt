@@ -1,0 +1,2 @@
+2009-12-15 把stud_base表addr_zip欄位長度改為5 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20091215.php

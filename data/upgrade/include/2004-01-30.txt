@@ -1,0 +1,2 @@
+2004-01-30 在 course_table 表中增加sections, test_times, ratio_chg, times_chg, year, semester欄位 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040102.php

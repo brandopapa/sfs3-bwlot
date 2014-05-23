@@ -1,0 +1,2 @@
+§ó·steacher_post  primary key ­È -- by hami (2003-06-09)
+ ALTER TABLE `teacher_post` ADD UNIQUE (`teacher_sn`);

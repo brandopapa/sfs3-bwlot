@@ -1,0 +1,9 @@
+各節上課時間表新建 -- by brucelyc (2005-05-10)
+
+CREATE TABLE if not exists section_time (
+		year smallint(5) unsigned NOT NULL default '0',
+		semester enum('1','2') NOT NULL default '1',
+		sector tinyint(2) unsigned NOT NULL default '0',
+		stime varchar(11) NOT NULL default '00:00-00:01',
+		PRIMARY KEY (year,semester,sector))
+ 各節上課時間表建立成功 ! 

@@ -1,0 +1,2 @@
+改變charge_decrease減免記錄欄位percvent為浮點數失敗 -- by infodaes(2010-02-13)
+ALTER TABLE `charge_decrease` CHANGE `percent` `percent` FLOAT DEFAULT '0'

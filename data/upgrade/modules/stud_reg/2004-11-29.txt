@@ -1,0 +1,12 @@
+學生補充資料表格建立 -- by prolin (2004-9-25)
+
+ CREATE TABLE if not exists stud_ext_data (
+  			stud_id varchar(8) NOT NULL default '',
+  			mid int(11) NOT NULL default '0',
+  			ext_data text NOT NULL,
+  			teach_id varchar(10) NOT NULL default '',
+  			ed_date date NOT NULL default '0000-00-00',
+  			update_time timestamp(14) NOT NULL,
+  			PRIMARY KEY  (stud_id,mid)
+			);
+ 學生補充個人資料表建立成功 ! 

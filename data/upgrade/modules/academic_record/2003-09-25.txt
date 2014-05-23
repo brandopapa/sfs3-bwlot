@@ -1,0 +1,8 @@
+評語相關資料表comment,comment_kind,comment_level欄位型態更新 -- by jrh (2003-09-25)
+
+ALTER TABLE `comment_kind` CHANGE `kind_teacher_id` `kind_teacher_id` VARCHAR( 20 ) DEFAULT NULL
+ 更新成功 ! 
+ALTER TABLE `comment_level` CHANGE `level_teacher_id` `level_teacher_id` VARCHAR( 20 ) DEFAULT NULL
+ 更新成功 ! 
+ALTER TABLE `comment` CHANGE `teacher_id` `teacher_id` VARCHAR( 20 ) DEFAULT NULL 
+ 更新成功 ! 

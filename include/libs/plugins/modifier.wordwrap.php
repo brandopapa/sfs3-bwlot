@@ -1,0 +1,28 @@
+<?php
+/**
+ * Smarty plugin
+ * @package Smarty
+ * @subpackage plugins
+ */
+//$Id: modifier.wordwrap.php 6117 2010-09-10 15:13:53Z brucelyc $
+/**
+ * Smarty wordwrap modifier plugin
+ *
+ * Type:     modifier<br>
+ * Name:     wordwrap<br>
+ * Purpose:  wrap a string of text at a given length
+ * @link http://smarty.php.net/manual/en/language.modifier.wordwrap.php
+ *          wordwrap (Smarty online manual)
+ * @author   Monte Ohrt <monte at ohrt dot com>
+ * @param string
+ * @param integer
+ * @param string
+ * @param boolean
+ * @return string
+ */
+function smarty_modifier_wordwrap($string,$length=80,$break="\n",$cut=false)
+{
+    return wordwrap($string,$length,$break,$cut);
+}
+
+?>

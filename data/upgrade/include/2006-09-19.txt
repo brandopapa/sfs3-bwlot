@@ -1,0 +1,2 @@
+2006-09-19 將stud_seme_score_oth,stud_seme_rew,stud_seme_score_nor三資料表新增點由academic_record移至系統 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20060919.php

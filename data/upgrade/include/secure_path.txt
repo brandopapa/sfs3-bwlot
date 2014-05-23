@@ -1,0 +1,2 @@
+刪除 data 下 Module_Path.php by hami 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/secure_path.php

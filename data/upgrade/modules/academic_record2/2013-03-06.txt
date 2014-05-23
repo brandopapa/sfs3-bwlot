@@ -1,0 +1,2 @@
+刪除 seme_year_seme 誤值 991,992等三碼長度的資料 -- by smallduh (2013-03-06)
+delete FROM `stud_seme_rew` WHERE length( seme_year_seme ) =3;

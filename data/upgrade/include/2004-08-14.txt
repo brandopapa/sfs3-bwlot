@@ -1,0 +1,2 @@
+2004-08-14 修正學成異動表內的student_sn成正確值 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20040814.php

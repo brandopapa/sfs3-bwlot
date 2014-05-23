@@ -1,0 +1,8 @@
+新增欄位, 可調整導師或社團指導老師能否看到學生成績或自我省思-- by smallduh (2012-11-28)
+
+ALTER TABLE `stud_club_setup` ADD `show_score` tinyint(1) not NULL
+ 更新失敗 ! 
+ALTER TABLE `stud_club_setup` ADD `show_feedback` tinyint(1) not NULL
+ 更新失敗 ! 
+ALTER TABLE `stud_club_setup` ADD `show_teacher_feedback` tinyint(1) not NULL
+ 更新失敗 ! 

@@ -1,0 +1,2 @@
+2007-01-14 合併檢核表文字 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20070114.php

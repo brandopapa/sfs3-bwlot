@@ -1,0 +1,2 @@
+score_reward欄位改為浮點數 失敗 -- by infodaes (2012-10-23)
+ALTER TABLE `12basic_tcntc` CHANGE `score_reward` `score_reward` FLOAT NULL

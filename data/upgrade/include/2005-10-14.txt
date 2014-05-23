@@ -1,0 +1,2 @@
+2005-10-14 在戶籍資料中加入student_sn by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20051014.php

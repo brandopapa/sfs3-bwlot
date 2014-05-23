@@ -1,0 +1,2 @@
+於 charge_item 資料表補入 cooperate 欄位失敗 -- by brucelyc (2007-03-18)
+ALTER TABLE `charge_item` ADD `cooperate` TINYINT(4)

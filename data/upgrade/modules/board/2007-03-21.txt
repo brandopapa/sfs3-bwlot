@@ -1,0 +1,2 @@
+改變上傳檔案為text型態 board_p 成功-- by infodaes (2007-03-21)
+ ALTER TABLE `board_p` CHANGE `b_upload` `b_upload` TEXT NOT NULL 

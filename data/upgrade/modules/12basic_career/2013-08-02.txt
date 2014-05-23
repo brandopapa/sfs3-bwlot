@@ -1,0 +1,2 @@
+增加 競賽積分權重欄位 成功-- by infodaes (2013-04-18)
+ ALTER TABLE `career_race` ADD `race_bonus` FLOAT NOT NULL DEFAULT '1';

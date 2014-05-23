@@ -1,0 +1,4 @@
+競賽記錄增加核准字號及權重欄位 -- by chiming (2013-07-20)
+
+ALTER TABLE `career_race` ADD `word` VARCHAR( 100 ) NOT NULL AFTER `memo` , ADD `weight` FLOAT NOT NULL AFTER `word` 
+ 更新成功 ! 

@@ -1,0 +1,2 @@
+2003-12-30 建立 name_list 表 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20031230.php

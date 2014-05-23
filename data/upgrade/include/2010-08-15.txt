@@ -1,0 +1,2 @@
+2010-08-15 把stud_domicile表的主鍵改為student_sn 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20100815.php

@@ -1,0 +1,1 @@
+重新升級 teacher_base stud_base 加上 ldap_password 欄位: /home/sfs6/dev.sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20130920.php

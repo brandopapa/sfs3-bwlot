@@ -1,0 +1,2 @@
+2012-06-01增加自然人憑證序號欄位! 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20120601.php

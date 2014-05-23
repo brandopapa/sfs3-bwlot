@@ -1,0 +1,4 @@
+更改 teacher_title_id 為 AUTO_INCREMENT -- by hami (2013-08-29)
+
+ALTER TABLE `teacher_title` CHANGE `teach_title_id` `teach_title_id` int UNSIGNED NOT NULL AUTO_INCREMENT
+ 更新成功 ! 

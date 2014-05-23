@@ -1,0 +1,2 @@
+2003-11-28 更新 reward 表 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20031128.php

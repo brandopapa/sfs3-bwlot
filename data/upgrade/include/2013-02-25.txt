@@ -1,0 +1,2 @@
+2013-02-25去除`stud_base`.stud_study_year欄位的UNSIGNED屬性 
+ 更新檔位置: /home/sfs6/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20130225.php

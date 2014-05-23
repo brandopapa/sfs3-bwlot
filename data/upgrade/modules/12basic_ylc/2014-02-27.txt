@@ -1,0 +1,1 @@
+ALTER TABLE `12basic_ylc` CHANGE `disability_id` `disability_id` VARCHAR(3) NOT NULL 修改身心障礙欄位型態 disability_id 成功 -- by kwcmath (2014-02-27) !

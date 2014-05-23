@@ -1,0 +1,2 @@
+docup 的 docup_owerid 欄位大小原先為 6 修改為 20 ，以解決 session_log_id 超過 6 個字元時無法下載檔案的問題-- by jrh (2003-10-08)
+ ALTER TABLE `docup` CHANGE `docup_owerid` `docup_owerid` VARCHAR( 20 ) NOT NULL

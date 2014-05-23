@@ -1,0 +1,2 @@
+加入學期上課日數資料表 seme_course_date 失敗 !!,請手動更新下列語法
+CREATE TABLE seme_course_date (seme_year_seme varchar(6) NOT NULL default '', days tinyint(3) unsigned NOT NULL default '0', UNIQUE KEY seme_year_seme (seme_year_seme))  COMMENT='學期上課日數'

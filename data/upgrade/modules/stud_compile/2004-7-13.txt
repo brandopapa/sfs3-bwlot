@@ -1,0 +1,2 @@
+已加入 bs 欄位 -- by hami (2004-07-13)
+alter table stud_compile add bs varchar(11)

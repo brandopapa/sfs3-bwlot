@@ -1,0 +1,2 @@
+2007-04-03 在學生學期獎懲紀錄表中加入student_sn欄位 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20070403.php

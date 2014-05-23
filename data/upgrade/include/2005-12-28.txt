@@ -1,0 +1,2 @@
+2005-12-28 將teacher_base中的login_pass改為以md5雜湊運算 by brucelyc 
+ 更新檔位置: /home/bwsh_sfs3/sfs3.bwsh.blisswisdom.org/include/upgrade_files/up20051228.php

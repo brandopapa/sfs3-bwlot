@@ -1,0 +1,350 @@
+<?php
+// $Id: ask_export3.php 7132 2013-02-21 07:56:52Z infodaes $
+
+include "config.php";
+include "../../include/sfs_case_score.php";
+sfs_check();
+
+//學校資訊
+$school_id=$SCHOOL_BASE["sch_id"];
+$school_tel=$SCHOOL_BASE["sch_phone"];
+$school_fax=$SCHOOL_BASE["sch_fax"];
+
+//依教育部代碼判定年制別
+$school_yg=$SCHOOL_BASE["sch_id"][3];
+switch ($school_yg) {
+  case 0: $school_yg='四'; break;
+  case 1: $school_yg='四'; break;
+  case 2: $school_yg='二'; break;
+  case 3: $school_yg='三'; break;
+  case 4: $school_yg='三'; break;
+  case 5: $school_yg='三'; break;
+  case 6: $school_yg='六'; break;
+  case 7: $school_yg='六'; break;
+  case 8: $school_yg='六'; break;
+  default: $school_yg='';
+}
+
+//$school_area=$SCHOOL_BASE["sch_sheng"]."政府";
+
+//今天的日期
+$today=(date("Y")-1911).date("年m月d日");
+
+//學期別
+$work_year_seme= ($_POST[work_year_seme])?$_POST[work_year_seme]:$_GET[work_year_seme];
+if($work_year_seme=='')        $work_year_seme = sprintf("%03d%d",curr_year(),curr_seme());
+$work_year=substr($work_year_seme,0,3)+0;
+
+//取得前一學期的代號
+$seme_list=get_class_seme();
+$seme_key_list=array_keys($seme_list);
+$pre_seme=$seme_key_list[(array_search($work_year_seme,$seme_key_list))+1];
+$seme_array=array($pre_seme);
+$sn_array=array();
+
+//列高與列數
+$height= ($_POST[height])?$_POST[height]:$_GET[height];
+if($height=="") $height=33;
+
+$rows= ($_POST[rows])?$_POST[rows]:$_GET[rows];
+if($rows=="") $rows=20;
+
+//換頁html碼
+$newpage="<P STYLE='page-break-before: always;'>";
+
+
+//簽章列
+$sign="承辦人：　　　　　出納： 　　　　　會計： 　　　　主任：　　　　　　校長：";
+
+// 取出班級陣列
+$class_base = class_base($work_year_seme);
+//$class_teacher=get_class_teacher();
+
+//取得學年學期陣列
+$year_seme_arr = get_class_seme();
+
+//取得學生基本資料
+$sql_select="select a.student_sn,left(a.class_num,length(a.class_num)-2) as class_id,a.dollar,b.stud_id,b.stud_name,b.stud_person_id,b.stud_sex,b.stud_tel_1,b.stud_addr_1,b.stud_birthday,c.guardian_name,c.fath_education,c.moth_education,c.fath_occupation,c.moth_occupation from grant_aid a,stud_base b,stud_domicile c where a.year_seme='$work_year_seme' AND a.type='$type' AND a.student_sn=b.student_sn AND a.student_sn = c.student_sn order by class_num";
+$res=$CONN->Execute($sql_select) or user_error("身分別紀錄讀取失敗！<br>$sql_select",256);
+$student_arr=array();
+while(!$res->EOF) {
+	$student_sn=$res->fields['student_sn'];
+	
+	$student_arr[$student_sn]['class_id']=$res->fields['class_id'];
+	$student_arr[$student_sn]['stud_id']=$res->fields['stud_id'];
+	$student_arr[$student_sn]['stud_name']=$res->fields['stud_name'];
+	$student_arr[$student_sn]['stud_person_id']=$res->fields['stud_person_id'];
+	$student_arr[$student_sn]['dollar']=$res->fields['dollar'];
+	$student_arr[$student_sn]['stud_sex']=$res->fields['stud_sex'];
+	$student_arr[$student_sn]['stud_tel_1']=$res->fields['stud_tel_1'];
+	$student_arr[$student_sn]['stud_addr_1']=$res->fields['stud_addr_1'];
+	$student_arr[$student_sn]['fath_education']=$res->fields['fath_education'];
+	$student_arr[$student_sn]['moth_education']=$res->fields['moth_education'];
+	$student_arr[$student_sn]['fath_occupation']=$res->fields['fath_occupation'];
+	$student_arr[$student_sn]['moth_occupation']=$res->fields['moth_occupation'];
+	$student_arr[$student_sn]['stud_birthday']=$res->fields['stud_birthday'];
+	$student_arr[$student_sn]['guardian_name']=$res->fields['guardian_name'];
+
+	$res->MoveNext();
+}
+
+//加入類別屬性資料
+$sql_select="select student_sn,clan,area from stud_subkind where type_id='".$target_id[$type]."'";
+$res=$CONN->Execute($sql_select) or user_error("身分屬性讀取失敗！<br>$sql_select",256);
+while(!$res->EOF) {
+	$student_sn=$res->fields['student_sn'];
+	if(array_key_exists($student_sn,$student_arr)){	
+		$student_arr[$student_sn]['clan']=$res->fields['clan'];
+		$student_arr[$student_sn]['area']=$res->fields['area'];
+	}
+	$res->MoveNext();
+}
+
+//echo '<PRE>';
+//print_r($student_arr);
+//echo '</PRE>';
+
+$student_arr_len=count($student_arr);
+
+$data="<center><font size='5' face='標楷體'>[表二]    財團法人臺灣學產基金會設置清寒學生助學金學生名冊</font><BR><BR>
+  <p>學校代碼：[ $school_id ] 　　學校名稱：[ $school_long_name ] 　　　申請年度：[ $work_year ]
+<table border='1' width='90%' cellspacing='0' cellpadding='0' bordercolordark='#008000' bordercolorlight='#008000'>
+<tr><td align=center bgcolor=$hint_color>編號</td>
+        <td align=center bgcolor=$hint_color>姓名</td>
+        <td align=center bgcolor=$hint_color>身份證號碼</td>
+        <td align=center bgcolor=$hint_color>年制</td>
+        <td align=center bgcolor=$hint_color>班級</td>
+        <td align=center bgcolor=$hint_color>七大領域</td>
+        <td align=center bgcolor=$hint_color>日常表現</td>
+        <td align=center bgcolor=$hint_color>備　　　　　　　註</td></tr>";
+
+foreach($student_arr as $key=>$value){
+	$class_id=$value['class_id'];
+	$stud_name=$value['stud_name'];
+	$stud_id=$value['stud_id'];
+	$stud_person_id=$value['stud_person_id'];
+	$stud_sex=$value['stud_sex'];
+	$stud_tel_1=$value['stud_tel_1'];
+	$stud_addr_1=$value['stud_addr_1'];
+	$fath_education=$value['fath_education'];
+	$moth_education=$value['moth_education'];
+	$fath_occupation=$value['fath_occupation'];
+	$moth_occupation=$value['moth_occupation'];
+	$stud_birthday=$value['stud_birthday'];
+	$guardian_name=$value['guardian_name'];
+
+	$clan=$value['clan'];
+	$area=$value['area'];
+	$dollar=$value['dollar'];
+	$student_sn=$key;
+	$no=$no+1;
+	$num_count++;
+        $total=$total+$dollar;
+        //取得上學期成績
+        $sn_array[0]=$student_sn;
+        $sub_score=cal_fin_score($sn_array,$seme_array);
+        $nor_score=cal_fin_nor_score($sn_array,$seme_array);
+        //準備名冊
+        $data.="<tr>
+        <td align=center>$num_count</td>
+        <td align=center>$stud_name</td>
+        <td align=center>$stud_person_id</td>
+        <td align=center>$school_yg</td>
+        <td align=center>$class_base[$class_id]</td>
+        <td align=center>".$sub_score[$student_sn][avg][score]."</td>
+        <td align=center>".$nor_score[$student_sn][avg][score]."</td>
+        <td>[ A ]</td>
+        </tr>";
+        $main.="
+<table border='1' width='100%' cellspacing='0' cellpadding='0' bordercolordark='#008000' bordercolorlight='#008000'>
+  <tr>
+    <td width='100%' colspan='21' height='38' align='center'>
+      <p align='center'><font size='4' face='標楷體'>[表一]    財團法人臺灣學產基金會設置清寒學生助學金申請書　　　　　　申請日期：[ $today ]&nbsp;</font></td>
+  </tr>
+  <tr>
+    <td width='4%' rowspan='2' height='64' align='center' bgcolor=$hint_color>就讀學校</td>
+    <td width='18%' colspan='8' height='19' align='center' bgcolor=$hint_color><font size='2'>(學校全銜)</font></td>
+    <td width='15%' height='19' align='center' colspan='4' bgcolor=$hint_color><font size='2'>年制別</font></td>
+    <td width='17%' height='19' align='center' colspan='3' bgcolor=$hint_color><font size='2'>班級/科系</font></td>
+    <td width='5%' height='132' align='center' rowspan='4' bgcolor=$hint_color>前學期成績</td>
+    <td width='10%' height='64' align='center' rowspan='2' valign='middle' bgcolor=$hint_color>
+      <p align='center' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'>學業
+      <p align='center' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='1'>(七大領域)</font></td>
+    <td width='10%' height='64' align='center' rowspan='2' valign='middle' bgcolor=$hint_color>
+      <p align='center' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'>操性
+      <p align='center' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='1'>(日常表現)</font></td>
+    <td width='5%' height='64' align='center' rowspan='2' bgcolor=$hint_color>校長簽章</td>
+    <td width='18%' height='64' align='center' rowspan='2'>
+      <p>　</td>
+  </tr>
+  <tr>
+    <td width='18%' height='43' align='center' colspan='8'>$school_long_name</td>
+    <td width='15%' height='43' align='center' colspan='4'>$school_yg</td>
+    <td width='17%' height='43' align='center' colspan='3'>$class_base[$class_id]</td>
+  </tr>
+  <tr>
+    <td width='4%' height='66' align='center' rowspan='2' bgcolor=$hint_color>申請人</td>
+    <td width='1%' height='16' align='center' colspan='3' bgcolor=$hint_color><font size='2'>姓名</font></td>
+    <td width='17%' height='16' align='center' colspan='4' bgcolor=$hint_color><font size='2'>身份證號碼</font></td>
+    <td width='15%' height='16' align='center' colspan='3' bgcolor=$hint_color><font size='2'>出生年月日</font></td>
+    <td width='19%' height='16' align='center' colspan='3' bgcolor=$hint_color><font size='2'>電話</font></td>
+    <td width='10%' height='16' align='center' colspan='2' bgcolor=$hint_color><font size='2'>學生簽章</font></td>
+    <td width='10%' height='66' align='center' rowspan='2'>".$sub_score[$student_sn][avg][score]."</td>
+    <td width='10%' height='66' align='center' rowspan='2'>".$nor_score[$student_sn][avg][score]."</td>
+    <td width='5%' height='66' align='center' rowspan='2' bgcolor=$hint_color>承辦單位主管簽章</td>
+    <td width='18%' height='66' align='center' rowspan='2'>　</td>
+  </tr>
+  <tr>
+    <td width='1%' height='48' align='center' colspan='3'>$stud_name</td>
+    <td width='17%' height='48' align='center' colspan='4'>$stud_person_id</td>
+    <td width='15%' height='48' align='center' colspan='3'>$stud_birthday</td>
+    <td width='19%' height='48' align='center' colspan='3'>$stud_tel_1</td>
+    <td width='10%' height='48' align='center' colspan='2'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='1' align='center' bgcolor=$hint_color>家長姓名</td>
+    <td width='12%' height='1' align='center' colspan='3'>$guardian_name</td>
+    <td width='3%' height='1' align='center' colspan='2' bgcolor=$hint_color>
+      <p align='center' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'>聯絡</p>
+      <p align='center' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'>地址</p>
+    </td>
+    <td width='23%' height='1' align='center' colspan='7'>$stud_addr_1</td>
+    <td width='7%' height='1' align='center' colspan='2' bgcolor=$hint_color>居住現況</td>
+    <td width='10%' height='1' align='center'>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>&nbsp;□租屋</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>&nbsp;□自有房屋</font></td>
+    <td width='5%' height='192' align='center' rowspan='9' bgcolor=$hint_color>學校審查意見</td>
+    <td width='27%' height='192' align='center' colspan='2' rowspan='9'>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>一、清寒條件：</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　□持低收入戶證明者。</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　[本證明文件須與本</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　申請書一同寄送到承</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　辦學校]</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>二、  □未申請本助學金實</font></p>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　施要點所列之十二項</font></p>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　補助之其中一項</font></p>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>三、  □七大領域與日常表</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　　現成績均達60分以上</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>四、學校初審小組審查決議：</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>　　□合格</font>
+      <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>&nbsp;</font><font size='2'>　　□不合格&nbsp;</font></td>
+    <td width='4%' height='1' align='center' bgcolor=$hint_color>承辦單位</td>
+    <td width='12%' height='1' align='center'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='192' align='center' rowspan='8' bgcolor=$hint_color>家庭狀況</td>
+    <td width='4%' height='1' align='center' rowspan='2' bgcolor=$hint_color>親屬稱謂</td>
+    <td width='15%' height='1' align='center' rowspan='2' colspan='4' bgcolor=$hint_color>姓名</td>
+    <td width='4%' height='1' align='center' rowspan='2' bgcolor=$hint_color>存歿</td>
+    <td width='5%' height='1' align='center' rowspan='2' colspan='2' bgcolor=$hint_color>年齡</td>
+    <td width='12%' height='1' align='center' colspan='4' bgcolor=$hint_color>健康狀況</td>
+    <td width='7%' height='1' align='center' rowspan='2' colspan='2' bgcolor=$hint_color><font size='2'>就學就業狀況</font></td>
+    <td width='10%' height='1' align='center' rowspan='2' bgcolor=$hint_color>每月收入
+    </td>
+    <td width='5%' height='1' align='center' rowspan='2' bgcolor=$hint_color>承辦人員</td>
+    <td width='13%' height='1' align='center' rowspan='2'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='7' align='center' bgcolor=$hint_color><font size='2'>正常</font></td>
+    <td width='4%' height='7' align='center' colspan='2' bgcolor=$hint_color><font size='2'>疾病</font></td>
+    <td width='4%' height='7' align='center' bgcolor=$hint_color><font size='2'>殘障</font></td>
+  </tr>
+  <tr>
+    <td width='4%' height='34' align='center'>　</td>
+    <td width='15%' height='34' align='center' colspan='4'>　</td>
+    <td width='4%' height='34' align='center'>　</td>
+    <td width='5%' height='34' align='center' colspan='2'>　</td>
+    <td width='5%' height='34' align='center'>　</td>
+    <td width='6%' height='34' align='center' colspan='2'>　</td>
+    <td width='5%' height='34' align='center'>　</td>
+    <td width='7%' height='34' align='center' colspan='2'>　</td>
+    <td width='10%' height='34' align='center'>　</td>
+    <td width='5%' height='99' align='center' rowspan='3' bgcolor=$hint_color>聯絡電話</td>
+    <td width='13%' height='99' align='center' rowspan='3'>$school_tel</td>
+  </tr>
+  <tr>
+    <td width='4%' height='31' align='center'>　</td>
+    <td width='15%' height='31' align='center' colspan='4'>　</td>
+    <td width='4%' height='31' align='center'>　</td>
+    <td width='5%' height='31' align='center' colspan='2'>　</td>
+    <td width='5%' height='31' align='center'>　</td>
+    <td width='6%' height='31' align='center' colspan='2'>　</td>
+    <td width='5%' height='31' align='center'>　</td>
+    <td width='7%' height='31' align='center' colspan='2'>　</td>
+    <td width='10%' height='31' align='center'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='15%' height='30' align='center' colspan='4'>　</td>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='5%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='6%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='7%' height='30' align='center' colspan='2'>　</td>
+    <td width='10%' height='30' align='center'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='15%' height='30' align='center' colspan='4'>　</td>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='5%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='6%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='7%' height='30' align='center' colspan='2'>　</td>
+    <td width='10%' height='30' align='center'>　</td>
+    <td width='5%' height='94' align='center' rowspan='3' bgcolor=$hint_color>級任導師簽章</td>
+    <td width='13%' height='94' align='center' rowspan='3'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='15%' height='30' align='center' colspan='4'>　</td>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='5%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='6%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='7%' height='30' align='center' colspan='2'>　</td>
+    <td width='10%' height='30' align='center'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='15%' height='30' align='center' colspan='4'>　</td>
+    <td width='4%' height='30' align='center'>　</td>
+    <td width='5%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='6%' height='30' align='center' colspan='2'>　</td>
+    <td width='5%' height='30' align='center'>　</td>
+    <td width='7%' height='30' align='center' colspan='2'>　</td>
+    <td width='10%' height='30' align='center'>　</td>
+  </tr>
+  <tr>
+    <td width='4%' height='100' align='center' bgcolor=$hint_color>家庭狀況描述</td>
+    <td width='49%' height='100' align='center' colspan='15'>　</td>
+    <td width='48%' height='100' align='left' colspan='5' valign='top'>&nbsp;導師加註意見並查證屬實：</td>
+  </tr>
+  <tr>
+    <td width='4%' height='1' align='center' valign='middle' bgcolor=$hint_color>注意事項</td>
+    <td width='96%' height='1' align='center' colspan='50' valign='middle'>
+        <li>
+          <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>上表各欄，辦理手續不完備者概不受理，家庭狀況之親屬如不足填載可加浮籤。</font></li>
+        <li>
+          <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>申請條件：本($work_year)學年度祇限低收入戶(不包括中低收入戶)身份，且前學期成績高中職以上學業、操行、體育者，可自上學期起申請。</font></li>
+        <li>
+          <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>申請方式：每學期開學初，依就讀學校公佈期限，詳填申請書檢附低收入戶證明影本，向學校提出申請。</font></li>
+        <li>
+          <p align='left' style='line-height: 100%; text-indent: 0; margin-top: 0; margin-bottom: 0'><font size='2'>審查結果經核定發給助學金者，如於學期結束前尚未被通知領取，請洽各校承辦人員查詢。</font></li>
+      </td>
+  </tr>
+</table>";
+
+       if($no<>$student_arr_len) $main.=$newpage;
+}
+$data.="</table><BR>全校學生數：　　　　　人。選送人數  低收入戶：[ $num_count ]人。　　　　　申請日期：[ $today ]</CENTER>";
+$main.=$newpage.$data."";
+
+echo $main;
+echo "\n<script language=\"Javascript\"> alert (\"本報表預設印表格式為A4橫印，印表前請記得設定喔！\")</script>";
+?>
