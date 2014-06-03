@@ -1,5 +1,5 @@
 <?php
-// $Id: normal.php 7977 2014-04-10 07:34:47Z infodaes $
+// $Id: normal.php 8050 2014-05-28 06:35:52Z infodaes $
 /*引入學務系統設定檔*/
 include "config.php";
 include "./module-upgrade.php";
@@ -45,7 +45,7 @@ $creat_table_sql="
 	enable tinyint(1) unsigned NOT NULL default '1', 	 
 	freq int(10) unsigned NOT NULL default '0', 	 
 	PRIMARY KEY  (`sn`),
-	KEY `teach_id` (`teach_id`,`stud_sn`)
+	KEY `teach_id` (`teach_id`,`stud_sn`),
 	KEY `elective_id` (`elective_id`))"; 	 
 $rs=$CONN->Execute($creat_table_sql);
 

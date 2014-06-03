@@ -513,14 +513,13 @@ function count_student_score_fault($sn_array)
 	}
 
 	foreach($fault as $student_sn=>$data){
-			//日常生活表現判定積分
-			if($data['flag_peccadillo']>0) $fault[$student_sn]['bonus']=0; else {
-					if($data['fault_count']>=9) $fault[$student_sn]['bonus']=$reward_score[9]; //累積至大功(9支嘉獎以上)
-							elseif($data['fault_count']>=3) $fault[$student_sn]['bonus']=$reward_score[3];  //累積至小功(3支嘉獎以上)
-							elseif($data['fault_count']>=1) $fault[$student_sn]['bonus']=$reward_score[1];  //有嘉獎紀錄
-							elseif($data['fault_count']==0) $fault[$student_sn]['bonus']=$fault_none;  //無懲處紀錄
-							else $fault[$student_sn]['bonus']=0;
-			}
+		//日常生活表現判定積分
+		if($data['flag_peccadillo']>0) $fault[$student_sn]['bonus']=0; else {
+						if($data['fault_count']>=9) $fault[$student_sn]['bonus']=$reward_score[9]; //累積至大功(9支嘉獎以上)
+										elseif($data['fault_count']>=3) $fault[$student_sn]['bonus']=$reward_score[3];  //累積至小功(3支嘉獎以上)
+										elseif($data['fault_count']>=1) $fault[$student_sn]['bonus']=$reward_score[1];  //有嘉獎紀錄
+		}
+		if($data['fault_count']<0) $fault[$student_sn]['bonus']=0; else $fault[$student_sn]['bonus']=max($fault_none,$fault[$student_sn]['bonus']);  //功過相抵後無懲處紀錄			
 	}
 	return $fault;
 }

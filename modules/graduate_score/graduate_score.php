@@ -1,5 +1,5 @@
 <?php
-// $Id: graduate_score.php 8029 2014-05-13 03:24:05Z infodaes $
+// $Id: graduate_score.php 8051 2014-05-29 00:40:22Z kwcmath $
 
 include "config.php";
 include "../../include/sfs_case_score.php";
@@ -189,12 +189,10 @@ HERE;
 	
 		
 		//領域成績加入日常生活表現成績(視為領域之一)
-		/*
 		foreach($fin_nor_score as $student_sn=>$nor_score)
 		{
 				$fin_score[$student_sn]['nor']=$fin_nor_score[$student_sn];
 		}
-		*/
 	
 		//修正原計算的加權
 		if($_POST[original_rate]) {	  //只計算學期不計算領域
