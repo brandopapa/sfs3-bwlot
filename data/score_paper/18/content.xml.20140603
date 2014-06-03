@@ -1020,13 +1020,13 @@
 </table:table-header-rows>
 <table:table-row table:style-name="Table4.2">
 <table:table-cell table:style-name="Table4.A2" table:value-type="string">
-<text:p text:style-name="P38"></text:p>
+<text:p text:style-name="P38">李岳璋</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table4.A2" table:value-type="string">
-<text:p text:style-name="P17"></text:p>
+<text:p text:style-name="P17">林佩玲</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table4.A2" table:value-type="string">
-<text:p text:style-name="P17"></text:p>
+<text:p text:style-name="P17">李岳璋</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table4.D2" table:number-columns-spanned="2" table:value-type="string">
 <text:p text:style-name="P18">{導師}</text:p>
@@ -1160,8 +1160,14 @@
 <text:p text:style-name="P17">{基礎主軸-書法硬筆字努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
+</table:sub-table>
+</table:table-cell>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+</table:table-row>
 <table:table-row>
-<table:table-cell table:style-name="Table5.A2" table:value-type="string">
+<table:table-cell table:style-name="Table5.A2" table:number-columns-spanned="2" table:value-type="string">
 <text:p text:style-name="P17">
 <text:span text:style-name="T7">總平均</text:span>
 </text:p>
@@ -1176,12 +1182,6 @@
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
 <text:p text:style-name="P17"/>
 </table:table-cell>
-</table:table-row>
-</table:sub-table>
-</table:table-cell>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1230,8 +1230,14 @@
 <text:p text:style-name="P17">{生命主軸-德討/孝經努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
+</table:sub-table>
+</table:table-cell>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+</table:table-row>
 <table:table-row>
-<table:table-cell table:style-name="Table5.A2" table:value-type="string">
+<table:table-cell table:style-name="Table5.A2" table:number-columns-spanned="2" table:value-type="string">
 <text:p text:style-name="P17">
 <text:span text:style-name="T7">總平均</text:span>
 </text:p>
@@ -1246,12 +1252,6 @@
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
 <text:p text:style-name="P17"/>
 </table:table-cell>
-</table:table-row>
-</table:sub-table>
-</table:table-cell>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1361,8 +1361,14 @@
 <text:p text:style-name="P17">{生活主軸-服務學習努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
+</table:sub-table>
+</table:table-cell>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+</table:table-row>
 <table:table-row>
-<table:table-cell table:style-name="Table5.A2" table:value-type="string">
+<table:table-cell table:style-name="Table5.A2" table:number-columns-spanned="2" table:value-type="string">
 <text:p text:style-name="P17">
 <text:span text:style-name="T7">總平均</text:span>
 </text:p>
@@ -1377,12 +1383,6 @@
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
 <text:p text:style-name="P17"/>
 </table:table-cell>
-</table:table-row>
-</table:sub-table>
-</table:table-cell>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
 </table:table-row>
 </table:table>
 <text:p text:style-name="P26">
