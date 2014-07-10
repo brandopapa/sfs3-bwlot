@@ -1,0 +1,4 @@
+擴展競賽名稱欄位長度為120 -- by infodaes (2014-01-07)
+
+ALTER TABLE `career_race` CHANGE `name` `name` VARCHAR( 120 ) NOT NULL ; 
+ 更新成功 ! 

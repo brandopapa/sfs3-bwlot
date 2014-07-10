@@ -1,0 +1,4 @@
+競賽記錄增加五專免試權重欄位 並依據競賽日期自動填入所屬學年度 -- by infodaes (2014-05-08)
+
+ALTER TABLE `career_race` ADD `weight_tech` FLOAT NOT NULL DEFAULT '1'
+ 更新成功 ! 

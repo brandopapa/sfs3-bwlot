@@ -1,0 +1,6 @@
+修正學生學期出缺席總表的主要鍵 -- by hami (2003-06-22)
+
+ALTER TABLE `stud_seme_abs` CHANGE `abs_kind` `abs_kind`TINYINT( 3 ) UNSIGNED NOT NULL ;
+ 更新成功 ! 
+ALTER TABLE `stud_seme_abs` DROP PRIMARY KEY,ADD PRIMARY KEY ( seme_year_seme, stud_id, `abs_kind` )
+ 更新成功 ! 

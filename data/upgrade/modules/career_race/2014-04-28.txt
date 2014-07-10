@@ -1,0 +1,4 @@
+競賽記錄增加核准字號及權重欄位 -- by infodaes (2014-04-28)
+
+ALTER TABLE `career_race` ADD `year` TINYINT(4) NULL , ADD `nature` VARCHAR(10) NULL
+ 更新成功 ! 

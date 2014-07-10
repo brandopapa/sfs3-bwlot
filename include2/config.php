@@ -9,7 +9,7 @@ $old_error_handler = set_error_handler("error_die");
  系統設定
 ***********************************/
 //程式根目錄 PATH
-$SFS_PATH = "/home/sfs6/dev2.sfs3.bwsh.blisswisdom.org";
+$SFS_PATH = "/home/sfs6/dev2.sfs3.bwsh.kindn.es";
 
 //學務管理首頁程式 URL (設定時，保留最後的 "/" )
 $SFS_PATH_HTML ="http://dev2.sfs3.bwsh.kindn.es/"; 
@@ -46,7 +46,7 @@ $mysql_db   ="bwsh_sfs3_dev2";
   上載檔案設定
 ***********************************/
 //上載檔案放置位置，上載目錄權限需設為 777
-$UPLOAD_PATH = "/home/sfs6/dev2.sfs3.bwsh.blisswisdom.org/data/";
+$UPLOAD_PATH = "/home/sfs6/dev2.sfs3.bwsh.kindn.es/data/";
 
 //別名 (alias)  apache 在設定檔 httpd.conf 中加入  WIN32 在IIS管理員中設定
 $UPLOAD_URL = "/data/";
@@ -117,6 +117,7 @@ $DEFAULT_FAM_LOG_PASS = "3333";
 
 //上課日數設定
 $weekN = array('一','二','三','四','五');
+
 
 //----一些名稱選項
 $school_kind_name=array("幼稚園","一年","二年","三年","四年","五年","六年","一年","二年","三年","一年","二年","三年");

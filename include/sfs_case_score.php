@@ -370,7 +370,7 @@ function seme_score_memo($student_sn,$ss_id,$sel_year="",$sel_seme=""){
 	return $ss_score_memo;
 }
 
-//取得學生日常生活表現檢核表項目
+//取得學生平常生活表現檢核表項目
 function get_chk_item($sel_year,$sel_seme) {
 	global $CONN;
 
@@ -385,7 +385,7 @@ function get_chk_item($sel_year,$sel_seme) {
 	return $ary;
 }
 
-//取得學生日常生活表現檢核表值 mode:value,input
+//取得學生平常生活表現檢核表值 mode:value,input
 function get_chk_value($student_sn,$sel_year,$sel_seme,$chk_kind_sel="",$mode="value") {
 	global $CONN;
 	$seme_year_seme = sprintf("%03d",$sel_year).$sel_seme;
@@ -419,7 +419,7 @@ function get_chk_value($student_sn,$sel_year,$sel_seme,$chk_kind_sel="",$mode="v
 	return $temp;
 }
 
-//取得學生日常行為表現值
+//取得學生平常行為表現值
 function &get_oth_value($stud_id,$sel_year,$sel_seme,$ss_kind_sel='') {
 	global $CONN;
 	$seme_year_seme = sprintf("%03d%d",$sel_year,$sel_seme);
@@ -447,7 +447,7 @@ function &get_oth_value($stud_id,$sel_year,$sel_seme,$ss_kind_sel='') {
 
 }
 
-//合併學生日常生活核檢表文字
+//合併學生平常生活核檢表文字
 function merge_chk_text($sel_year,$sel_seme,$student_sn,$ary=array()) {
 	global $CONN;
 
@@ -473,7 +473,7 @@ function merge_chk_text($sel_year,$sel_seme,$student_sn,$ary=array()) {
 		$CONN->Execute("insert into stud_seme_score_nor (seme_year_seme,student_sn,ss_id,ss_score_memo) values ('$seme_year_seme','$student_sn','0','$temp_str')");
 }
 
-//取得學生日常行為表現值 傳回班級陣列
+//取得學生平常行為表現值 傳回班級陣列
 //$class_id = sprintf("%d%02d",$temp_id_arr[2],$temp_id_arr[3]);
 function &get_class_oth_value($class_id,$sel_year,$sel_seme,$ss_id_sel,$ss_kind_sel='') {
 	global $CONN,$IS_JHORES;
@@ -505,7 +505,7 @@ function &get_class_oth_value($class_id,$sel_year,$sel_seme,$ss_id_sel,$ss_kind_
 
 }
 
-//取得學生日常行為文字
+//取得學生平常行為文字
 function get_nor_text($student_sn,$sel_year,$sel_seme) {
 	global $CONN;
 
@@ -524,7 +524,7 @@ function get_nor_text($student_sn,$sel_year,$sel_seme) {
 	return $temp_arr;
 }
 
-//取得學生日常表現檢核表文字
+//取得學生平常表現檢核表文字
 function get_chk_text($student_sn,$sel_year,$sel_seme,$chk_kind_arr=array()) {
 	global $CONN;
 
@@ -624,7 +624,7 @@ function get_abs_value($stud_id,$sel_year,$sel_seme,$mode="",$start_date="",$end
 }
 
 //$class_id 是專門給自訂成績單模組使用的
-//取得學生日常生活表現分數及導師評語建議
+//取得學生平常生活表現分數及導師評語建議
 //$mode=1 取得團體活動、公共服務、特殊表現等文字
 function get_nor_value($student_sn,$sel_year,$sel_seme,$class_id="",$mode=0) {
 	global $CONN;
@@ -975,7 +975,7 @@ $ss_score_avg['平均']['平時成績']=round($ss_score_sum['平時成績'],0);
 // $mode 0:不含檢核表, 1:含檢核表
 function &html2code2($class,$sel_year,$sel_seme,$oth_data,$nor_data,$abs_data,$reward_data,$score_data,$student_sn,$mode=0) {
 	global $SFS_PATH_HTML,$TOTAL_DAYS,$CONN,$IS_JHORES,$is_summary_input;
-	$arr_1 = sfs_text("日常行為表現");
+	$arr_1 = sfs_text("平常行為表現");
 	$arr_2 = sfs_text("團體活動表現");
 	$arr_3 = sfs_text("公共服務表現");
 	$arr_4 = sfs_text("校外特殊表現");
@@ -996,7 +996,7 @@ function &html2code2($class,$sel_year,$sel_seme,$oth_data,$nor_data,$abs_data,$r
 			${"sel_str_$i"} = $oth_data['生活表現評量'][$i];
 		}
 	}
-	//日常生活表現評量
+	//平常生活表現評量
 	if ($IS_JHORES==0&&$_SESSION[session_who]=="教師") {
 		$score_str_arr = &score2str_arr($class);
 		$sel1->s_name="nor_score";
@@ -1022,7 +1022,7 @@ function &html2code2($class,$sel_year,$sel_seme,$oth_data,$nor_data,$abs_data,$r
 	if ($mode==1) {
 		$temp_str .="
 		<tr bgcolor=\"#c4d9ff\">
-		<td colspan=\"13\" align=\"center\" nowrap>日常生活表現</td>
+		<td colspan=\"13\" align=\"center\" nowrap>平常生活表現</td>
 		</tr>
 		<tr bgcolor=\"white\">
 		<td nowrap>生活行為</td><td colspan=\"12\"><textarea name='nor_score_memo' id='nor_score_memo'  rows=5 style='width: 100%'>".$nor_data[ss_score_memo][0]."</textarea><br><font color=\"red\" size=\"2\">※若本欄內容與檢核表建議文字不同，請到檢核表重新儲存一次即可。</font></td>
@@ -1040,10 +1040,10 @@ function &html2code2($class,$sel_year,$sel_seme,$oth_data,$nor_data,$abs_data,$r
 	} else {
 		$temp_str .="
 		<tr bgcolor=\"white\">
-		<td colspan=\"13\" nowrap>日常生活表現評量</td>
+		<td colspan=\"13\" nowrap>平常生活表現評量</td>
 		</tr>
 		<tr bgcolor=\"white\">
-		<td nowrap>日常行為表現</td>
+		<td nowrap>平常行為表現</td>
 		<td colspan=\"3\">$sel_str_1
 		</td>
 		<td colspan=\"8\" nowrap>導師評語及建議";

@@ -205,7 +205,7 @@
 <style:properties style:font-name="標楷體" fo:font-size="16pt" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="16pt" style:font-weight-asian="bold" style:font-size-complex="16pt" style:font-weight-complex="bold" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
 <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
-<style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="end" style:justify-single-word="false"/>
+<style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="end" style:justify-single-word="false" fo:line-height="0.2cm"/>
 </style:style>
 <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard">
 <style:properties fo:color="#000000" style:font-name="標楷體" fo:font-size="14pt" style:text-underline="none" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-weight-complex="bold" fo:text-align="start" style:justify-single-word="false"/>
@@ -255,6 +255,9 @@
 <style:style style:name="P17" style:family="paragraph" style:parent-style-name="Table Contents">
 <style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
+<style:style style:name="P17a" style:family="paragraph" style:parent-style-name="Table Contents">
+<style:properties style:font-name="標楷體" fo:font-size="9pt" style:font-name-asian="標楷體" style:font-size-asian="9pt" fo:text-align="center" style:justify-single-word="false"/>
+</style:style>
 <style:style style:name="P18" style:family="paragraph" style:parent-style-name="Standard">
 <style:properties fo:color="#000080" style:font-name="標楷體" style:text-underline="none" style:text-underline-color="font-color" style:font-name-asian="標楷體" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
@@ -286,34 +289,34 @@
 <style:properties fo:color="#000000" style:font-name="標楷體" fo:font-size="14pt" style:text-underline="none" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-weight-complex="bold" fo:line-height="100%" fo:text-align="start" style:justify-single-word="false"/>
 </style:style>
 <style:style style:name="P28" style:family="paragraph" style:parent-style-name="Standard">
-<style:properties fo:color="#000000" style:font-name="標楷體" fo:font-size="10pt" style:text-underline="none" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="10pt" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-weight-complex="bold" fo:line-height="0.2cm" fo:text-align="start" style:justify-single-word="false"/>
+<style:properties fo:color="#000000" style:font-name="標楷體" fo:font-size="10pt" style:text-underline="none" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="10pt" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-weight-complex="bold" fo:line-height="0.1cm" fo:text-align="start" style:justify-single-word="false"/>
 </style:style>
 <style:style style:name="P29" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="0.889cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.4cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="0.889cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.34cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P30" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="0.762cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.349cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="0.762cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.33cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P31" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="0cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.4cm" fo:text-indent="1.894cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="0cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.33cm" fo:text-indent="1.894cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P32" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="2.096cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.32cm" fo:text-indent="-0.321cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="2.096cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.31cm" fo:text-indent="-0.321cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P33" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="0cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.32cm" fo:text-indent="1.506cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="0cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.31cm" fo:text-indent="1.506cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P34" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="0.889cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.349cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="0.889cm" fo:margin-right="0cm" fo:font-size="12pt" style:font-name="標楷體" style:font-name-asian="標楷體" style:font-size-asian="12pt" fo:line-height="0.34cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P35" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties fo:margin-left="2.268cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.34cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+<style:properties fo:margin-left="2.268cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.33cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P36" style:family="paragraph" style:parent-style-name="Text body">
 <style:properties fo:margin-left="0cm" fo:margin-right="0cm" style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.33cm" fo:text-indent="1.482cm" style:auto-text-indent="false"/>
 </style:style>
 <style:style style:name="P37" style:family="paragraph" style:parent-style-name="Text body">
-<style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.349cm"/>
+<style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:line-height="0.33cm"/>
 </style:style>
 <style:style style:name="P38" style:family="paragraph" style:parent-style-name="Table Contents">
 <style:properties style:font-name="標楷體" fo:font-size="14pt" style:font-name-asian="標楷體" style:font-size-asian="14pt" fo:text-align="center" style:justify-single-word="false"/>
@@ -369,11 +372,17 @@
 <style:style style:name="T17" style:family="text">
 <style:properties fo:font-size="9pt" fo:language="en" fo:country="US"/>
 </style:style>
+<style:style style:name="T16a" style:family="text">
+<style:properties style:font-size-asian="7pt"/>
+</style:style>
+<style:style style:name="T17a" style:family="text">
+<style:properties fo:font-size="7pt" fo:language="en" fo:country="US"/>
+</style:style>
 <style:style style:name="T18" style:family="text">
-<style:properties style:font-size-asian="14pt"/>
+<style:properties style:font-size-asian="12pt"/>
 </style:style>
 <style:style style:name="T19" style:family="text">
-<style:properties fo:font-size="10pt"/>
+<style:properties fo:font-size="9pt"/>
 </style:style>
 <style:style style:name="T20" style:family="text">
 <style:properties style:font-size-asian="10pt"/>
@@ -391,7 +400,7 @@
 </text:sequence-decls>
 <text:p text:style-name="P1">{學校全銜}{學年}學年度{學期}學期成績單</text:p>
 <text:p text:style-name="P2"/>
-<text:p text:style-name="P2">
+<text:p text:style-name="P22">
 班級：
 <text:span text:style-name="T1">{班級}</text:span>
 姓名：
@@ -1007,16 +1016,16 @@
 </table:table-header-rows>
 <table:table-row table:style-name="Table4.2">
 <table:table-cell table:style-name="Table4.A2" table:value-type="string">
-<text:p text:style-name="P38">李岳璋</text:p>
+<text:p text:style-name="P38"></text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table4.A2" table:value-type="string">
-<text:p text:style-name="P17">林佩玲</text:p>
+<text:p text:style-name="P17"></text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table4.A2" table:value-type="string">
-<text:p text:style-name="P17">李岳璋</text:p>
+<text:p text:style-name="P17"></text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table4.D2" table:number-columns-spanned="2" table:value-type="string">
-<text:p text:style-name="P18">{導師}</text:p>
+<text:p text:style-name="P18"></text:p>
 </table:table-cell>
 <table:covered-table-cell/>
 </table:table-row>
@@ -1037,7 +1046,7 @@
 </table:table-row>
 </table:table>
 <text:p text:style-name="P21"/>
-<text:p text:style-name="P1">{屬性}{縣市別}{學校全銜}{學年}學年度{學期}學期成績單</text:p>
+<text:p text:style-name="P1">{學校全銜}{學年}學年度{學期}學期成績單</text:p>
 <text:p text:style-name="P2"/>
 <text:p text:style-name="P22">
 班級：
@@ -1147,14 +1156,8 @@
 <text:p text:style-name="P17">{基礎主軸-書法硬筆字努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
-</table:sub-table>
-</table:table-cell>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-</table:table-row>
 <table:table-row>
-<table:table-cell table:style-name="Table5.A2" table:number-columns-spanned="2" table:value-type="string">
+<table:table-cell table:style-name="Table5.A2" table:value-type="string">
 <text:p text:style-name="P17">
 <text:span text:style-name="T7">總平均</text:span>
 </text:p>
@@ -1164,11 +1167,17 @@
 <text:p text:style-name="P17">{基礎主軸_學期總平均加權}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{基礎主軸_學期總平均分數}</text:p>
+<text:p text:style-name="P17">{基礎主軸_學期總平均等第}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
 <text:p text:style-name="P17"/>
 </table:table-cell>
+</table:table-row>
+</table:sub-table>
+</table:table-cell>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1198,13 +1207,13 @@
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">
-<text:span text:style-name="T16">倫理道德</text:span>
-<text:span text:style-name="T17">(</text:span>
-<text:span text:style-name="T16">孝經</text:span>
-<text:span text:style-name="T17">/</text:span>
-<text:span text:style-name="T16">德討</text:span>
-<text:span text:style-name="T17">)</text:span>
+<text:p text:style-name="P17a">
+<text:span text:style-name="T16a">倫理道德</text:span>
+<text:span text:style-name="T17a">(</text:span>
+<text:span text:style-name="T16a">孝經</text:span>
+<text:span text:style-name="T17a">/</text:span>
+<text:span text:style-name="T16a">德討</text:span>
+<text:span text:style-name="T17a">)</text:span>
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1217,14 +1226,8 @@
 <text:p text:style-name="P17">{生命主軸-德討/孝經努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
-</table:sub-table>
-</table:table-cell>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-</table:table-row>
 <table:table-row>
-<table:table-cell table:style-name="Table5.A2" table:number-columns-spanned="2" table:value-type="string">
+<table:table-cell table:style-name="Table5.A2" table:value-type="string">
 <text:p text:style-name="P17">
 <text:span text:style-name="T7">總平均</text:span>
 </text:p>
@@ -1239,6 +1242,12 @@
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
 <text:p text:style-name="P17"/>
 </table:table-cell>
+</table:table-row>
+</table:sub-table>
+</table:table-cell>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1348,14 +1357,8 @@
 <text:p text:style-name="P17">{生活主軸-服務學習努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
-</table:sub-table>
-</table:table-cell>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-<table:covered-table-cell/>
-</table:table-row>
 <table:table-row>
-<table:table-cell table:style-name="Table5.A2" table:number-columns-spanned="2" table:value-type="string">
+<table:table-cell table:style-name="Table5.A2" table:value-type="string">
 <text:p text:style-name="P17">
 <text:span text:style-name="T7">總平均</text:span>
 </text:p>
@@ -1371,6 +1374,12 @@
 <text:p text:style-name="P17"/>
 </table:table-cell>
 </table:table-row>
+</table:sub-table>
+</table:table-cell>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+<table:covered-table-cell/>
+</table:table-row>
 </table:table>
 <text:p text:style-name="P26">
 <text:span text:style-name="T18">成績說明</text:span>
@@ -1383,12 +1392,13 @@
 <text:span text:style-name="T19">1.</text:span>
 <text:span text:style-name="T20">目標：（內）建立崇高人格，建構圓滿生命</text:span>
 <text:span text:style-name="T19">-</text:span>
-<text:span text:style-name="T20">智慧、慈悲、精勤；</text:span>
-</text:p>
-<text:p text:style-name="P31">
-<text:span text:style-name="T20">（外）培養三種人才</text:span>
+<text:span text:style-name="T20">智慧、慈悲、精勤；（外）培養三種人</text:span>
 <text:span text:style-name="T19">-</text:span>
-<text:span text:style-name="T20">成聖成賢、安邦定國、安定社會。</text:span>
+<text:span text:style-name="T20">成聖成賢、安邦</text:span>
+</text:p>
+<text:p text:style-name="P30">
+<text:s text:c="7"/>
+<text:span text:style-name="T20">定國、安定社會。</text:span>
 </text:p>
 <text:p text:style-name="P30">
 <text:s text:c="4"/>
@@ -1397,9 +1407,11 @@
 </text:p>
 <text:p text:style-name="P32">
 <text:span text:style-name="T19">(1)</text:span>
-<text:span text:style-name="T20">
-好樂學習的能力：認識學習規劃者的功德、用心，課程內涵的意義及對我的幫助，了解學習的目的、學習的好處、不學的壞處。培養學習的好樂心與歡喜心。
-</text:span>
+<text:span text:style-name="T20">好樂學習的能力：認識學習規劃者的功德、用心，課程內涵的意義及對我的幫助，了解學習的目的、學習</text:span>
+</text:p>
+<text:p text:style-name="P32">
+<text:s text:c="4"/>
+<text:span text:style-name="T20">的好處、不學的壞處。培養學習的好樂心與歡喜心。</text:span>
 </text:p>
 <text:p text:style-name="P32">
 <text:span text:style-name="T19">(2)</text:span>
@@ -1412,14 +1424,22 @@
 <text:p text:style-name="P32">
 <text:span text:style-name="T19">(4)</text:span>
 <text:span text:style-name="T20">
-善用時間的能力：珍惜學習的好條件、總結學習的成功經驗，從自己的緣起點下手去努力，懂得運用時間做有意義的事，不浪費時間。
-</text:span>
+善用時間的能力：珍惜學習的好條件、總結學習的成功經驗，從自己的緣起點下手去努力，懂得運用時間</text:span>
+</text:p>
+<text:p text:style-name="P32">
+<text:s text:c="4"/>
+<text:span text:style-name="T20">做有意義的事，不浪費時間。</text:span>
 </text:p>
 <text:p text:style-name="P32">
 <text:span text:style-name="T19">(5)</text:span>
-<text:span text:style-name="T20">
-規劃學習的能力：熟知課程的本末次第，課前的心理準備，落實課前預習、上課專心認真、下課復習，有條有理。對於自己所學課程的整體概念、學習的次第，乃至生涯規劃及無限生命長遠學習的總別次第，有正確的認識及規劃的能力。
-</text:span>
+<text:span text:style-name="T20">規劃學習的能力：熟知課程的本末次第，課前的心理準備，落實課前預習、上課專心認真、下課復習，有</text:span></text:p>
+<text:p text:style-name="P32">
+<text:s text:c="4"/>
+<text:span text:style-name="T20">條有理。對於自己所學課程的整體概念、學習的次第，乃至生涯規劃及無限生命長遠學習的總別次第，有</text:span>
+</text:p>
+<text:p text:style-name="P32">
+<text:s text:c="4"/>
+<text:span text:style-name="T20">正確的認識及規劃的能力。</text:span>
 </text:p>
 <text:p text:style-name="P33">
 <text:span text:style-name="T19">3.</text:span>
