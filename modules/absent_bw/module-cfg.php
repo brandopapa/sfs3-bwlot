@@ -24,12 +24,12 @@ $today=date("Y-m-d");
 
 //目錄內程式
 $school_menu_p = array(
-//"index.php"=>"缺曠課登記",
-//"index_group.php"=>"團體登記",
+"index.php"=>"缺曠課登記",
+"index_group.php"=>"團體登記",
 "stat.php"=>"缺曠課明細",
 "stat_all.php"=>"缺曠課統計",
-//"add_record.php"=>"學期缺曠課登記",
-//"add_record_person.php"=>"個人學期缺曠課補登",
+"add_record.php"=>"學期缺曠課登記",
+"add_record_person.php"=>"個人學期缺曠課補登",
 "report.php"=>"缺曠課報表",
 "chc_prn_week.php"=>"網頁式缺課週報表",
 "week_abs_tol.php"=>"本週概況",

@@ -1,0 +1,2 @@
+ldap 欄位加入 base_uid 欄位 失敗 -- by hami (2013-09-30)
+ALTER TABLE `ldap` ADD `base_uid` VARCHAR( 10 ) NOT NULL AFTER `base_dn` ;

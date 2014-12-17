@@ -16,6 +16,7 @@ $stage=$_POST['stage'];
 $sel=$_POST['sel'];
 $save_csv=$_POST['save_csv'];
 $bank_data=$_POST['bank_data'];
+$kind = $_POST['kind'];
 
 $html_mode=!($save_csv || $bank_data);
 //if ($tops==0) $tops=100;
@@ -74,6 +75,15 @@ if ($html_mode) echo "<table border=0 cellspacing=0 cellpadding=2 width=100% bgc
 $year_seme_menu=year_seme_menu($sel_year,$sel_seme);
 $class_year_menu =class_year_menu($sel_year,$sel_seme,$year_name);
 
+$show_kind=array("1"=>"定期評量","2"=>"平時成績","3"=>"定期+平時");
+$sk = new drop_select();
+$sk->s_name ="kind";
+$sk->top_option = "選擇種類";
+$sk->id = $kind;
+$sk->arr = $show_kind;
+$sk->is_submit = true;
+$kind_menu= $sk->get_select();
+
 if($year_name){
 	$choice_kind="定期評量";
 	$stage_menu =stage_menu($sel_year,$sel_seme,$year_name,$me,$stage,"1");
@@ -90,7 +100,7 @@ if($year_name){
 $menu="<form name=\"myform\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 	<table>
 	<tr>
-	<td>$year_seme_menu</td><td>$class_year_menu</td><td>$stage_menu</td><td>$rate_menu</td><td>$target_menu</td><td>$num_menu</td>
+	<td>$year_seme_menu</td><td>$class_year_menu</td><td>$stage_menu</td><td>$kind_menu</td><td>$rate_menu</td><td>$target_menu</td><td>$num_menu</td>
 	</tr>
 	</table>";
 
@@ -103,7 +113,7 @@ if ($year_name && $stage && count($sel)==0) {
 		<td>
 		<table bgcolor='#9ebcdd' cellspacing='1' cellpadding='4' class='small'>
 		<tr bgcolor='#c4d9ff'>
-		<td align='center'>選取</td>
+		<td align='center'>選取<input type='checkbox' name='all_check' onclick='checkall(1);'>全選<input type='checkbox' name='none_check' onclick='checkall(0);'>全不選</td>
 		<td align='center'>科目</td>
 		</tr>
 		";
@@ -184,6 +194,7 @@ if ($year_name && $stage && count($sel)!=0) {
 			stud_id int(10) unsigned NOT NULL default '0',
 			class_num varchar(11) NOT NULL default '',
 			score float NOT NULL default '0',
+			score2 float NOT NULL default '0',
 			test_name varchar(80) NOT NULL default '',
 			PRIMARY KEY  (t_id))
 			";
@@ -191,12 +202,22 @@ if ($year_name && $stage && count($sel)!=0) {
 		$query="select * from stud_seme where seme_year_seme='$seme_year_seme' and seme_class like '$year_name%'";
 		$res=$CONN->Execute($query);
 		$all_stud_sn="";
+		$sql2= "";
 		while(!$res->EOF) {
 			$all_stud_sn.="'".$res->fields[student_sn]."',";
 			$res->MoveNext();
 		}
 		if ($all_stud_sn) $all_stud_sn=substr($all_stud_sn,0,-1);
-		$sql="select a.student_sn,b.stud_id,a.ss_id,a.score,b.curr_class_num from $score_semester a left join stud_base b on a.student_sn=b.student_sn where a.student_sn in ($all_stud_sn) and a.test_kind = '定期評量' and a.test_sort = '$stage' order by b.curr_class_num,a.student_sn,a.ss_id";
+		//add 20141028
+		if ($kind == "1") { 
+			$sql="select a.student_sn,b.stud_id,a.ss_id,a.score,b.curr_class_num from $score_semester a left join stud_base b on a.student_sn=b.student_sn where a.student_sn in ($all_stud_sn) and a.test_kind = '定期評量' and a.test_sort = '$stage' order by b.curr_class_num,a.student_sn,a.ss_id";			
+	  }
+	  elseif ($kind == "2") {
+	  	$sql="select a.student_sn,b.stud_id,a.ss_id,a.score,b.curr_class_num from $score_semester a left join stud_base b on a.student_sn=b.student_sn where a.student_sn in ($all_stud_sn) and a.test_kind = '平時成績' and a.test_sort = '$stage' order by b.curr_class_num,a.student_sn,a.ss_id";			 
+	  }
+	  else{
+	  	$sql="select a.student_sn,b.stud_id,a.ss_id,round((IFNULL(a.score,0) + IFNULL(a1.score,0))/2.0,1) as score,b.curr_class_num from $score_semester a left join stud_base b on b.student_sn=a.student_sn left join $score_semester a1 on a1.student_sn = a.student_sn and a1.ss_id = a.ss_id and a1.test_kind = '平時成績' and a1.test_sort = '$stage' where a.student_sn in ($all_stud_sn) and a.test_kind = '定期評量' and a.test_sort = '$stage' order by b.curr_class_num,a.student_sn,a.ss_id";
+	  }
 		$rs=&$CONN->Execute($sql);
 		$sn="";
 		$number_ss=count($subject_id);
@@ -228,6 +249,7 @@ if ($year_name && $stage && count($sel)!=0) {
 					$cs_num[$cn]=$sclass_num;
 				}
 				$sum_ss=$sum_ss/$pers;
+				
 				$sql="insert into score_top (student_sn,stud_id,class_num,score,test_name) values ('$sn','$id','$cn','$sum_ss','$test_ss')";
 				$rs2=&$CONN->Execute($sql);
 				$sn=$student_sn;
@@ -261,6 +283,7 @@ if ($year_name && $stage && count($sel)!=0) {
 			$cs_num[$cn]=$sclass_num;
 		}
 		$sum_ss=$sum_ss/$pers;
+		
 		$sql="insert into score_top (student_sn,stud_id,class_num,score,test_name) values ('$sn','$id','$cn','$sum_ss','$test_ss')";
 		$rs2=&$CONN->Execute($sql);
 
@@ -368,3 +391,20 @@ else
 if ($html_mode) echo "</td></tr></table></form>";
 if ($html_mode) foot();
 ?>
+<script>
+	function checkall(val) {	
+	  if (val == 0){
+	    document.myform.all_check.checked=false;
+	  }
+	  if (val == 1){
+	    document.myform.none_check.checked=false;
+	  }
+	  var i =0;
+	  while (i < document.myform.elements.length)  {
+	    if (document.myform.elements[i].name.substr(0,4)=='sel[') {
+	      document.myform.elements[i].checked=val;
+	    }
+	    i++;
+	  }
+	}		
+</script>	

@@ -100,7 +100,7 @@ if ($_POST['save']==1) {
 		<?php
     //先登錄服務項目 , 新資料則先儲存, 再取得本服務資料的 sn
     if ($sn=="" or $sn=="new") {
-    $query="insert into stud_service (year_seme,service_date,department,item,memo,update_sn,input_sn,input_time,confirm,sponsor) values ('$year_seme','$service_date','$department','$item','$memo','$update_sn','$update_sn','".date('Y-m-d H:i:s')."','$CONFIRM','$sponsor')";
+    $query="insert into stud_service (year_seme,service_date,department,item,memo,update_sn,update_time,sponsor) values ('$year_seme','$service_date','$department','$item','$memo','$update_sn','".date('Y-m-d H:i:s')."','$sponsor')";
      if (mysql_query($query)) {
      		
      	list($item_sn)=mysql_fetch_row(mysql_query("SELECT LAST_INSERT_ID()"));

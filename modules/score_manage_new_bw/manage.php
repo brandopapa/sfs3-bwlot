@@ -311,18 +311,25 @@ if ($year_name && $stage) {
 			
 			//抓取班級學習科目並轉換成陣列供檢索教師姓名
 			$class_course_teacher=array();
-			$sql="select distinct ss_id,teacher_sn from score_course where class_id='$class_id'";
+			//$sql="select distinct ss_id,teacher_sn from score_course where class_id='$class_id'";
+			$sql="select distinct ss_id, score_course.teacher_sn,t.name as teacher_name from score_course 
+			      left join teacher_base t on t.teacher_sn = score_course.teacher_sn 
+			      where class_id='$class_id'";
+			
 			$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 			while(!$res->EOF) {
 				$ss_id=$res->fields[ss_id];
 				$teacher_sn=$res->fields[teacher_sn];
-				$class_course_teacher[$class_id][$ss_id][teacher_sn].=$teacher_array[$teacher_sn].',';			
+				$teacher_name = $res->fields[teacher_name];
+				//$class_course_teacher[$class_id][$ss_id][teacher_sn].=$teacher_array[$teacher_sn].',';			
+				$class_course_teacher[$class_id][$ss_id][teacher_sn] = $teacher_name;
 				$res->MoveNext();
 			}
 			
 			reset($subject);
 			while(list($ss_id,$subject_name)=each($subject)) {
-				$teacher_name=str_replace(',','<br>',substr($class_course_teacher[$class_id][$ss_id][teacher_sn],0,-1));
+				//$teacher_name=str_replace(',','<br>',substr($class_course_teacher[$class_id][$ss_id][teacher_sn],0,-1));
+				$teacher_name = $class_course_teacher[$class_id][$ss_id][teacher_sn];
 				$teacher_name="<font size=2 color='brown'>$teacher_name</font>";
 				$i=1;
 				if ($yorn=="n") {

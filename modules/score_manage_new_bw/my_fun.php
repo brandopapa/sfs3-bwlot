@@ -323,10 +323,47 @@ function score_period_menu($id,$other_script="") {
 	$scy->id = $id;
 	$scy->arr = $show_score_period;
 	$scy->is_submit = true;
-	$sc->other_script = $other_script;
+	$scy->other_script = $other_script;
 	return $scy->get_select();
 }
 
+function score_period_menu2($id,$other_script="",$section1=false,$section2=false,$section3=false) {
+	if ($section1 && $section2 && $section3){
+	  $show_score_period[181]='180分以上';
+	  $show_score_period[180]='180分(不含)以下';
+  }
+	else if ( ($section1 && $section2 ) || ($section1 && $section3 ) || ($section2 && $section3 ) ){
+	  $show_score_period[121]='120分以上';
+	  $show_score_period[120]='120分(不含)以下';
+  }
+	else{
+	  $show_score_period[61]='60分以上';
+	  $show_score_period[60]='60分(不含)以下';
+  }
+	$scy = new drop_select();
+	$scy->s_name ="score_period";
+	$scy->top_option = "選擇分數";
+	$scy->id = $id;
+	$scy->arr = $show_score_period;
+	$scy->is_submit = true;
+	$scy->other_script = $other_script;
+	return $scy->get_select();
+}
+
+function section_menu($id,$other_script="") {
+	$show_section_period[0]='全選';
+	$show_section_period[1]='第一階段';
+	$show_section_period[2]='第二階段';
+	$show_section_period[3]='第三階段';
+	$scy = new drop_select();
+	$scy->s_name ="section";
+	$scy->top_option = "選擇階段";
+	$scy->id = $id;
+	$scy->arr = $show_section_period;
+	$scy->is_submit = true;
+	$scy->other_script = $other_script;
+	return $scy->get_select();
+}
 function class_name_menu($sel_year,$sel_seme,$sel_class,$id,$other_script="") {
 	global $CONN;
 

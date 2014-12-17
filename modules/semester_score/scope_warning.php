@@ -1,4 +1,3 @@
-
 <?php
 //$Id:  $
 include "config.php";
@@ -28,8 +27,8 @@ for($i=1;$i<=$all_years;$i++) {
   	    if ($Y>1) {
   	     for ($j=$Y-1;$j>=1;$j--) {
   	      $chk_year=curr_year()-$j;
-  	      $Year_scan[$Y].=";".$chk_year."1";
-  	      $Year_scan[$Y].=";".$chk_year."2";
+  	      $Year_scan[$Y].=",".$chk_year."1";
+  	      $Year_scan[$Y].=",".$chk_year."2";
   	     }
   	    }
   	break;

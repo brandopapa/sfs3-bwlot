@@ -1,0 +1,4 @@
+新增欄位 enable1 , 學生登入是否啟用 ldap -- by smallduh (2013-12-24)
+
+ALTER TABLE `ldap` ADD `enable1` tinyint(1) not NULL default '0'
+ 更新失敗 ! 

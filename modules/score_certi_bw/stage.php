@@ -55,10 +55,11 @@ if ($_POST['kind']=="各學期定考成績單") {
 			//取得當學期所有定考成績
 			if (count($temp_ss)>0) {
 				$ss_str="'".implode("','",$temp_ss)."'";
-				$query="select * from score_semester_".$year."_".$seme." where student_sn='$student_sn' and test_kind='定期評量' and ss_id in ($ss_str) order by test_sort";
+				//$query="select * from score_semester_".$year."_".$seme." where student_sn='$student_sn' and test_kind='定期評量' and ss_id in ($ss_str) order by test_sort";
+				$query="select * from score_semester_".$year."_".$seme." where student_sn='$student_sn' and test_kind in('定期評量','平時成績') and ss_id in ($ss_str) order by test_sort";
 				$res=$CONN->Execute($query);
 				while(!$res->EOF) {
-					$all_score[$year][$seme][$all_map[$res->fields['ss_id']]][$res->fields['test_sort']]=$res->fields['score'];
+					$all_score[$year][$seme][$all_map[$res->fields['ss_id']]][$res->fields['test_sort']][$res->fields['test_kind']]=$res->fields['score'];						
 					$res->MoveNext();
 				}
 			}
@@ -73,6 +74,7 @@ if ($_POST['kind']=="各學期定考成績單") {
 		$smarty->assign("all_ss",$all_ss);
 		$smarty->assign("all_score",$all_score);
 		$smarty->assign("test_sort",array(1,2,3));
+		$smarty->assign("test_kind",array('平時成績','定期評量'));
 		$smarty->assign("year",Num2CNum(intval(date("Y")-1911)));
 		$smarty->assign("month",Num2CNum(intval(date("m"))));
 		$smarty->assign("day",Num2CNum(intval(date("d"))));

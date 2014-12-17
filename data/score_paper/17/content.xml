@@ -255,9 +255,6 @@
 <style:style style:name="P17" style:family="paragraph" style:parent-style-name="Table Contents">
 <style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
-<style:style style:name="P17a" style:family="paragraph" style:parent-style-name="Table Contents">
-<style:properties style:font-name="標楷體" fo:font-size="9pt" style:font-name-asian="標楷體" style:font-size-asian="9pt" fo:text-align="center" style:justify-single-word="false"/>
-</style:style>
 <style:style style:name="P18" style:family="paragraph" style:parent-style-name="Standard">
 <style:properties fo:color="#000080" style:font-name="標楷體" style:text-underline="none" style:text-underline-color="font-color" style:font-name-asian="標楷體" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
@@ -371,12 +368,6 @@
 </style:style>
 <style:style style:name="T17" style:family="text">
 <style:properties fo:font-size="9pt" fo:language="en" fo:country="US"/>
-</style:style>
-<style:style style:name="T16a" style:family="text">
-<style:properties style:font-size-asian="7pt"/>
-</style:style>
-<style:style style:name="T17a" style:family="text">
-<style:properties fo:font-size="7pt" fo:language="en" fo:country="US"/>
 </style:style>
 <style:style style:name="T18" style:family="text">
 <style:properties style:font-size-asian="12pt"/>
@@ -955,6 +946,7 @@
 </table:table-cell>
 </table:table-row>
 </table:table>
+<text:p text:style-name="P12"/>
 <text:p text:style-name="P13">
 <text:span text:style-name="T8">說明：1.成績轉換基準：</text:span>
 <text:span text:style-name="T9">優等：九十分以上者。甲等：八十分以上未滿九十分者。乙等：七十 分以上未滿八十分者。</text:span>
@@ -1045,7 +1037,7 @@
 </table:table-row>
 </table:table>
 <text:p text:style-name="P21"/>
-<text:p text:style-name="P1">{學校全銜}{學年}學年度{學期}學期成績單</text:p>
+<text:p text:style-name="P1">{屬性}{縣市別}{學校全銜}{學年}學年度{學期}學期成績單</text:p>
 <text:p text:style-name="P2"/>
 <text:p text:style-name="P22">
 班級：
@@ -1208,13 +1200,13 @@
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17a">
-<text:span text:style-name="T16a">倫理道德</text:span>
-<text:span text:style-name="T17a">(</text:span>
-<text:span text:style-name="T16a">孝經</text:span>
-<text:span text:style-name="T17a">/</text:span>
-<text:span text:style-name="T16a">德討</text:span>
-<text:span text:style-name="T17a">)</text:span>
+<text:p text:style-name="P17">
+<text:span text:style-name="T16">倫理道德</text:span>
+<text:span text:style-name="T17">(</text:span>
+<text:span text:style-name="T16">孝經</text:span>
+<text:span text:style-name="T17">/</text:span>
+<text:span text:style-name="T16">德討</text:span>
+<text:span text:style-name="T17">)</text:span>
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1382,9 +1374,6 @@
 <table:covered-table-cell/>
 </table:table-row>
 </table:table>
-<text:p text:style-name="P26">
-<text:span text:style-name="T18">成績說明</text:span>
-</text:p>
 <text:p text:style-name="P27">四、學習目標及內容</text:p>
 <text:p text:style-name="P28"/>
 <text:p text:style-name="P29">(一) 基礎主軸：</text:p>

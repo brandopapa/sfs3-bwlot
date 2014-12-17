@@ -1,4 +1,4 @@
 修改資料表 stud_service_detail (學生填寫自我省思功能)-- by smallduh (2012-11-30)
 
 ALTER TABLE `stud_service_detail` add `feedback` text 
- 更新失敗 ! 
+ 更新成功 ! 

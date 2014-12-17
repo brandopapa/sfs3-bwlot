@@ -1,0 +1,6 @@
+新增欄位, 教師的 ou 及學生的 ou -- by smallduh (2013-10-09)
+
+ALTER TABLE `ldap` ADD `teacher_ou` varchar(20) not NULL
+ 更新失敗 ! 
+ALTER TABLE `ldap` ADD `stud_ou` varchar(20) not NULL
+ 更新失敗 ! 

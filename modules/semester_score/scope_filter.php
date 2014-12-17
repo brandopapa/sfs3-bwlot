@@ -1,4 +1,3 @@
-
 <?php
 //$Id:  $
 include "config.php";

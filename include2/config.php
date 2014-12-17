@@ -30,7 +30,7 @@ $HOME_IP = array("::1.."); // 一個 c class
   MYSQL 連接設定
 ***********************************/
 // mysql 主機
-$mysql_host ="mysql.blisswisdom.org";
+$mysql_host ="mysql.kindn.es";
 
 // mysql 使用者
 $mysql_user ="bwsh_sfs3";

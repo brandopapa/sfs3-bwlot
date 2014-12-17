@@ -30,6 +30,14 @@ if ($_POST['year_name']) {
   else if ($sel_score_period == '70') {
   	$score_period = 'a.score < 70 and a.score >= 60';
   }
+ 	//add by phoenix 20140905
+  $sel_section=$_POST['section'];
+  if ($sel_section != '0' && $sel_section != '') {
+     $section = 'and a.test_sort = '.$sel_section;
+  }
+  else{
+  	$section = '';
+  }	
 	$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 	$score_semester="score_semester_".$sel_year."_".$sel_seme;
 	$query="select * from $score_semester where 1=0";
@@ -47,7 +55,7 @@ if ($_POST['year_name']) {
 		}
 		if ($all_sn) $all_sn=substr($all_sn,0,-1);
 		//取出符合成績篩選資料列
-		$query="select a.*,b.stud_name from $score_semester a left join stud_base b on a.student_sn=b.student_sn where $score_period and a.student_sn in ($all_sn) and b.stud_study_cond in( 0, 15 ) order by a.student_sn,a.ss_id,a.test_sort,a.test_kind";
+		$query="select a.*,b.stud_name from $score_semester a left join stud_base b on a.student_sn=b.student_sn where $score_period $section and a.student_sn in ($all_sn) and b.stud_study_cond in( 0, 15 ) order by a.student_sn,a.ss_id,a.test_sort,a.test_kind";
 		$res=$CONN->Execute($query);
 		$score_data=$res->GetRows();
 		//取科目中文名
@@ -81,6 +89,7 @@ $smarty->assign("module_name","特定成績篩選查詢");
 $smarty->assign("SFS_MENU",$menu_p); 
 $smarty->assign("year_seme_menu",year_seme_menu($sel_year,$sel_seme)); 
 $smarty->assign("class_year_menu",class_year_menu($sel_year,$sel_seme,$_POST[year_name])); 
+$smarty->assign("section_menu",section_menu($_POST[section])); //add by phoenix 20140905
 $smarty->assign("score_period_menu",score_period_menu($_POST[score_period])); //add by phoenix 20140321
 $smarty->display("score_manage_new_check_score_under.tpl");
 ?>

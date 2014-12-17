@@ -123,6 +123,7 @@
 
                                 $rs=$CONN->Execute($sql);
                         }
+                        
 
 			$wtime="";
 			$ss_arr="";
@@ -132,6 +133,7 @@
 			$mmemo="";
 			$sval="";
 			$v= array();
+			$sum_c_rate=0;
 			while (!$rs->EOF) {
 				$scope_id=$rs->fields['scope_id'];
 				$subject_id=$rs->fields['subject_id'];
@@ -159,13 +161,16 @@
 					if ($score[$ss_id]!="") {
 						$ss_score[$link_ss]+=$score[$ss_id]*$rrate;
 						$rate[$link_ss]+=$rrate;
+						$sum_c_rate+=$rrate;
 					}
 					$dd=$mmemo[$link_ss];
 					$d=(($dd != "") && (substr($dd,-2,2) != "。"))?"。":"";
 					$mmemo[$link_ss].=$d.$memo[$ss_id];
 					if ($ssval[$ss_id]) {
 						$vv=$v[$link_ss];
-						$sval[$link_ss]=$arr_nor[round(($nor_arr[$sval[$link_ss]]*$vv+$nor_arr[$ssval[$ss_id]])/($vv+1))];
+						//$sval[$link_ss]=$arr_nor[round(($nor_arr[$sval[$link_ss]]*$vv+$nor_arr[$ssval[$ss_id]])/($vv+1))];
+						$sval[$link_ss] = $ssval[$ss_id];
+						//echo $link_ss.'_'.$ssval[$ss_id].'_'.$sval[$link_ss].'<br>';
 						$v[$link_ss]+=1;
 					}
 				}
@@ -229,7 +234,7 @@
 				else
 					$temp_arr["b".$k."_".$i.$j]="---";
 			}
-			//處理日常表現成績及文字描述
+			//處理平常表現成績及文字描述
 			$sql="select ss_score,ss_score_memo from stud_seme_score_nor where seme_year_seme='$year_seme' and student_sn='$student_sn'";
 			$rs=$CONN->Execute($sql);
 			$ss_score=$rs->fields['ss_score'];

@@ -20,6 +20,7 @@ $menu_p = array("score_query.php"=>"成績查詢",
 		"check.php"=>"空白成績檢查",
 		"check100.php"=>"百分成績檢查",
 		"check_score_under.php"=>"特定成績篩選查詢",
+		"check_score_notify.php"=>"成績預警分析",
 		"out.php"=>"排除名單");
 //取得模組設定
 $m_arr = get_sfs_module_set();

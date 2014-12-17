@@ -8,7 +8,7 @@
 <table width="100%">
 <tr>
 <td>
-{{$year_seme_menu}} {{$class_year_menu}} {{$score_period_menu}}
+{{$year_seme_menu}} {{$class_year_menu}} {{$section_menu}} {{$score_period_menu}}
 <br><br>檢查該學期各階段成績介於輸入的特定值之間的學生記錄
 {{if $err_msg}}<br><font color="red">{{$err_msg}}</font>{{/if}}
 </td>

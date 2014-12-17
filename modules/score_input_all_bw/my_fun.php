@@ -222,12 +222,13 @@ function class_id_to_student_sn($class_id,$all_student=0){
     $seme_year_seme=sprintf("%03d%d",$class_id_array[0],$class_id_array[1]);
     $seme_class=sprintf("%d%02d",$class_id_array[2],$class_id_array[3]);	
     //$sql="select student_sn from stud_base where stud_study_cond=0 and curr_class_num like '$class_num%' order by curr_class_num ";
-    if ($all_student)
+    if ($all_student) {
 	     $sql="select student_sn from stud_seme where seme_year_seme='$seme_year_seme' and seme_class='$seme_class' order by seme_num";
-    else
-    	$sql="select a.student_sn from stud_base a,stud_seme b where a.stud_study_cond=0 and a.curr_class_num like '$seme_class%' and a.student_sn = b.student_sn and b.seme_year_seme = '$seme_year_seme' and b.seme_class='$seme_class' order by a.curr_class_num ";
-
-	$rs=$CONN->Execute($sql) or die($sql);;
+    }
+    else{
+    	$sql="select a.student_sn from stud_base a,stud_seme b where a.stud_study_cond=0 and a.student_sn = b.student_sn and b.seme_year_seme = '$seme_year_seme' and b.seme_class='$seme_class' order by a.curr_class_num ";
+    }	
+	$rs=$CONN->Execute($sql) or die($sql);
     while (!$rs->EOF) {
         $student_sn[]=$rs->fields["student_sn"];
         $rs->MoveNext();
