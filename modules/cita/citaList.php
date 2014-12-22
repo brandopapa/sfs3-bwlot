@@ -1,6 +1,6 @@
 <?php
 
-// $Id: citaList.php 7084 2013-01-18 11:20:11Z infodaes $
+// $Id: citaList.php 8138 2014-09-23 08:13:03Z smallduh $
 
 include "config.php";
 
@@ -84,6 +84,6 @@ for ($j=1;$j<=$page_total;$j++){
 ?>  
 
 </table>
-<?
+<?php
 foot();
 ?>

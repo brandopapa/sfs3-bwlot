@@ -1,12 +1,16 @@
 <?php
 
-// $Id: stud_move_out.php 7877 2014-02-20 05:50:25Z infodaes $
+// $Id: stud_move_out.php 8215 2014-11-27 04:33:31Z hsiao $
 // 載入設定檔
 include "stud_move_config.php";
 include_once "../../include/sfs_case_dataarray.php";
 
 // 認證檢查
 sfs_check();
+
+//$SCHOOL_BASE = get_school_base($mysql_db);
+//echo $SCHOOL_BASE['sch_id'];
+
 
 $m_arr = get_sfs_module_set();
 extract($m_arr, EXTR_OVERWRITE);
@@ -79,6 +83,12 @@ switch($key) {
 		$CONN->Execute($sql_insert) or die ($sql_insert);
 		$sql_update = "update stud_base set stud_study_cond ='$move_kind' where student_sn='$student_sn'";
 		$CONN->Execute($sql_update) or die ($sql_update);
+                /*
+                if ($isTaichung=='06' || $isTaichung=='19'){
+                    echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                }
+                 * 
+                 */
 	break;
 	
 	case "edit":
@@ -112,6 +122,12 @@ switch($key) {
 		}
 		$postOutBtn=$sure;
 		$edit='1';
+                /*
+                if ($isTaichung=='06' || $isTaichung=='19'){
+                    echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                }
+                 * 
+                 */
 	break;
 	
 	case $sure :
@@ -131,6 +147,12 @@ switch($key) {
 		$CONN->Execute($query)or die ($query);
 		$sql_update = "update stud_base set stud_study_cond ='0' where student_sn='$student_sn'";
 		$CONN->Execute($sql_update) or die ($sql_update);	
+                /*
+                if ($isTaichung=='06' || $isTaichung=='19'){
+                    echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                }
+                 * 
+                 */
 	break;
 	
 	case $clean :
@@ -154,7 +176,22 @@ $field_data = get_field_info("stud_move");
 head();
 print_menu($student_menu_p);
 ?>
-<script language="JavaScript">
+<script type="text/javascript" language="JavaScript">
+
+//var oform = document.forms["myform"];
+function getSN(){
+var oform = document.forms["myform"];
+alert(oform.elements.choice.value);
+}
+
+function openModal(studentsn,currseme,stud_id,stud_name,stud_class,stud_new_class)
+{
+  var para = studentsn + ';' + currseme + ';' + stud_id + ';' + stud_name.trim() + ';' + stud_class.trim() + ';' + stud_new_class.trim() + ';' + '<?php echo $SCHOOL_BASE["sch_cname_ss"].'('.$SCHOOL_BASE['sch_id'].')'; ?>';
+  para = encodeURIComponent(para);
+  var targeturi = encodeURI("<?php echo $SFS_PATH_HTML;?>modules/stud_move/session_out.php?para="+para);
+  window.open(targeturi);
+}
+
 function checkok()
 {
 	var OK=true;	
@@ -166,11 +203,27 @@ function checkok()
 	{	alert('未選擇學生');
 		OK=false;
 	}	
-
+	
+	
 	if(document.myform.move_kind.value=='')
 	{	alert('未選擇類別');
 		OK=false;
-	}	
+	}
+	
+	var kid = document.getElementsByName("move_kind")[0].value;
+	
+	if(kid == 8 && document.myform.city.value=='')
+        {       alert('新就讀縣市未輸入');
+                OK=false;
+        }
+	if(kid == 8 && document.myform.school.value=='')
+        {       alert('新就讀學校未輸入');
+                OK=false;
+        }
+	if(kid == 8 && document.myform.school_id.value=='')
+        {       alert('新就讀學校教育部代碼未輸入');
+                OK=false;
+        }
 	document.myform.action='<?php echo $_SERVER['SCRIPT_NAME'] ?>';
 	return OK
 }
@@ -295,16 +348,20 @@ function PrintChart(a,b,c,d) {
 	<td> <?php echo $school_sshort_name ?>轉證字第<?php echo $curr_seme?><input type='text' name='school_move_num' value='<?php echo sprintf('%03d',$school_move_num); ?>' width='3' size='3'<?php echo ($key=='edit' or $postOutBtn==$sure)?'':' disabled'; ?>>號 ( 新增轉出 會自動給予編號 )</td>
 </tr>
 <tr>
+        <td align="right" CLASS="title_sbody1">請選擇新就讀學校</td>
+        <td><SELECT  NAME="selectcity" onChange="SelectCity();" ><Option value="">請選擇縣市</option></SELECT>&nbsp;<SELECT  NAME="selectdistrict" onChange="SelectDistrict();" ><Option value="">請選擇區域</option></SELECT>&nbsp;<SELECT NAME="selectschool" onchange="disp_text();"><Option value="">請選擇學校</option></SELECT></td>
+</tr>
+<tr>
         <td align="right" CLASS="title_sbody1">新就讀縣市</td>
-        <td><input type="text" size="20" maxlength="20" name="city" value="<?php echo $city ?>"></td>
+        <td><input type="text" size="20" maxlength="20" name="city" value="<?php echo $city ?>" readonly></td>
 </tr>
 <tr>
         <td align="right" CLASS="title_sbody1">新就讀學校</td>
-        <td><input type="text" size="20" maxlength="20" name="school" value="<?php echo $school ?>"></td>
+        <td><input type="text" size="20" maxlength="20" name="school" value="<?php echo $school ?>" readonly></td>
 </tr>
  <tr> 
           <td align="right" CLASS="title_sbody1">新就讀學校教育部代碼</td>   
-          <td><input type="text" size="10" maxlength="6" name="school_id" value="<?php echo $school_id ?>"></td>   
+          <td><input type="text" size="10" maxlength="6" name="school_id" value="<?php echo $school_id ?>" readonly></td>   
   </tr> 
 
 <tr>
@@ -364,7 +421,7 @@ function PrintChart(a,b,c,d) {
 		$result = $CONN->Execute($query) or die ($query);
 		if (!$result->EOF) {
 			echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"2\" bordercolorlight=\"#333354\" bordercolordark=\"#FFFFFF\"  width=\"100%\" class=main_body >";
-			echo "<tr><td colspan=12 class=title_top1 align=center >本學期調出學生</td></tr>";
+			echo "<tr><td colspan=13 class=title_top1 align=center >本學期調出學生</td></tr>";
 			echo "
 			<TR class=title_mbody >
 				<TD>NO.</TD>
@@ -382,6 +439,7 @@ function PrintChart(a,b,c,d) {
 				<input type='submit' name='output_xml' value='匯出XML' onclick=\"document.myform.action='../toxml/output_xml.php'; document.myform.submit();\">
 				</TD>
 				<TD rowspan=2 align='center'>學籍狀態暫切</TD>
+				<TD rowspan=2 align='center'>XML自動交換</TD>
 			</TR>
 			<TR class=title_mbody >
 			<TD colspan=8>轉出原因</TD>
@@ -411,6 +469,7 @@ function PrintChart(a,b,c,d) {
 			$move_c_num = $result->fields["move_c_num"];
 			$school_id = $result->fields["school_id"];
 			$cityschool = $result->fields["city"].$result->fields["school"];
+                        $school = $result->fields["school"];
 			
 			//加入抓取學生身分的功能
 			//學生身分別 
@@ -442,6 +501,7 @@ function PrintChart(a,b,c,d) {
 					<td rowspan=2 align='center'><input type='checkbox' name='choice[$student_sn]'></td>
 					</TD>
 					<TD rowspan=2 align='center'>$stud_study_cond</TD>
+<TD rowspan=2 align='center'><input type='button' value='自動上傳' onclick='openModal($student_sn,$curr_seme,$stud_id,\"$stud_name\",\"$stud_clss".(($stud_clss=="")?"　":"")."\",\"$school\");'></TD>
 				</TR>";
 			
 			echo ($i++ %4>1)?"<TR class=nom_1>":"<TR class=nom_2>";
@@ -473,5 +533,14 @@ function PrintChart(a,b,c,d) {
 <input type="hidden" name="filename">
 <input type="hidden" name="do_key">
 </form>
-
+<?php
+if ($IS_JHORES){
+	echo "<script type='text/javascript' src='jhslist.js'></script>";
+}else{
+	echo "<script type='text/javascript' src='pslist.js'></script>";
+}
+?>
+<script language='javascript'>
+$(function(){fillCity();});
+</script>
 <?php foot(); ?>

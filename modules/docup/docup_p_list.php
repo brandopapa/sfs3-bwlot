@@ -1,6 +1,6 @@
 <?php
 
-//$Id: docup_p_list.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: docup_p_list.php 8143 2014-09-23 08:18:23Z smallduh $
 
 //設定檔載入檢查
 include "docup_config.php";
@@ -16,7 +16,7 @@ $result = $CONN->Execute($sql_select);
 ?>
 
 <table border="1" class=module_body cellspacing="0" cellpadding="0" width=100%>
-<caption><? echo $_SESSION[session_tea_name]; ?>--文件專案管理&nbsp;&nbsp;&nbsp;<a href="docup_p_add.php">新增文件專案</a></caption>
+<caption><?php echo $_SESSION[session_tea_name]; ?>--文件專案管理&nbsp;&nbsp;&nbsp;<a href="docup_p_add.php">新增文件專案</a></caption>
   <tr>    
     <td nowrap bgcolor="#008000" align="center" width=60%><font color="#FFFFFF">專案名稱</font></td>
     <td nowrap bgcolor="#008000" align="center" colspan=2 ><font color="#FFFFFF">動作</font></td>

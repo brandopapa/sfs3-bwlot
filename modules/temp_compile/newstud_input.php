@@ -1,6 +1,6 @@
 <?php
 
-// $Id: newstud_input.php 7339 2013-07-10 14:20:29Z chiming $
+// $Id: newstud_input.php 8118 2014-09-15 05:35:09Z hami $
 
 /*引入學務系統設定檔*/
 require "config.php";
@@ -216,6 +216,7 @@ function import($newstuddata,$newstuddata_name,$newstuddata_size){
 		echo "檔案格式錯誤!";
 		exit;
 	}
+    unlink($temp_file);
 }
 
 //結束主網頁顯示區

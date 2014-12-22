@@ -1,5 +1,5 @@
 <?php
-// $Id: module-upgrade.php 7733 2013-10-29 11:38:25Z smallduh $
+// $Id: module-upgrade.php 8101 2014-08-31 14:51:15Z infodaes $
 if(!$CONN){
         echo "go away !!";
         exit;
@@ -187,5 +187,19 @@ if (!is_file($up_file_name)){
         fclose ($fp);
 }
 
+//新增協同教學教師代碼欄位
+$up_file_name =$upgrade_str."2014-08-31.txt";
+if (!is_file($up_file_name)){
+	$query="ALTER TABLE `score_course` ADD `cooperate_sn` INT NULL AFTER `teacher_sn`; ";
+	if ($CONN->Execute($query))
+		$temp_str = "$query\n 新增協同教學教師代碼欄位建立成功 ! \n";
+	else
+		$temp_str = "$query\n 新增協同教學教師代碼欄位建立失敗 ! \n";
+
+	$temp_query = "新增協同教學教師代碼欄位 -- by chi (2014-08-31)\n\n$temp_str";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+}
 
 ?>

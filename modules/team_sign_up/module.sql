@@ -1,4 +1,4 @@
-# //$Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# //$Id: module.sql 8153 2014-09-30 01:33:20Z smallduh $
 
 # 資料表格式： `stud_team_kind`
 #
@@ -18,7 +18,7 @@ CREATE TABLE stud_team_kind (
   beg_date datetime default '0000-00-00 00:00:00',
   end_date datetime default '0000-00-00 00:00:00',
   PRIMARY KEY  (id)
-) TYPE=MyISAM COMMENT='社團報名類別';
+) ENGINE=MyISAM COMMENT='社團報名類別';
 
 
 # 資料表格式： `stud_team_sign`
@@ -33,4 +33,4 @@ CREATE TABLE stud_team_sign (
   bk_fg tinyint(4) NOT NULL default '0',
   sign_time timestamp(14) NOT NULL,
   PRIMARY KEY  (sid)
-) TYPE=MyISAM COMMENT='社團報名表';
+) ENGINE=MyISAM COMMENT='社團報名表';

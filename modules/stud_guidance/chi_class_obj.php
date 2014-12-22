@@ -1,5 +1,5 @@
 <?php
-//$Id: chi_class_obj.php 7420 2013-08-09 23:58:53Z infodaes $
+//$Id: chi_class_obj.php 8059 2014-06-10 13:55:04Z chiming $
 $question_kind=array("未填寫",
 	1=>"犯案、嚴重行為偏差行為",
 	2=>"低成就、中輟學生",
@@ -35,7 +35,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 A:link  {text-decoration:none;color:blue; }
 A:visited {text-decoration:none;color:blue; }
 A:hover {background-color:FF8000;color: #000000;  }
-</style><?
+</style><?php
 }
 
 #####################   班級選單  ###########################

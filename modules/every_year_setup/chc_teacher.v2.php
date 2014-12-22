@@ -1,11 +1,12 @@
-<?
-// $Id: chc_teacher.v2.php 5310 2009-01-10 07:57:56Z hami $
+<?php
+// $Id: chc_teacher.v2.php 8205 2014-11-14 08:01:43Z hami $
 include "config.php";
 sfs_check();
-
+$ary = array();
 if ($_POST[act]=='add' && $_POST[year_seme]!=''&& $_POST[grade]!='' ){
 	foreach ($_POST[class_id] as $new_class=>$tea_sn) {
-	if ($new_class=='' || $new_class=='0' ) continue;
+	if ($new_class=='' || $new_class=='0' || !$tea_sn) continue;
+
 	$ary[$tea_sn][sn]=$tea_sn;
 	$new_class1= split("_",$new_class);//切開字串
 	$seme_class=($new_class1[2]+0).$new_class1[3];
@@ -32,9 +33,10 @@ if ($_POST[act]=='add' && $_POST[year_seme]!=''&& $_POST[grade]!='' ){
 
 	foreach ($ary as $sn => $dat) {
 		//如果,是本學期才修改 teacher_post
-		if ($chk_now=='Y'){
+		if ($chk_now=='Y' and $sn){
 			$SQL="update teacher_post set class_num='$dat[seme_class]' where teacher_sn='$sn'";
-			$rs=$CONN->Execute($SQL) or die($SQL); 
+			$rs=$CONN->Execute($SQL) or die($SQL);
+
 			}
 		$sql_update = "update school_class set teacher_1='$dat[tea_name]' where year='$dat[year]' and semester='$dat[semester]' and c_year='$dat[c_year]' and c_sort='$dat[c_sort]' and enable=1";
 		$rs=$CONN->Execute($sql_update) or die($sql_update); 

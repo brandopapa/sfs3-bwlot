@@ -1,6 +1,6 @@
 <?php 
 
-// $Id: stud_eduh_list.php 6986 2012-10-31 06:39:15Z infodaes $
+// $Id: stud_eduh_list.php 8208 2014-11-18 02:38:06Z smallduh $
 
 // ¸ü¤J³]©wÀÉ
 include "stud_reg_config.php";
@@ -34,8 +34,11 @@ switch($_POST[do_key]) {
         		$sse_temp =",";
         		$sse_arr = "sse_s".$i;
         		if (count($_POST["sse_s".$i])>0) {
-        			while(list($tid,$tname)=each($_POST["sse_s".$i]))
-        				$sse_temp .= $tname.",";
+        			foreach ($_POST["sse_s".$i] as $tid=>$tname) {
+        			 $sse_temp .= $tname.",";
+        			}
+        			//while(list($tid,$tname)=each($_POST["sse_s".$i]))
+        			//	$sse_temp .= $tname.",";
 
         			$$sse_arr = $sse_temp;
         		}

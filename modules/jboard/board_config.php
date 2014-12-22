@@ -14,17 +14,28 @@ include "module-upgrade.php";
 $m_arr = &get_sfs_module_set();
 extract($m_arr, EXTR_OVERWRITE);
 
+//2014.11.4 跑馬燈最長期限，若未設定，預設30日
+if ($max_marquee_days==0) $max_marquee_days=30;
+
 /* 上傳檔案目的目錄 */
 $path_str = "school/jboard/";
 set_upload_path($path_str);
 $USR_DESTINATION = $UPLOAD_PATH.$path_str;
+
+//附檔存放路徑 2014.08.08
+$path_str = "school/jboard/files/";
+set_upload_path($path_str);
+/*附檔下載路徑 URL */
+$download_file_path = $UPLOAD_URL.$path_str;
+/*下載路徑 */
+$Download_Path = $UPLOAD_PATH.$path_str;
+
 $path_str = "school/jboard/tmp/";
 set_upload_path($path_str);
 /*圖檔暫存目錄*/
 $USR_IMG_TMP = $UPLOAD_PATH.$path_str;
 
-/*下載路徑 */
-$download_path = $UPLOAD_URL.$path_str;
+
 
 /*處室陣列*/
 $ROOM=room_kind();

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_list.php 7548 2013-09-19 03:35:54Z hami $
+// $Id: stud_list.php 8165 2014-10-08 15:11:08Z infodaes $
 
 // 載入設定檔
 include "stud_reg_config.php";
@@ -27,7 +27,7 @@ if ($stud_person_id) {
 check_phpini_upload();
 
 //按鍵處理 
-switch ($do_key){	
+switch ($do_key){
 	case $editBtn: //修改
 	if ($same_key) {
 		$addr = $stud_addr_1;
@@ -107,9 +107,10 @@ switch ($do_key){
 		stud_preschool_status='$stud_preschool_status',stud_preschool_id='$stud_preschool_id',
 		stud_preschool_name='$stud_preschool_name',stud_Mschool_status='$stud_Mschool_status',
 		stud_mschool_id='$stud_mschool_id',stud_mschool_name='$stud_mschool_name',curr_class_num='$temp_num',
-		addr_zip='$addr_zip',enroll_school='$enroll_school' ,edu_key='$edu_key' where student_sn='$student_sn'";
+		addr_zip='$addr_zip',enroll_school='$enroll_school' ,edu_key='$edu_key',obtain='$obtain',safeguard='$safeguard' where student_sn='$student_sn'";
 		
 		$sql_update=str_replace("addr_move_in=''","addr_move_in=NULL",$sql_update);
+		
 //echo $sql_update; 
 
 		$CONN->Execute($sql_update) or die($sql_update);
@@ -162,7 +163,7 @@ switch ($do_key){
 		
 		//寫到學籍基本資料表		
 		$new_curr_class_num=$seme_class.sprintf("%02d",$new_seme_num);
-		$sql_ins="replace into stud_base(stud_id, stud_sex, stud_study_year, curr_class_num, stud_study_cond) values('$new_stud_id','$new_stud_sex', '$new_stud_study_year', '$new_curr_class_num','0')";	
+		$sql_ins="replace into stud_base(stud_id, stud_sex, stud_study_year, curr_class_num, stud_study_cond,obtain,safeguard) values('$new_stud_id','$new_stud_sex', '$new_stud_study_year', '$new_curr_class_num','0','$obtain','$safeguard')";	
 		$rs_ins=$CONN->Execute($sql_ins) or trigger_error($sql_ins,256);
 		//取出剛加入的流水號
 		$new_student_sn=mysql_insert_id();
@@ -340,6 +341,8 @@ while (!$recordSet->EOF) {
 	$stud_study_cond = $recordSet->fields["stud_study_cond"];
 	$addr_zip = $recordSet->fields["addr_zip"];
 	$enroll_school = $recordSet->fields["enroll_school"];
+	$obtain = $recordSet->fields["obtain"];
+	$safeguard = $recordSet->fields["safeguard"];
 
 	$recordSet->MoveNext();
 };
@@ -524,6 +527,31 @@ function do_same(){
 <tr>
 <td align="right" CLASS="title_sbody1" nowrap>入學時學校：</td><td colspan="4"><input type='text' size=30 maxlength=30 name="enroll_school" value="<?php echo $enroll_school ?>"></td>
 </tr>
+
+<tr bgcolor="#ffcccc">
+<td align="right" nowrap>學籍取得原因:</td><td>
+	<?php
+    	$sel1 = new drop_select(); //選單類別
+    	$sel1->s_name = "obtain"; //選單名稱
+	$sel1->id = intval($obtain);
+	$sel1->has_empty = true;
+	$sel1->arr = stud_obtain_kind(); //內容陣列
+	$sel1->do_select();	
+    	?>
+</td>
+<td align="right" nowrap>個案保護類別:</td><td>
+	<?php
+    	$sel1 = new drop_select(); //選單類別
+    	$sel1->s_name = "safeguard"; //選單名稱
+	$sel1->id = intval($safeguard);
+	$sel1->has_empty = true;
+	$sel1->arr = stud_safeguard_kind(); //內容陣列
+	$sel1->do_select();	
+    	?>
+</td>
+<td align='center'>*本列資料非XML交換標準！</td>
+</tr>
+
 <tr>
 <td   colspan="5" >
 	<!-- 中輟時戶籍地址 -->

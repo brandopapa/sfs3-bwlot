@@ -1,6 +1,6 @@
 <?php
 
-//$Id: doc_update.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: doc_update.php 8145 2014-09-23 08:21:31Z smallduh $
 
 //設定檔載入檢查
 include "docup_config.php";
@@ -120,7 +120,7 @@ while (!$result->EOF) {
 <input type=hidden name=docup_store2 value="<?php echo $docup_store ?>">
   <table class=module_body align=center>
     <caption>修改 <font color=blue><b> 
-    <? echo "$docup_name"; ?>
+    <?php echo "$docup_name"; ?>
     </b></font></caption>
     <tr> 
       <td align="right" valign="top" width="70">專案編號</td>
@@ -135,21 +135,21 @@ while (!$result->EOF) {
         <input type="text" size="80" maxlength="80" name="docup_name" value="<?php echo $docup_name ?>">
       </td>
     </tr>
-    <? if ($docup_url) { ?>
+    <?php if ($docup_url) { ?>
     <tr> 
       <td align="right" valign="top" width="70">鏈結網址:</td>
       <td width="490">
-        <input type="text" name="txturl" size="80" value="<? echo $docup_url ; ?>">
+        <input type="text" name="txturl" size="80" value="<?php echo $docup_url ; ?>">
       </td>
     </tr>
-    <? } else { ?> 
+    <?php } else { ?> 
     <tr> 
       <td align="right" valign="top" width="70">選擇檔案:</td>
       <td width="490"> 
         <input type="FILE" size="40" name="docup_store" >
         不更動檔案不須重新瀏覽</td>
     </tr>
-    <? }  ?>
+    <?php }  ?>
     
     <tr> 
       <td align="right" valign="top" width="70">分享設定</td>
@@ -195,7 +195,7 @@ for ($j=0;$j<3;$j++){
     <tr> 
       <td colspan=2 align=center> 
         <hr size=1>
-        <? echo "<a href=\"doc_list.php?doc_kind_id=$doc_kind_id&docup_p_id=$docup_p_id\">"; ?>
+        <?php echo "<a href=\"doc_list.php?doc_kind_id=$doc_kind_id&docup_p_id=$docup_p_id\">"; ?>
         回文件列表</a> </td>
     </tr>
   </table>

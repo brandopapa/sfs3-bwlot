@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_list.php 7550 2013-09-19 03:36:20Z hami $
+// $Id: stud_list.php 8165 2014-10-08 15:11:08Z infodaes $
 
 // 載入設定檔
 include "stud_reg_config.php";
@@ -77,7 +77,7 @@ switch ($do_key){
 		stud_preschool_status='$stud_preschool_status',stud_preschool_id='$stud_preschool_id',
 		stud_preschool_name='$stud_preschool_name',stud_Mschool_status='$stud_Mschool_status',
 		stud_mschool_id='$stud_mschool_id',stud_mschool_name='$stud_mschool_name',curr_class_num='$temp_num',
-		enroll_school='$enroll_school' ,edu_key='$edu_key' where student_sn='$student_sn'";
+		enroll_school='$enroll_school' ,edu_key='$edu_key',obtain='$obtain',safeguard='$safeguard' where student_sn='$student_sn'";
 		$sql_update=str_replace("addr_move_in=''","addr_move_in=NULL",$sql_update);
 		$CONN->Execute($sql_update) or die($CONN->ErrorMsg());
 		$c_curr_class=substr($curr_class_num,0,3);
@@ -192,6 +192,8 @@ while (!$recordSet->EOF) {
 	$curr_class_num = $recordSet->fields["curr_class_num"];
 	$stud_study_cond = $recordSet->fields["stud_study_cond"];
 	$enroll_school = $recordSet->fields["enroll_school"];
+	$obtain = $recordSet->fields["obtain"];
+	$safeguard = $recordSet->fields["safeguard"];
 	$recordSet->MoveNext();
 };
 
@@ -255,7 +257,31 @@ function do_same(){
 	<td align="right" CLASS="title_sbody1" nowrap><?php echo $field_data[stud_name][d_field_cname] ?></td>
 	<td >中文:<?php echo $stud_name ?><BR>英文:<input type="text" size="20" maxlength="20" name="stud_name_eng" value="<?php echo $stud_name_eng ?>"></td>
 	<td align="right" CLASS="title_sbody1" nowrap>座號</td>
-    	<td CLASS="gendata" align='center'><font size=4><?php echo intval(substr($curr_class_num,-2)) ?></font><input type="hidden" name="sit_num" size="3" value="<?php echo intval(substr($curr_class_num,-2)) ?>">
+    	<td CLASS="gendata" align='center'>
+    		<?php
+    		//國中，不允許導師改座號
+    		if ($IS_JHORES==6) {
+    		?>
+    		<font size=4><?php echo intval(substr($curr_class_num,-2)) ?></font>
+    		<input type="hidden" name="sit_num" size="3" value="<?php echo intval(substr($curr_class_num,-2)) ?>">
+    		
+    		<?php
+    		} else {
+					//檢查是否為設定月分
+					$Month=date('n');
+					$M=explode(',',$update_site_num);
+					if (in_array($Month, $M)) {
+					?>
+    			<input type="text" name="sit_num" size="3" value="<?php echo intval(substr($curr_class_num,-2)) ?>">
+					<?php
+					} else {
+					?>
+    			<font size=4><?php echo intval(substr($curr_class_num,-2)) ?></font>
+    			<input type="hidden" name="sit_num" size="3" value="<?php echo intval(substr($curr_class_num,-2)) ?>">
+    	  	<?php
+    		  } // end if in_array
+    		}  // end if $IS_JHORES
+    		?>
     	<input type=hidden name="curr_class_num" value="<?php echo $curr_class_num ?>">
     	</td>
     	
@@ -363,6 +389,30 @@ function do_same(){
 </tr>
 <tr>
 <td align="right" CLASS="title_sbody1" nowrap>入學時學校：</td><td colspan="4"><input type='text' size=30 maxlength=30 name="enroll_school" value="<?php echo $enroll_school ?>"></td>
+</tr>
+
+<tr bgcolor="#ffcccc">
+<td align="right" nowrap>學籍取得原因:</td><td>
+	<?php
+    	$sel1 = new drop_select(); //選單類別
+    	$sel1->s_name = "obtain"; //選單名稱
+	$sel1->id = intval($obtain);
+	$sel1->has_empty = true;
+	$sel1->arr = stud_obtain_kind(); //內容陣列
+	$sel1->do_select();	
+    	?>
+</td>
+<td align="right" nowrap>個案保護類別:</td><td>
+	<?php
+    	$sel1 = new drop_select(); //選單類別
+    	$sel1->s_name = "safeguard"; //選單名稱
+	$sel1->id = intval($safeguard);
+	$sel1->has_empty = true;
+	$sel1->arr = stud_safeguard_kind(); //內容陣列
+	$sel1->do_select();	
+    	?>
+</td>
+<td align='center'>*本列資料非XML交換標準！</td>
 </tr>
 
 <tr>

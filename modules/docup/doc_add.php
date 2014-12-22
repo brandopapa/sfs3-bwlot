@@ -1,6 +1,6 @@
 <?php
 
-//$Id: doc_add.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: doc_add.php 8145 2014-09-23 08:21:31Z smallduh $
 
 //設定檔載入檢查
 include "docup_config.php";
@@ -89,7 +89,7 @@ $doc_kind_id = $result->fields["doc_kind_id"];
 <input type="hidden" name="fname">
   <table class=module_body align=center>
     <caption>新增 <font color=blue><b> 
-    <? echo "$state_name--$docup_p_name"; ?>
+    <?php echo "$state_name--$docup_p_name"; ?>
     </b></font> 文件</caption>
     <tr> 
       <td align="right" valign="top">專案編號:</td>
@@ -149,7 +149,7 @@ $doc_kind_id = $result->fields["doc_kind_id"];
     <tr> 
       <td colspan=2 align=center> 
         <hr size=1>
-        <? echo "<a href=\"doc_list.php?docup_p_id=$docup_p_id&doc_kind_id=$doc_kind_id\">回文件列表</a>"; ?>
+        <?php echo "<a href=\"doc_list.php?docup_p_id=$docup_p_id&doc_kind_id=$doc_kind_id\">回文件列表</a>"; ?>
       </td>
     </tr>
   </table>

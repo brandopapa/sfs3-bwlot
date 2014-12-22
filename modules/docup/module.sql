@@ -10,7 +10,7 @@ CREATE TABLE docup (
   teacher_sn int(11) NOT NULL default '0',
   docup_file_size int(11) NOT NULL default '0',
   PRIMARY KEY  (docup_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -28,6 +28,6 @@ CREATE TABLE docup_p (
   docup_p_count int(11) NOT NULL default '0',
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY  (docup_p_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 

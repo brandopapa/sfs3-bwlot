@@ -100,11 +100,12 @@ while (!$result->EOF) {
 		$tempArr[] = $teacher_sn;
 		$result->MoveNext();		
 }
+$tea_name_arr2 = array();
 foreach ($tea_name_arr as $id=>$val) {
-	if (!in_array($id, $tempArr))
-		unset($tea_name_arr[$id]);
+	if (in_array($id, $tempArr))
+		$tea_name_arr2[$id] = $val;
 }
-while (list($key, $val) = each($tea_name_arr) ){
+while (list($key, $val) = each($tea_name_arr2) ){
 	$post_k=teacher_post_k($key);
 	$main="<tr bgcolor=#ddddff align=center OnMouseOver=sbar(this) OnMouseOut=cbar(this)><td > $val</td><td>$post_kind[$post_k]</td>";
 	for ($i = 1; $i <= $a; $i++) {

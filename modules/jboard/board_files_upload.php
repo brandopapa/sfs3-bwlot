@@ -22,15 +22,18 @@
        		$sFP=fopen($_FILES["resourceFile_$i"]['tmp_name'],"r");				//載入檔案
        		$sFilesize=filesize($_FILES["resourceFile_$i"]['tmp_name']); 	//檔案大小       		
        		if ($sFilesize>$Max_upload*1024*1024) {
-       	   continue;
+       			//超過限制大小, 不存
+       	    continue;
        	  }else{
        		$sFiletype=$_FILES["resourceFile_$i"]['type'];  							//檔案屬性
-       		
+       		/* 2014.09.30 取消
        		//轉碼 , 把檔案內容存入
        		$sFile=addslashes(fread($sFP,filesize($_FILES["resourceFile_$i"]['tmp_name'])));
        		$sFile=base64_encode($sFile);
-				  
-				  $query="insert into jboard_files (b_id,org_filename,new_filename,filesize,filetype,content) values ('$b_id','$org_filename','$new_filename','$sFilesize','$sFiletype','$sFile')";
+				  */
+				  /* 將檔名複製到檔案區, 並更成新檔名  2014.09.30 */
+				  copy($_FILES["resourceFile_$i"]['tmp_name'],$Download_Path.$new_filename); 				  
+				  $query="insert into jboard_files (b_id,org_filename,new_filename,filesize,filetype) values ('$b_id','$org_filename','$new_filename','$sFilesize','$sFiletype')";
 				  $CONN->Execute($query) or die ($query);				  
 				  }
 				}

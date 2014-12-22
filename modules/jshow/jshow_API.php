@@ -62,15 +62,32 @@ if ($_GET['act']=='GetPicByKindID') {
 //取得某kind_id的所有圖id依隨機
 if ($_GET['act']=='GetPicByKindIDorderByRand') {
   $kind_id=$_GET['kind_id'];  //指定分類區
+  //若有指定必選圖片
+  if ($_GET['visible_must']!="") {
+    $must="and id not in (".$_GET['visible_must'].")";
+    //取得必選圖片
+    $sql="select * from jshow_pic where kind_id='$kind_id' and display='1' and id in (".$_GET['visible_must'].") order by sort";
+  	$res=$CONN->Execute($sql);
+  	$ROW_MUST=$res->GetRows();
+  } else {
+    $must="";
+  }
+  
   //取得預設圖片與今日圖片
-  $sql="select * from jshow_pic where kind_id='$kind_id' and display='1' order by RAND()";
+  $sql="select * from jshow_pic where kind_id='$kind_id' and display='1' ".$must." order by RAND()";
   if ($_GET['visible']>0) $sql.=" limit ".$_GET['visible']; 
   $res=$CONN->Execute($sql);
   $ROW=$res->GetRows();
   //轉碼
   $row=array();
+  $i=0;
+  foreach ($ROW_MUST as $k=>$v) {
+        $i++;
+        $row[$i]=array_base64_encode($v);
+  }
   foreach ($ROW as $k=>$v) {
-        $row[$k]=array_base64_encode($v);
+        $i++;
+        $row[$i]=array_base64_encode($v);
   }
 }
 

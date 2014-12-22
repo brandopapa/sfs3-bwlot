@@ -23,12 +23,51 @@ if (!ini_get('register_globals')) {
 
 switch($key) {
 	case "確定新增" :
-	$sql_insert = "insert into jboard_kind (bk_id,board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin,bk_order,board_is_sort,position,board_is_coop_edit) values ('$bk_id','$board_name','$board_date','$board_k_id','$board_last_date','$board_is_upload','$board_is_public','$board_admin','$bk_order','$board_is_sort','$position','$board_is_coop_edit')";
-	mysql_query($sql_insert,$conID) or die($sql_insert);
+	$bk_id=$new_bk_id;
+	$sql_check="select * from jboard_kind where bk_id='$bk_id'";
+	$res=$CONN->Execute($sql_check);
+	if ($res->RecordCount()>0) {
+		$INFO="分類區代碼重覆了, 請重新訂定!";	
+		$key="新增分類區";
+		$row['board_name']=$board_name;
+		$row['board_date']=$board_date;
+		$row['board_k_id']=$board_k_id;
+		$row['board_last_date']=$board_last_date;
+		$row['board_is_upload']=$board_is_upload;
+		$row['board_is_public']=$board_is_public;
+		$row['board_admin']=$board_admin;
+		$row['bk_order']=$bk_order;
+		$row['board_is_sort']=$board_is_sort;
+		$row['position']=$position;
+		$row['board_is_coop_edit']=$board_is_coop_edit;
+		
+	} else {
+	 $sql_insert = "insert into jboard_kind (bk_id,board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin,bk_order,board_is_sort,position,board_is_coop_edit) values ('$bk_id','$board_name','$board_date','$board_k_id','$board_last_date','$board_is_upload','$board_is_public','$board_admin','$bk_order','$board_is_sort','$position','$board_is_coop_edit')";
+	 mysql_query($sql_insert,$conID) or die($sql_insert);
+  }
 	break;
 	case "確定修改" :
 	$sql_update = "update jboard_kind set board_name='$board_name ',board_date='$board_date',board_k_id='$board_k_id',board_last_date='$board_last_date',board_is_upload='$board_is_upload',board_is_public='$board_is_public',board_admin='$board_admin',bk_order='$bk_order',board_is_sort='$board_is_sort',position='$position',board_is_coop_edit='$board_is_coop_edit' where bk_id='$bk_id' ";
 	mysql_query($sql_update,$conID) or die ($sql_update);
+	//更改代碼
+	if ($new_bk_id!=$bk_id) {
+	 	$sql_check="select * from jboard_kind where bk_id='$new_bk_id'";
+	  $res=$CONN->Execute($sql_check);
+	 if ($res->RecordCount()>0) {
+		$INFO="分類區代碼重覆了, 請重新訂定! 無法更新代碼!";   
+   } else {
+   	//修改 jboard_kind 的 bk_id
+   	  $sql="update jboard_kind set bk_id='$new_bk_id' where bk_id='$bk_id'";
+   	  $res=$CONN->Execute($sql);
+   	//修改 jboard_check 的 pro_kind_id
+   	  $sql="update jboard_check set pro_kind_id='$new_bk_id' where pro_kind_id='$bk_id'";
+   	  $res=$CONN->Execute($sql);
+   	//修改 jboard_p 的 bk_id
+   	  $sql="update jboard_p set bk_id='$new_bk_id' where bk_id='$bk_id'";
+   	  $res=$CONN->Execute($sql);
+   }
+	}
+	
 	break;
 	case "確定刪除" :
 	$sql_update = "delete from jboard_kind  where bk_id='$bk_id'";	
@@ -122,7 +161,7 @@ return;
 function checkok()
 {
     var OK=true
-    if      (document.eform.bk_id.value == "" )
+    if      (document.eform.new_bk_id.value == "" )
      {
              OK=false;
        str= "分類區代號不可留空！請再詳填！";
@@ -177,20 +216,20 @@ if ($key == "刪除"){
 ?>
 <form method="post" name="myform" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <select name="bk_id" onchange="this.form.submit()" size="20">
-	<option value="">─────</option>
+	<option value="">-[順序]-名稱(代碼)────</option>
 
 <?php
 	$query = "select * from jboard_kind order by bk_order,bk_id ";
 	$result= $CONN->Execute($query) or die ($query);
 	while( $row = $result->fetchRow()){
-		$P=($row['position']>0)?"|".str_repeat("--",$row['position']):"";
+		$P=($row['position']>0)?"".str_repeat("|--",$row['position']):"";
 		
 		if ($row["bk_id"] == $bk_id  ){
-			echo sprintf(" <option style='color:%s' value=\"%s\" selected>[%05d] %s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row['bk_order'],$row["board_name"]);
+			echo sprintf(" <option style='color:%s' value=\"%s\" selected>[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
 			$board_name = $row["board_name"];
 		}
 		else
-			echo sprintf(" <option style='color:%s' value=\"%s\">[%05d] %s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row['bk_order'],$row["board_name"]);
+			echo sprintf(" <option style='color:%s' value=\"%s\">[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
 	}
 	echo "</select>";
 
@@ -204,26 +243,27 @@ if ($key == "刪除"){
 <form action="<?php echo $PHP_SELF ?>" name=eform method="post" onsubmit="return checkok()"> 
 <table border="1" cellspacing="0" cellpadding="2" bordercolorlight="#333354" bordercolordark="#FFFFFF"  width="100%" class=main_body >
 <?php
-if ($key == "新增分類區" or $key == "確定新增" or $bk_id == ""){
+//if ($key == "新增分類區" or $key == "確定新增" or $bk_id == ""){
 ?>
   <td align="right"  nowrap>分類區代號</td>
-	<td><input type="text" size="12" maxlength="12" name="bk_id" value="<?php echo $bk_id ?>"></td>
+	<td><input type="text" size="36" maxlength="36" name="new_bk_id" value="<?php echo $bk_id ?>"></td>
+	<input type="hidden" name="bk_id" value="<?php echo $bk_id ?>">
   <?php	
-  }
- else
-{
+  /*
+  } else {
 ?> 
    <input type="hidden" name="bk_id" value="<?php echo $bk_id ?>">
    <td align="right"  nowrap>分類區代號</td>
 	<td><?php echo $bk_id ?></td>
 	
   <?php	
- }
+  */
+ //}
 	
  ?> 
 </tr> 
 	<td align="right"  nowrap>分類區名稱</td>
-	<td><input type="text" size="20" maxlength="20" name="board_name" value="<?php echo $board_name ?>"></td>
+	<td><input type="text" size="36" maxlength="72" name="board_name" value="<?php echo $board_name ?>"></td>
 </tr>
 
 
@@ -338,7 +378,11 @@ if ($key == "新增分類區" or $key == "確定新增" or $bk_id == ""){
 
 </table>
 </TD></TR>
+<tr>
+	<td style="color:#FF0000"><?php echo $INFO;?></td>
+</tr>
 </TABLE>
+
 <?php
 	foot();
 ?>

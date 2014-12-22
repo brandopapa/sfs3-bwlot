@@ -27,7 +27,7 @@ CREATE TABLE stud_guid (
   st_oth_record text NOT NULL,
   guid_over_reason text NOT NULL,
   PRIMARY KEY  (guid_c_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
         
 
 CREATE TABLE stud_guid_event (
@@ -39,5 +39,5 @@ CREATE TABLE stud_guid_event (
   guid_l_con text NOT NULL,
   update_id varchar(20) NOT NULL default '',
   PRIMARY KEY  (guid_l_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
         

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: sfs_oo_overlib.php 6902 2012-09-23 07:03:51Z hami $
+// $Id: sfs_oo_overlib.php 8130 2014-09-23 07:56:38Z smallduh $
 // ¨ú¥N class.overlib.php
 
     /* 
@@ -62,7 +62,7 @@
       type='text/css'>
 <div id='overDiv' style='position:absolute; visibility:hide; z-index: 1000;'>
 </div>
-<script language='javascript' src=<? echo "'$this->ol_path/sfs_script_overlib.js'"; ?>>
+<script language='javascript' src=<?php echo "'$this->ol_path/sfs_script_overlib.js'"; ?>>
 </script>
 <?php
 	  }

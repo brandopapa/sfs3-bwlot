@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 7881 2014-02-20 07:01:42Z infodaes $
+// $Id: module-cfg.php 8113 2014-09-09 08:10:41Z smallduh $
 
 //---------------------------------------------------
 //
@@ -90,6 +90,7 @@ $menu_p = array(
 "parent_manage.php"=>"家長帳號管理",
 "link_parent.php"=>"聯絡簿管理",
 "absent_list.php"=>"學生缺席記錄",
+"club_select.php"=>"學生社團選填",
 "service_class_list.php"=>"服務學習記錄");
 if ($is_absent=='y') $menu_p["absent_class.php"]="缺曠課紀錄";
 if ($course_input) $menu_p["course_setup3.php"]="設定功課表";
@@ -99,6 +100,7 @@ if ($is_sms) {
 	$menu_p["sms_record.php"]="簡訊發送記錄";
 }
 if($is_rewrad) $menu_p["reward_list.php"]="學生獎懲記錄";
+if($is_pwd) $menu_p["stud_pwd.php"]="學生登入密碼";
 
 //---------------------------------------------------
 //
@@ -140,6 +142,7 @@ $SFS_MODULE_SETUP[1] = array('var'=>"course_input", 'msg'=>"是否可以修改課表", '
 $SFS_MODULE_SETUP[2] = array('var'=>"influenza", 'msg'=>"是否啟用流感登錄", 'value'=>array("0"=>"否","1"=>"是"));
 $SFS_MODULE_SETUP[3] = array('var'=>"is_sms", 'msg'=>"是否啟用簡訊功能", 'value'=>array("0"=>"否","1"=>"是"));
 $SFS_MODULE_SETUP[4] = array('var'=>"is_rewrad", 'msg'=>"是否啟用列式獎懲功能", 'value'=>array("0"=>"否","1"=>"是"));
+$SFS_MODULE_SETUP[5] = array('var'=>"is_pwd", 'msg'=>"是否啟用更改學生登入密碼功能", 'value'=>array("0"=>"否","1"=>"是"));
 
 // $SFS_MODULE_SETUP[2] =
 //        array('var'=>"ssss", 'msg'=>"tttt", 'value'=>1);

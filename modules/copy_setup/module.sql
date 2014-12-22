@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 
 CREATE TABLE `copy_log` (
   `cp_sn` int(10) unsigned NOT NULL auto_increment,
@@ -9,4 +9,4 @@ CREATE TABLE `copy_log` (
   `year` tinyint(3) unsigned NOT NULL default '0',
   `semester` enum('1','2') NOT NULL default '1',
   PRIMARY KEY  (`cp_sn`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

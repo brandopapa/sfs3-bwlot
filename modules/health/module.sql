@@ -1,4 +1,4 @@
-# $Id: module.sql 5698 2009-10-22 07:56:40Z brucelyc $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 
 #
 # 資料表格式： `BMI`
@@ -10,7 +10,7 @@ CREATE TABLE BMI (
   `range` int(1) unsigned NOT NULL default '0',
   `value` float NOT NULL default '0',
   PRIMARY KEY (year,sex,range)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 INSERT INTO BMI VALUES ( 2,1,1,15.2);
 INSERT INTO BMI VALUES ( 2,1,2,17.7);
@@ -124,7 +124,7 @@ CREATE TABLE GHD (
   sex int(1) unsigned NOT NULL default '0',
   value float NOT NULL default '0',
   PRIMARY KEY (year,sex)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 INSERT INTO GHD VALUES (5,1,103);
 INSERT INTO GHD VALUES (6,1,106.7);
@@ -172,7 +172,7 @@ CREATE TABLE health_WH (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (year,semester,student_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_sight`
@@ -198,7 +198,7 @@ CREATE TABLE health_sight (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (year,semester,student_sn,side)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_sight_ntu`
@@ -210,7 +210,7 @@ CREATE TABLE health_sight_ntu (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_worm`
@@ -227,7 +227,7 @@ CREATE TABLE health_worm (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (year,semester,student_sn,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_uri`
@@ -247,7 +247,7 @@ CREATE TABLE health_uri (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (year,semester,student_sn,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_disease`
@@ -262,7 +262,7 @@ CREATE TABLE health_disease (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn,di_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_diseaseserious`
@@ -275,7 +275,7 @@ CREATE TABLE health_diseaseserious (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn,di_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_bodymind`
@@ -289,7 +289,7 @@ CREATE TABLE health_bodymind (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_inherit`
@@ -303,7 +303,7 @@ CREATE TABLE health_inherit (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn,folk_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_checks_item`
@@ -315,7 +315,7 @@ CREATE TABLE health_checks_item (
 	item varchar(50) NOT NULL default '',
 	ps int(4) NOT NULL default '0',
 	PRIMARY KEY (subject,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_checks_item VALUES ( 'Oph',0,'無異狀',0);
 INSERT INTO health_checks_item VALUES ( 'Oph',1,'視力不良',0);
 INSERT INTO health_checks_item VALUES ( 'Oph',2,'辨色力異常',0);
@@ -389,7 +389,7 @@ CREATE TABLE health_checks_record (
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
 	PRIMARY KEY (year,semester,student_sn,subject,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_teeth`
@@ -404,7 +404,7 @@ CREATE TABLE health_teeth (
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
 	PRIMARY KEY (year,semester,student_sn,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_hospital`
@@ -415,7 +415,7 @@ CREATE TABLE health_hospital (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_hospital_record`
@@ -428,7 +428,7 @@ CREATE TABLE health_hospital_record (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_insurance`
@@ -439,7 +439,7 @@ CREATE TABLE health_insurance (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 INSERT INTO health_insurance VALUES ( 1,'全民健保',1);
 INSERT INTO health_insurance VALUES ( 2,'學生團體保險',1);
@@ -455,7 +455,7 @@ CREATE TABLE health_insurance_record (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn,no)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_exam_item`
@@ -466,7 +466,7 @@ CREATE TABLE health_exam_item (
   name varchar(200) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_exam_item VALUES ( 1,'頭蝨檢查',1);
 INSERT INTO health_exam_item VALUES ( 2,'心臟超音波篩檢',1);
 
@@ -486,7 +486,7 @@ CREATE TABLE health_exam_record (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (year,semester,student_sn,id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_inject_item`
@@ -506,7 +506,7 @@ CREATE TABLE health_inject_item (
   enable varchar(1) NOT NULL default '1',
   memo text NOT NULL default '',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_inject_item VALUES ( 1,'卡介苗','卡介苗',1,1,'1','1','','','',1,'');
 INSERT INTO health_inject_item VALUES ( 2,'B型肝炎疫苗','B型肝炎疫苗',3,3,'3','3','2,3','1,2,3','',1,'');
 INSERT INTO health_inject_item VALUES ( 3,'小兒麻痺口服疫苗','小兒麻痺口服疫苗',4,4,'1','1,4','1,2,3,4','1,2,3,4','1,2,3,4',1,'');
@@ -531,7 +531,7 @@ CREATE TABLE health_inject_record (
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn,id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_yellowcard`
@@ -541,7 +541,7 @@ CREATE TABLE health_yellowcard (
 	student_sn int(10) unsigned NOT NULL default '0',
 	value tinyint(1) unsigned NOT NULL default '0',
 	PRIMARY KEY (student_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_place`
@@ -552,7 +552,7 @@ CREATE TABLE health_accident_place (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_place VALUES ( 1,'操場',1);
 INSERT INTO health_accident_place VALUES ( 2,'遊戲運動器材',1);
 INSERT INTO health_accident_place VALUES ( 3,'普通教室',1);
@@ -574,7 +574,7 @@ CREATE TABLE health_accident_reason (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_reason VALUES ( 1,'下課遊戲',1);
 INSERT INTO health_accident_reason VALUES ( 2,'上下課途中',1);
 INSERT INTO health_accident_reason VALUES ( 3,'升旗',1);
@@ -594,7 +594,7 @@ CREATE TABLE health_accident_part (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_part VALUES ( 1,'頭',1);
 INSERT INTO health_accident_part VALUES ( 2,'頸',1);
 INSERT INTO health_accident_part VALUES ( 3,'肩',1);
@@ -620,7 +620,7 @@ CREATE TABLE health_accident_status (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_status VALUES ( 1,'擦傷',1);
 INSERT INTO health_accident_status VALUES ( 2,'裂割刺傷',1);
 INSERT INTO health_accident_status VALUES ( 3,'夾壓傷',1);
@@ -655,7 +655,7 @@ CREATE TABLE health_accident_attend (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_attend VALUES ( 1,'傷口處理',1);
 INSERT INTO health_accident_attend VALUES ( 2,'冰敷',1);
 INSERT INTO health_accident_attend VALUES ( 3,'熱敷',1);
@@ -684,7 +684,7 @@ CREATE TABLE health_accident_record (
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
 	PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_part_record`
@@ -695,7 +695,7 @@ CREATE TABLE health_accident_part_record (
 	id int(10) unsigned NOT NULL default '0',
 	part_id int(6) unsigned NOT NULL default '0',
 	PRIMARY KEY (pid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_status_record`
@@ -706,7 +706,7 @@ CREATE TABLE health_accident_status_record (
 	id int(10) unsigned NOT NULL default '0',
 	status_id int(6) unsigned NOT NULL default '0',
 	PRIMARY KEY (sid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_attend_record`
@@ -717,4 +717,4 @@ CREATE TABLE health_accident_attend_record (
 	id int(10) unsigned NOT NULL default '0',
 	attend_id int(6) unsigned NOT NULL default '0',
 	PRIMARY KEY (aid)
-) TYPE=MyISAM;
+)ENGINE=MyISAM;

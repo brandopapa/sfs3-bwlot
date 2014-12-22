@@ -1,6 +1,6 @@
 <?php
 
-// $Id: funcs.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: funcs.php 8086 2014-08-07 07:07:12Z smallduh $
 
 //
 // funcs.php - function library for MiG
@@ -285,9 +285,14 @@ function buildDirList( $baseURL, $albumDir, $currDir, $imageDir,
 
             // Ignore anything that's hidden or was already sorted.
             if (!$hidden[$file] and !$presorted[$file]) {
-
                 // Stash file in an array
-                $directories[$file] = TRUE;
+                //$directories[$file] = TRUE;
+                
+                $D_YEAR=date("Y", filemtime("$albumDir/$currDir/$file"));
+                //echo $D_YEAR;
+                // Stash file in an array
+                $directories[$file]['file'] = TRUE;
+                $directories[$file]['year'] = $D_YEAR;
             }
         }
     }
@@ -297,23 +302,31 @@ function buildDirList( $baseURL, $albumDir, $currDir, $imageDir,
 
     // snatch each element from $directories and shove it on the end of
     // $presorted
-    while (list($file,$junk) = each($directories)) {
-        $presorted[$file] = TRUE;
-    }
+    //while (list($file,$junk) = each($directories)) {
+     //   $presorted[$file] = TRUE;
+    //}
+    
+    foreach($directories as $K=>$V) {
+        $presorted[$K] = TRUE;  
+        $YEAR=$V['year'];   
+        $row[$YEAR] = 0;
+        $col[$YEAR] = 0;      
+    } // end foreach
 
     reset($presorted);		// reset array pointer
 
     // Track columns
-    $row = 0;
-    $col = 0;
+    //$row = 0;
+    //$col = 0;
     $maxColumns--;  // Tricks $maxColumns into working since it
                     // really starts at 0, not 1
 
     while (list($file,$junk) = each($presorted)) {
-
+        $YEAR=$directories[$file]['year'];
+        //echo $YEAR;
         // Start a new row if appropriate
-        if ($col == 0) {
-            $directoryList .= '<tr>';
+        if ($col[$YEAR] == 0) {
+            $directoryList[$YEAR] .= '<tr>';
         }
 
         // Surmise the full path to work with
@@ -336,18 +349,18 @@ function buildDirList( $baseURL, $albumDir, $currDir, $imageDir,
 
         // Build the full link (icon plus folder name) and tack it on
         // the end of the list.
-        $directoryList .= '<td class="folder">' . $linkURL . '<img src="'
+        $directoryList[$YEAR] .= '<td class="folder">' . $linkURL . '<img src="'
                        . $imageDir . '/folder.gif" border="0"></a>&nbsp;'
                        . $linkURL . '<font size="-1">' . $nbspfile
                        . '</font></a></td>';
 
         // Keep track of what row/column we're on
-        if ($col == $maxColumns) {
-            $directoryList .= '</tr>';
-            $row++;
-            $col = 0;
+        if ($col[$YEAR] == $maxColumns) {
+            $directoryList[$YEAR] .= '</tr>';
+            $row[$YEAR]++;
+            $col[$YEAR] = 0;
         } else {
-            $col++;
+            $col[$YEAR]++;
         }
     }
 
@@ -357,10 +370,17 @@ function buildDirList( $baseURL, $albumDir, $currDir, $imageDir,
     if ($directoryList == '') {
         return 'NULL';
 
-    } elseif (!eregi('</tr>$', $directoryList)) {
+    } else {
+    	
+    	foreach ($directoryList as $K=>$V ) {
+    	 if (!eregi('</tr>$', $V)) {
 
         // Stick a </tr> on the end if it isn't there already
-        $directoryList .= '</tr>';
+        $V .= '</tr>';
+        $directoryList[$K]=$V;
+       }
+      }
+      
     }
 
     return $directoryList;
@@ -1032,12 +1052,39 @@ function migURLencode( $string )
 
 function folderFrame( $input )
 {
-
-    $retval = '<table border="0" cellpadding="2" cellspacing="0">'
-            . '<tr><td class="folder">' . $input . '</td></tr></table><br>';
-
-    return $retval;
-
+	$N=count($input);
+	$H="
+	<table border='1' style='border-collapse:collapse' bordercolor='#800000'>
+	  <tr>
+	   <td>
+	<table border='0'>
+	<tr>
+	 <td colspan='$N'>篩選年度資料夾: (個別檔案不進行篩選)<td>
+	</tr>
+	  <tr>
+	    ";
+	    $A="";
+	foreach ($input as $Y=>$I) {
+	  $A.="<td>
+	  <input type='radio' name='tag_year' class='check_year' id='$Y'> $Y 年</td>";		
+	}    
+	$H.=$A."    
+	  </tr>
+	</table>
+	   </td>
+	  </tr>
+	</table>
+	";
+	
+	$R="";
+ foreach ($input as $Y=>$I) {
+    $retval = '<table border="0" style="display:none" cellpadding="2" cellspacing="0" class="year_folder" id="f_'.$Y.'">'
+            . '<tr><td class="folder">' . $I . '</td></tr></table>';
+   $R=$R.$retval;
+ }
+ $R=$H.$R;
+  
+    return $R;
 }	// -- End of folderFrame()
 
 

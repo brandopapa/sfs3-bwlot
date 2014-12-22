@@ -1,5 +1,5 @@
 <?php
-//$Id: record.php 7435 2013-08-24 02:51:13Z infodaes $
+//$Id: record.php 8104 2014-09-01 05:56:02Z hami $
 include "config.php";
 include "../../include/sfs_class_absent.php";
 
@@ -53,17 +53,52 @@ if ($_POST[sure]) {
 
  	$month = substr($start_date,5,2);   //月
 	$post_k=teacher_post_k($sn);
+    $fileName = '';
+    if (is_file($_FILES['note_file']['tmp_name'])) {
+        if (!check_is_php_file($_FILES['note_file']['name'])) {
+            $temp = explode('.',$_FILES['note_file']['name']);
+            $fileName = time().'.'.end($temp);
+            $filePath = set_upload_path("/school/teacher_absent");
+
+            if (!copy($_FILES['note_file']['tmp_name'],$filePath.$fileName)){
+                echo "檔案上傳失敗!請重新送出!<br>";
+                foot();
+                exit;
+            }
+        }
+        else{
+            echo "警告：請勿上傳php檔！<br>";
+            foot();
+            exit;
+        }
+    }
 
 	if ($_POST[act]=="add"){		
-		$query="insert into teacher_absent (year,semester,month,teacher_sn,reason,abs_kind,start_date,end_date,class_dis,deputy_sn,record_id,record_date,day,hour,note,post_k,locale) values ('$sel_year','$sel_seme','$month','$sn','$reason','$abs_kind','$start_date','$end_date','$class_dis','$agent_sn','$_SESSION[session_log_id]','".date("Y-m-d H:i:s")."','$day','$hour','$note','$post_k','$locale')";
+		$query="insert into teacher_absent (year,semester,month,teacher_sn,reason,abs_kind,start_date,
+		end_date,class_dis,deputy_sn,record_id,record_date,day,hour,note,post_k,locale,note_file)
+		 values ('$sel_year','$sel_seme','$month','$sn','$reason','$abs_kind','$start_date','$end_date','$class_dis','$agent_sn','$_SESSION[session_log_id]',
+		 '".date("Y-m-d H:i:s")."','$day','$hour','$note','$post_k','$locale','$fileName')";
 		$CONN->Execute($query);
 		header("Location: deputy.php?year_seme=$sel_year"."_"."$sel_seme");
 	}
 	else {
-		$a->set_id($_POST[id]);
-		$id=$_POST[id];		
-		$query="update teacher_absent set year='$sel_year',semester='$sel_seme',month='$month',teacher_sn='$sn',reason='$reason',abs_kind='$abs_kind',start_date='$start_date',end_date='$end_date',class_dis='$class_dis',deputy_sn='$agent_sn',record_id='$_SESSION[session_log_id]',record_date='".date("Y-m-d H:i:s")."',day='$day',hour='$hour' ,note='$note',post_k='$post_k',locale='$locale' where id='$id'";
-		$CONN->Execute($query);		
+        $a->set_id($_POST[id]);
+        $id=$_POST[id] ;
+        // 如果上傳案先刪除舊檔
+        if ($fileName){
+            $query = "SELECT note_file FROM teacher_absent where id='$id'";
+            $res = $CONN->execute($query);
+            $row = $res->fetchRow();
+
+            unlink($filePath.$row['note_file']);
+
+        }
+
+		$query="update teacher_absent set year='$sel_year',semester='$sel_seme',month='$month',teacher_sn='$sn',reason='$reason',
+		abs_kind='$abs_kind',start_date='$start_date',end_date='$end_date',class_dis='$class_dis',deputy_sn='$agent_sn',
+		record_id='$_SESSION[session_log_id]',record_date='".date("Y-m-d H:i:s")."',day='$day',hour='$hour' ,note='$note',
+		post_k='$post_k',locale='$locale' ,note_file='$fileName' where id='$id'";
+		$CONN->Execute($query) or die ($query);
 		header("Location: deputy.php?year_seme=$sel_year"."_"."$sel_seme");
 	}
 }

@@ -12,7 +12,7 @@ CREATE TABLE `elective_tea` (
   `course_id` mediumint(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (`group_id`),
   UNIQUE KEY `group_name` (`group_name`,`ss_id`,`teacher_sn`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 #
 # 資料表格式： `elective_stu`
@@ -24,4 +24,4 @@ CREATE TABLE `elective_stu` (
   `student_sn` int(11) NOT NULL default '0',
   PRIMARY KEY  (`elective_stu_sn`),
   UNIQUE KEY `ss_id` (`group_id`,`student_sn`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;

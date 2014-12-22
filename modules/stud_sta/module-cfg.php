@@ -255,7 +255,7 @@ $MODULE_UPDATE_MAN="chen";
 
 
 $SFS_MODULE_SETUP[0] =
-        array('var'=>"sta_word", 'msg'=>"在學證明書字號", 'value'=>"福中教在證字");
+        array('var'=>"sta_word", 'msg'=>"在學證明書字號", 'value'=>"中縣安小在證字");
 $SFS_MODULE_SETUP[1] =
         array('var'=>"signature", 'msg'=>"證明聯主管落款", 'value'=>"校長 ");
 $SFS_MODULE_SETUP[2] =

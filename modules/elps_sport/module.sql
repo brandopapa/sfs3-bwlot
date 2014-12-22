@@ -8,7 +8,7 @@ CREATE TABLE sport_main (
   work_end datetime NOT NULL default '0000-00-00 00:00:00',
   memo text,
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE sport_item (
   id int(10) unsigned NOT NULL auto_increment,
@@ -31,7 +31,7 @@ CREATE TABLE sport_item (
   overtime datetime default NULL,
   imemo varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE sport_res (
   id bigint(20) NOT NULL auto_increment,
@@ -50,7 +50,7 @@ CREATE TABLE sport_res (
   sportorder tinyint(3) NOT NULL default '0',
   memo varchar(120) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE sport_teach (
   id int(10) NOT NULL auto_increment,
@@ -59,7 +59,7 @@ CREATE TABLE sport_teach (
   pa tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (tmid,teacher_sn),
   UNIQUE KEY id (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE sport_var (
@@ -69,7 +69,7 @@ CREATE TABLE sport_var (
   na varchar(255) NOT NULL default '',
   UNIQUE KEY id (id),
   KEY gp (gp)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 INSERT INTO sport_var VALUES (1, 'sportname', '1', 'ß@§Â');
 INSERT INTO sport_var VALUES (2, 'sportname', '2', '∫t¡ø');

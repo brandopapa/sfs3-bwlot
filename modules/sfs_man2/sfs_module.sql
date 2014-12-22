@@ -1,4 +1,4 @@
-# $Id: sfs_module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: sfs_module.sql 8152 2014-09-30 01:15:55Z smallduh $
 
 # phpMyAdmin MySQL-Dump
 # version 2.4.0
@@ -31,7 +31,7 @@ CREATE TABLE sfs_module (
   txt varchar(255) NOT NULL default '',
   PRIMARY KEY  (msn),
   KEY sort (sort,of_group)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 列出以下資料庫的數據： `sfs_module`

@@ -136,5 +136,10 @@ function select() {
 	return $str;
 	}
 	
+function tol20($max,$a) {
+	if ($a>$max) return $max;
+	return $a;
+}
+
 
 }

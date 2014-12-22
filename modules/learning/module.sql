@@ -28,7 +28,7 @@ CREATE TABLE poke_base (
   p_order int(11) NOT NULL default '0',
   p_subj varchar(30) default NULL,
   PRIMARY KEY  (p_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -47,7 +47,7 @@ CREATE TABLE test_badge (
   up_date datetime NOT NULL default '0000-00-00 00:00:00',
   teacher_sn int(10) NOT NULL default '0',
   PRIMARY KEY  (s_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -79,7 +79,7 @@ CREATE TABLE test_data (
   note text NOT NULL,
   beef bigint(10) NOT NULL default '0',
   PRIMARY KEY  (qid)
-) TYPE=MyISAM COMMENT='線上測驗題庫';
+) ENGINE=MyISAM COMMENT='線上測驗題庫';
 # --------------------------------------------------------
 
 #
@@ -126,7 +126,7 @@ CREATE TABLE test_online (
   p_games int(3) NOT NULL default '0',
   err int(3) NOT NULL default '0',
   PRIMARY KEY  (p_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -139,7 +139,7 @@ CREATE TABLE test_paper (
   qid bigint(20) default NULL,
   unit varchar(10) default NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM COMMENT='線上測驗試卷';
+) ENGINE=MyISAM COMMENT='線上測驗試卷';
 # --------------------------------------------------------
 
 #
@@ -164,7 +164,7 @@ CREATE TABLE test_score (
   top int(11) NOT NULL default '0',
   act int(10) NOT NULL default '0',
   PRIMARY KEY  (s_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -180,7 +180,7 @@ CREATE TABLE test_setup (
   n_sp int(1) NOT NULL default '1',
   unit char(1) NOT NULL default '',
   KEY n_sp (n_sp)
-) TYPE=MyISAM;
+)ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -213,7 +213,7 @@ CREATE TABLE unit_c (
   b_kind varchar(20) NOT NULL default '',
   act bigint(20) NOT NULL default '0',
   PRIMARY KEY  (b_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -229,7 +229,7 @@ CREATE TABLE unit_tome (
   unit_tome varchar(24) NOT NULL default '',
   seme int(1) NOT NULL default '0',
   PRIMARY KEY  (ut_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -247,7 +247,7 @@ CREATE TABLE unit_u (
   total bigint(20) NOT NULL default '0',
   exam int(1) NOT NULL default '0',
   PRIMARY KEY  (u_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 # phpMyAdmin MySQL-Dump

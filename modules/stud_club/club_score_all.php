@@ -133,6 +133,8 @@ function print_kind() {
   document.getElementById("myform").target='_blank';
   document.getElementById("myform").action = 'club_print_all.php';
   document.myform.submit();
+  document.getElementById("myform").target='';
+  document.getElementById("myform").action = 'club_score_all.php';
 }
 
 function print_here() {

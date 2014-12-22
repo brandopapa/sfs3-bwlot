@@ -1,4 +1,4 @@
-{{* $Id: list.tpl 5618 2009-09-01 14:42:58Z hami $ *}}
+{{* $Id: list.tpl 8104 2014-09-01 05:56:02Z hami $ *}}
 
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 
@@ -59,7 +59,9 @@
 		<input type="image" src="images/supply.png" name="outlay[{{$a.id}}]" alt="差旅費處理">
 	{{/if}}
 	<br><font color=blue>{{$a.note}}</font></td>
-<td>{{$a.reason}}<br><font color=blue>{{$a.locale}}</font></td>
+<td>{{$a.reason}}<br><font color=blue>{{$a.locale}}</font>
+{{if $a.note_file}}<a href="{{$upload_url}}school/teacher_absent/{{$a.note_file}}">下載證明文件</a>{{/if}}
+</td>
 <td><font size=3>{{$a.start_date|date_format:"%Y-%m-%d %H:%M"}}<br>
 
 {{$a.end_date|date_format:"%Y-%m-%d %H:%M"}}</font></td>

@@ -68,6 +68,8 @@ class chc_seme{
 	var $Ograde2=array('0'=>'0.肄業','1'=>'1.畢業');
 	var $Oincome=array('0'=>'無','1'=>'中低收入戶','2'=>'低收入戶');
 	var $Oincome2=array('0'=>'0.無','1'=>'1.中低收入','2'=>'2.低收入');
+	var $income3=array('0'=>'0','1'=>'1中低','2'=>'2低收');
+	var $balance_s=array('6'=>'6(五學期)','4'=>'4(四學期)','2'=>'2(三學期)','0'=>'0');
 	//建構函式
 	function chc_seme($CONN,$smarty){
 		global $IS_JHORES;
@@ -75,9 +77,12 @@ class chc_seme{
 		$this->smarty=&$smarty;
 		$this->IS_JHORES=$IS_JHORES;
 		$YS=''; 
+		/* -- 限制其他學期輸入
 		if (isset($_POST['year_seme'])) $YS=$_POST['year_seme'];
 		if ($YS=='' && isset($_GET['year_seme'])) $YS=$_GET['year_seme'];
 		if ($YS=='') $YS=curr_year()."_".curr_seme();
+		*/
+		$YS=curr_year()."_".curr_seme();
 		$this->year_seme=$YS;
 		$aa=split("_",$this->year_seme);
 		$this->year=$aa[0];
@@ -205,7 +210,7 @@ function select() {
 		$year_seme=$ro->year."_".$ro->seme;
 		$obj_stu[$year_seme]=$ro->year."學年度第".$ro->seme."學期";
 	}
-	$str="<select name='".$this->YS."' onChange=\"location.href='".$_SERVER[SCRIPT_NAME]."?".$this->YS."='+this.options[this.selectedIndex].value;\">\n";
+	$str="<select name='".$this->YS."' onChange=\"location.href='".$_SERVER[SCRIPT_NAME]."?".$this->YS."='+this.options[this.selectedIndex].value;\" disabled>\n";
 		//$str.="<option value=''>-未選擇-</option>\n";
 	foreach($obj_stu as $key=>$val) {
 		($key==$this->year_seme) ? $bb=' selected':$bb='';
@@ -241,12 +246,10 @@ function grade() {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
+function tol20($max,$a) {
+	if ($a>$max) return $max;
+	return $a;
+}
 
 
 }

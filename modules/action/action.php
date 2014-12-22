@@ -1,5 +1,5 @@
 <?php
-// $Id: action.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: action.php 8134 2014-09-23 08:06:50Z smallduh $
 
   require("config.php") ;
   //$debug = 1;
@@ -131,14 +131,14 @@ function gotourl(id,selpage,dirstr) {
   <tr > 
       <td bgcolor="#CCCCFF" class="tdbody" width="90%">
         <span class="daystyl"><?php echo  '第' . $nb[act_ID] .'則['. $nb[act_date] . ']' ?></span> 
-<?
+<?php
     if ($gotostr) {
        //有網頁
 ?>
         <a href = javascript:gotourl(<?php echo $gotostr ?>) > 
           <?php echo $nb[act_name] ?>
         </a> 
-<?
+<?php
         }
     else 
       echo $nb[act_name] ;
@@ -170,7 +170,7 @@ function gotourl(id,selpage,dirstr) {
 <br>
 
 
-<?
+<?php
 }  
 ?>  
 

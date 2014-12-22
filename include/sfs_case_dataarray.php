@@ -1,6 +1,6 @@
 <?php
 
-// $Id: sfs_case_dataarray.php 7663 2013-10-08 11:38:04Z hami $
+// $Id: sfs_case_dataarray.php 8164 2014-10-08 13:05:57Z infodaes $
 // 各種資料陣列
 // 取代原 data_array_function.php
 
@@ -478,7 +478,18 @@ function class_teacher() {
 		$class_teacher_array[$class_id]=$teacher_1;
 	}
 	return $class_teacher_array;
-
-
 }
+
+//取得學籍原因
+function stud_obtain_kind(){
+	return array("1"=>"戶籍","2"=>"隨父就讀","3"=>"隨母就讀","4"=>"個案保護","5"=>"外籍");
+}
+
+//個案保護類別
+function stud_safeguard_kind(){
+	return array("1"=>"避債","2"=>"家暴","3"=>"教養安置");
+}
+
+
+
 ?>

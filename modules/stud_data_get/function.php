@@ -95,7 +95,7 @@ function Get_stud_data($stud_id) {
 	*/
     unset( $dd );	
     if ($have_stud_data_fg) {	
-        $sql="select *    from stud_domicile   where stud_id = '$stud_id'   ";
+        $sql="select a.* from stud_domicile a,stud_base b where a.student_sn=b.student_sn and b.stud_study_cond = 0  and a.stud_id = '$stud_id'";
         $result = $CONN->Execute($sql) or user_error("Åª¨ú¥¢±Ñ¡I<br>$sql",256) ;
     
         $row = $result->FetchRow() ;           

@@ -1,5 +1,5 @@
 <?php
-  // $Id: fixedview.php 5310 2009-01-10 07:57:56Z hami $
+  // $Id: fixedview.php 8155 2014-09-30 07:53:16Z smallduh $
   //  維修通報系統 
   //  林朝敏的半點心工作坊
   //  http://sy3es.tnc.edu.tw/~prolin
@@ -90,6 +90,6 @@
   </tr>
 </table>
 <p align="center"><a href="javascript:history.go(-1);">回上一頁</a></p>
-<? foot(); ?>
+<?php foot(); ?>
 </body>
 </html>

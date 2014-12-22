@@ -2,6 +2,7 @@
 //取得設定檔
 include_once "config.php";
 
+
 sfs_check();
 
 //製作選單 ( $school_menu_p陣列設定於 module-cfg.php )
@@ -57,7 +58,7 @@ if ($_POST['act']=='save') {
 	word='{$word}', weight='{$weight}', weight_tech='{$weight_tech}',year='$year',nature='$nature' ,	update_sn='".$_SESSION['session_tea_sn']."'";
    		if (!mysql_query($query)) {
    		 $MSG="儲存資料失敗!";
-   		  echo$query;die($MSG);
+   		  echo $query;die($MSG);
 			} 
 	$_POST['act']='';
 }
@@ -193,8 +194,12 @@ echo $tool_bar;
 	   				} // end foreach
 	 					 $act='update';
 					 } else {
+					 	//預設值
+					 	$race_record['year']=date("Y")-1911;
 						$race_record['level']=5;	
 						$race_record['squad']=1;
+						$race_record['weight']=1;
+						$race_record['weight_tech']=1;
 						$race_record['certificate_date']=date("Y-m-d");
 						$act='save';
 					 }
@@ -219,7 +224,15 @@ echo $tool_bar;
 </tr>
 </table>
 </form>
-
+<?php
+//若為屏東
+if (substr($sch_id,0,2)=='13') {
+?>
+<script type='text/javascript' src='select_race_option.js'></script>
+<?php
+  if ($start==1 and $_POST['act']=='edit') echo "<Script>SelectR_name(0);</Script>";
+ }
+?>
 <Script language="JavaScript">
  //檢測資料是否完整
  function check_save(ACT) {

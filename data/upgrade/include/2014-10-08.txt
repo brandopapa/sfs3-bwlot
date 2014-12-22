@@ -1,0 +1,1 @@
+學生基本資料加入 學籍取得原因、個案保護類別 欄位: /home/sfs6/dev3.sfs3.bwsh.kindn.es/include/upgrade_files/up20141008.php

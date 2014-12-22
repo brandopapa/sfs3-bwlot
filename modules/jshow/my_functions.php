@@ -34,7 +34,7 @@ function show_setup_all($kind_id) {
 	//取得設定
 	$S=get_setup($kind_id);
 	//把每張圖列出
-	$sql="select * from jshow_pic where kind_id='$kind_id' order by upload_day desc";
+	$sql="select * from jshow_pic where kind_id='$kind_id' order by sort,upload_day desc";
 	$res=$CONN->Execute($sql) or die('SQL='.$sql);
 	?>
 	<table border="2"  cellpadding='3' cellspacing='0' style='border-collapse: collapse; font-size=12px;' bordercolor='#111111' width=100%>

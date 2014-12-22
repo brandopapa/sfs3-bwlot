@@ -1,5 +1,5 @@
 
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8151 2014-09-29 03:41:24Z smallduh $
 #
 # 資料表格式： `reward`
 #
@@ -21,4 +21,4 @@ CREATE TABLE reward (
   dep_id tinyint(4) NOT NULL default '0',
   student_sn int(10) default '0',
   PRIMARY KEY  (reward_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

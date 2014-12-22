@@ -8,7 +8,7 @@
 
 <tr><td bgcolor="#FFFFFF">
 
-<form name="menu_form" method="post" action="{{$smarty.server.PHP_SELF}}">
+<form name="menu_form" method="post" enctype="multipart/form-data" action="{{$smarty.server.PHP_SELF}}">
 
 <table>
 
@@ -89,6 +89,12 @@
 <td>證明文件</td>
 <td bgcolor="#ffffff" align="left"><input type="text" name="note" value="{{$smarty.post.note}}" size="30"></td>
 </tr>
+    <tr bgcolor="#E1ECFF" align="center">
+        <td>上傳證明文件</td>
+        <td bgcolor="#ffffff" align="left">
+            <input type="file" name="note_file" >
+            {{if $smarty.post.note_file}}<a href="#" id="del-file">刪除檔案</a>{{/if}}
+        </td></tr>
 {{if $smarty.post.abs_kind == "52"}}
 
 <tr bgcolor="#E1ECFF" align="center">
@@ -119,7 +125,7 @@
 
 <tr bgcolor="#FBFBC4">
 
-<td><img src="images/filefind.png" width=16 height=16 hspace=3 border=0>相關說明</td>
+<td><img src="{{$SFS_PATH_HTML}}/images/filefind.png" width=16 height=16 hspace=3 border=0>相關說明</td>
 
 </tr>
 
@@ -150,3 +156,15 @@
 </table>
 
 {{include file="$SFS_TEMPLATE/footer.tpl"}}
+
+    <script type="text/javascript">
+        $(function(){
+            $("#del-file").click(function(){
+                if (confirm('確定刪除?')){
+                    $.get("delete-file.php?id={{$id}}",function(){
+                        window.location.reload();
+                    });
+                }
+            });
+        });
+    </script>

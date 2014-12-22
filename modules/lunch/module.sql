@@ -7,5 +7,5 @@ CREATE TABLE lunchtb (
   pPs varchar(20) default NULL,
   pDesign varchar(20) default NULL,
   PRIMARY KEY  (pDate)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

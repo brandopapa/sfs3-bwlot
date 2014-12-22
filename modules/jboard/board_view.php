@@ -139,27 +139,10 @@ thetable.bgColor=TheColor
 </script>
 
 <form action="<?php echo $_SERVER[PHP_SELF] ?>" method="get" name="bform">
-<table width="95%"  >
-<tr >
+<table width="95%">
+<tr>
 <td nowrap>
-<select name="bk_id" onchange="document.bform.submit()">
-	<option value="" style="color:#0000FF;background-color:#FFFFCC"><?php echo ($top_item)?$top_item:"近期發佈"; ?></option>
-	<option value="">─────</option>
-
 <?php
-	$query = "select * from jboard_kind order by bk_order,bk_id ";
-	$result= $CONN->Execute($query) or die ($query);
-	while( $row = $result->fetchRow()){
-		$P=($row['position']>0)?"|".str_repeat("--",$row['position']):"";
-		if ($row['board_is_public']=='0' and !board_checkid($row['bk_id']) and !$module_manager) continue;
-		if ($row["bk_id"] == $bk_id  ){
-			echo sprintf(" <option style='color:%s' value=\"%s\" selected>%s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$P,$row['bk_order'],$row["board_name"]);
-			$board_name = $row["board_name"];
-		}
-		else
-			echo sprintf(" <option style='color:%s' value=\"%s\">%s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$P,$row['bk_order'],$row["board_name"]);
-	}
-	echo "</select>";
 	if ($bk_id!="" and ($Manager or $module_manager)) {
 	 echo "《<a href=\"board.php?bk_id=$bk_id\">發表文章</a>》";
 	
@@ -171,9 +154,9 @@ thetable.bgColor=TheColor
 	if ($_SESSION[session_log_id] != "")
 		echo "《<a href=\"$_SERVER[PHP_SELF]?logout=yes\">登出系統</a>》";
 	if ($bk_id!="")
-		echo "</td><td align=center width=100%><b>".$board_name."文章列表</b>";
+		echo "</td><td align=center width=100% style='color:#800000'><b>版區文章列表</b>";
 	else
-		echo "</td><td align=center width=100% bgcolor=#FFFFFF><b>近期文章列表</b>";
+		echo "</td><td align=center width=100% bgcolor=#FFFFFF><b>各版區近期所有文章列表</b>";
 
 
 	echo "</td>";
@@ -191,18 +174,58 @@ thetable.bgColor=TheColor
 
 	?>
 </tr>
-</table>
+<tr>
+<td colspan="4">
+<font color="#800000"><b>版區：</b></font><select name="bk_id" onchange="document.bform.submit()">
+	<option value="" style="color:#0000FF;background-color:#FFFFCC"><?php echo ($top_item)?$top_item:"近期發佈"; ?></option>
+	<option value="">─────</option>
+
+<?php
+	$query = "select * from jboard_kind order by bk_order,bk_id ";
+	$result= $CONN->Execute($query) or die ($query);
+	while( $row = $result->fetchRow()){
+		$P=($row['position']>0)?"".str_repeat("|--",$row['position']):"";
+		if ($row['board_is_public']=='0' and !board_checkid($row['bk_id']) and !$module_manager) continue;
+    /*
+		if ($row["bk_id"] == $bk_id  ){
+			echo sprintf(" <option style='color:%s' value=\"%s\" selected>%s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$P,$row['bk_order'],$row["board_name"]);
+			$board_name = $row["board_name"];
+		}
+		else
+			echo sprintf(" <option style='color:%s' value=\"%s\">%s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$P,$row['bk_order'],$row["board_name"]);
+	  }
+	  */
+	  
+	  if ($row["bk_id"] == $bk_id  ){
+			echo sprintf(" <option style='color:%s;font-weight:bold;font-size:13pt' value=\"%s\" selected>[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+			$board_name = $row["board_name"];
+		}
+		else
+	  	if ($row['position']==0) {
+			echo sprintf(" <option style='color:%s;font-weight:bold;font-size:13pt' value=\"%s\">[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+	  	} else {
+			echo sprintf(" <option style='color:%s' value=\"%s\">[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+		  }
+	  }
+
+	
+	echo "</select>";
+?>
+</td>
+</tr>
+<tr>
+<td colspan="4">
 <!--擷取顯示跑馬燈-->
 <?php
-        $query = "select b_id,b_sub,b_is_intranet,b_title from jboard_p where b_is_marquee = '1' and ((to_days(b_open_date)+b_days > to_days(current_date())) or b_days=0)";
+        $query = "select b_id,b_sub,b_is_intranet,b_title from jboard_p where b_is_marquee = '1' and ((to_days(b_open_date)+b_days > to_days(current_date())) or (to_days(b_open_date)+".$max_marquee_days." > to_days(current_date())))";
         $result = $CONN->Execute($query) or die($query);
         if ($result){
         $html_link = '<p><FONT COLOR="'.$marquee_fontcolor.'">';
-        $html_link .= '<MARQUEE WIDTH="'.$table_width.'" height="'.$marquee_height.'" BEHAVIOR="'.$marquee_behavior.'" BGColor="'.$marquee_backcolor.'" direction="'.$marquee_direction.'" scrollamount="'.$marquee_scrollamount.'">';
-                $query = "select b_id,b_sub,b_is_intranet,b_title from jboard_p where b_is_marquee = '1' and ((to_days(b_open_date)+b_days > to_days(current_date())) or b_days=0)";
+        $html_link .= '<MARQUEE WIDTH="100%" height="'.$marquee_height.'" BEHAVIOR="'.$marquee_behavior.'" BGColor="'.$marquee_backcolor.'" direction="'.$marquee_direction.'" scrollamount="'.$marquee_scrollamount.'">';
+                $query = "select b_id,b_open_date,b_sub,b_is_intranet,b_title from jboard_p where b_is_marquee = '1' and ((to_days(b_open_date)+b_days > to_days(current_date())) or (to_days(b_open_date)+".$max_marquee_days." > to_days(current_date())))";
                 $result = $CONN->Execute($query) or die($query);
                 while ($row = $result->fetchRow()){
-                        $html_link .= '&nbsp;'.'<a href="board_show.php?b_id='.$row['b_id'].'">'.$row['b_sub'].'&nbsp;(&nbsp;'.$row['b_title'].'&nbsp;)';
+                        $html_link .= '&nbsp;'.'<a href="board_show.php?b_id='.$row['b_id'].'">'.$row['b_sub'].'&nbsp;(&nbsp;'.$TEACHER_TITLE[$row['b_title']].'&nbsp'.$row['b_open_date'].'&nbsp;)';
                         if ($row['b_is_intranet']=='1'){
                                 $html_link .= '<font color="red"><sub>校內文件</sub></font>';
                         }
@@ -212,6 +235,9 @@ thetable.bgColor=TheColor
                 echo $html_link;
         }
 ?>
+</td>
+</tr>
+</table>
 <?php
 echo "<font color='$header_text_color' size='8'><table width='$table_width' bgcolor='$table_bg_color'  border='$table_border_width' bordercolor='$table_border_color' cellpadding='2' cellspacing='0' style='border-collapse: collapse'>
 	<tr style='color:$header_text_color;background-color:$header_bg_color;text-align:center;line-height:$header_height pt;font-size:$header_text_size pt;'>

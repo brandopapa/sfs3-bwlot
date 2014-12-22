@@ -256,6 +256,9 @@ class chc_seme{
 		if ($D[1]<=7){$Y=$D[0]-1912;$S=2;}else{$Y=$D[0]-1911;$S=1;}
 		return $Y.$S;
 	}
-
+function tol20($max,$a) {
+	if ($a>$max) return $max;
+	return $a;
+}
 
 }

@@ -1,5 +1,5 @@
 <?php
-//$Id: grad_list_print_v.php 8010 2014-04-30 22:11:29Z yjtzeng $
+//$Id: grad_list_print_v.php 8068 2014-06-18 05:07:01Z infodaes $
 
 //¸ü¤J³]©wÀÉ
 require("config.php") ;
@@ -54,9 +54,10 @@ if  ( $key)  {
         $clear_arr["sex". $i] ="" ;
         $clear_arr["birth" . $i] ="" ;
         $clear_arr["num". $i] ="";
+		$clear_arr["grad_id". $i] ="";
   }  
   $clear_arr["ttt"]=$title_str ; 
-  $clear_arr["grad_id"] ="" ;
+  //$clear_arr["grad_id"] ="" ;
   
   $i = 1;
   $temp_arr = $clear_arr ;
@@ -105,7 +106,7 @@ if  ( $key)  {
       $temp_arr["name". $i]=$stud_name ;
       $temp_arr["sex" . $i ]=$stud_sex_temp ;
       $temp_arr["birth" . $i]=$stud_birthday ;
-      $temp_arr["grad_id"]=$stud_graduate_num ;
+      $temp_arr["grad_id" . $i]=$stud_graduate_num ;
       $temp_arr["num" . $i]=$grad_num ;
       $have_data_out = true ;    
         

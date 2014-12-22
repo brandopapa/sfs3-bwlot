@@ -826,4 +826,5 @@ if (empty($friendly_print) && empty($save_csv)) echo "</td></tr></table></form><
 
 //µ{¦¡ÀÉ§À
 if (empty($friendly_print) && empty($save_csv)) foot();
+//----------
 ?>

@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8152 2014-09-30 01:15:55Z smallduh $
 #
 # 資料表格式： `test_manage`
 #
@@ -14,4 +14,4 @@ CREATE TABLE test_manage (
   compare_id int(10) unsigned NOT NULL default '0',
   PRIMARY KEY (id),
   KEY serial (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

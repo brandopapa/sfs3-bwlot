@@ -1,4 +1,4 @@
-// $Id: data_design.txt 5310 2009-01-10 07:57:56Z hami $
+// $Id: data_design.txt 8152 2014-09-30 01:15:55Z smallduh $
 
 CREATE TABLE sign_data (
   id bigint(20) NOT NULL default '0',
@@ -29,7 +29,7 @@ CREATE TABLE sign_data (
   
   
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 #
@@ -76,4 +76,4 @@ CREATE TABLE sign_kind (
   #預設隱藏名單，只出現快速輸入列
   is_hide tinyint(4) NOT NULL default '0', 
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

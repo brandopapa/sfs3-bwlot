@@ -14,7 +14,7 @@ CREATE TABLE exam (
   teach_id varchar(20) NOT NULL default '',
   teach_name varchar(20) NOT NULL default '',
   PRIMARY KEY  (exam_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -30,7 +30,7 @@ CREATE TABLE exam_kind (
   teach_name varchar(20) NOT NULL default '',
   class_id varchar(10) NOT NULL default '',
   PRIMARY KEY  (e_kind_id,class_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -50,7 +50,7 @@ CREATE TABLE exam_stud (
   tea_grade int(11) default NULL,
   f_ctime datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (exam_id,stud_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -65,4 +65,4 @@ CREATE TABLE exam_stud_data (
   stud_memo varchar(80) NOT NULL default '',
   stud_c_time tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (stud_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

@@ -20,7 +20,7 @@ CREATE TABLE book (
   book_isout tinyint(4) NOT NULL default '0',
   book_buy_date datetime NOT NULL default '0000-00-00 00:00:00',
   UNIQUE KEY pk_book (book_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -36,7 +36,7 @@ CREATE TABLE borrow (
   in_date datetime NOT NULL default '0000-00-00 00:00:00',
   curr_class_num int(10) unsigned NOT NULL default '0',
   UNIQUE KEY pk_borrow (b_num)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `bookch1`
@@ -48,7 +48,7 @@ CREATE TABLE bookch1 (
   bookch2_name char(20) default NULL,
   tolnum int(11) NOT NULL default '0',
   UNIQUE KEY pk_bookch1 (bookch1_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 列出以下資料庫的數據： `bookch1`

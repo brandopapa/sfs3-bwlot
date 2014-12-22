@@ -43,10 +43,10 @@ $MODULE_PRO_KIND_NAME = "12年國教雲林區免試入學";
 //---------------------------------------------------
 
 // 模組最後更新版本
-$MODULE_UPDATE_VER="1.1.3";
+$MODULE_UPDATE_VER="1.2.0";
 
 // 模組最後更新日期
-$MODULE_UPDATE="2014-02-23";
+$MODULE_UPDATE="2014-11-07";
 
 
 //---------------------------------------------------
@@ -101,9 +101,9 @@ $MENU_P = array("readme.php"=>"使用說明","student_list.php"=>"參與免試學生","kin
 //---------------------------------------------------
 
 //認定未知、目前採線上修改  $SFS_MODULE_SETUP[]=array('var'=>"remote_school", 'msg'=>"符合偏遠小校", 'value'=>array(0=>"不符",2=>"9班以下",1=>"13班以下"));
-$school_nature_array = array("4"=>"符合就近入學學校","0"=>"不符就近入學學校");
+$school_nature_array = array("5"=>"符合就近入學學校","0"=>"不符就近入學學校");
 $SFS_MODULE_SETUP[0]=array('var'=>"school_nature", 'msg'=>"本校符合就近入學", 'value'=>$school_nature_array);
-$school_remote_array = array("0"=>"不符合偏遠小校","2"=>"符合偏遠小校(9班以下)","1"=>"符合偏遠小校(13班以下)");
+$school_remote_array = array("0"=>"不符合偏遠小校","2"=>"符合偏遠小校(7班以下)","1"=>"符合偏遠小校(8-12班)");
 $SFS_MODULE_SETUP[1]=array('var'=>"school_remote", 'msg'=>"本校符合偏遠小校", 'value'=>$school_remote_array);
 $SFS_MODULE_SETUP[2]=array('var'=>"moral_editable", 'msg'=>"允許直接修改品德服務級分", 'value'=>array(1=>"是",0=>"否"));
 $SFS_MODULE_SETUP[3]=array('var'=>"diversification_editable", 'msg'=>"允許直接修改多元學習級分", 'value'=>array(1=>"是",0=>"否"));

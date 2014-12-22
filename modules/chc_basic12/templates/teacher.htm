@@ -40,6 +40,8 @@
 
 {{foreach from=$this->stu item=stu key=st_sn}}
 
+{{assign var="T20" value=$this->tol20(20,$stu.score_service+$stu.score_reward+$stu.score_fault)}}
+{{assign var="T16" value=$this->tol20(16,$stu.score_balance+$stu.score_race+$stu.score_physical)}}
 
 
 <tr align=center  style='font-size:10pt' 
@@ -59,7 +61,7 @@ bgcolor=white  onMouseOver="this.style.backgroundColor='#FFEBD6'" onMouseOut="th
 <td>{{$stu.score_balance}}</td>
 <td>{{$stu.score_race}}</td>
 <td>{{$stu.score_physical}}</td>
-<td>{{$stu.income+$stu.score_nearby+$stu.score_service+$stu.score_reward+$stu.score_fault+$stu.score_balance+$stu.score_race+$stu.score_physical}}</td>
+<td>{{$stu.income+$stu.score_nearby+$T20+$T16}}</td>
 </tr>
 
 

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 7039 2012-12-10 08:19:04Z smallduh $
+// $Id: module-cfg.php 8063 2014-06-12 08:28:34Z smallduh $
 
 //---------------------------------------------------
 //
@@ -70,8 +70,8 @@ $menu_p = array(
 "print.php"=>"換算列印",
 "admin.php"=>"統計查詢",
 "model.php"=>"體適能常模",
-"input_tall_weigh2.php"=>"快貼全校身高體重資料"
-);
+"input_tall_weigh2.php"=>"快貼全校身高體重資料",
+"input_swim.php"=>"游泳能力資料輸入");
 
 
 

@@ -111,7 +111,8 @@ if ($year_name && ($section1 || $section1 || $section1) ) {
 		}
 		if ($all_sn) $all_sn=substr($all_sn,0,-1);
 		//取出符合成績篩選資料列		
-		$query="select a.class_id,a.student_sn,a.ss_id,a.test_kind,sum(a.score) as score from $score_semester a where $section and a.student_sn in ($all_sn) group by a.class_id,a.student_sn,a.ss_id,a.test_kind having $score_period order by a.class_id,a.student_sn,a.ss_id,a.test_kind";
+		//$query="select a.class_id,a.student_sn,a.ss_id,a.test_kind,sum(a.score) as score from $score_semester a where $section and a.student_sn in ($all_sn) group by a.class_id,a.student_sn,a.ss_id,a.test_kind having $score_period order by a.class_id,a.student_sn,a.ss_id,a.test_kind";
+		$query="select a.class_id,a.student_sn,a.ss_id,a.test_sort,sum(a.score) as score from $score_semester a where $section and a.student_sn in ($all_sn) group by a.class_id,a.student_sn,a.ss_id,a.test_sort having $score_period order by a.class_id,a.student_sn,a.ss_id,a.test_sort";
 		$res=$CONN->Execute($query) or die('SQL執行錯誤:'.$query);
 		$all_sn = '';
 		$score_data_key = array();
@@ -119,8 +120,8 @@ if ($year_name && ($section1 || $section1 || $section1) ) {
 			//$all_sn.="'".$res->fields['student_sn']."',";
 			$sn = $res->fields['student_sn'];
 			$ss_id = $res->fields['ss_id'];
-			$test_kind = $res->fields['test_kind'];
-		  $query="select a.*,b.stud_name from $score_semester a left join stud_base b on b.student_sn=a.student_sn where a.student_sn = $sn and a.ss_id = $ss_id and a.test_kind = '$test_kind' and b.stud_study_cond in( 0, 15 ) order by a.student_sn,a.ss_id,a.test_kind,a.test_sort";
+			$test_sort = $res->fields['test_sort'];
+		  $query="select a.*,b.stud_name from $score_semester a left join stud_base b on b.student_sn=a.student_sn where a.student_sn = $sn and a.ss_id = $ss_id and a.test_sort = '$test_sort' and b.stud_study_cond in( 0, 15 ) order by a.student_sn,a.ss_id,a.test_sort,a.test_kind";
 		  $res1=$CONN->Execute($query) or die('SQL執行錯誤:'.$query);
 		  if ($res1->rowCount() > 0){
 			  $index = $sn.'_'.$ss_id.'_'.$test_kind;		  

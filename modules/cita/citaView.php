@@ -1,6 +1,6 @@
 <?php
 
-// $Id: citaView.php 7086 2013-01-18 12:53:24Z infodaes $
+// $Id: citaView.php 8139 2014-09-23 08:14:02Z smallduh $
 
 include "config.php";
 include "make_ooo.php";
@@ -84,7 +84,7 @@ if (date("Y-m-d")>=$beg_date and date("Y-m-d")<=$end_date) {
 
 	</script>
 	
-<?
+<?php
 
 
 head("報名資料") ;

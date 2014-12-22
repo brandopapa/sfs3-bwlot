@@ -1,5 +1,5 @@
 <?php
-// $Id: module-upgrade.php 7825 2013-12-24 06:45:54Z smallduh $
+// $Id: module-upgrade.php 8063 2014-06-12 08:28:34Z smallduh $
 if(!$CONN){
         echo "go away !!";
         exit;
@@ -128,4 +128,35 @@ if (!is_file($up_file_name)){
 	fwrite($fp,$temp_query);
 	fclose ($fp);
 }
+
+
+$up_file_name =$upgrade_str."2014-06-12.txt";
+if (!is_file($up_file_name)){
+	$query = "
+CREATE TABLE `fitness_data_swim` (
+  c_curr_seme varchar(4) NOT NULL default '',
+  student_sn int(10) unsigned NOT NULL default '0',
+  test_date date NOT NULL,
+  teach_swim tinyint(1) not null,
+  swim_class tinyint(1) null,
+  swim_score float not null,
+  teacher_sn int(10) default NULL,
+  up_date timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY (c_curr_seme,student_sn)
+) ENGINE=MyISAM;	
+	";
+	if ($CONN->Execute($query)) {
+		$temp_str = "新增游泳資料表成功!\n";
+	} else	$temp_str = "新增游泳資料表失敗 ! \n";
+	$temp_query = "新增游泳資料表 fitness_data_swim -- by smallduh (2014-06-12)\n\n$temp_str";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+}
+
+
+
+
+
+
 ?>

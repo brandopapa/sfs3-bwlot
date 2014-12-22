@@ -49,31 +49,21 @@ if($_POST['move_kind'])
 
 	//取得資料---------------------------------------------------------------------------
 	$class_list_p = class_base($curr_seme);
-	//$query = "select a.*,b.stud_name,b.stud_birthday,b.curr_class_num from stud_move a inner join stud_base b on a.student_sn=b.student_sn where a.move_kind IN ($kind_list) and (a.move_date between '$beg_date' and '$end_date') order by a.move_date";
-	$query = "select a.*,b.stud_name, CONCAT( CAST(DATE_FORMAT(b.stud_birthday,'%Y')-1911 AS CHAR) , DATE_FORMAT(b.stud_birthday,'.%m.%d') ) as stud_birthday,b.curr_class_num,b.stud_sex,b.stud_person_id,b.stud_addr_1,b.stud_study_year,b.enroll_school from stud_move a inner join stud_base b on a.student_sn=b.student_sn where a.move_kind IN ($kind_list) and (a.move_date between '$beg_date' and '$end_date') order by a.move_date";
-	
+	$query = "select a.*,b.stud_name,b.stud_birthday,b.curr_class_num from stud_move a inner join stud_base b on a.student_sn=b.student_sn where a.move_kind IN ($kind_list) and (a.move_date between '$beg_date' and '$end_date') order by a.move_date";
 	$result = $CONN->Execute($query) or die ($query);
 	while(!$result->EOF) {
 		$move_id = $result->fields["move_id"];
 		$move_kind=$result->fields["move_kind"];
 		$arr[$move_id][move_kind] = $study_cond_array[$move_kind];
 		//$arr[$move_id][stud_name] = "<a href='../stud_search/stu_list.php?student_sn=$student_sn' target='_$student_sn'>{$result->fields[stud_name]}</a>";
-		$arr[$move_id][stud_name] = $result->fields["stud_name"];
-		$arr[$move_id][stud_birthday] = $result->fields["stud_birthday"];
-		// add at 20140926
-		$arr[$move_id][stud_sex] = $result->fields["stud_sex"] == 1 ? "男" : "女";
-		$arr[$move_id][stud_person_id] = $result->fields["stud_person_id"];
-		$arr[$move_id][stud_addr_1] = $result->fields["stud_addr_1"];
-		$arr[$move_id][stud_study_year] = $result->fields["stud_study_year"];
-		
-		
+		$arr[$move_id][stud_name] = $result->fields[stud_name];
+		$arr[$move_id][stud_birthday] = $result->fields[stud_birthday];
 		$arr[$move_id][move_date] = $result->fields["move_date"];
 		$arr[$move_id][stud_id] = $result->fields["stud_id"];
 		$arr[$move_id][curr_class_num] = $result->fields["curr_class_num"];
 		$arr[$move_id][school] = $result->fields["school"];
 		$arr[$move_id][reason] = $result->fields["reason"];
 		$arr[$move_id][school_id] = $result->fields["school_id"];
-		$arr[$move_id][enroll_school] = $result->fields["enroll_school"];		
 		$arr[$move_id][move_year] = substr($result->fields["move_year_seme"],0,-1);
 		$arr[$move_id][move_semester] = substr($result->fields["move_year_seme"],-1);
 		$result->MoveNext();
@@ -82,17 +72,12 @@ if($_POST['move_kind'])
 	
 	if($_POST[go]=='HTML輸出'){
 		//抓取資料製成表格
-		//$main="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1' width='100%'>
-			//	<tr align='center' bgcolor='#ffffcc'><td>NO.</td><td>學期</td><td>類別</td><td>學號</td><td>年級</td><td>姓名</td><td>出生年月日</td><td>異動日期</td><td>異動原因</td><td>轉出/轉入學校</td></tr>";
 		$main="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1' width='100%'>
-				<tr align='center' bgcolor='#ffffcc'><td>NO.</td><td>學號</td><td>姓名</td><td>性別</td><td>身分證字號</td><td>出生年月日</td><td>入學年月</td><td>入學資格</td><td>戶籍地址</td></tr>";
-				
+				<tr align='center' bgcolor='#ffffcc'><td>NO.</td><td>學期</td><td>類別</td><td>學號</td><td>年級</td><td>姓名</td><td>出生年月日</td><td>異動日期</td><td>異動原因</td><td>轉出/轉入學校</td></tr>";
 		foreach($arr as $move_id=>$data){
 			$grade=substr($data[curr_class_num],0,-4);
 			$i++;
-			//$main.="<tr align='center'><td>$i</td><td>{$data[move_year]}-{$data[move_semester]}</td><td>{$data[move_kind]}</td><td>{$data[stud_id]}</td><td>$grade</td><td>{$data[stud_name]}</td><td>{$data[stud_birthday]}</td><td>{$data[move_date]}</td><td>{$data[reason]}</td><td>{$data[school_id]}{$data[school]}</td></tr>";
-			//$main.="<tr align='center'><td>$i</td><td>{$data[stud_id]}</td><td>{$data[stud_name]}</td><td>{$data[stud_sex]}</td><td>{$data[stud_person_id]}</td><td>{$data[stud_birthday]}</td><td>{$data[move_year]}-{$data[move_semester]}</td><td>{$data[school_id]}{$data[school]}</td><td>{$data[stud_addr_1]}</td></tr>";
-			$main.="<tr align='center'><td>$i</td><td>{$data[stud_id]}</td><td>{$data[stud_name]}</td><td>{$data[stud_sex]}</td><td>{$data[stud_person_id]}</td><td>{$data[stud_birthday]}</td><td>{$data[move_year]}-{$data[move_semester]}</td><td>{$data[enroll_school]}</td><td>{$data[stud_addr_1]}</td></tr>";
+			$main.="<tr align='center'><td>$i</td><td>{$data[move_year]}-{$data[move_semester]}</td><td>{$data[move_kind]}</td><td>{$data[stud_id]}</td><td>$grade</td><td>{$data[stud_name]}</td><td>{$data[stud_birthday]}</td><td>{$data[move_date]}</td><td>{$data[reason]}</td><td>{$data[school_id]}{$data[school]}</td></tr>";
 		}
 		$main.="</table>";		
 		foreach($_POST['move_kind'] as $key) $kind_name_list.="[{$study_cond_array[$key]}]";

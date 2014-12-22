@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8153 2014-09-30 01:33:20Z smallduh $
 # 資料表格式： `new_stud`
 #
 
@@ -33,7 +33,7 @@ CREATE TABLE new_stud (
   sort_sn smallint(3) unsigned default NULL,
   class_meno varchar(50) NOT NULL default '',
   UNIQUE KEY newstud_sn (newstud_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE  if not exists `new_stud_notification` (
 `note_sn` INT NOT NULL AUTO_INCREMENT ,
@@ -50,4 +50,4 @@ CREATE TABLE  if not exists `new_stud_notification` (
 `note2` TEXT ,
 PRIMARY KEY ( `note_sn` ) ,
 UNIQUE (`year`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

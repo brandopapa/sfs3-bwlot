@@ -1,5 +1,5 @@
 <?php
-// $Id: manage2.php 6921 2012-10-03 06:45:17Z hami $
+// $Id: manage2.php 8169 2014-10-14 05:26:07Z smallduh $
 
 
 /*引入學務系統設定檔*/
@@ -131,7 +131,7 @@ $creat_table_sql="CREATE TABLE  if not exists $score_semester (
 		  ss_id smallint(5) unsigned NOT NULL default '0',
 		  score float  NOT NULL default '0',
 		  test_name varchar(20) NOT NULL default '',
-		  test_kind varchar(10) NOT NULL default '定期評量',
+		  test_kind varchar(12) NOT NULL default '定期評量',
 		  test_sort tinyint(3) unsigned NOT NULL default '0',
 		  update_time datetime NOT NULL default '0000-00-00 00:00:00',
 		  sendmit enum('0','1') NOT NULL default '1',

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: class.health.php 7244 2013-03-21 02:10:56Z hsiao $
+// $Id: class.health.php 8149 2014-09-27 02:32:17Z smallduh $
 
 class health_chart {
 	var $sn_arr=array(); //學生流水號陣列
@@ -241,7 +241,7 @@ class health_chart {
 	//更新身高體重資料
 	function update_wh($update=array(),$mode="") {
 		global $CONN;
-
+    reset($update['new']);
 		while(list($sn,$v)=each($update['new'])) {
 			reset($v);
 			while(list($ys,$vv)=each($v)) {

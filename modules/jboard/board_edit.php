@@ -43,7 +43,9 @@ if ($_GET['act'] == 'del_file'){
 	//	unlink($sFile);
 	 $query= "delete from jboard_files where b_id = '$b_id' and new_filename='".$fArr[$_GET['id']]['new_filename']."'";
 	 $CONN->Execute($query);
-
+	 
+	 $sFile=$Download_Path.$fArr[$_GET['id']]['new_filename'];
+	 unlink($sFile);
 		header("Content-type: text/html; charset=big5");
 		echo $fArr[$_GET['id']]['new_filename'];
 	//}

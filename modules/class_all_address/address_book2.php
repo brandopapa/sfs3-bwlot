@@ -1,6 +1,6 @@
 <?php
 
-// $Id: address_book2.php 7704 2013-10-23 08:51:29Z smallduh $
+// $Id: address_book2.php 8126 2014-09-16 08:56:20Z smallduh $
 
 /*引入學務系統設定檔*/
 include "../../include/config.php";
@@ -146,7 +146,7 @@ function print_key($sel_year="",$sel_seme="",$print_key="" ,$allyear=0){
 		$filename =  "name.doc";
 
 	header("Content-disposition: filename=$filename");
-	header("Content-type: application/octetstream ; Charset=Big5");
+	header("Content-type: application/octetstream");
 	//header("Pragma: no-cache");
 					//配合 SSL連線時，IE 6,7,8下載有問題，進行修改 
 				header("Cache-Control: max-age=0");

@@ -1,5 +1,5 @@
 <?php
-//$Id: stud_move_rein.php 6027 2010-08-24 16:19:07Z brucelyc $
+//$Id: stud_move_rein.php 8116 2014-09-10 12:41:32Z hsiao $
 include "stud_move_config.php";
 
 //認證
@@ -145,12 +145,15 @@ $smarty->assign("class_sel",get_class_select(curr_year(),curr_seme(),"","stud_cl
 //取出復學記錄
 $temp_move_kind="a.move_kind='".implode("' or a.move_kind='",array_keys($rein_arr))."'";
 
-$query="select a.*,b.stud_name,c.seme_class from stud_move a,stud_seme c,stud_base b where a.student_sn=c.student_sn and  a.student_sn=b.student_sn and c.seme_year_seme='$seme_year_seme' and a.move_year_seme='$curr_seme' and ($temp_move_kind) order by a.move_date desc";
+$query="select a.*,b.stud_name,b.stud_person_id,b.stud_birthday,c.seme_class from stud_move a,stud_seme c,stud_base b where a.student_sn=c.student_sn and  a.student_sn=b.student_sn and c.seme_year_seme='$seme_year_seme' and a.move_year_seme='$curr_seme' and ($temp_move_kind) order by a.move_date desc";
 
 
 $res=$CONN->Execute($query) or die($query);
 $smarty->assign("stud_move",$res->GetRows());
-
+$session_path=$SFS_PATH_HTML.'modules/stud_move/session_in.php?para=';
+$session_schoolnameeduno=$SCHOOL_BASE["sch_cname_ss"].'('.$SCHOOL_BASE['sch_id'].')';
+$smarty->assign("sesion_path",$session_path);
+$smarty->assign("session_schoolnameeduno",$session_schoolnameeduno);
 $smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE);
 $smarty->assign("module_name","學生復學作業");
 $smarty->assign("SFS_MENU",$student_menu_p);

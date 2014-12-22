@@ -61,14 +61,10 @@ if ($do_key =="Excel ¿é¥X") {
 		  } 
     }
 
-		//$addr = change_addr(addslashes($result->fields[stud_addr_1]),1);
-		$addr = change_addr($result->fields[stud_addr_1],1);
+		$addr = change_addr(addslashes($result->fields[stud_addr_1]),1);
 		$s_addres = "";
-		//for ($i=0;$i<=20;$i++) $s_addres .= $addr[$i];
-		for ($i=0;$i<=20;$i++) $s_addres .= $addr[$i];
-		if ($addr_zip != '') {
-			$s_addres = substr($s_addres,strlen($addr_zip));
-		}
+		for ($i=2;$i<=12;$i++) $s_addres .= $addr[$i];
+
 		$query2 = "select fath_name,moth_name from stud_domicile where stud_id ='$stud_id'";
 		$result2 = $CONN->Execute($query2)or die ($query2) ;
 		$fath_name = $result2->fields[fath_name];

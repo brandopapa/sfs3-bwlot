@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8150 2014-09-29 03:41:14Z smallduh $
 # 資料表格式： `school_board`
 #
 
@@ -19,5 +19,5 @@ CREATE TABLE school_board (
   TopNews tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (msg_id),
   KEY userid (userid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
         

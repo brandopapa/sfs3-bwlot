@@ -36,7 +36,12 @@ if($_POST['act']=='統計本年度所有開列學生品德服務的級分'){
 		$sql="SELECT stud_id FROM stud_base WHERE student_sn=$student_sn";
 		$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 		$stud_id=$res->fields[0];
-		$my_abs_score=(array_key_exists($stud_id,$absence_array))?$absence_array[$stud_id]:$absence_score_array[0];
+		//$my_abs_score=(array_key_exists($stud_id,$absence_array))?$absence_array[$stud_id]:$absence_score_array[0];
+		$my_abs_score=$absence_score_max;
+		$absence_sid=count_student_seme_abs($stud_id);		//抓取學生歷年學期出缺席次數
+		foreach($absence_sid as $abs_seme=>$abs_days){
+			if($abs_days>0) $my_abs_score--;
+		}
 
 		$sql="UPDATE 12basic_ylc SET score_reward='{$reward_array[$student_sn]['bonus'][2]}',score_fault='{$reward_array[$student_sn]['bonus'][1]}',score_absence='$my_abs_score'
 				WHERE academic_year=$work_year AND student_sn=$student_sn";

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 6986 2012-10-31 06:39:15Z infodaes $
+// $Id: module-cfg.php 8111 2014-09-09 01:31:25Z smallduh $
 
 //---------------------------------------------------
 //
@@ -105,6 +105,8 @@ $SFS_MODULE_SETUP[2] =array('var'=>"eduh_input_method", 'msg'=>"學期輔導輸入方式
 $SFS_MODULE_SETUP[3] =array('var'=>"completeness", 'msg'=>"輔導A表項目強制須輸入完整", 'value'=>array("0"=>"是","1"=>"否"));
 $SFS_MODULE_SETUP[4] =array('var'=>"talk_length", 'msg'=>"輔導訪談內容中文字字數限制", 'value'=>50);
 $SFS_MODULE_SETUP[5] =array('var'=>"teach_subject", 'msg'=>"輔導A表可填報任教科目", 'value'=>'輔導,輔導活動,綜合活動');
+$SFS_MODULE_SETUP[6] =array('var'=>"interview_methods", 'msg'=>"訪談方式選項(以,分隔)", 'value'=>'電話訪談,家庭訪視,個別訪談,團體輔導');
+$SFS_MODULE_SETUP[7] =array('var'=>"update_site_num", 'msg'=>"導師可改學生座號月分(限國小)", 'value'=>'9,3');
 
 
 // $SFS_MODULE_SETUP[2] =

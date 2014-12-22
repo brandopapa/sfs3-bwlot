@@ -1,0 +1,856 @@
+
+*** These modified files were found in JOE when it aborted on Sun Dec 21 23:51:00 2014
+*** JOE was aborted by UNIX signal 1
+
+*** File '.git/COMMIT_EDITMSG'
+20141222 update file check_score_notify 
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   data/system/clean_templates_c
+#	new file:   data/upgrade/include/2014-08-03.txt
+#	new file:   data/upgrade/include/2014-09-15.txt
+#	new file:   data/upgrade/include/2014-10-08.txt
+#	modified:   include/libs/plugins/shared.escape_special_chars.php
+#	modified:   include/sfs_case_dataarray.php
+#	modified:   include/sfs_case_score.php
+#	modified:   include/sfs_oo_dropmenu.php
+#	modified:   include/sfs_oo_overlib.php
+#	modified:   include/sfs_upgrade_list.php
+#	modified:   include/sfsinfo/program_info.php
+#	new file:   include/upgrade_files/up20140803.php
+#	new file:   include/upgrade_files/up20140915.php
+#	new file:   include/upgrade_files/up20141008.php
+#	new file:   modules/12basic_ptc/104_ptc_1.0.pdf
+#	modified:   modules/12basic_ptc/basic_data.php
+#	modified:   modules/12basic_ptc/config.php
+#	modified:   modules/12basic_ptc/diversification.php
+#	modified:   modules/12basic_ptc/graduate.php
+#	new file:   modules/12basic_ptc/images/race.png
+#	new file:   modules/12basic_ptc/images/service.png
+#	modified:   modules/12basic_ptc/module-cfg.php
+#	modified:   modules/12basic_ptc/module-upgrade.php
+#	modified:   modules/12basic_ptc/my_fun.php
+#	modified:   modules/12basic_ptc/output_tmd.php
+#	modified:   modules/12basic_ptc/prove_service.php
+#	modified:   modules/12basic_ptc/readme.php
+#	modified:   modules/12basic_tech/my_fun.php
+#	modified:   modules/12basic_ylc/config.php
+#	modified:   modules/12basic_ylc/disadvantage.php
+#	modified:   modules/12basic_ylc/kind_mirror.php
+#	modified:   modules/12basic_ylc/module-cfg.php
+#	modified:   modules/12basic_ylc/morality.php
+#	modified:   modules/12basic_ylc/transcript.php
+#	modified:   modules/absent/letter/content_body.xml
+#	modified:   modules/absent/module.sql
+#	modified:   modules/absent/trans_main.php
+#	modified:   modules/absent_bw/INSTALL
+#	modified:   modules/absent_bw/NEWS
+#	modified:   modules/absent_bw/README
+#	modified:   modules/absent_bw/add_record.php
+#	modified:   modules/absent_bw/add_record_person.php
+#	modified:   modules/absent_bw/add_record_person.php.bak
+#	modified:   modules/absent_bw/ajax_return_students.php
+#	modified:   modules/absent_bw/ajax_select_students.php
+#	modified:   modules/absent_bw/author.txt
+#	modified:   modules/absent_bw/chc_class_obj.php
+#	modified:   modules/absent_bw/chc_class_obj.php.bak
+#	modified:   modules/absent_bw/chc_prn_week.php
+#	modified:   modules/absent_bw/chc_report.php
+#	modified:   modules/absent_bw/chc_report_all.php
+#	modified:   modules/absent_bw/config.php
+#	modified:   modules/absent_bw/function.php
+#	modified:   modules/absent_bw/images/blue_new_icon.png
+#	modified:   modules/absent_bw/images/cyan_new_icon.png
+#	modified:   modules/absent_bw/images/del.png
+#	modified:   modules/absent_bw/images/green_new_icon.png
+#	modified:   modules/absent_bw/images/grey_new_icon.png
+#	modified:   modules/absent_bw/images/new_icon.png
+#	modified:   modules/absent_bw/images/orange_new_icon.png
+#	modified:   modules/absent_bw/images/violet_new_icon.png
+#	modified:   modules/absent_bw/images/yellow_new_icon.png
+#	modified:   modules/absent_bw/index.php
+#	modified:   modules/absent_bw/index.php.20140916
+#	modified:   modules/absent_bw/index_group.php
+#	modified:   modules/absent_bw/letter.php
+#	modified:   modules/absent_bw/letter/META-INF/manifest.xml
+#	modified:   modules/absent_bw/letter/content.xml
+#	modified:   modules/absent_bw/letter/content_body.xml
+#	modified:   modules/absent_bw/letter/content_foot.xml
+#	modified:   modules/absent_bw/letter/content_head.xml
+#	modified:   modules/absent_bw/letter/layout-cache
+#	modified:   modules/absent_bw/letter/meta.xml
+#	modified:   modules/absent_bw/letter/mimetype
+#	modified:   modules/absent_bw/letter/settings.xml
+#	modified:   modules/absent_bw/letter/styles.xml
+#	modified:   modules/absent_bw/module-cfg.php
+#	modified:   modules/absent_bw/module.sql
+#	modified:   modules/absent_bw/oo/META-INF/manifest.xml
+#	modified:   modules/absent_bw/oo/content.xml
+#	modified:   modules/absent_bw/oo/meta.xml
+#	modified:   modules/absent_bw/oo/mimetype
+#	modified:   modules/absent_bw/oo/settings.xml
+#	modified:   modules/absent_bw/oo/styles.xml
+#	modified:   modules/absent_bw/report.php
+#	modified:   modules/absent_bw/semester_rank.php
+#	modified:   modules/absent_bw/stat.php
+#	modified:   modules/absent_bw/stat_all.php
+#	modified:   modules/absent_bw/stat_all.php.bak
+#	modified:   modules/absent_bw/templates/absent_add_record.tpl
+#	modified:   modules/absent_bw/templates/absent_add_record_person.tpl
+#	modified:   modules/absent_bw/templates/chc_prn_week.html
+#	modified:   modules/absent_bw/templates/prn_all_absent.html
+#	modified:   modules/absent_bw/templates/prn_class_absent.html
+#	modified:   modules/absent_bw/templates/week_abs_tol.htm
+#	modified:   modules/absent_bw/trans_main.php
+#	modified:   modules/absent_bw/week_abs_tol.php
+#	modified:   modules/academic_record/chc_check.php
+#	modified:   modules/academic_record/comment.php
+#	modified:   modules/action/XPPubWiz.php
+#	modified:   modules/action/action.php
+#	modified:   modules/action/action_admin.php
+#	modified:   modules/address_book/config.php
+#	modified:   modules/book/module.sql
+#	modified:   modules/calendar/module.sql
+#	modified:   modules/career_leader/leader_input.php
+#	modified:   modules/career_race/config.php
+#	modified:   modules/career_race/cr_input.php
+#	modified:   modules/career_race/my_functions.php
+#	new file:   modules/career_race/select_race_option.js
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/META-INF/manifest.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/content.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/meta.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/mimetype"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/settings.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/styles.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/\246\254\266O\263q\252\276\275d\250\322_\244\244\244@\244M\245b\274e\246\254\276\332.zip"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/META-INF/manifest.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/content.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/meta.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/mimetype"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/settings.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/styles.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/\246\254\266O\263q\252\276\275d\250\322_\244\244\244G\244M\246\254\276\332.zip"
+#	modified:   modules/chc_basic12/stu.php
+#	modified:   modules/chc_basic12/stud_export.php
+#	modified:   modules/chc_basic12/stud_listA.php
+#	modified:   modules/chc_basic12/stud_listA_edit.php
+#	modified:   modules/chc_basic12/stud_listB.php
+#	modified:   modules/chc_basic12/stud_listB_edit.php
+#	modified:   modules/chc_basic12/stud_perV3.php
+#	modified:   modules/chc_basic12/teacher.php
+#	modified:   modules/chc_basic12/templates/chc_excel.htm
+#	modified:   modules/chc_basic12/templates/stud_listA.htm
+#	modified:   modules/chc_basic12/templates/stud_listA_edit.htm
+#	modified:   modules/chc_basic12/templates/stud_listB.htm
+#	modified:   modules/chc_basic12/templates/stud_listB_edit.htm
+#	modified:   modules/chc_basic12/templates/stud_per.htm
+#	modified:   modules/chc_basic12/templates/stud_per3.htm
+#	modified:   modules/chc_basic12/templates/teacher.htm
+#	modified:   modules/chc_basic12/templates/view.htm
+#	modified:   modules/chc_basic12/view.php
+#	modified:   modules/chc_edu/chc_newstud.php
+#	new file:   modules/chc_mend/INSTALL
+#	new file:   modules/chc_mend/NEWS
+#	new file:   modules/chc_mend/README
+#	new file:   modules/chc_mend/author.txt
+#	new file:   modules/chc_mend/chi_fun.php
+#	new file:   modules/chc_mend/config.php
+#	new file:   modules/chc_mend/images/01.jpg
+#	new file:   modules/chc_mend/images/02.jpg
+#	new file:   modules/chc_mend/images/03.jpg
+#	new file:   modules/chc_mend/images/04.jpg
+#	new file:   modules/chc_mend/images/05.jpg
+#	new file:   modules/chc_mend/images/blue_new_icon.png
+#	new file:   modules/chc_mend/images/cyan_new_icon.png
+#	new file:   modules/chc_mend/images/green_new_icon.png
+#	new file:   modules/chc_mend/images/grey_new_icon.png
+#	new file:   modules/chc_mend/images/orange_new_icon.png
+#	new file:   modules/chc_mend/images/violet_new_icon.png
+#	new file:   modules/chc_mend/images/yellow_new_icon.png
+#	new file:   modules/chc_mend/index.php
+#	new file:   modules/chc_mend/module-cfg.php
+#	new file:   modules/chc_mend/module.sql
+#	new file:   modules/chc_mend/score_identify.php
+#	new file:   modules/chc_mend/score_identify_print.php
+#	new file:   modules/chc_mend/score_input.php
+#	new file:   modules/chc_mend/score_list.php
+#	new file:   modules/chc_mend/select_stu.php
+#	new file:   modules/chc_mend/templates/index.htm
+#	new file:   modules/chc_mend/templates/score_identify.htm
+#	new file:   modules/chc_mend/templates/score_input.htm
+#	new file:   modules/chc_mend/templates/score_list.htm
+#	new file:   modules/chc_mend/templates/score_list_all.htm
+#	new file:   modules/chc_mend/templates/select_stu.htm
+#	new file:   modules/chc_mend/templates/ungraduate_stu.htm
+#	new file:   modules/chc_mend/templates/ungraduate_stu_print.htm
+#	new file:   modules/chc_mend/ungraduate_stu.php
+#	modified:   modules/cita/README
+#	modified:   modules/cita/citaList.php
+#	modified:   modules/cita/citaView.php
+#	modified:   modules/cita/citain.php
+#	modified:   modules/class_all_address/address_book2.php
+#	modified:   modules/class_health/module.sql
+#	modified:   modules/class_things/address_book2.php
+#	new file:   modules/class_things/club_select.php
+#	modified:   modules/class_things/config.php
+#	modified:   modules/class_things/module-cfg.php
+#	modified:   modules/class_things/service_class_list.php
+#	new file:   modules/class_things/stud_pwd.php
+#	modified:   modules/copy_setup/module.sql
+#	modified:   modules/course_paper/csv_class_all.php
+#	modified:   modules/course_paper/get_data_function.php
+#	modified:   modules/course_paper/list_all_teacher.php
+#	modified:   modules/course_paper/list_chk_class.php
+#	modified:   modules/course_paper/list_teach_sum.php
+#	modified:   modules/course_paper/list_teach_sum_csv.php
+#	modified:   modules/create_data/explode_stu.php
+#	modified:   modules/csrc/module.sql
+#	modified:   modules/database_info/tpl_field.php
+#	modified:   modules/docup/doc_add.php
+#	modified:   modules/docup/doc_kind_list.php
+#	modified:   modules/docup/doc_update.php
+#	modified:   modules/docup/docup_p_add.php
+#	modified:   modules/docup/docup_p_list.php
+#	modified:   modules/docup/docup_p_update.php
+#	modified:   modules/docup/module.sql
+#	modified:   modules/edu_chart/module.sql
+#	modified:   modules/edusoft/tape_delete.php
+#	modified:   modules/edusoft/tape_edit.php
+#	modified:   modules/elective/module.sql
+#	modified:   modules/elps_cal/cal_add.php
+#	modified:   modules/elps_cal/index2.php
+#	modified:   modules/elps_cal/module.sql
+#	modified:   modules/elps_sport/admin.php
+#	modified:   modules/elps_sport/module.sql
+#	modified:   modules/every_year_setup/chc_teacher.v2.php
+#	modified:   modules/every_year_setup/course_setup3_teacher.php
+#	modified:   modules/every_year_setup/module-upgrade.php
+#	modified:   modules/exam/module.sql
+#	new file:   modules/fitness/input_swim.php
+#	modified:   modules/fitness/module-cfg.php
+#	modified:   modules/fitness/module-upgrade.php
+#	modified:   modules/fitness/my_fun.php
+#	modified:   modules/fitness/templates/fitness_input.tpl
+#	new file:   modules/fitness/templates/fitness_input_swim.tpl
+#	modified:   modules/fitness/templates/fitness_print.tpl
+#	modified:   modules/fix_tool/chi_fun.php
+#	modified:   modules/fix_tool/del_comment.php
+#	new file:   modules/fix_tool/fix_stud_seme_rew_1.php
+#	modified:   modules/fix_tool/module-cfg.php
+#	modified:   modules/fixed/boardadmin.php
+#	modified:   modules/fixed/fixed.php
+#	modified:   modules/fixed/fixedadmin.php
+#	modified:   modules/fixed/fixedview.php
+#	modified:   modules/graduate/module.sql
+#	modified:   modules/health/class.health.php
+#	modified:   modules/health/module.sql
+#	modified:   modules/health/module_health_accident.sql
+#	modified:   modules/jboard/board_API.php
+#	modified:   modules/jboard/board_config.php
+#	modified:   modules/jboard/board_delete.php
+#	modified:   modules/jboard/board_edit.php
+#	modified:   modules/jboard/board_files_upload.php
+#	modified:   modules/jboard/board_view.php
+#	modified:   modules/jboard/file_download.php
+#	modified:   modules/jboard/module-cfg.php
+#	modified:   modules/jboard/module-upgrade.php
+#	modified:   modules/jboard_man/board_user_list.php
+#	modified:   modules/jboard_man/boardadmin.php
+#	modified:   modules/jshow/jshow_API.php
+#	modified:   modules/jshow/my_functions.php
+#	modified:   modules/learning/module.sql
+#	modified:   modules/lunch/module.sql
+#	modified:   modules/mig/funcs.php
+#	modified:   modules/mig/index.php
+#	modified:   modules/new_board/module.sql
+#	modified:   modules/new_compclass/course_room.sql
+#	modified:   modules/new_course/function.php
+#	modified:   modules/new_course/teacher_class.php
+#	modified:   modules/news/module.sql
+#	modified:   modules/newsmig/module.sql
+#	modified:   modules/newsmig/newslist.php
+#	modified:   modules/photoview/XPPubWiz.php
+#	modified:   modules/photoview/view_list.php
+#	modified:   modules/reward/module.sql
+#	modified:   modules/reward/reward_list.php
+#	modified:   modules/reward/reward_one.php
+#	modified:   modules/salary/module.sql
+#	modified:   modules/school_msn/main_message.php
+#	modified:   modules/school_msn/main_showdata.php
+#	modified:   modules/school_msn/main_teachers_id.php
+#	modified:   modules/score_input/manage.php
+#	modified:   modules/score_input/manage2.php
+#	modified:   modules/score_input/myfun2.php
+#	modified:   modules/score_input/normal.php
+#	modified:   modules/score_manage_new_bw/check_score_notify.php
+#	new file:   modules/score_manage_new_bw/check_score_notify.php.20141222
+#	modified:   modules/score_manage_new_bw/score_query.php
+#	modified:   modules/score_nor/module.sql
+#	modified:   modules/score_nor/report.php
+#	modified:   modules/score_paper/module.sql
+#	modified:   modules/score_stage_chart/index.php
+#	modified:   modules/score_stage_chart/module-cfg.php
+#	modified:   modules/score_stage_chart/stage_class_score.php
+#	modified:   modules/semester_score/scope_filter.php
+#	modified:   modules/semester_score/scope_no_pass.php
+#	modified:   modules/semester_score/scope_warning.php
+#	new file:   modules/semester_score/templates/score_report_no_pass.tpl
+#	modified:   modules/sfs3_blog/module.sql
+#	modified:   modules/sfs_man2/sfs_module.sql
+#	modified:   modules/sign_act/module.sql
+#	modified:   modules/spec_test/module.sql
+#	modified:   modules/stud_base/stud_base.php
+#	modified:   modules/stud_class/images/demo.jpg
+#	modified:   modules/stud_class/images/demo.xls
+#	modified:   modules/stud_class/module-cfg.php
+#	modified:   modules/stud_class/module-upgrade.php
+#	modified:   modules/stud_class/stud_eduh_list.php
+#	modified:   modules/stud_class/stud_list.php
+#	modified:   modules/stud_class/stud_seme_talk2.php
+#	modified:   modules/stud_club/club_arrange.php
+#	modified:   modules/stud_club/club_manage.php
+#	modified:   modules/stud_club/club_score2.php
+#	modified:   modules/stud_club/club_score_all.php
+#	modified:   modules/stud_club/my_functions.php
+#	modified:   modules/stud_compile/module.sql
+#	modified:   modules/stud_data_get/function.php
+#	modified:   modules/stud_eduh/chc_talk_all.htm
+#	modified:   modules/stud_eduh/chc_talk_all.php
+#	modified:   modules/stud_eduh/module-upgrade.php
+#	modified:   modules/stud_eduh/stud_seme_talk2.php
+#	modified:   modules/stud_eduh_self/club_feedback.php
+#	modified:   modules/stud_eduh_self/stud_cpass.php
+#	modified:   modules/stud_eduh_teacher/module-upgrade.php
+#	modified:   modules/stud_eduh_teacher/stud_seme_talk.php
+#	modified:   modules/stud_grade/grad_list_print_v.php
+#	modified:   modules/stud_grade/grad_list_print_v2.php
+#	modified:   modules/stud_grade/module-cfg.php
+#	modified:   modules/stud_grade/ooo/v_view/content
+#	modified:   modules/stud_grade/ooo/v_view2/content
+#	new file:   modules/stud_grade/sr_tc_csv.php
+#	modified:   modules/stud_guidance/chi_class_obj.php
+#	modified:   modules/stud_guidance/module.sql
+#	modified:   modules/stud_guidance_tea/chi_class_obj.php
+#	new file:   modules/stud_move/XCVXMLexChange.jar
+#	new file:   modules/stud_move/jhslist.js
+#	new file:   modules/stud_move/lib/P11JNI.jar
+#	new file:   modules/stud_move/lib/commons-codec-1.8.jar
+#	new file:   modules/stud_move/lib/commons-configuration-1.9.jar
+#	new file:   modules/stud_move/lib/commons-lang-2.6.jar
+#	new file:   modules/stud_move/lib/commons-logging-1.1.3.jar
+#	new file:   modules/stud_move/lib/derby.jar
+#	new file:   modules/stud_move/lib/derbyclient.jar
+#	new file:   modules/stud_move/lib/derbynet.jar
+#	new file:   modules/stud_move/lib/fluent-hc-4.3.5.jar
+#	new file:   modules/stud_move/lib/httpclient-4.3.5.jar
+#	new file:   modules/stud_move/lib/httpclient-cache-4.3.5.jar
+#	new file:   modules/stud_move/lib/httpcore-4.3.2.jar
+#	new file:   modules/stud_move/lib/httpmime-4.3.5.jar
+#	new file:   modules/stud_move/lib/log4j-1.2.16.jar
+#	new file:   modules/stud_move/lib/pivot-core-2.0.3.jar
+#	new file:   modules/stud_move/lib/pivot-wtk-2.0.3.jar
+#	new file:   modules/stud_move/lib/pivot-wtk-terra-2.0.3.jar
+#	new file:   modules/stud_move/lib/schooldb.jar
+#	new file:   modules/stud_move/pslist.js
+#	new file:   modules/stud_move/session_in.php
+#	new file:   modules/stud_move/session_out.php
+#	modified:   modules/stud_move/stud_move.php
+#	modified:   modules/stud_move/stud_move_list2.php
+#	modified:   modules/stud_move/stud_move_out.php
+#	modified:   modules/stud_move/stud_move_rein.php
+#	modified:   modules/stud_move/templates/stud_move_stud_move_rein.tpl
+#	modified:   modules/stud_pass/index.php
+#	modified:   modules/stud_pass/module-cfg.php
+#	modified:   modules/stud_pass/query.php
+#	new file:   modules/stud_pass/query_class.php
+#	modified:   modules/stud_pass_show/stud_pass_list.php
+#	modified:   modules/stud_reg/module-upgrade.php
+#	modified:   modules/stud_reg/stud_ext_data.php
+#	modified:   modules/stud_reg/stud_list.php
+#	modified:   modules/stud_report/chc_index.php
+#	modified:   modules/stud_report/chc_years_score.php
+#	modified:   modules/stud_service/service_list.php
+#	modified:   modules/stud_service/service_one.php
+#	modified:   modules/stud_sign/data_design.txt
+#	modified:   modules/stud_sign/module.sql
+#	modified:   modules/stud_sta/module-cfg.php
+#	modified:   modules/stud_sta/stud_sta_rep.php
+#	modified:   modules/teacher_absent/config.php
+#	new file:   modules/teacher_absent/delete-file.php
+#	modified:   modules/teacher_absent/list.php
+#	new file:   modules/teacher_absent/module-upgrade.php
+#	modified:   modules/teacher_absent/record.php
+#	modified:   modules/teacher_absent/templates/list.tpl
+#	modified:   modules/teacher_absent/templates/record.tpl
+#	new file:   modules/teacher_absent_admin/delete-file.php
+#	modified:   modules/teacher_absent_admin/deputy.php
+#	modified:   modules/teacher_absent_admin/record.php
+#	modified:   modules/teacher_absent_admin/statis.php
+#	modified:   modules/teacher_absent_admin/templates/deputy_a.tpl
+#	modified:   modules/teacher_absent_admin/templates/record_a.tpl
+#	modified:   modules/team_sign_up/module.sql
+#	modified:   modules/temp_compile/module.sql
+#	modified:   modules/temp_compile/newstud_input.php
+#	modified:   modules/toxml/class.php
+#	modified:   modules/toxml/import_seme.php
+#	new file:   modules/toxml/import_xml2.php
+#	new file:   modules/toxml/output_xml2.php
+#	new file:   modules/toxml/security.php
+#	modified:   modules/web_hd/module.sql
+#	modified:   sfs-release.php
+#	modified:   themes/new/new_login.php
+#
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	deleted:    data/temp/newstud/newstud.csv
+#	deleted:    modules/score_manage_new_bw/check_score_notify.php.20141222
+#
+
+*** File '(Unnamed)'
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+
+*** These modified files were found in JOE when it aborted on Sun Dec 21 23:56:37 2014
+*** JOE was aborted because the terminal closed
+
+*** File '.git/COMMIT_EDITMSG'
+update 2014122 check_score_notif
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   data/system/clean_templates_c
+#	new file:   data/upgrade/include/2014-08-03.txt
+#	new file:   data/upgrade/include/2014-09-15.txt
+#	new file:   data/upgrade/include/2014-10-08.txt
+#	modified:   include/libs/plugins/shared.escape_special_chars.php
+#	modified:   include/sfs_case_dataarray.php
+#	modified:   include/sfs_case_score.php
+#	modified:   include/sfs_oo_dropmenu.php
+#	modified:   include/sfs_oo_overlib.php
+#	modified:   include/sfs_upgrade_list.php
+#	modified:   include/sfsinfo/program_info.php
+#	new file:   include/upgrade_files/up20140803.php
+#	new file:   include/upgrade_files/up20140915.php
+#	new file:   include/upgrade_files/up20141008.php
+#	new file:   modules/12basic_ptc/104_ptc_1.0.pdf
+#	modified:   modules/12basic_ptc/basic_data.php
+#	modified:   modules/12basic_ptc/config.php
+#	modified:   modules/12basic_ptc/diversification.php
+#	modified:   modules/12basic_ptc/graduate.php
+#	new file:   modules/12basic_ptc/images/race.png
+#	new file:   modules/12basic_ptc/images/service.png
+#	modified:   modules/12basic_ptc/module-cfg.php
+#	modified:   modules/12basic_ptc/module-upgrade.php
+#	modified:   modules/12basic_ptc/my_fun.php
+#	modified:   modules/12basic_ptc/output_tmd.php
+#	modified:   modules/12basic_ptc/prove_service.php
+#	modified:   modules/12basic_ptc/readme.php
+#	modified:   modules/12basic_tech/my_fun.php
+#	modified:   modules/12basic_ylc/config.php
+#	modified:   modules/12basic_ylc/disadvantage.php
+#	modified:   modules/12basic_ylc/kind_mirror.php
+#	modified:   modules/12basic_ylc/module-cfg.php
+#	modified:   modules/12basic_ylc/morality.php
+#	modified:   modules/12basic_ylc/transcript.php
+#	modified:   modules/absent/letter/content_body.xml
+#	modified:   modules/absent/module.sql
+#	modified:   modules/absent/trans_main.php
+#	modified:   modules/absent_bw/INSTALL
+#	modified:   modules/absent_bw/NEWS
+#	modified:   modules/absent_bw/README
+#	modified:   modules/absent_bw/add_record.php
+#	modified:   modules/absent_bw/add_record_person.php
+#	modified:   modules/absent_bw/add_record_person.php.bak
+#	modified:   modules/absent_bw/ajax_return_students.php
+#	modified:   modules/absent_bw/ajax_select_students.php
+#	modified:   modules/absent_bw/author.txt
+#	modified:   modules/absent_bw/chc_class_obj.php
+#	modified:   modules/absent_bw/chc_class_obj.php.bak
+#	modified:   modules/absent_bw/chc_prn_week.php
+#	modified:   modules/absent_bw/chc_report.php
+#	modified:   modules/absent_bw/chc_report_all.php
+#	modified:   modules/absent_bw/config.php
+#	modified:   modules/absent_bw/function.php
+#	modified:   modules/absent_bw/images/blue_new_icon.png
+#	modified:   modules/absent_bw/images/cyan_new_icon.png
+#	modified:   modules/absent_bw/images/del.png
+#	modified:   modules/absent_bw/images/green_new_icon.png
+#	modified:   modules/absent_bw/images/grey_new_icon.png
+#	modified:   modules/absent_bw/images/new_icon.png
+#	modified:   modules/absent_bw/images/orange_new_icon.png
+#	modified:   modules/absent_bw/images/violet_new_icon.png
+#	modified:   modules/absent_bw/images/yellow_new_icon.png
+#	modified:   modules/absent_bw/index.php
+#	modified:   modules/absent_bw/index.php.20140916
+#	modified:   modules/absent_bw/index_group.php
+#	modified:   modules/absent_bw/letter.php
+#	modified:   modules/absent_bw/letter/META-INF/manifest.xml
+#	modified:   modules/absent_bw/letter/content.xml
+#	modified:   modules/absent_bw/letter/content_body.xml
+#	modified:   modules/absent_bw/letter/content_foot.xml
+#	modified:   modules/absent_bw/letter/content_head.xml
+#	modified:   modules/absent_bw/letter/layout-cache
+#	modified:   modules/absent_bw/letter/meta.xml
+#	modified:   modules/absent_bw/letter/mimetype
+#	modified:   modules/absent_bw/letter/settings.xml
+#	modified:   modules/absent_bw/letter/styles.xml
+#	modified:   modules/absent_bw/module-cfg.php
+#	modified:   modules/absent_bw/module.sql
+#	modified:   modules/absent_bw/oo/META-INF/manifest.xml
+#	modified:   modules/absent_bw/oo/content.xml
+#	modified:   modules/absent_bw/oo/meta.xml
+#	modified:   modules/absent_bw/oo/mimetype
+#	modified:   modules/absent_bw/oo/settings.xml
+#	modified:   modules/absent_bw/oo/styles.xml
+#	modified:   modules/absent_bw/report.php
+#	modified:   modules/absent_bw/semester_rank.php
+#	modified:   modules/absent_bw/stat.php
+#	modified:   modules/absent_bw/stat_all.php
+#	modified:   modules/absent_bw/stat_all.php.bak
+#	modified:   modules/absent_bw/templates/absent_add_record.tpl
+#	modified:   modules/absent_bw/templates/absent_add_record_person.tpl
+#	modified:   modules/absent_bw/templates/chc_prn_week.html
+#	modified:   modules/absent_bw/templates/prn_all_absent.html
+#	modified:   modules/absent_bw/templates/prn_class_absent.html
+#	modified:   modules/absent_bw/templates/week_abs_tol.htm
+#	modified:   modules/absent_bw/trans_main.php
+#	modified:   modules/absent_bw/week_abs_tol.php
+#	modified:   modules/academic_record/chc_check.php
+#	modified:   modules/academic_record/comment.php
+#	modified:   modules/action/XPPubWiz.php
+#	modified:   modules/action/action.php
+#	modified:   modules/action/action_admin.php
+#	modified:   modules/address_book/config.php
+#	modified:   modules/book/module.sql
+#	modified:   modules/calendar/module.sql
+#	modified:   modules/career_leader/leader_input.php
+#	modified:   modules/career_race/config.php
+#	modified:   modules/career_race/cr_input.php
+#	modified:   modules/career_race/my_functions.php
+#	new file:   modules/career_race/select_race_option.js
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/META-INF/manifest.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/content.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/meta.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/mimetype"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/settings.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/styles.xml"
+#	new file:   "modules/charge/ooo/\244\244\244@\244M\245b\274e\246\254\276\332/\246\254\266O\263q\252\276\275d\250\322_\244\244\244@\244M\245b\274e\246\254\276\332.zip"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/META-INF/manifest.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/content.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/meta.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/mimetype"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/settings.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/styles.xml"
+#	new file:   "modules/charge/ooo/\244\244\244G\244M\246\254\276\332/\246\254\266O\263q\252\276\275d\250\322_\244\244\244G\244M\246\254\276\332.zip"
+#	modified:   modules/chc_basic12/stu.php
+#	modified:   modules/chc_basic12/stud_export.php
+#	modified:   modules/chc_basic12/stud_listA.php
+#	modified:   modules/chc_basic12/stud_listA_edit.php
+#	modified:   modules/chc_basic12/stud_listB.php
+#	modified:   modules/chc_basic12/stud_listB_edit.php
+#	modified:   modules/chc_basic12/stud_perV3.php
+#	modified:   modules/chc_basic12/teacher.php
+#	modified:   modules/chc_basic12/templates/chc_excel.htm
+#	modified:   modules/chc_basic12/templates/stud_listA.htm
+#	modified:   modules/chc_basic12/templates/stud_listA_edit.htm
+#	modified:   modules/chc_basic12/templates/stud_listB.htm
+#	modified:   modules/chc_basic12/templates/stud_listB_edit.htm
+#	modified:   modules/chc_basic12/templates/stud_per.htm
+#	modified:   modules/chc_basic12/templates/stud_per3.htm
+#	modified:   modules/chc_basic12/templates/teacher.htm
+#	modified:   modules/chc_basic12/templates/view.htm
+#	modified:   modules/chc_basic12/view.php
+#	modified:   modules/chc_edu/chc_newstud.php
+#	new file:   modules/chc_mend/INSTALL
+#	new file:   modules/chc_mend/NEWS
+#	new file:   modules/chc_mend/README
+#	new file:   modules/chc_mend/author.txt
+#	new file:   modules/chc_mend/chi_fun.php
+#	new file:   modules/chc_mend/config.php
+#	new file:   modules/chc_mend/images/01.jpg
+#	new file:   modules/chc_mend/images/02.jpg
+#	new file:   modules/chc_mend/images/03.jpg
+#	new file:   modules/chc_mend/images/04.jpg
+#	new file:   modules/chc_mend/images/05.jpg
+#	new file:   modules/chc_mend/images/blue_new_icon.png
+#	new file:   modules/chc_mend/images/cyan_new_icon.png
+#	new file:   modules/chc_mend/images/green_new_icon.png
+#	new file:   modules/chc_mend/images/grey_new_icon.png
+#	new file:   modules/chc_mend/images/orange_new_icon.png
+#	new file:   modules/chc_mend/images/violet_new_icon.png
+#	new file:   modules/chc_mend/images/yellow_new_icon.png
+#	new file:   modules/chc_mend/index.php
+#	new file:   modules/chc_mend/module-cfg.php
+#	new file:   modules/chc_mend/module.sql
+#	new file:   modules/chc_mend/score_identify.php
+#	new file:   modules/chc_mend/score_identify_print.php
+#	new file:   modules/chc_mend/score_input.php
+#	new file:   modules/chc_mend/score_list.php
+#	new file:   modules/chc_mend/select_stu.php
+#	new file:   modules/chc_mend/templates/index.htm
+#	new file:   modules/chc_mend/templates/score_identify.htm
+#	new file:   modules/chc_mend/templates/score_input.htm
+#	new file:   modules/chc_mend/templates/score_list.htm
+#	new file:   modules/chc_mend/templates/score_list_all.htm
+#	new file:   modules/chc_mend/templates/select_stu.htm
+#	new file:   modules/chc_mend/templates/ungraduate_stu.htm
+#	new file:   modules/chc_mend/templates/ungraduate_stu_print.htm
+#	new file:   modules/chc_mend/ungraduate_stu.php
+#	modified:   modules/cita/README
+#	modified:   modules/cita/citaList.php
+#	modified:   modules/cita/citaView.php
+#	modified:   modules/cita/citain.php
+#	modified:   modules/class_all_address/address_book2.php
+#	modified:   modules/class_health/module.sql
+#	modified:   modules/class_things/address_book2.php
+#	new file:   modules/class_things/club_select.php
+#	modified:   modules/class_things/config.php
+#	modified:   modules/class_things/module-cfg.php
+#	modified:   modules/class_things/service_class_list.php
+#	new file:   modules/class_things/stud_pwd.php
+#	modified:   modules/copy_setup/module.sql
+#	modified:   modules/course_paper/csv_class_all.php
+#	modified:   modules/course_paper/get_data_function.php
+#	modified:   modules/course_paper/list_all_teacher.php
+#	modified:   modules/course_paper/list_chk_class.php
+#	modified:   modules/course_paper/list_teach_sum.php
+#	modified:   modules/course_paper/list_teach_sum_csv.php
+#	modified:   modules/create_data/explode_stu.php
+#	modified:   modules/csrc/module.sql
+#	modified:   modules/database_info/tpl_field.php
+#	modified:   modules/docup/doc_add.php
+#	modified:   modules/docup/doc_kind_list.php
+#	modified:   modules/docup/doc_update.php
+#	modified:   modules/docup/docup_p_add.php
+#	modified:   modules/docup/docup_p_list.php
+#	modified:   modules/docup/docup_p_update.php
+#	modified:   modules/docup/module.sql
+#	modified:   modules/edu_chart/module.sql
+#	modified:   modules/edusoft/tape_delete.php
+#	modified:   modules/edusoft/tape_edit.php
+#	modified:   modules/elective/module.sql
+#	modified:   modules/elps_cal/cal_add.php
+#	modified:   modules/elps_cal/index2.php
+#	modified:   modules/elps_cal/module.sql
+#	modified:   modules/elps_sport/admin.php
+#	modified:   modules/elps_sport/module.sql
+#	modified:   modules/every_year_setup/chc_teacher.v2.php
+#	modified:   modules/every_year_setup/course_setup3_teacher.php
+#	modified:   modules/every_year_setup/module-upgrade.php
+#	modified:   modules/exam/module.sql
+#	new file:   modules/fitness/input_swim.php
+#	modified:   modules/fitness/module-cfg.php
+#	modified:   modules/fitness/module-upgrade.php
+#	modified:   modules/fitness/my_fun.php
+#	modified:   modules/fitness/templates/fitness_input.tpl
+#	new file:   modules/fitness/templates/fitness_input_swim.tpl
+#	modified:   modules/fitness/templates/fitness_print.tpl
+#	modified:   modules/fix_tool/chi_fun.php
+#	modified:   modules/fix_tool/del_comment.php
+#	new file:   modules/fix_tool/fix_stud_seme_rew_1.php
+#	modified:   modules/fix_tool/module-cfg.php
+#	modified:   modules/fixed/boardadmin.php
+#	modified:   modules/fixed/fixed.php
+#	modified:   modules/fixed/fixedadmin.php
+#	modified:   modules/fixed/fixedview.php
+#	modified:   modules/graduate/module.sql
+#	modified:   modules/health/class.health.php
+#	modified:   modules/health/module.sql
+#	modified:   modules/health/module_health_accident.sql
+#	modified:   modules/jboard/board_API.php
+#	modified:   modules/jboard/board_config.php
+#	modified:   modules/jboard/board_delete.php
+#	modified:   modules/jboard/board_edit.php
+#	modified:   modules/jboard/board_files_upload.php
+#	modified:   modules/jboard/board_view.php
+#	modified:   modules/jboard/file_download.php
+#	modified:   modules/jboard/module-cfg.php
+#	modified:   modules/jboard/module-upgrade.php
+#	modified:   modules/jboard_man/board_user_list.php
+#	modified:   modules/jboard_man/boardadmin.php
+#	modified:   modules/jshow/jshow_API.php
+#	modified:   modules/jshow/my_functions.php
+#	modified:   modules/learning/module.sql
+#	modified:   modules/lunch/module.sql
+#	modified:   modules/mig/funcs.php
+#	modified:   modules/mig/index.php
+#	modified:   modules/new_board/module.sql
+#	modified:   modules/new_compclass/course_room.sql
+#	modified:   modules/new_course/function.php
+#	modified:   modules/new_course/teacher_class.php
+#	modified:   modules/news/module.sql
+#	modified:   modules/newsmig/module.sql
+#	modified:   modules/newsmig/newslist.php
+#	modified:   modules/photoview/XPPubWiz.php
+#	modified:   modules/photoview/view_list.php
+#	modified:   modules/reward/module.sql
+#	modified:   modules/reward/reward_list.php
+#	modified:   modules/reward/reward_one.php
+#	modified:   modules/salary/module.sql
+#	modified:   modules/school_msn/main_message.php
+#	modified:   modules/school_msn/main_showdata.php
+#	modified:   modules/school_msn/main_teachers_id.php
+#	modified:   modules/score_input/manage.php
+#	modified:   modules/score_input/manage2.php
+#	modified:   modules/score_input/myfun2.php
+#	modified:   modules/score_input/normal.php
+#	modified:   modules/score_manage_new_bw/check_score_notify.php
+#	new file:   modules/score_manage_new_bw/check_score_notify.php.20141222
+#	modified:   modules/score_manage_new_bw/score_query.php
+#	modified:   modules/score_nor/module.sql
+#	modified:   modules/score_nor/report.php
+#	modified:   modules/score_paper/module.sql
+#	modified:   modules/score_stage_chart/index.php
+#	modified:   modules/score_stage_chart/module-cfg.php
+#	modified:   modules/score_stage_chart/stage_class_score.php
+#	modified:   modules/semester_score/scope_filter.php
+#	modified:   modules/semester_score/scope_no_pass.php
+#	modified:   modules/semester_score/scope_warning.php
+#	new file:   modules/semester_score/templates/score_report_no_pass.tpl
+#	modified:   modules/sfs3_blog/module.sql
+#	modified:   modules/sfs_man2/sfs_module.sql
+#	modified:   modules/sign_act/module.sql
+#	modified:   modules/spec_test/module.sql
+#	modified:   modules/stud_base/stud_base.php
+#	modified:   modules/stud_class/images/demo.jpg
+#	modified:   modules/stud_class/images/demo.xls
+#	modified:   modules/stud_class/module-cfg.php
+#	modified:   modules/stud_class/module-upgrade.php
+#	modified:   modules/stud_class/stud_eduh_list.php
+#	modified:   modules/stud_class/stud_list.php
+#	modified:   modules/stud_class/stud_seme_talk2.php
+#	modified:   modules/stud_club/club_arrange.php
+#	modified:   modules/stud_club/club_manage.php
+#	modified:   modules/stud_club/club_score2.php
+#	modified:   modules/stud_club/club_score_all.php
+#	modified:   modules/stud_club/my_functions.php
+#	modified:   modules/stud_compile/module.sql
+#	modified:   modules/stud_data_get/function.php
+#	modified:   modules/stud_eduh/chc_talk_all.htm
+#	modified:   modules/stud_eduh/chc_talk_all.php
+#	modified:   modules/stud_eduh/module-upgrade.php
+#	modified:   modules/stud_eduh/stud_seme_talk2.php
+#	modified:   modules/stud_eduh_self/club_feedback.php
+#	modified:   modules/stud_eduh_self/stud_cpass.php
+#	modified:   modules/stud_eduh_teacher/module-upgrade.php
+#	modified:   modules/stud_eduh_teacher/stud_seme_talk.php
+#	modified:   modules/stud_grade/grad_list_print_v.php
+#	modified:   modules/stud_grade/grad_list_print_v2.php
+#	modified:   modules/stud_grade/module-cfg.php
+#	modified:   modules/stud_grade/ooo/v_view/content
+#	modified:   modules/stud_grade/ooo/v_view2/content
+#	new file:   modules/stud_grade/sr_tc_csv.php
+#	modified:   modules/stud_guidance/chi_class_obj.php
+#	modified:   modules/stud_guidance/module.sql
+#	modified:   modules/stud_guidance_tea/chi_class_obj.php
+#	new file:   modules/stud_move/XCVXMLexChange.jar
+#	new file:   modules/stud_move/jhslist.js
+#	new file:   modules/stud_move/lib/P11JNI.jar
+#	new file:   modules/stud_move/lib/commons-codec-1.8.jar
+#	new file:   modules/stud_move/lib/commons-configuration-1.9.jar
+#	new file:   modules/stud_move/lib/commons-lang-2.6.jar
+#	new file:   modules/stud_move/lib/commons-logging-1.1.3.jar
+#	new file:   modules/stud_move/lib/derby.jar
+#	new file:   modules/stud_move/lib/derbyclient.jar
+#	new file:   modules/stud_move/lib/derbynet.jar
+#	new file:   modules/stud_move/lib/fluent-hc-4.3.5.jar
+#	new file:   modules/stud_move/lib/httpclient-4.3.5.jar
+#	new file:   modules/stud_move/lib/httpclient-cache-4.3.5.jar
+#	new file:   modules/stud_move/lib/httpcore-4.3.2.jar
+#	new file:   modules/stud_move/lib/httpmime-4.3.5.jar
+#	new file:   modules/stud_move/lib/log4j-1.2.16.jar
+#	new file:   modules/stud_move/lib/pivot-core-2.0.3.jar
+#	new file:   modules/stud_move/lib/pivot-wtk-2.0.3.jar
+#	new file:   modules/stud_move/lib/pivot-wtk-terra-2.0.3.jar
+#	new file:   modules/stud_move/lib/schooldb.jar
+#	new file:   modules/stud_move/pslist.js
+#	new file:   modules/stud_move/session_in.php
+#	new file:   modules/stud_move/session_out.php
+#	modified:   modules/stud_move/stud_move.php
+#	modified:   modules/stud_move/stud_move_list2.php
+#	modified:   modules/stud_move/stud_move_out.php
+#	modified:   modules/stud_move/stud_move_rein.php
+#	modified:   modules/stud_move/templates/stud_move_stud_move_rein.tpl
+#	modified:   modules/stud_pass/index.php
+#	modified:   modules/stud_pass/module-cfg.php
+#	modified:   modules/stud_pass/query.php
+#	new file:   modules/stud_pass/query_class.php
+#	modified:   modules/stud_pass_show/stud_pass_list.php
+#	modified:   modules/stud_reg/module-upgrade.php
+#	modified:   modules/stud_reg/stud_ext_data.php
+#	modified:   modules/stud_reg/stud_list.php
+#	modified:   modules/stud_report/chc_index.php
+#	modified:   modules/stud_report/chc_years_score.php
+#	modified:   modules/stud_service/service_list.php
+#	modified:   modules/stud_service/service_one.php
+#	modified:   modules/stud_sign/data_design.txt
+#	modified:   modules/stud_sign/module.sql
+#	modified:   modules/stud_sta/module-cfg.php
+#	modified:   modules/stud_sta/stud_sta_rep.php
+#	modified:   modules/teacher_absent/config.php
+#	new file:   modules/teacher_absent/delete-file.php
+#	modified:   modules/teacher_absent/list.php
+#	new file:   modules/teacher_absent/module-upgrade.php
+#	modified:   modules/teacher_absent/record.php
+#	modified:   modules/teacher_absent/templates/list.tpl
+#	modified:   modules/teacher_absent/templates/record.tpl
+#	new file:   modules/teacher_absent_admin/delete-file.php
+#	modified:   modules/teacher_absent_admin/deputy.php
+#	modified:   modules/teacher_absent_admin/record.php
+#	modified:   modules/teacher_absent_admin/statis.php
+#	modified:   modules/teacher_absent_admin/templates/deputy_a.tpl
+#	modified:   modules/teacher_absent_admin/templates/record_a.tpl
+#	modified:   modules/team_sign_up/module.sql
+#	modified:   modules/temp_compile/module.sql
+#	modified:   modules/temp_compile/newstud_input.php
+#	modified:   modules/toxml/class.php
+#	modified:   modules/toxml/import_seme.php
+#	new file:   modules/toxml/import_xml2.php
+#	new file:   modules/toxml/output_xml2.php
+#	new file:   modules/toxml/security.php
+#	modified:   modules/web_hd/module.sql
+#	modified:   sfs-release.php
+#	modified:   themes/new/new_login.php
+#
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	deleted:    data/temp/newstud/newstud.csv
+#	deleted:    modules/score_manage_new_bw/check_score_notify.php.20141222
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	DEADJOE
+
+*** File '(Unnamed)'
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG
+.git/COMMIT_EDITMSG

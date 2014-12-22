@@ -62,7 +62,7 @@ $MODULE_UPDATE="2012-11-12";
 //---------------------------------------------------
 
 //目錄內程式  //
-$MENU_P = array("readme.php"=>"使用說明","student_list.php"=>"參與免試學生","kind_mirror.php"=>"身分對應設定","student_kind.php"=>"報名身分","basic_data.php"=>"基本資料","graduate.php"=>"1.畢業資格","aspiration.php"=>"2.志願序*","disadvantage.php"=>"3.經濟弱勢","balance.php"=>"4.均衡學習","diversification.php"=>"5.多元學習","personality.php"=>"6.適性發展","exam.php"=>"7.教育會考*","sealed.php"=>"資料封存","output_tmd.php"=>"試探系統電子檔輸出");
+$MENU_P = array("readme.php"=>"使用說明","student_list.php"=>"參與免試學生","kind_mirror.php"=>"身分對應設定","student_kind.php"=>"報名身分","basic_data.php"=>"基本資料","graduate.php"=>"1.畢業資格","aspiration.php"=>"2.志願序*","balance.php"=>"3.均衡學習","diversification.php"=>"4.多元學習表現","personality.php"=>"5.適性發展","disadvantage.php"=>"6.經濟弱勢","exam.php"=>"7.教育會考*","sealed.php"=>"資料封存","output_tmd.php"=>"試探系統電子檔輸出");
 //,"output.php"=>"招生系統報名電子檔輸出"
 
 
@@ -126,6 +126,8 @@ $SFS_MODULE_SETUP[]=array('var'=>"data_source", 'msg'=>"聯絡資料來源", 'value'=>
 $SFS_MODULE_SETUP[]=array('var'=>"tel_family", 'msg'=>"市內電話資料來源", 'value'=>array(''=>"不輸出",'stud_tel_2'=>"連絡電話",'stud_tel_1'=>"戶籍電話",'stud_tel_3'=>"行動電話"));
 $SFS_MODULE_SETUP[]=array('var'=>"tel_mobile", 'msg'=>"行動電話資料來源", 'value'=>array(''=>"不輸出",'stud_tel_3'=>"行動電話",'stud_tel_1'=>"戶籍電話",'stud_tel_2'=>"連絡電話"));
 $SFS_MODULE_SETUP[]=array('var'=>"address_family", 'msg'=>"通訊地址資料來源", 'value'=>array(''=>"不輸出",'stud_addr_2'=>"連絡地址",'stud_addr_1'=>"戶籍地址"));
+
+$SFS_MODULE_SETUP[]=array('var'=>"graduate_source", 'msg'=>"畢業資格判定", 'value'=>array(''=>"全部為修業",'1'=>"全部為畢業",'2'=>"依據畢業生升學資料模組的設定"));
 
 
 ?>

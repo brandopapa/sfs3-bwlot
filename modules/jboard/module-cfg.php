@@ -185,4 +185,7 @@ $SFS_MODULE_SETUP[] =
         array('var'=>"marquee_direction", 'msg'=>"(公告跑馬燈)--內容移動方向", 'value'=>"left");
 $SFS_MODULE_SETUP[] =
         array('var'=>"marquee_scrollamount", 'msg'=>"(公告跑馬燈)--每次內容移動距離", 'value'=>"5");
+$SFS_MODULE_SETUP[] =
+        array('var'=>"max_marquee_days", 'msg'=>"(公告跑馬燈)--展示最長期限(日)", 'value'=>"30");
+
 ?>

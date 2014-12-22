@@ -1,10 +1,10 @@
-# $Id: module_health_accident.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module_health_accident.sql 8149 2014-09-27 02:32:17Z smallduh $
 CREATE TABLE if not exists  health_accident_place (
   id int(6) unsigned NOT NULL default '1',
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_place VALUES ( 1,'操場',1);
 INSERT INTO health_accident_place VALUES ( 2,'遊戲運動器材',1);
 INSERT INTO health_accident_place VALUES ( 3,'普通教室',1);
@@ -26,7 +26,7 @@ CREATE TABLE if not exists health_accident_reason (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_reason VALUES ( 1,'下課遊戲',1);
 INSERT INTO health_accident_reason VALUES ( 2,'上下課途中',1);
 INSERT INTO health_accident_reason VALUES ( 3,'升旗',1);
@@ -46,7 +46,7 @@ CREATE TABLE  if not exists health_accident_part (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_part VALUES ( 1,'頭',1);
 INSERT INTO health_accident_part VALUES ( 2,'頸',1);
 INSERT INTO health_accident_part VALUES ( 3,'肩',1);
@@ -72,7 +72,7 @@ CREATE TABLE if not exists  health_accident_status (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_status VALUES ( 1,'擦傷',1);
 INSERT INTO health_accident_status VALUES ( 2,'裂割刺傷',1);
 INSERT INTO health_accident_status VALUES ( 3,'夾壓傷',1);
@@ -107,7 +107,7 @@ CREATE TABLE if not exists  health_accident_attend (
   name varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_accident_attend VALUES ( 1,'傷口處理',1);
 INSERT INTO health_accident_attend VALUES ( 2,'冰敷',1);
 INSERT INTO health_accident_attend VALUES ( 3,'熱敷',1);
@@ -136,7 +136,7 @@ CREATE TABLE if not exists  health_accident_record (
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
 	PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_part_record`
@@ -147,7 +147,7 @@ CREATE TABLE if not exists  health_accident_part_record (
 	id int(10) unsigned NOT NULL default '0',
 	part_id int(6) unsigned NOT NULL default '0',
 	PRIMARY KEY (pid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_status_record`
@@ -158,7 +158,7 @@ CREATE TABLE if not exists  health_accident_status_record (
 	id int(10) unsigned NOT NULL default '0',
 	status_id int(6) unsigned NOT NULL default '0',
 	PRIMARY KEY (sid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_accident_attend_record`
@@ -169,5 +169,5 @@ CREATE TABLE if not exists  health_accident_attend_record (
 	id int(10) unsigned NOT NULL default '0',
 	attend_id int(6) unsigned NOT NULL default '0',
 	PRIMARY KEY (aid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
  

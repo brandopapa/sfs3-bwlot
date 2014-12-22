@@ -1,5 +1,5 @@
 <?php
-// $Id: manage.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: manage.php 8233 2014-12-10 12:23:42Z chiming $
 /*引入學務系統設定檔*/
 include "config.php";
 //引入函數
@@ -138,7 +138,7 @@ echo "<table cellspacing=0 cellpadding=0><tr><td>$select_teacher_subject</td><td
                          update_time datetime NOT NULL default '0000-00-00 00:00:00',
                          sendmit enum('0','1') NOT NULL default '1',
                          PRIMARY KEY  (score_id)
-                         )";
+                         ) ENGINE=MyISAM ";
 
        $rs=$CONN->Execute($creat_table_sql);
 

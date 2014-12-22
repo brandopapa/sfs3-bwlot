@@ -74,10 +74,13 @@ class chc_seme{
 		$this->CONN=&$CONN;
 		$this->smarty=&$smarty;
 		$this->IS_JHORES=$IS_JHORES;
+		/* -- 限制其他學期輸入
 		$YS=''; 
 		if (isset($_POST['year_seme'])) $YS=$_POST['year_seme'];
 		if ($YS=='' && isset($_GET['year_seme'])) $YS=$_GET['year_seme'];
-		if ($YS=='') $YS=curr_year()."_".curr_seme();
+		if ($YS=='') $YS=curr_year()."_".curr_seme();		
+		*/
+		$YS=curr_year()."_".curr_seme();
 		$this->year_seme=$YS;
 		$aa=split("_",$this->year_seme);
 		$this->year=$aa[0];
@@ -163,6 +166,7 @@ class chc_seme{
 
 ##################  學期下拉式選單函式  ##########################
 function select() {
+	//-- 限制其他學期輸入
 	$SQL = "select * from school_day where  day<=now() and day_kind='start' order by day desc ";
 	$rs=&$this->CONN->Execute($SQL) or die("無法查詢，語法:".$SQL);
 	while(!$rs->EOF){
@@ -171,7 +175,7 @@ function select() {
 		$year_seme=$ro->year."_".$ro->seme;
 		$obj_stu[$year_seme]=$ro->year."學年度第".$ro->seme."學期";
 	}
-	$str="<select name='".$this->YS."' onChange=\"location.href='".$_SERVER[SCRIPT_NAME]."?".$this->YS."='+this.options[this.selectedIndex].value;\">\n";
+	$str="<select name='".$this->YS."' onChange=\"location.href='".$_SERVER[SCRIPT_NAME]."?".$this->YS."='+this.options[this.selectedIndex].value;\" disabled>\n";
 		//$str.="<option value=''>-未選擇-</option>\n";
 	foreach($obj_stu as $key=>$val) {
 		($key==$this->year_seme) ? $bb=' selected':$bb='';
@@ -207,8 +211,10 @@ function grade() {
 	}
 	
 	
-	
-	
+function tol20($max,$a) {
+	if ($a>$max) return $max;
+	return $a;
+}
 	
 	
 	

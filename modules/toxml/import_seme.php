@@ -23,7 +23,7 @@
 		$SQL.=",seme_num=$seme_num,student_sn=$student_sn;";
 		$SQL=str_replace("'null'","''",$SQL);
 		$SQL=iconv("UTF-8","Big5//IGNORE",$SQL);
-		$rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
+		if($SQL) $rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
 		echo iconv("UTF-8","Big5//IGNORE","<BR>#◎ 匯入[$seme_year_seme]學期班級就讀資料 ( stud_seme_import ) OK ! ");
 		if($ShowSQL) echo '<BR>'.$SQL;
 	
@@ -137,7 +137,7 @@
 		$SQL="REPLACE stud_seme_score_nor SET seme_year_seme='$seme_year_seme',student_sn=$student_sn,ss_id=0,ss_score_memo='$nor_score->日常生活表現_文字描述';";
 		$SQL=iconv("UTF-8","Big5//IGNORE",$SQL);
 		$SQL=str_replace("'null'","''",$SQL);
-		$rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
+		if($SQL) $rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
 		echo iconv("UTF-8","Big5//IGNORE","<BR>#◎ 匯入[$seme_year_seme]日常生活表現 ( stud_seme_score_nor ) OK ! ");
 		if($ShowSQL) echo '<BR>'.$SQL;
 	
@@ -252,7 +252,7 @@
 		$SQL="REPLACE INTO stud_seme_eduh(seme_year_seme,stud_id,sse_relation,sse_family_air,sse_farther,sse_mother,sse_live_state,sse_rich_state,sse_s1,sse_s2,sse_s3,sse_s4,sse_s5,sse_s6,sse_s7,sse_s8,sse_s9,sse_s10,sse_s11) VALUES ($SQL)";
 		$SQL=iconv("UTF-8","Big5//IGNORE",$SQL);
 		//seme_year_seme  stud_id  sse_relation  sse_family_kind            sse_s1  sse_s2  sse_s3  sse_s4  sse_s5  sse_s6  sse_s7  sse_s8  sse_s9  sse_s10  sse_s11  
-		$rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
+		if($SQL) $rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
 		echo iconv("UTF-8","Big5//IGNORE","<BR>#◎ 匯入[$seme_year_seme]學期輔導基本資料 ( stud_seme_eduh ) OK ! ");
 		if($ShowSQL) echo '<BR>'.$SQL;
 	
@@ -278,7 +278,7 @@
 			$SQL=str_replace("'null'","''",$SQL);
 			//先清空原有紀錄
 			$rs = $CONN->Execute("DELETE FROM stud_seme_talk WHERE stud_id=$stud_id AND seme_year_seme='$seme_year_seme'") or user_error("ERROR WHILE DELETING THE RECORDS OF TABLE stud_seme_talk ( STUDENT_SN:$student_sn )! <br><br>",256) ;
-			$rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
+			if($SQL) $rs = $CONN->Execute($SQL) or user_error("ERROR WHILE EXCUING SQL! <br><br>$SQL",256) ;
 			echo iconv("UTF-8","Big5//IGNORE","<BR>#◎ 匯入[$seme_year_seme]輔導訪談紀錄 ( stud_seme_talk ) OK ! ");
 			if($ShowSQL) echo '<BR>'.$SQL;
 		}

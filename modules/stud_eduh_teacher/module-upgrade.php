@@ -41,4 +41,19 @@ if (!is_file($up_file_name)){
 	fclose ($fd);
 }
 
+
+
+$up_file_name =$upgrade_str."2014-08-25.txt";
+if (!is_file($up_file_name)){
+	$query ="ALTER TABLE `stud_seme_talk` ADD `interview_method` varchar(10) AFTER `interview`;";
+	if ($CONN->Execute($query))
+		$str="新增訪談方式欄位成功\";
+	else
+		$str="新增訪談方式欄位失敗( 有可能已經自級務管理中升級完成了! )";
+	$temp_query = "於 stud_seme_talk 資料表新增訪談方式 -- by infodaes 2014-08-25 \n$query";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+}
+
 ?>

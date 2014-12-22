@@ -1,5 +1,5 @@
 <?php
-//$Id: reward_list.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: reward_list.php 8236 2014-12-10 14:14:14Z infodaes $
 include "config.php";
 
 sfs_check();
@@ -54,7 +54,8 @@ if (count($sn_arr)>0) {
 		}
 		$ns_arr=array_keys($sn_arr);
 		$sn_str="'".implode("','",$ns_arr)."'";
-		$query="select * from stud_base where student_sn in ($sn_str) and stud_study_cond='0' order by curr_class_num";
+		//$query="select * from stud_base where student_sn in ($sn_str) and stud_study_cond='0' order by curr_class_num";
+		$query="select * from stud_base where student_sn in ($sn_str) order by curr_class_num";
 		$res=$CONN->Execute($query);
 		while(!$res->EOF) {
 			$studata[$res->fields['student_sn']]['stud_name']=$res->fields['stud_name'];

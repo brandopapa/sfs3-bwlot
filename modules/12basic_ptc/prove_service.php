@@ -84,17 +84,23 @@ while(!$res->EOF)
 
 
 //輸出
+//取得12basic_ptc紀錄資料
+$final_data=get_final_data($work_year);
+
+
 foreach($all as $class_id=>$students){
 	$class_name=substr($class_id,0,1).'年'.substr($class_id,-2).'班';
 	$semester_year=$work_year+1;
 	echo "<h2>屏東區{$semester_year}學年度高中職免試入學<br>超額比序多元學習表現之「服務表現」證明單</h2>";
-	echo "※學校：".$school_long_name.'      ※班級：'.$class_name;
+	echo "※學校：".$school_long_name.'      　　　　※班級：'.$class_name;
 	echo "<table border='2' cellpadding='3' cellspacing='0' style='font-size:11px; border-collapse: collapse' bordercolor='#111111' id='AutoNumber1' width='100%'>
-			<tr align='center'><td rowspan=2>座號</td><td rowspan=2>姓名</td><td colspan=5>服務表現項目</td><td rowspan=2>備註</td></tr>
+			<tr align='center'><td rowspan=2>座號</td><td rowspan=2>姓名</td><td colspan=5>服務表現項目</td><td rowspan=2>積分</td><td rowspan=2>備註</td></tr>
 			<tr align='center'><td>7上</td><td>7下</td><td>8上</td><td>8下</td><td>9上</td></tr>";
-	foreach($students as $student_sn=>$data) 	
-        echo "<tr align='center'><td>{$data['seme_num']}</td><td>{$data['stud_name']}</td><td>{$leader[$student_sn]['7-1']}</td><td>{$leader[$student_sn]['7-2']}</td><td>{$leader[$student_sn]['8-1']}</td><td>{$leader[$student_sn]['8-2']}</td><td>{$leader[$student_sn]['9-1']}</td><td>{$move[$student_sn]}{$leader[$student_sn]['memo']}</td></tr>";
-	echo '</table><table width=80%><tr height=40><td>學生簽名：</td><td>處室核章：</td><td>初審積分：</td></tr><tr><td>導師簽名：</td><td>校長核章：</td><td>初審核章：</td></tr></table>
+	foreach($students as $student_sn=>$data) {	
+        $score_service=$final_data[$student_sn]['score_service'];
+		echo "<tr align='center'><td>{$data['seme_num']}</td><td>{$data['stud_name']}</td><td>{$leader[$student_sn]['7-1']}</td><td>{$leader[$student_sn]['7-2']}</td><td>{$leader[$student_sn]['8-1']}</td><td>{$leader[$student_sn]['8-2']}</td><td>{$leader[$student_sn]['9-1']}</td><td>$score_service</td><td>{$move[$student_sn]}{$leader[$student_sn]['memo']}</td></tr>";
+	}
+	echo '</table><table width=80%><tr height=40><td>導師簽名：</td><td>處室核章：</td><td>校長核章：</td><td></td><td>初審核章：</td></tr></table>
 	<p style="page-break-after: always;"></p>';
 }
 

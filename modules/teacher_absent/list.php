@@ -1,5 +1,5 @@
 <?php
-//$Id: list.php 7448 2013-08-29 14:16:21Z hami $
+//$Id: list.php 8104 2014-09-01 05:56:02Z hami $
 include "config.php";
 include "../../include/sfs_class_absent.php";
 
@@ -16,6 +16,7 @@ if ($_POST[edit]) {
 	$act="del";
 	$a->set_id($id);
 	$a->del_absent();
+
 	$query = "delete from teacher_absent_course where a_id ='$id'";
 	$CONN->Execute($query);
 
@@ -102,7 +103,7 @@ $query .=" order by start_date  desc ";
 
 $res=$CONN->Execute($query);
 $smarty->assign("absent",$res->GetRows());
-
+$smarty->assign('upload_url',$UPLOAD_URL);
 $smarty->display('list.tpl'); 
 
 

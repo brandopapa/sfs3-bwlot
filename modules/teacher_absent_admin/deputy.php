@@ -207,15 +207,17 @@ $query1 .=" and a.abs_kind='$_POST[abs_kind]'";
 }
 
 //取得所有人請假資料
-$query="select a.* from teacher_absent a , teacher_post b where " .$query1 ;
+$query="select a.*,c.title_kind from teacher_absent a , teacher_post b , teacher_title c  where " .$query1.
+" AND b.teach_title_id=c.teach_title_id ";
 
 $query .=" order by a.start_date  desc ";
 
 $res=$CONN->Execute($query);
+//print_r($res->getRows());
 $smarty->assign("absent",$res->GetRows());
 //選擇假別
-$smarty->assign("abs_kind",tea_abs($_POST[abs_kind],$a->absent_kind_arr)); 
-
+$smarty->assign("abs_kind",tea_abs($_POST[abs_kind],$a->absent_kind_arr));
+$smarty->assign('upload_url',$UPLOAD_URL);
 $smarty->display('deputy_a.tpl'); 
 
 

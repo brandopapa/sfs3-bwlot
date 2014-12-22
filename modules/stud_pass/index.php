@@ -1,5 +1,5 @@
 <?php
-//$Id: index.php 8027 2014-05-09 08:58:50Z hami $
+//$Id: index.php 8161 2014-10-07 14:57:17Z smallduh $
 include "config.php";
 
 //認證
@@ -20,13 +20,26 @@ print_menu($school_menu_p);
 
 //開始設定密碼
 if ($_POST[set] && $stud_study_year) {
+	  
+	  //更新學生 sha key 2014.10.07 *********************/
+			$query = "SELECT stud_person_id,student_sn FROM stud_base where stud_study_year='$stud_study_year' and stud_study_cond in ('0','15') ";
+			$res = $CONN->Execute($query) or die($query);
+			foreach($res as $row) {
+			 if ($row['stud_person_id']!="") {
+				 	$stud_person_id = hash('sha256', strtoupper($row['stud_person_id']));
+				 	$sql = "UPDATE stud_base SET edu_key='$stud_person_id' WHERE student_sn='{$row['student_sn']}'";
+					$CONN->Execute($sql) ;
+			 }
+		  } // end foreach
+		  /*******************************************/
 	$chk_str="";
 	if ($rsel[1]) $chk_str.=" and stud_study_cond in ('0','15')";
 	$pass="NULL";
 	switch ($law) {
 		case 0:
-			$query="update stud_base set email_pass=''  where stud_study_year='$stud_study_year' $chk_str";
+			$query="update stud_base set email_pass='', ldap_password=''  where stud_study_year='$stud_study_year' $chk_str";
 			$CONN->Execute($query) or die($query);
+			break;
 		case 1:
 			$ldap_password = createLdapPassword($str);
 			$query="update stud_base set email_pass='$str' , ldap_password='$ldap_password' where stud_study_year='$stud_study_year' $chk_str";
@@ -44,9 +57,9 @@ if ($_POST[set] && $stud_study_year) {
 					$tempArr = explode("-", $row['stud_birthday']);
 					$pass= $tempArr[1].$tempArr[2];
 				}
-				
+								
 				$ldap_password = createLdapPassword($pass); 
-				$query="update stud_base set email_pass='$pass'  , ldap_password='$ldap_password'  WHERE student_sn={$row['student_sn']}";
+				$query="update stud_base set email_pass='$pass' , ldap_password='$ldap_password'  WHERE student_sn={$row['student_sn']}";
 				
 				$CONN->Execute($query) or die($query);
 			}
@@ -69,7 +82,7 @@ if ($_POST[set] && $stud_study_year) {
 			}
 			break;
 		case 4:
-			$query="SELECT student_sn FROM stud_base WHERE email_pass IS NULL AND stud_study_year='$stud_study_year' $chk_str";
+			$query="SELECT student_sn FROM stud_base WHERE (email_pass IS NULL or email_pass='') AND stud_study_year='$stud_study_year' $chk_str";
 			$res = $CONN->Execute($query) or die($query);
 			while(!$res->EOF) {
 				$randval = "";
@@ -95,7 +108,7 @@ $query="select distinct stud_study_year,count(student_sn) as nums from stud_base
 $res=$CONN->Execute($query) or die($query);
 while(!$res->EOF) {
 	$study_year=$res->fields[stud_study_year];
-	$query_count="select count(student_sn) as nums from stud_base where stud_study_year='$study_year' and email_pass is NULL";
+	$query_count="select count(student_sn) as nums from stud_base where stud_study_year='$study_year' and (email_pass is NULL or email_pass='')";
 	$res_count=$CONN->Execute($query_count) or die($query_count);
 	$checked=($stud_study_year==$study_year)?"checked":"";
 	$main.="<input type='radio' name='stud_study_year' value='$study_year' $checked>".$study_year."學年度(<font color='#000088'>共".$res->fields[nums]."人</font><-><font color='#ff0000'>未設定密碼".$res_count->fields[nums]."人</font>)<br>\n";

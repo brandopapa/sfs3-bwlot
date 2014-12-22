@@ -1,5 +1,5 @@
 <?php
-// $Id: normal.php 8050 2014-05-28 06:35:52Z infodaes $
+// $Id: normal.php 8233 2014-12-10 12:23:42Z chiming $
 /*引入學務系統設定檔*/
 include "config.php";
 include "./module-upgrade.php";
@@ -46,7 +46,7 @@ $creat_table_sql="
 	freq int(10) unsigned NOT NULL default '0', 	 
 	PRIMARY KEY  (`sn`),
 	KEY `teach_id` (`teach_id`,`stud_sn`),
-	KEY `elective_id` (`elective_id`))"; 	 
+	KEY `elective_id` (`elective_id`)) ENGINE=MyISAM"; 	 
 $rs=$CONN->Execute($creat_table_sql);
 
 //取得正確任教課程

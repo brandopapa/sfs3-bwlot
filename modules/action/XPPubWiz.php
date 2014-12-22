@@ -33,7 +33,7 @@ $nday = date("Y-m-d") ;
 
 	Version: 1.0b
 
-	CVS Version: $Id: XPPubWiz.php 5310 2009-01-10 07:57:56Z hami $
+	CVS Version: $Id: XPPubWiz.php 8136 2014-09-23 08:11:33Z smallduh $
 
 	$Log: XPPubWiz.php,v $
 	Revision 1.1.2.1  2006-12-06 00:35:49  prolin
@@ -323,7 +323,7 @@ if ($step == "input_data")
       </tr>
       <tr> 
         <td>建制日期</td>
-        <td><input type="text" name="Iact_date" value="<? echo $nday ; ?>"></td>
+        <td><input type="text" name="Iact_date" value="<?php echo $nday ; ?>"></td>
       </tr>
       <tr> 
         <td>簡介</td>
@@ -372,7 +372,7 @@ if ($step == "input_data")
 <div id="content"/>
 
 </div>
-<?
+<?php
   
 if ($step == "options")
   { ?>
@@ -384,7 +384,7 @@ if ($step == "options")
 	<h3>設定上傳目錄 </h3>
 
 	<select id="dir" name="dir" size="2" width="40">
-	    <option value="<? echo $_SESSION[ 'updir'] ?>" selected="selected">活動花絮目錄區</option>
+	    <option value="<?php echo $_SESSION[ 'updir'] ?>" selected="selected">活動花絮目錄區</option>
 	</select>
 
   </center>

@@ -88,14 +88,18 @@ function check_select(item) {
 
 </td>
 
-<td width=80 nowrap="nowrap"><font size=3>{{$tea_arr[$a.teacher_sn]|replace:'--':'<br />'}}</font></td>
+<td width=80 nowrap="nowrap"><font size=3>{{$tea_arr[$a.teacher_sn]|replace:'--':'<br />'}}</font><br/>
+    {{$a.record_date|date_format:"%Y-%m-%d"}}
+</td>
 <td>{{$abs_kind_arr[$a.abs_kind]}}
 	{{if ($a.abs_kind==52 )}} 
 		<input type="image" src="images/supply.png" name="outlay[{{$a.id}}]" alt="差旅費處理">
 	{{/if}}
 	<br><font color=blue>{{$a.note}}</font></td>
 <td  width=80 >{{$a.reason}}
-<br><font color=blue>{{$a.locale}}</font></td>
+<br><font color=blue>{{$a.locale}}</font>
+{{if $a.note_file}}<a href="{{$upload_url}}school/teacher_absent/{{$a.note_file}}">下載證明文件</a>{{/if}}
+</td>
 <td td width=120><font size=3>{{$a.start_date|date_format:"%Y-%m-%d %H:%M"}}<br>
 
 {{$a.end_date|date_format:"%Y-%m-%d %H:%M"}}</font></td>
@@ -140,17 +144,19 @@ function check_select(item) {
 		<input type="image" src="images/del.png" name="check2_c[{{$a.id}}]" alt="我要取消">
 	{{/if}}
 	<br>{{$a.check2_date|date_format:"%Y-%m-%d"}}
-{{elseif $a.check1_sn > "0"}}
+{{elseif $a.check1_sn > "0"  }}
+    {{if $a.title_kind < 12}}
 	<br>{{if $isAdmin}}<input type="checkbox" name="check2[]" value="{{$a.id}}">{{/if}}<font color="red">待確認</font>
+    {{/if}}
 {{/if}}
 </td>
 <td>{{$tea_arr[$a.check3_sn]}}
-{{if $a.check3_sn > "0" }}
+{{if $a.check3_sn > "0"}}
 	{{if $a.check4_sn =="0" and $a.check3_sn == $session_tea_sn and $isAdmin }}
 		<input type="image" src="images/del.png" name="check3_c[{{$a.id}}]" alt="我要取消">
 	{{/if}}
 	<br>{{$a.check3_date|date_format:"%Y-%m-%d"}}
-{{elseif $a.check2_sn > "0"}}
+{{elseif $a.check2_sn > "0"  or ( $a.check1_sn > "0" and $a.title_kind > 11)}}
 	<br>{{if $isAdmin}}<input type="checkbox" name="check3[]" value="{{$a.id}}">{{/if}}<font color="red">待確認</font>
 {{/if}}
 </td>

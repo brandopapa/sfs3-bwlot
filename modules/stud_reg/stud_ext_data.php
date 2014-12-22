@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_ext_data.php 6892 2012-09-15 03:37:24Z hami $
+// $Id: stud_ext_data.php 8054 2014-06-04 12:04:49Z smallduh $
 
 // 載入設定檔
 include "stud_reg_config.php";
@@ -18,29 +18,33 @@ if (!ini_get('register_globals')) {
 	extract( $_SERVER );
 }
 
+//傳的 post或get 值有 stud_id 及 [c_curr_class] => 102_2_09_01 [c_curr_seme] => 1022
+//比對後可取得 student_sn
+$sql="select student_sn from stud_seme where seme_year_seme='".$c_curr_seme."' and stud_id='".$stud_id."'";
+$res=$CONN->Execute($sql);
+$student_sn=$res->fields['student_sn'];
 
 
 switch($do_key) {
 
-
 	//刪除
 	case "delete":
-	$query = "delete  from stud_ext_data where mid='$_GET[mid]' and stud_id='$_GET[stud_id]'";
+	$query = "delete  from stud_ext_data where mid='$_GET[mid]' and stud_id='$_GET[stud_id]' and student_sn='$student_sn'";
 	$CONN->Execute($query);
 	break;
 	
 	//新增
 	case $newBtn: 
 	$n_day = date("Y-m-d") ;
-	$sql_insert = "insert into stud_ext_data (stud_id , mid ,ext_data ,teach_id ,ed_date) 
-	               values ('$_POST[stud_id]' , '$_POST[mid]' , '$_POST[ext_data]' ,'{$_SESSION['session_tea_sn']}' , '$n_day' )" ; ; 
+	$sql_insert = "insert into stud_ext_data (stud_id , mid ,ext_data ,teach_id ,ed_date,student_sn) 
+	               values ('$_POST[stud_id]' , '$_POST[mid]' , '$_POST[ext_data]' ,'{$_SESSION['session_tea_sn']}' , '$n_day','$student_sn' )" ;
 	
 	$CONN->Execute($sql_insert) or die($sql_insert);
 	break;
 
 	//確定修改
 	case $editBtn:
-	$sql_update = "update stud_ext_data set ext_data='$_POST[ext_data]',teach_id='{$_SESSION['session_tea_sn']}' where mid='$_POST[mid]' and stud_id = '$_POST[stud_id]' ";
+	$sql_update = "update stud_ext_data set ext_data='$_POST[ext_data]',teach_id='{$_SESSION['session_tea_sn']}' where mid='$_POST[mid]' and stud_id = '$_POST[stud_id]' and student_sn='$student_sn'";
 	$CONN->Execute($sql_update) or die($sql_update);
 	break;
 
@@ -187,7 +191,7 @@ $s_s = substr($c_curr_seme,-1);
     			 <td align='right' CLASS='title_sbody1'>填寫說明</td> <td CLASS='gendata' >$doc</td>
                        </tr>" ;
            if ($id) 
-               $sql_select2 = "select * from stud_ext_data  where stud_id='$stud_id' and mid='$id'  ";
+               $sql_select2 = "select * from stud_ext_data  where stud_id='$stud_id' and mid='$id' and student_sn='$student_sn' ";
                $recordSet2 = $CONN->Execute($sql_select2);
                if ($recordSet2) {
                    $mid = $recordSet2->fields["mid"];
@@ -241,7 +245,7 @@ $s_s = substr($c_curr_seme,-1);
     echo "<a href=\"{$_SERVER['PHP_SELF']}?do_key=edit&stud_id=$stud_id&mid=$id&c_curr_class=$c_curr_class&c_curr_seme=$c_curr_seme\">檢視 / 修改</a>&nbsp;|&nbsp;<a href=\"{$_SERVER['PHP_SELF']}?do_key=delete&mid=$id&stud_id=$stud_id&c_curr_class=$c_curr_class&c_curr_seme=$c_curr_seme\" onClick=\"return confirm('確定刪除?');\">刪除</a>	
   	</td></tr>" ;
   	
-    $sql_select2 = "select * from stud_ext_data  where stud_id='$stud_id' and mid='$id'   ";
+    $sql_select2 = "select * from stud_ext_data  where stud_id='$stud_id' and mid='$id' and student_sn='$student_sn'   ";
     $recordSet2 = $CONN->Execute($sql_select2);
     if ($recordSet2) {	
       $mid = $recordSet2->fields["mid"];

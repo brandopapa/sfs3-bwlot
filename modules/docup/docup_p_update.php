@@ -1,6 +1,6 @@
 <?php
 
-//$Id: docup_p_update.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: docup_p_update.php 8144 2014-09-23 08:19:00Z smallduh $
 
 //設定檔載入檢查
 include "docup_config.php";
@@ -85,8 +85,8 @@ $state .= "</select>";
 ?>
 
 <form method="post" action="<?php echo $_SERVER[PHP_SELF] ?>">
-<input type=hidden name="docup_p_id" value="<? echo $docup_p_id ?>">
-<input type=hidden name="doc_kind_id" value="<? echo $doc_kind_id ?>">
+<input type=hidden name="docup_p_id" value="<?php echo $docup_p_id ?>">
+<input type=hidden name="doc_kind_id" value="<?php echo $doc_kind_id ?>">
 <table  class=module_body align=center>
 <caption><b>修改文件專案</b></caption>
 <tr> 
@@ -121,6 +121,6 @@ $state .= "</select>";
 </tr>
 </table>
 </form>
-<?
+<?php
 if ($is_standalone!="1") foot();
 ?>

@@ -332,7 +332,7 @@ function check() {
   </tr>
 </table>  	
 
-<?  
+<?php  
 }	
 
   else {	

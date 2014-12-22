@@ -1,5 +1,5 @@
 <?php
-  // $Id: fixedadmin.php 7968 2014-03-28 07:36:51Z smallduh $
+  // $Id: fixedadmin.php 8163 2014-10-07 15:57:04Z smallduh $
   //  維修通報系統 
   //  林朝敏的半點心工作坊
   //  http://sy3es.tnc.edu.tw/~prolin
@@ -120,8 +120,8 @@
 
   if ($do=="edit") { //要同一人才可以
     //if ($userid != "$session_log_id") {
-    if (strnatcasecmp ($userid, $session_log_id) ) {
-       echo "非填表本人，無權修改！" ;
+    if ( (strnatcasecmp ($userid, $session_log_id) ) and (!board_checkid($unitId)) ) {
+       echo "非填表本人或該單位成員，無權修改！" ;
        redir("fixed.php",1) ;
        exit ;
     }      	
@@ -180,7 +180,7 @@ function check( mode ) {
 if (!isset($id)) {
    // 身份認証	
 ?>  	
- <form name="myform" method="post" action="<? echo basename($PHP_SELF)?>" onSubmit="check(1);return document.returnValue">  
+ <form name="myform" method="post" action="<?php echo basename($PHP_SELF)?>" onSubmit="check(1);return document.returnValue">  
   <h1>報修記錄-新增</h1>
   <table width="95%" border="1" cellspacing="0" cellpadding="4" bordercolorlight="#333333" bordercolordark="#FFFFFF">
     <tr> 
@@ -235,7 +235,7 @@ if (!isset($id)) {
 //編修
 if ($do=="edit") {
 ?>
- <form name="myform" method="post" action="<? echo basename($PHP_SELF)?>" onSubmit="check(1);return document.returnValue">  
+ <form name="myform" method="post" action="<?php echo basename($PHP_SELF)?>" onSubmit="check(1);return document.returnValue">  
   <h1>報修記錄-修改</h1>
   <table width="95%" border="1" cellspacing="0" cellpadding="4" bordercolorlight="#666666" bordercolordark="#FFFFFF">
     <tr> 
@@ -295,7 +295,7 @@ if ($do=="edit") {
 //回覆
 if ($do=="reply"){
 ?>  
-<form name="myform" method="post" action="<? echo basename($PHP_SELF)?>" onSubmit="check(2);return document.returnValue">  
+<form name="myform" method="post" action="<?php echo basename($PHP_SELF)?>" onSubmit="check(2);return document.returnValue">  
   <h1>報修記錄-維修單位回覆</h1>
   <table width="95%" border="1" cellspacing="0" cellpadding="4" bordercolorlight="#333333" bordercolordark="#FFFFFF">
     <tr>

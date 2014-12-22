@@ -5,6 +5,30 @@ include_once ('my_functions.php');
 
 $ann_num=-1;
 
+ mysql_query("SET NAMES 'utf8'");
+   //計算有效公告, 內部公告
+   $nowsec=date("U",mktime(0,0,0,date("n"),date("j"),date("Y")));
+   $nowdate=date("Y-m-d 0:0:0");
+   $query="select idnumber,data,data_kind from sc_msn_data where to_id='' and to_days(curdate())<=(to_days(post_date)+last_date) and (data_kind=0 or data_kind=2) order by post_date desc";
+   $result=mysql_query($query);
+   $board_num=mysql_num_rows($result);
+   while($row=mysql_fetch_row($result)) {
+   	 $ann_num++;
+    list($idnumber,$data,$data_kind)=$row;
+    $ann_data[$ann_num]=nl2br($data);
+    
+     $query_file="select filename,filename_r from sc_msn_file where idnumber='".$idnumber."'";
+  	$result_file=mysql_query($query_file);
+	  	if (mysql_num_rows($result_file)) {
+       $ann_data[$ann_num].="<font size=5 color=#000000>--《校園MSN/檔案下載》</font>";
+	  	} else {
+	  	 $ann_data[$ann_num].="<font size=5 color=#000000>--《校園MSN/校內訊息》</font>";
+	  	}
+    
+   
+   }
+
+
 //讀取近日公告 , 儲存在 $ann_data 陣列 , $ann_num 變數表公告數
 $BOARD_P=$SOURCE."_p";
 $BOARD_KIND=$SOURCE."_kind";
@@ -38,26 +62,7 @@ if ($res->RecordCount()>0) {
     $ann_num++;
    }
    
-   //計算有效公告
-   $nowsec=date("U",mktime(0,0,0,date("n"),date("j"),date("Y")));
-   $nowdate=date("Y-m-d 0:0:0");
-   $query="select idnumber,data,data_kind from sc_msn_data where to_id='' and to_days(curdate())<=(to_days(post_date)+last_date) and (data_kind=0 or data_kind=2) order by post_date desc";
-   $result=mysql_query($query);
-   $board_num=mysql_num_rows($result);
-   while($row=mysql_fetch_row($result)) {
-    list($idnumber,$data,$data_kind)=$row;
-    $ann_data[$ann_num]=$data;
-    
-     $query_file="select filename,filename_r from sc_msn_file where idnumber='".$idnumber."'";
-  	$result_file=mysql_query($query_file);
-	  	if (mysql_num_rows($result_file)) {
-       $ann_data[$ann_num].="<font size=5 color=#000000>--《校園MSN/檔案下載》</font>";
-	  	} else {
-	  	 $ann_data[$ann_num].="<font size=5 color=#000000>--《校園MSN/校內訊息》</font>";
-	  	}
-    
-    $ann_num++;
-   }
+
 
 
 
@@ -129,12 +134,14 @@ A:hover {font-size:9pt;color: #ffff00; text-decoration: underline}
 		      //延遲多久再執行一次
 		          setTimeout(s, delay);
 		          start_ok++;
-		           if (start_ok>=allelement) { setTimeout("reloading()",10000); }
+		           if (start_ok>=allelement) { 
+		           	setTimeout("reloading()",15000); 
+		           }
 		          } //end if 
 		        }   //滑鼠移上去會暫停 移走會繼續動
 		          slideBox.onmouseover=function(){pause=true;}
 		          slideBox.onmouseout=function(){pause=false;}
-		            //起始的地方，沒有這個就不會動囉
+		          //起始的地方，沒有這個就不會動囉
 		          setTimeout(s, delay); 
 	}
 		

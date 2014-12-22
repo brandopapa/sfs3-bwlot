@@ -4,6 +4,10 @@
 
 // 載入設定檔
 include "config.php";
+
+$m_arr = get_sfs_module_set("stud_class");
+extract($m_arr, EXTR_OVERWRITE);
+
 // 認證檢查
 sfs_check();
 
@@ -65,7 +69,7 @@ switch($do_key) {
 	$seme_year_seme = $_POST[sel_seme_year_seme];
 	if ($seme_year_seme =='')
 		$seme_year_seme = $this_seme_year_seme;
-	$sql_insert = "insert into stud_seme_talk (seme_year_seme,stud_id,sst_date,sst_name,sst_main,sst_memo,teach_id,interview) values ('$sel_seme_year_seme','$_POST[stud_id]','$_POST[sst_date]','$_POST[sst_name]','$_POST[sst_main]','$_POST[sst_memo]','{$_SESSION['session_tea_sn']}','$interview')";
+	$sql_insert = "insert into stud_seme_talk (seme_year_seme,stud_id,sst_date,sst_name,sst_main,sst_memo,teach_id,interview,interview_method) values ('$sel_seme_year_seme','$_POST[stud_id]','$_POST[sst_date]','$_POST[sst_name]','$_POST[sst_main]','$_POST[sst_memo]','{$_SESSION['session_tea_sn']}','$interview','$_POST[interview_method]')";
 	$CONN->Execute($sql_insert) or die($sql_insert);
 	$sst_date ='';
 	$sst_name ='';
@@ -96,6 +100,7 @@ switch($do_key) {
 		$sst_main = $recordSet->fields["sst_main"];		
 		$sst_memo = $recordSet->fields["sst_memo"];
 		$interview = $recordSet->fields["interview"];
+		$interview_method = $recordSet->fields["interview_method"];
 		$teach_id = $recordSet->fields["teach_id"];
 	}
 
@@ -103,7 +108,7 @@ switch($do_key) {
 	
 	//確定修改
 	case $editBtn:
-	$sql_update = "update stud_seme_talk set sst_date='$_POST[sst_date]',interview='$interview',sst_name='$_POST[sst_name]',sst_main='$_POST[sst_main]',sst_memo='$_POST[sst_memo]',teach_id='{$_SESSION['session_tea_sn']}' where sst_id='$_POST[sst_id]'";
+	$sql_update = "update stud_seme_talk set sst_date='$_POST[sst_date]',interview='$interview',interview_method='$_POST[interview_method]',sst_name='$_POST[sst_name]',sst_main='$_POST[sst_main]',sst_memo='$_POST[sst_memo]',teach_id='{$_SESSION['session_tea_sn']}' where sst_id='$_POST[sst_id]'";
 	$CONN->Execute($sql_update) or die($sql_update);
 	break;
 	
@@ -126,7 +131,7 @@ if ($_POST['stud_data']) {
    	foreach ($student as $k=>$v) {
    	 $student[$k]=trim($v);  //去掉前後空白
    	}   	 
-   				$sql_query="insert into stud_seme_talk (seme_year_seme,stud_id,sst_date,sst_name,sst_main,sst_memo,teach_id,interview) values ('$sel_seme_year_seme','$_POST[stud_id]','".$student[0]."','".$student[2]."','".$student[3]."','".$student[4]."','{$_SESSION['session_tea_sn']}','".$student[1]."')";
+   				$sql_query="insert into stud_seme_talk (seme_year_seme,stud_id,sst_date,sst_name,sst_main,sst_memo,teach_id,interview,interview_method) values ('$sel_seme_year_seme','$_POST[stud_id]','".$student[0]."','".$student[2]."','".$student[3]."','".$student[4]."','{$_SESSION['session_tea_sn']}','".$student[1]."','".$student[4]."')";
    				$CONN->Execute($sql_query) or die($sql_query);
           //echo $sql_query."<br>";
    }
@@ -195,6 +200,7 @@ function nor_form() {
   nor_form3.style.display="block";
   nor_form4.style.display="block";
   nor_form5.style.display="block";
+  nor_form6.style.display="block";
   past_form1.style.display="none";
   past_form2.style.display="none";
   past_form3.style.display="none";
@@ -207,6 +213,7 @@ function past_form() {
   nor_form3.style.display="none";
   nor_form4.style.display="none";
   nor_form5.style.display="none";
+  nor_form6.style.display="none";
   past_form1.style.display="block";
   past_form2.style.display="block";
   past_form3.style.display="block";
@@ -301,7 +308,21 @@ function past_form() {
     <td CLASS="gendata"><input type="text" size="20" maxlength="20" name="interview" value="<?php echo $interview ?>"></td>
 </tr>
 
+<tr id="nor_form6">
+    <td align="right" CLASS="title_sbody1">訪談方式</td>
+	<?php 
+		$im="<select name='interview_method'><option value=''></option>";
+		$methods=explode(',',$interview_methods);
 
+		foreach($methods as $key=>$value) {
+			$selected=($value == $interview_method)?'selected':'';
+			$im.="<option value='$value' $selected>$value</option>";		
+		}
+		$im.="</select><font size=1 color='red'> (選項由班級學籍管理模組變數中設定!)</font>";
+
+	?>
+    <td CLASS="gendata"><?php echo $im ?></td>
+</tr>
 
 <tr id="nor_form3">
     <td align="right" CLASS="title_sbody1">連絡對象</td>
@@ -363,7 +384,7 @@ function past_form() {
 </table>
 </form>
 <table border="1" cellspacing="0" cellpadding="2" bordercolorlight="#333354" bordercolordark="#FFFFFF"  width="100%" class=main_body >
-<tr><td>學期</td><td>記錄日期</td><td>連絡對象</td><td>連絡事項</td><td>訪談者</td><td>建檔者</td><td>動作</td></tr>
+<tr><td>學期</td><td>記錄日期</td><td>連絡對象</td><td>連絡事項</td><td>訪談者</td><td>訪談方式</td><td>建檔者</td><td>動作</td></tr>
 <?php
 $sql_select = "select a.*,b.name from stud_seme_talk a left join teacher_base b on a.teach_id=b.teacher_sn where a.seme_year_seme like '$sel_this_year%' and a.stud_id='$stud_id' order by a.seme_year_seme desc ,a.sst_id desc";
 
@@ -379,6 +400,7 @@ while (!$recordSet->EOF) {
 	$sst_main = $recordSet->fields["sst_main"];
 	$sst_memo = $recordSet->fields["sst_memo"];
 	$interview = $recordSet->fields["interview"];
+	$interview_method = $recordSet->fields["interview_method"];
 	$name = $recordSet->fields["name"];
     	$seme_str = substr($seme_year_seme,0,3)."學年第".substr($seme_year_seme,-1)."學期";
 	if($ii++ % 2 ==0)
@@ -386,7 +408,7 @@ while (!$recordSet->EOF) {
 	else
 		echo "<tr class=\"nom_2\">";
 		
-	echo "<td>$seme_str</td><td>$sst_date</td><td>$sst_name</td><td>$sst_main</td><td>$interview</td><td>$name</td><td >&nbsp;";
+	echo "<td>$seme_str</td><td>$sst_date</td><td>$sst_name</td><td>$sst_main</td><td>$interview</td><td>$interview_method</td><td>$name</td><td >&nbsp;";
 	if($sel_this_year == $this_year || $old_year_is_edit) {
 		echo " <a href=\"{$_SERVER['SCRIPT_NAME']}?class_num={$_REQUEST[class_num]}&do_key=edit&sst_id=$sst_id\"";
 		$ol->pover($sst_name,$sst_memo);

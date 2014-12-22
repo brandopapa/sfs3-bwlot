@@ -1,4 +1,4 @@
-{{* $Id: stud_move_stud_move_rein.tpl 6483 2011-08-22 13:21:39Z infodaes $ *}}
+{{* $Id: stud_move_stud_move_rein.tpl 8116 2014-09-10 12:41:32Z hsiao $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -55,6 +55,15 @@ function checkok()	{
 	if (OK==true) return confirm('確定新增 '+document.base_form.student_sn.options[document.base_form.student_sn.selectedIndex].text+' '+document.base_form.move_kind.options[document.base_form.move_kind.selectedIndex].text+'記錄 ?');
 	return OK
 }
+
+function openModal(studentnewsn,stud_name,stud_id,stud_birthday,stud_in_class,stud_out_school_info)
+{
+  var para = studentnewsn + ';' + stud_name.trim() + ';' + stud_id + ';' + stud_birthday+ ';' + stud_in_class.trim() + ';' + stud_out_school_info.trim() + ';' + '{{$session_schoolnameeduno}}';
+  para = encodeURIComponent(para);
+  var targeturi = encodeURI("{{$sesion_path}}"+para);
+  window.open(targeturi);
+}
+
 //-->
 </script>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -114,7 +123,7 @@ function checkok()	{
 	</tr>
 	<TR>
 		<TD>
-			<table border="1" cellspacing="0" cellpadding="2" bordercolorlight="#333354" bordercolordark="#FFFFFF"  width="100%" class=main_body ><tr><td colspan=8 class=title_top1 align=center >本學期復學學生</td></tr>
+			<table border="1" cellspacing="0" cellpadding="2" bordercolorlight="#333354" bordercolordark="#FFFFFF"  width="100%" class=main_body ><tr><td colspan=9 class=title_top1 align=center >本學期復學學生</td></tr>
 				<TR class=title_mbody >				
 					<TD>異動類別</TD>
 					<TD>生效日期</TD>
@@ -124,6 +133,7 @@ function checkok()	{
 					<TD>核准單位</TD>
 					<TD>字號</TD>
 					<TD>編修</TD>
+					<TD>XML自動匯入</TD>
 				</TR>
 				{{section loop=$stud_move name=arr_key}}
 					<TR class=nom_2>
@@ -139,6 +149,9 @@ function checkok()	{
 						<TD><a href="{{$smarty.server.SCRIPT_NAME}}?do_key=edit&move_id={{$stud_move[arr_key].move_id}}">編輯</a>&nbsp;&nbsp;
 						<a href="{{$smarty.server.SCRIPT_NAME}}?do_key=delete&&move_id={{$stud_move[arr_key].move_id}}&student_sn={{$stud_move[arr_key].student_sn}}" onClick="return confirm('確定取消 {{$stud_move[arr_key].stud_id}}--{{$stud_move[arr_key].stud_name}} {{$kind_arr.$kid}}記錄 ?');">刪除記錄</a>
 						<a href='../toxml/stud_data_patch.php' target='_BLANK'>資料補登</a></TD>
+						<TD>
+                                                <input type='button' value='自動匯入' onclick='openModal("{{$stud_move[arr_key].stud_id}}","{{$stud_move[arr_key].stud_name}}","{{$stud_move[arr_key].stud_person_id}}","{{$stud_move[arr_key].stud_birthday}}","{{$class_list.$cid}}","");'>
+						</TD>
 
 					</TR>
 				{{/section}}

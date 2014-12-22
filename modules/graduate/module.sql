@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 CREATE TABLE grad_stud (
   grad_sn int(10) NOT NULL auto_increment,
   stud_grad_year tinyint(3) unsigned default NULL,
@@ -11,4 +11,4 @@ CREATE TABLE grad_stud (
   grad_num varchar(20) default NULL,
   grad_score float unsigned default NULL,
   UNIQUE KEY grad_sn (grad_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

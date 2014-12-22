@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 #
 # 資料表格式： `calendar`
 #
@@ -27,5 +27,5 @@ CREATE TABLE calendar (
   KEY from_cal_sn (from_cal_sn),
   KEY week (week),
   KEY restart_day (restart_day,restart_end)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

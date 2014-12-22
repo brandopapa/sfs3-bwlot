@@ -25,24 +25,36 @@ $selected_text=$_GET['selected_text'];
 // ====================================================================
 $POST_KIND=array("","校長","教師兼主任","主任","教師兼組長","組長","導師","專任教師","實習教師","試用教師","代理/代課教師","兼任教師","職員","護士","警衛","工友");
 ?>
- <table border="0" cellspacing="0" width="100%" bgcolor="#FFFFFF" bordercolor="#FFFFFF" style="border-collapse:collapse">
+<form name="form0" method="post" action="<?php echo $_SERVER['php_self']?>">
+<table border="0" cellspacing="0" width="100%" bgcolor="#FFFFFF" bordercolor="#FFFFFF" style="border-collapse:collapse">
 <tr>
- <td style="color:#FF0000">§請選擇要發送訊息的對象：
+ <td style="color:#FF0000">
+ 	◎名單篩選條件:<input type="text" size="10" name="master_subjects" value="<?php echo $_POST['master_subjects'];?>">
+ 	<input type="button" value="篩選" onclick="document.form0.submit()"><font size="2" color="#000000">(請輸入科目別,如:國文、自然....，未輸入則依職務列出)</font>
+ 
+ </td>
+</tr>
+</table>
+</form>
+<table border="0" cellspacing="0" width="100%" bgcolor="#FFFFFF" bordercolor="#FFFFFF" style="border-collapse:collapse">
+<tr>
+ <td align="left" style="color:blue">
+ 	§請選擇要發送訊息的對象：
  <?php
  if ($_GET['email']==1) echo "未設定 E-mail信箱者無法勾選!";
  ?>
- </td>
- <td align="right">
+  <br>
   <input type="button" value="送出資料" onclick="select_item()">
 	<input type="button" value="全選" onclick="check_select_all()">
   <input type="button" value="全部不選" onclick="check_disable()">
 </td>
 </tr>
- <form name="form1" method="post" action="teachers_id.php" onsubmit="return false">
+ <form name="form1" method="post" action="<?php echo $_SERVER['php_self']?>" onsubmit="return false">
 <tr>
 <td colspan="2">
  <table border="0" cellspacing="0" width="100%" bordercolor="#FFFFFF" style="border-collapse:collapse">
 <?php
+if ($_POST['master_subjects']=="") {
 //依職別取得資料
 for ($kind=1;$kind<=count($POST_KIND);$kind++) {
  $i=0; //紀錄本類別人數
@@ -113,6 +125,70 @@ for ($kind=1;$kind<=count($POST_KIND);$kind++) {
  } // end if $result->RecordCount() 
  
 } // end for
+//依科目篩選教師
+}else{
+ $master_subjects=iconv("UTF-8", "big5",$_POST['master_subjects']);
+ $query="select a.teacher_sn,c.teach_id,c.name from teacher_post a,teacher_title b,teacher_base c where c.master_subjects like '%".$master_subjects."%' and a.teach_title_id=b.teach_title_id and a.teacher_sn=c.teacher_sn and c.teach_condition=0 order by c.name";
+ $result=$CONN->Execute($query);
+ if ($result->RecordCount()>0) {
+ 	?>
+ 	<tr>
+  		<td>
+  			<table border="0">
+ 	<?php
+  while ($row=$result->fetchRow()) {
+  	$email=get_teacher_email_by_id($row['teach_id']);
+  	$f_color=($_GET['email']==1 and $email=="")?"#CCCCCC":"blue";
+  	?>
+  	
+  		
+  		<?php
+  			$i++;  if ($i%7==1) echo "<tr>";
+				$teacher_sn=$row['teacher_sn'];
+       ?>
+        
+        <td style="font-size:10pt" align="center">
+        	<table border="1"  style="border-collapse:collapse">
+        		<?php
+        		/*
+        		<tr>
+        			<td align="center" width="130" height="180">
+        				<?php
+        				 //印出照片    	
+    						if (file_exists($UPLOAD_PATH."/$img_path/".$teacher_sn)&& $teacher_sn<>'') {
+    							echo "<img src=\"".$UPLOAD_URL."$img_path/$teacher_sn\" width=\"120\"><br>";
+								} else {
+									echo "<font size=2>沒有照片</font><br>";
+								}
+        				?>
+        			</td>
+        		</tr>
+        		*/
+        		?>
+        		<tr>
+        			<td align="center" style="font-size:11pt;color:<?php echo $f_color;?>">
+        				<input type="checkbox" name="sendid[]" value="<?php echo $row['teach_id'];?>" style="width:9pt;height:9pt" <?php if ($_GET['email']==1 and $email=="") echo "disabled";?>>
+        				
+        				<?php
+  				        if ($kind==6 and $row['class_num']>0) echo $row['class_num']-600;
+        					echo big52utf8($row['name']);
+        				?>
+        				
+        			</td>
+        		</tr>
+        	</table>
+         </td>
+        	<?php
+      		if ($i%7==0) echo "</tr>";
+ 	}// end while
+	?> 
+		</table>
+  	</td>
+  </tr>
+  <?php 
+ }// end if $result->RecordCount()
+ 
+} // end if else
 
 ?>  	
 

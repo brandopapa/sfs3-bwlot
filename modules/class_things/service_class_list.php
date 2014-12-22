@@ -115,7 +115,7 @@ foreach($SERVICE as $student_sn=>$v) {
 		$ALL+=$SEME_REC[$seme];
 		?>
 		<td align="center"><?php echo round($SEME_REC[$seme]/60,2);?></td>
-		<?
+		<?php
 		}
   ?>
   <td align="cente"><?php echo round($ALL/60,2);?></td>

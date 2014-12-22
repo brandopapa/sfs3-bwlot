@@ -1,6 +1,6 @@
 <?php
 
-// $Id: address_book2.php 7706 2013-10-23 08:59:03Z smallduh $
+// $Id: address_book2.php 8117 2014-09-15 00:44:40Z smallduh $
 
 /*引入學務系統設定檔*/
 include "config.php";
@@ -172,7 +172,7 @@ function print_key($sel_year="",$sel_seme="",$print_key="",$cols=""){
       if ($rs_name->fields["stud_name"]) { 
         $stud_name = $rs_name->fields["stud_name"];
 		$stud_addr_1 = $rs_name->fields["stud_addr_1"];
-		//$stud_addr_2 = $rs_name->fields["stud_addr_2"];
+		$stud_addr_2 = $rs_name->fields["stud_addr_2"];
 		$stud_tel_1 = $rs_name->fields["stud_tel_1"];
 		$stud_tel_2 = $rs_name->fields["stud_tel_2"];
 		//$stud_tel_3 = $rs_name->fields["stud_tel_3"];

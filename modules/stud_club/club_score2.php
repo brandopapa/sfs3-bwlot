@@ -143,7 +143,7 @@ $res=mysql_query($query);
   	<td align="center"><?php echo $row['stud_name'];?></td> 
   	<td align="center"><input type="text" name="score[<?php echo $row['student_sn'];?>]" value="<?php echo $row['score'];?>" size="3"></td> 
   	<td align="center"><input type="text" name="stud_post[<?php echo $row['student_sn'];?>]" value="<?php echo $row['stud_post'];?>" size="8"></td> 
-  	<td ><input type="text" name="description[<?php echo $row['student_sn'];?>]" value="<?php echo $row['description'];?>" size="35"></td> 
+  	<td ><textarea cols="36" rows="3" name="description[<?php echo $row['student_sn'];?>]"><?php echo $row['description'];?></textarea></td> 
    	<td style="font-size:8pt" width="150"><?php echo $row['stud_feedback']; ?></td>
  </tr>  
   <?php 

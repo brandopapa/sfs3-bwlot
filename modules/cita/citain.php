@@ -1,6 +1,6 @@
 <?php
 
-// $Id: citain.php 7086 2013-01-18 12:53:24Z infodaes $
+// $Id: citain.php 8137 2014-09-23 08:12:36Z smallduh $
 
 include "config.php";
 sfs_check();
@@ -128,7 +128,7 @@ $class_id=old_class_2_new_id($class_num,$sel_year,$sel_seme);
 	}
 
 	</script>
-<?
+<?php
      //´Á­­ÀË¬d    
 if (date("Y-m-d")>=$beg_date and date("Y-m-d")<=$end_date) {
 

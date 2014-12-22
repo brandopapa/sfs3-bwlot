@@ -21,17 +21,17 @@
 <td rowspan=2 colspan="1" width=6% nowrap>姓　名</td>
 <td rowspan=2 colspan="1" width=5% nowrap>學　號</td>
 
-<td rowspan=1 colspan="3" width=15% nowrap>品德服務</td>
-<td rowspan=1 colspan="3" width=15% nowrap>績優表現</td>
+<td rowspan=1 colspan="3" width=15% nowrap>品德服務<font color=blue>(上限20分)</font></td>
+<td rowspan=1 colspan="3" width=15% nowrap>績優表現<font color=blue>(上限16分)</font></td>
 <td rowspan=2 colspan="1" width=5% nowrap>積分狀況</td>
 </tr>
 <tr bgcolor='white' align=center>
-<td style='font-size:9pt' nowrap>1服務學習</td>
-<td style='font-size:9pt' nowrap>2獎勵記錄</td>
-<td style='font-size:9pt' nowrap>3生活教育</td>
+<td style='font-size:9pt' nowrap>1服務學習<font color=blue>(上限8分)</font>
+<td style='font-size:9pt' nowrap>2獎勵記錄<font color=blue>(上限6分)</font></td>
+<td style='font-size:9pt' nowrap>3生活教育<font color=blue>(上限8分)</font></td>
 <td style='font-size:9pt' nowrap>均衡學習</td>
-<td style='font-size:9pt' nowrap>4競賽表現</td>
-<td style='font-size:9pt' nowrap>5體適能</td>
+<td style='font-size:9pt' nowrap>4競賽表現<font color=blue>(上限6分)</font></td>
+<td style='font-size:9pt' nowrap>5體適能<font color=blue>(上限6分)</font></td>
 </tr>
 <form name='Fix1' method='post' action="{{$smarty.server.SCRIPT_NAME}}">
 
@@ -49,6 +49,8 @@
 
 {{foreach from=$this->stu item=stu key=st_sn}}
 
+{{assign var="T20" value=$this->tol20(20,$stu.score_service+$stu.score_reward+$stu.score_fault)}}
+{{assign var="T16" value=$this->tol20(16,$stu.score_balance+$stu.score_race+$stu.score_physical)}}
 
 <tr align=center  style='font-size:10pt' 
 bgcolor=white ondblclick="jampb('{{$stu.student_sn}}')"  onMouseOver="this.style.backgroundColor='#FFEBD6'" onMouseOut="this.style.backgroundColor=''">
@@ -58,21 +60,20 @@ bgcolor=white ondblclick="jampb('{{$stu.student_sn}}')"  onMouseOver="this.style
 {{else}}<font color="#000000">{{$stu.stud_name}}</font>{{/if}}</a></td>
 <td>{{$stu.stud_id}}</td>
 
-<td><input type="text" name="score_service[{{$stu.student_sn}}]" value="{{$stu.score_service}}" size="3" /></td>
-<td><input type="text" name="score_reward[{{$stu.student_sn}}]" value="{{$stu.score_reward}}" size="3" /></td>
-<td><input type="text" name="score_fault[{{$stu.student_sn}}]" value="{{$stu.score_fault}}" size="3" /></td>
+<td><input type="text" name="score_service[{{$stu.student_sn}}]" value="{{$stu.score_service}}" size="3" maxlength="3" onchange="ser_check(this);" /></td>
+<td><input type="text" name="score_reward[{{$stu.student_sn}}]" value="{{$stu.score_reward}}" size="3" maxlength="3" onchange="rew_check(this);" /></td>
+
+<td><input type="text" name="score_fault[{{$stu.student_sn}}]" value="{{$stu.score_fault}}" size="3" maxlength="1" onchange="fau_check(this);" /></td>
 
 <input type="hidden" name="stuname[{{$stu.student_sn}}]" value="{{$stu.stud_name}}" />
 
 <td>{{if $stu.score_balance!=0 && $stu.score_balance!=''}}{{$stu.score_balance}}{{/if}}</td>
-<td><input type="text" name="score_race[{{$stu.student_sn}}]" value="{{$stu.score_race}}" size="3" /></td>
-<td><input type="text" name="score_physical[{{$stu.student_sn}}]" value="{{$stu.score_physical}}" size="3" /></td>
+<td><input type="text" name="score_race[{{$stu.student_sn}}]" value="{{$stu.score_race}}" size="3" maxlength="3" onchange="rac_check(this);" /></td>
+<td><input type="text" name="score_physical[{{$stu.student_sn}}]" value="{{$stu.score_physical}}" size="3" maxlength="1" onchange="phy_check(this);" /></td>
 
 
 
-<td>
-{{$stu.income+$stu.score_nearby+$stu.score_service+$stu.score_reward+$stu.score_fault+$stu.score_balance+$stu.score_race+$stu.score_physical}}
-</td>
+<td>{{$stu.income+$stu.score_nearby+$T20+$T16}}</td>
 </tr>
 {{/foreach}}
 
@@ -104,6 +105,50 @@ function chcchk(){
 		document.Fix1.submit();
 	}
 
+}
+function ser_check(obj){
+	var OV=obj.value;
+	if(OV>8 | OV<0){
+		obj.value='';
+		alert('服務學習填寫出錯！(0~8)');
+		setTimeout(function(){obj.focus();}, 1);
+	}
+}
+
+function rew_check(obj){
+	var OV=obj.value;
+	if(OV!='' && OV!=0 && OV!=0.5 && OV!=1 && OV!=1.5 && OV!=2 && OV!=2.5 && OV!=3 && OV!=3.5 && OV!=4 && OV!=4.5 && OV!= 5 && OV!= 5.5 && OV!=6){
+		obj.value='';
+		alert('獎勵紀錄填寫出錯！(0~6,小數點後只能.5)');
+		setTimeout(function(){obj.focus();}, 1);
+	}
+}
+
+function fau_check(obj){
+	var OV=obj.value;
+	if(OV!='' && OV!=0 && OV!=4 && OV!=8){
+		obj.value='';
+		alert('生活教育填寫出錯！(只能0,4,8)');
+		setTimeout(function(){obj.focus();}, 1);
+	}
+}
+
+function rac_check(obj){
+	var OV=obj.value;
+	if(OV!='' && OV!=0 && OV!=0.5 && OV!=1 && OV!=1.5 && OV!=2 && OV!=2.5 && OV!=3 && OV!=3.5 && OV!=4 && OV!=4.5 && OV!= 5 && OV!= 5.5 && OV!=6){
+		obj.value='';
+		alert('競賽表現填寫出錯！(0~6,小數點後只能.5)');
+		setTimeout(function(){obj.focus();}, 1);
+	}
+}
+
+function phy_check(obj){
+	var OV=obj.value;
+	if(OV!='' && OV!=0 && OV!=1 && OV!=2 && OV!=3 && OV!=4 && OV!=5 && OV!=6){
+		obj.value='';
+		alert('體適能填寫出錯！(0~6整數)');
+		setTimeout(function(){obj.focus();}, 1);
+	}
 }
 
 

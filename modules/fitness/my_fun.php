@@ -1,5 +1,5 @@
 <?php
-// $Id: my_fun.php 7799 2013-12-10 07:16:17Z smallduh $
+// $Id: my_fun.php 8065 2014-06-13 06:18:06Z smallduh $
 
 function year_seme_menu($sel_year,$sel_seme) {
 
@@ -9,6 +9,7 @@ function year_seme_menu($sel_year,$sel_seme) {
 	$scys->id = sprintf("%03d",$sel_year).$sel_seme;
 	$scys->arr = get_class_seme();
 	$scys->is_submit = true;
+	$scys->other_script="this.form.act.value=''";
 	return $scys->get_select();
 }
 
@@ -20,6 +21,7 @@ function class_name_menu($sel_year,$sel_seme,$id) {
 	$sc->id = $id;
 	$sc->arr = class_base(sprintf("%03d",$sel_year).$sel_seme);
 	$sc->is_submit = true;
+	$sc->other_script="this.form.act.value=''";
 	return $sc->get_select();
 }
 

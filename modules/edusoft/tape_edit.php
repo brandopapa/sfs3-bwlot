@@ -1,5 +1,5 @@
 <?php 
-//$Id: tape_edit.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: tape_edit.php 8146 2014-09-23 08:24:22Z smallduh $
 include "config.php";  //軟體設定
 //登入檢查
 sfs_check();
@@ -26,14 +26,14 @@ include "header.php";
 <center><img src="eye.gif">
    <b>修改 <?php echo $ap_name ?></b>
    <form method="post" name="tapeform" action="tape_edit.php"> 
-   <input type="hidden" name="tapem_id" value="<? echo("$row[tapem_id]") ?>">
-   <input type="hidden" name="tape_id" value="<? echo("$row[tape_id]") ?>">   
+   <input type="hidden" name="tapem_id" value="<?php echo("$row[tapem_id]") ?>">
+   <input type="hidden" name="tape_id" value="<?php echo("$row[tape_id]") ?>">   
    <table border="1" width="80%">
-   <tr ><td>類別編號</td><td><? echo("$row[tapem_id]") ?><? echo("$row[tape_id]") ?>     
+   <tr ><td>類別編號</td><td><?php echo("$row[tapem_id]") ?><?php echo("$row[tape_id]") ?>     
    </td></tr>
-   <tr><td>名稱</td><td><input type="text" name="tape_name" size="60" value="<? echo("$row[tape_name]") ?>"></td></tr>
-   <tr><td>適用年級</td><td><input type="text" name="tape_grade" size="30"value="<? echo("$row[tape_grade]") ?>"></td></tr>
-   <tr><td>說明<br></td><td><textarea name="tape_memo"rows=6 cols="62"><? echo("$row[tape_memo]") ?></textarea></td></tr>   
+   <tr><td>名稱</td><td><input type="text" name="tape_name" size="60" value="<?php echo("$row[tape_name]") ?>"></td></tr>
+   <tr><td>適用年級</td><td><input type="text" name="tape_grade" size="30"value="<?php echo("$row[tape_grade]") ?>"></td></tr>
+   <tr><td>說明<br></td><td><textarea name="tape_memo"rows=6 cols="62"><?php echo("$row[tape_memo]") ?></textarea></td></tr>   
    <tr><td colspan=2 align=center><input type="submit" name="dopost" value="確定修改">&nbsp;&nbsp;<input type="button" value="回上一頁" onClick="history.back()"></td></tr>   
    </table>
    </form>

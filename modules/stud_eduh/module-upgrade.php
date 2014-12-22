@@ -1,6 +1,6 @@
 <?php
 
-//$Id: module-upgrade.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: module-upgrade.php 8109 2014-09-02 14:18:37Z infodaes $
 
 if(!$CONN){
 	echo "go away !!";
@@ -109,5 +109,20 @@ CHANGE `explanation` `explanation` VARCHAR( 100 )";
         fwrite($fp,$temp_query);
         fclose ($fd);
 }
+
+
+$up_file_name =$upgrade_str."2014-09-02.txt";
+if (!is_file($up_file_name)){
+	$query ="ALTER TABLE `stud_seme_talk` ADD `interview_method` varchar(10) AFTER `interview`;";
+	if ($CONN->Execute($query))
+		$str="新增訪談方式欄位成功\";
+	else
+		$str="新增訪談方式欄位失敗";
+	$temp_query = "於stud_seme_talk 資料表新增訪談方式 -- by infodaes 2014-09-02 \n$query";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+}
+
 
 ?>

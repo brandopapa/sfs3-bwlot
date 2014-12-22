@@ -2,31 +2,36 @@
 
 //填寫競賽記錄表單
 function form_race_record($race_record) {
-	global $level_array,$squid_array,$R_select,$N_select;
+	global $level_array,$squid_array,$R_select,$N_select,$sch_id;	
 ?>
-<table border="0" width="700" bgcolor="#FFFFCC">
-	<tr bgcolor="#CCFFCC">
-	 <td>*年度</td>
-	 <td colspan="3"><input type="text" name="year" value="<?php echo $race_record['year'];?>" size="3"></td></td>
+<table border="1" width="750" style="border-collapse:collapse" cellpadding="3" cellspacing="3" bordercolor="#c0c0c0" bgcolor="#FFFFCC">
+	<tr>
+	 <td bgcolor="#CCFFCC">*年度</td>
+	  <td bgcolor="#DCFFDC" colspan="3">
+	 	 <input type="text" name="year" value="<?php echo $race_record['year'];?>" size="3">
+	 	</td>
+	 </td>
 	</tr>
-	<tr bgcolor="#CCFFCC">
-	 <td>*類別</td>
-	 
-	 <td><select name="nature"><option value=""></option>
+	<tr>
+	 <td bgcolor="#CCFFCC">*類別</td>
+	 <td bgcolor="#DCFFDC" colspan="3">
+	 		<select name="nature" <?php if (substr($sch_id,0,2)=='13') echo "onchange=\"SelectR_name(1)\"";?>>
+	 	  		<option value="">請選擇類別</option>
 	 	   <?php
 	 	    foreach ($N_select as $k=>$v) {
 	 	     ?>
-	 	     <option value="<?php echo $v;?>"<?php if ($race_record['nature']==$v) echo " selected";?>><?php echo $v;?></option>
+	 	     	<option value="<?php echo $v;?>"<?php if ($race_record['nature']==$v) echo " selected";?>><?php echo $v;?></option>
 	 	     <?php
 	 	    }
 	 	   ?>	 		
-	 </select></td>	 
+	 		</select>
+	 </td>	 
 	</tr>
 	
 	<tr>
 	 <td width="75">競賽範圍</td>
-	 <td width="250">
-	 		<select size="1" name="level">
+	 <td width="300">
+	 		<select size="1" name="level" <?php if (substr($sch_id,0,2)=='13') echo "onchange=\"SelectR_name(1)\"";?>>
 	 	   <?php
 	 	    foreach ($level_array as $k=>$v) {
 	 	     ?>
@@ -38,7 +43,7 @@ function form_race_record($race_record) {
 	 	
 	 	</td>
 		<td width="75">競賽性質</td>
-	 	<td width="250">
+	 	<td width="200">
 	     <input type="radio" name="squad" value="1"<?php if ($race_record['squad']==1) echo " checked"; ?>>個人賽
 	     <input type="radio" name="squad" value="2"<?php if ($race_record['squad']==2) echo " checked"; ?>>團體賽
 
@@ -46,12 +51,31 @@ function form_race_record($race_record) {
 	</tr>	
 	<tr>
 	 <td>競賽名稱</td>
-	 <td colspan='3'><input type="text" name="r_name" value="<?php echo $race_record['name'];?>" size="60"></td></tr>
-	 <tr>
-	 <td>證書字號</td>
-	 <td colspan=3>
-	 <input type="text" name="word" value="<?php echo $race_record['word'];?>" size="20">
-	 &nbsp;得獎名次
+	 <td>
+	 	<?php 
+	 	 if (substr($sch_id,0,2)=='13') {
+			?>
+	 		<select size="1" name="r_name" onchange="Check_select()">
+	 			<?php
+	 			if ($race_record['name']!="") {
+	 			?>
+	 				<Option value="<?php echo $race_record['name'];?>" selected><?php echo $race_record['name'];?></option>			
+	 		  <?php
+	 			} else {
+	 			?>
+	 			<Option value="">請選擇競賽名稱</option>			
+	 		 <?php } ?>
+			</select>
+			<?php
+	 	 } else {
+	     ?>
+	     	<input type="text" name="r_name" value="<?php echo $race_record['name'];?>" size="30">
+	     <?php	 
+	 	 }
+	 	?>
+	 </td>
+	 <td>得獎名次</td>
+	 <td>
 	 			<select size="1" name="rank">
 	 				<option value=''>---</option>
 	 				<?php
@@ -63,21 +87,31 @@ function form_race_record($race_record) {
 	 				?>
 	 			</select>
 	 
-	 &nbsp;高中免試權重 <input type="text" name="weight" value="<?php echo $race_record['weight'];?>" size="6">
-	 &nbsp;五專免試權重 <input type="text" name="weight_tech" value="<?php echo $race_record['weight_tech'];?>" size="6">
 	 </td>
-	</tr>	
+	</tr>
+	<tr>	
+	 <td>證書字號</td>
+	 <td>
+	 	<input type="text" name="word" value="<?php echo $race_record['word'];?>" size="20">
+	 </td>		 
+	 <td>證書日期</td>
+	 <td><input type="text" name="certificate_date" value="<?php echo $race_record['certificate_date'];?>" size="12"></td>
+	</tr>
+	<tr>
+		<td>高中免試權重</td>
+		<td>
+		  <input type="text" name="weight" value="<?php echo $race_record['weight'];?>" size="6">
+		</td>
+	  <td>五專免試權重</td>
+	  <td>
+	    <input type="text" name="weight_tech" value="<?php echo $race_record['weight_tech'];?>" size="6">
+	  </td>
+	</tr>
 	<tr>
 	 <td>主辦單位</td>
 	 <td><input type="text" name="sponsor" value="<?php echo $race_record['sponsor'];?>" size="30"></td>
-	 <td>證書日期</td>
-	 <td><input type="text" name="certificate_date" value="<?php echo $race_record['certificate_date'];?>" size="12"></td>
-	</tr>	
-	<tr>
-	</tr>	
-	<tr>
 	 <td>備註</td>
-	 <td colspan="3"><input type="text" name="memo" value="<?php echo $race_record['memo'];?>" size="60"></td>
+	 <td><input type="text" name="memo" value="<?php echo $race_record['memo'];?>" size="30"></td>
 	</tr>
 </table>
 

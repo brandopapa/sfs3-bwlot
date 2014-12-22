@@ -1,6 +1,6 @@
 <?php
 
-//$Id: doc_kind_list.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: doc_kind_list.php 8145 2014-09-23 08:21:31Z smallduh $
 
 include "docup_config.php";
 if ($is_standalone!="1") head("文件資料庫");
@@ -49,7 +49,7 @@ while (list($tid, $tname) = each($post_office_p)){
 $state_kind .= "</select>";
 ?>
 <table align=center class=module_body width=100%>
-<tr><td align=center><form action="<?php echo $_SERVER[PHP_SELF] ?>" method=get name="kindform"><a href="docup_list.php">文件總表</a>&nbsp;&nbsp;<? echo $state_kind; ?>&nbsp;&nbsp;<a href="docup_p_add.php?doc_kind_id=<?php echo $_GET[doc_kind_id] ?>">新增文件專案</a> | <a href="<?php echo "doc_search.php?doc_kind_id=$doc_kind_id" ?>">搜尋</a></td></tr></table>
+<tr><td align=center><form action="<?php echo $_SERVER[PHP_SELF] ?>" method=get name="kindform"><a href="docup_list.php">文件總表</a>&nbsp;&nbsp;<?php echo $state_kind; ?>&nbsp;&nbsp;<a href="docup_p_add.php?doc_kind_id=<?php echo $_GET[doc_kind_id] ?>">新增文件專案</a> | <a href="<?php echo "doc_search.php?doc_kind_id=$doc_kind_id" ?>">搜尋</a></td></tr></table>
 <table border="1" class=module_body cellspacing="0" cellpadding="0" width=100% >
   <tr>    
     <td  bgcolor="#008000" align="center" width=60%><font color="#FFFFFF">專案名稱</font></td>

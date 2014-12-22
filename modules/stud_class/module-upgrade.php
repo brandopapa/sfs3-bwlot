@@ -1,6 +1,6 @@
 <?php
 
-//$Id: module-upgrade.php 6534 2011-09-22 09:46:05Z infodaes $
+//$Id: module-upgrade.php 8094 2014-08-24 16:25:12Z infodaes $
 
 if(!$CONN){
 	echo "go away !!";
@@ -95,6 +95,20 @@ if (!is_file($up_file_name)){
 	else
 		$str="新增畢修業別欄位失敗";
 	$temp_query = "於 stud_domicile 資料表新增父母畢修業別欄位以符合XML 3.0".$str." -- by infodaes 2009-02-02 \n$query";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+}
+
+
+$up_file_name =$upgrade_str."2014-08-24.txt";
+if (!is_file($up_file_name)){
+	$query ="ALTER TABLE `stud_seme_talk` ADD `interview_method` varchar(10) AFTER `interview`;";
+	if ($CONN->Execute($query))
+		$str="新增訪談方式欄位成功\";
+	else
+		$str="新增訪談方式欄位失敗";
+	$temp_query = "於stud_seme_talk 資料表新增訪談方式 -- by infodaes 2014-08-24 \n$query";
 	$fp = fopen ($up_file_name, "w");
 	fwrite($fp,$temp_query);
 	fclose ($fp);

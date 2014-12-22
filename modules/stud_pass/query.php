@@ -1,5 +1,5 @@
 <?php
-//$Id: query.php 7847 2014-01-09 05:51:44Z hami $
+//$Id: query.php 8161 2014-10-07 14:57:17Z smallduh $
 include "config.php";
 include "../../include/sfs_case_dataarray.php";
 
@@ -19,6 +19,16 @@ $change="修改密碼";
 $finish="修改完成";
 if (count($passwd)>0 && $mode==$finish) {
 	while(list($student_sn,$email_pass)=each($passwd)) {
+	  //更新學生 sha key 2014.10.07 *********************/
+			$query = "SELECT stud_person_id FROM stud_base where student_sn='$student_sn' ";
+			$res = $CONN->Execute($query) or die($query);
+			$row=$res->FetchRow();
+      if ($row['stud_person_id']!="") {
+				 	$stud_person_id = hash('sha256', strtoupper($row['stud_person_id']));
+				 	$sql = "UPDATE stud_base SET edu_key='$stud_person_id' WHERE student_sn='$student_sn'";
+					$CONN->Execute($sql) ;
+			 }
+		
 		$ldap_password = createLdapPassword($email_pass);
 		$query="update stud_base set email_pass='$email_pass' , ldap_password='$ldap_password'  where student_sn='$student_sn'";
 		

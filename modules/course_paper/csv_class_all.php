@@ -63,12 +63,13 @@ while(!$rs->EOF){
 	$class_data[$class_id]['tutor'].=($r->fields[1]?'、'.$r->fields[1]:'');
 
 	//抓取課表資料
-	$sql_course="select course_id,teacher_sn,day,sector,ss_id,room,c_kind from score_course where class_id='$class_id' order by day,sector";
+	$sql_course="select course_id,teacher_sn,cooperate_sn,day,sector,ss_id,room,c_kind from score_course where class_id='$class_id' order by day,sector";
 	$recordSet=$CONN->Execute($sql_course) or trigger_error("錯誤訊息： $sql_course",E_USER_ERROR);
-	while(list($course_id,$teacher_sn,$day,$sector,$ss_id,$room,$c_kind)= $recordSet->FetchRow()) {
+	while(list($course_id,$teacher_sn,$cooperate_sn,$day,$sector,$ss_id,$room,$c_kind)= $recordSet->FetchRow()) {
 		$k=$day."_".$sector;
 		$class_data[$class_id]['course'][$k]['ss_id']=$subject_array[$ss_id];
 		$class_data[$class_id]['course'][$k]['teacher']=$teacher_sn;
+		$class_data[$class_id]['course'][$k]['co_teacher']=$cooperate_sn;
 		$class_data[$class_id]['course'][$k]['room']=$room;
 		$class_data[$class_id]['course'][$k]['c_kind']=$c_kind;
 	}
@@ -92,6 +93,10 @@ foreach($class_data as $class_id=>$data){
 			$k=$w."_".$s;
 			$teacher_sn=$class_data[$class_id]['course'][$k]['teacher'];
 			$t=$teacher_name[$teacher_sn];
+			
+			$cooperate_sn=$class_data[$class_id]['course'][$k]['co_teacher'];
+			if($cooperate_sn) $t.='、'.$teacher_name[$cooperate_sn];
+			
 			$row_data.="{$class_data[$class_id]['course'][$k]['ss_id']},$t,{$class_data[$class_id]['course'][$k]['room']},{$class_data[$class_id]['course'][$k]['c_kind']},";
 		}
 	}

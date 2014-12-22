@@ -648,6 +648,8 @@ $mail->Password   = $SMPTpassword;        	// SMTP account password
 	//收件者	
 	  mysql_query("set names 'latin1';");
 		$a=explode(";",$m_to);
+		$Email_fail="";
+		$Email_success="";
 		 foreach($a as $g) {
 		 	
 		 	$query="select a.name,b.email,b.email2,b.email3 from teacher_base a,teacher_connect b where a.teacher_sn=b.teacher_sn and a.teach_id='".$g."'";
@@ -672,8 +674,10 @@ $mail->Password   = $SMPTpassword;        	// SMTP account password
  
 		    //寄信
 				if(!$mail->Send()) {
- 			 		echo "Mailer Error: " . $mail->ErrorInfo;
+ 			 		//echo "Mailer Error: " . $mail->ErrorInfo;
+ 			 		$Email_fail.=$TONAME." ";
 				} else {
+					$Email_success.=$TONAME." ";
  	 				$save=1; 
  	 				$countMail+=1;
 				}
@@ -681,7 +685,25 @@ $mail->Password   = $SMPTpassword;        	// SMTP account password
   			$mail->ClearAddresses();
   			$mail->ClearAttachments();		 	
  		 } // end foreach
-
+   //發送通知訊息給使用者
+   	$idnumber=date("y").date("m").date("d").date("H").date("i").date("s");
+ 		//測試代碼是否重覆
+		do {
+	 		$a=floor(rand(10,99));
+	 		$idnumber_test=$idnumber.$a;
+	 		$query="select id from sc_msn_data where idnumber='".$idnumber_test."'";
+	 		$result=mysql_query($query);
+	 		$exist=mysql_num_rows($result);
+		} while ($exist>0);
+		
+    
+ 		$idnumber=$idnumber_test;
+		$Email_success=iconv("big5","utf-8",$Email_success);
+		$Email_fail=iconv("big5","utf-8",$Email_fail);
+		mysql_query("SET NAMES 'utf8'");
+ 		$msg="由於您使用了E-mail功能, 此為系統自動通知結果:<br><br>成功發送E-mail給: ".$Email_success." <br><br>發送失敗者:".$Email_fail;
+    $sql="insert into sc_msn_data (idnumber,teach_id,to_id,data_kind,post_date,last_date,data,relay,folder) values ('$idnumber','$m_from','$m_from','$data_kind','$datetime','$lasttime','$msg','$relay','private')";
+    mysql_query($sql);
 } else {
 
 $idnumber=date("y").date("m").date("d").date("H").date("i").date("s");

@@ -1,5 +1,5 @@
 <?php
-// $Id: stage_class_score.php 7699 2013-10-23 08:08:58Z smallduh $
+// $Id: stage_class_score.php 8232 2014-12-10 08:12:04Z brucelyc $
 /* 取得設定檔 */
 include "config.php";
 sfs_check();
@@ -21,6 +21,7 @@ $ss_id_b = ($_POST[ss_id_b])?$_POST[ss_id_b]:$_GET[ss_id_b];
 $act = ($_POST[act])?$_POST[act]: $_GET[act];
 $mode = ($_POST[mode])?$_POST[mode]: $_GET[mode]; 
 
+$M_SETUP=get_module_setup('score_stage_chart');
 
 //更改學期
 if (empty($year_seme)) {
@@ -226,7 +227,7 @@ function &get_score_value_stage($student_sn,$class_id,$sel_year,$sel_seme,$stage
 //下載成績單
 function downlod_ar($class_id="",$sel_year="",$sel_seme="",$stage){
 	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,
-			$draw_img_width,$draw_img_height,$mode,$all,$ss_id_b,$class;
+			$draw_img_width,$draw_img_height,$mode,$all,$ss_id_b,$class,$M_SETUP;
 
 	//Openofiice的路徑
 	$oo_path = "ooo/2";
@@ -257,9 +258,10 @@ function downlod_ar($class_id="",$sel_year="",$sel_seme="",$stage){
 		$subject_name_row .= '<table:table-cell table:style-name="table1.A1" table:value-type="string"><text:p text:style-name="P2">'.$val.'</text:p></table:table-cell>';
 	}
 	
-
-	if ($draw_img_width=='') $draw_img_width="1.27cm";
-	if ($draw_img_height=='') $draw_img_height="1.27cm";
+	if ($M_SETUP['hborder']=="") $M_SETUP['hborder'] = 1.27;
+	if ($M_SETUP['wborder']=="") $M_SETUP['wborder'] = 1.27;
+	if ($draw_img_width=='') $draw_img_width=$M_SETUP['hborder']."cm";
+	if ($draw_img_height=='') $draw_img_height=$M_SETUP['wborder']."cm";
 	//校長簽章檔
 	if (is_file($UPLOAD_PATH."school/title_img/title_1")){
 // 		$title_img = "http://".$_SERVER["SERVER_ADDR"]."/".$UPLOAD_URL."school/title_img/title_1";

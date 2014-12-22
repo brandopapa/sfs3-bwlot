@@ -1,4 +1,4 @@
-#$Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+#$Id: module.sql 8152 2014-09-30 01:15:55Z smallduh $
 # 資料表格式： `score_paper`
 #
 # 請將您的資料表 CREATE TABLE 語法置於下。
@@ -11,7 +11,7 @@ CREATE TABLE `score_paper` (
   `descriptive` text NOT NULL,
   `enable` enum('1','2') NOT NULL default '1',
   PRIMARY KEY  (`sp_sn`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 

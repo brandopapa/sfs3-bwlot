@@ -64,6 +64,69 @@ if ($_POST['act']=="save") {
  
 }
 
+//匯出本班名單
+if ($_POST['act']=="output") {
+  $data_output="
+	<table>
+		<tr>
+		 <td colspan=\"6\">".$select_class[$class_num]."幹部名單</td>
+		</tr>
+		<tr>
+			<td>座號</td>
+			<td>姓名</td>
+			<td>幹部1</td>
+			<td>幹部2</td>
+			<td>小老師1</td>
+			<td>小老師2</td>
+		</tr>";
+	//開始列出學生及本學期明細
+	$stud_count=0;
+  while ($row=$res_stud_list->FetchRow()) {
+  	$stud_count++;
+  	$student_sn=$row['student_sn'];
+  	$seme_num=$row['seme_num'];
+  	$stud_name=$row['stud_name'];
+		//取出該生幹部相關資料(包含所有學期的陣列資料, 以下只顯示本學期, 其他學期則以 hidden 方式)
+		$query="select * from career_self_ponder where student_sn='$student_sn' and id='3-2'";
+ 		$res_ponder=$CONN->Execute($query);
+ 		$ponder_array=unserialize($res_ponder->fields['content']); //二維陣列
+ 		/***
+ 		陣列資料說明:
+ 		  $ponder_array[學期7-1,7-2,8-,8-2,9-1,9-2等][1幹部][1,2] 兩欄
+ 		  $ponder_array[學期7-1,7-2,8-,8-2,9-1,9-2等][2小老師][1,2] 兩欄
+ 		*/
+  	$data_output.="
+  	<tr>
+  		<td>".$seme_num."</td>
+  		<td>".$stud_name."</td>";
+  		
+  		foreach ($select_seme as $the_seme=>$V) {
+  		  if ($the_seme==$c_curr_seme) {
+			    $data_output.="
+					<td>".$ponder_array[$select_seme_key[$c_curr_seme]][1][1]."</td>
+					<td>".$ponder_array[$select_seme_key[$c_curr_seme]][1][2]."</td>
+		  		<td>".$ponder_array[$select_seme_key[$c_curr_seme]][2][1]."</td>
+		  		<td>".$ponder_array[$select_seme_key[$c_curr_seme]][2][2]."</td>";		  		
+   		  } // end if
+  		} // end foreach
+  		
+ 		$data_output.="</tr>";
+  } // end while
+	
+	$data_output.="</table>";
+
+  $filename=$class_num."_leader.xls";
+  header("Content-disposition: attachment; filename=$filename");
+	header("Content-type: application/octetstream");
+	header("Cache-Control: max-age=0");
+	header("Pragma: public");
+	header("Expires: 0");
+	echo $data_output;
+
+	exit;
+
+} // end if output
+//匯出全校名單
 
 
 
@@ -80,7 +143,7 @@ echo $tool_bar;
 	<?php
 	if ($module_manager) {
 	?>
-		<select size="1" name="class_num" onchange="document.myform.submit()">
+		<select size="1" name="class_num" onchange="document.myform.act.value='';document.myform.submit()">
 		<?php
 		foreach ($select_class as $k=>$v) {
 			?>
@@ -95,7 +158,7 @@ echo $tool_bar;
 	}// end if $module_manager	
 	?>
 
-	<select size="1" name="c_curr_seme" onchange="document.myform.submit()">
+	<select size="1" name="c_curr_seme" onchange="document.myform.act.value='';document.myform.submit()">
 		<?php
 		foreach ($select_seme as $k=>$v) {
 			?>
@@ -109,7 +172,20 @@ echo $tool_bar;
 	 	<td style="color:#0000FF"><b>年級-學期：<?php echo $select_seme_key[$c_curr_seme];?></b>
 	 	 <font size="2" color="red"><?php echo $INFO;?></font>
 	 	</td>
-	 	<td width="50%" align="right"><input type="button" value="儲存資料" onclick="chk_max_input();document.myform.act.value='save';document.myform.submit();"></td>
+	 	<td width="50%" align="right">
+	 		<?php
+	 		/*
+	 		if ($module_manager) {
+	 		?>
+			<input type="button" value="匯出全校幹部名單" onclick="document.myform.act.value='output_all';document.myform.submit();">	 		
+			<?php
+			}
+			*/
+			?>
+			<input type="button" value="匯出本班幹部名單" onclick="document.myform.act.value='output';document.myform.submit();">
+	 		<input type="button" value="儲存資料" onclick="chk_max_input();document.myform.act.value='save';document.myform.submit();">
+	 	
+	 	</td>
 	 </tr>
 	</table>
 	<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse; font-size=12px;' bordercolor='#111111' width=100%>
@@ -150,14 +226,14 @@ echo $tool_bar;
 			?>	
 					<td align='left'>1. <?php echo get_name_list_select("ponder_array[$student_sn][$select_seme_key[$c_curr_seme]][1][1]",$name_list_arr,$ponder_array[$select_seme_key[$c_curr_seme]][1][1]) ?>&nbsp;&nbsp;2. <?php echo get_name_list_select("ponder_array[$student_sn][$select_seme_key[$c_curr_seme]][1][2]",$name_list_arr,$ponder_array[$select_seme_key[$c_curr_seme]][1][2]) ?></td>
 		  		<td align='left'>1. <?php echo get_name_list_select("ponder_array[$student_sn][$select_seme_key[$c_curr_seme]][2][1]",$name_list2_arr,$ponder_array[$select_seme_key[$c_curr_seme]][2][1]) ?>&nbsp;&nbsp;2. <?php echo get_name_list_select("ponder_array[$student_sn][$select_seme_key[$c_curr_seme]][2][2]",$name_list2_arr,$ponder_array[$select_seme_key[$c_curr_seme]][2][2]) ?></td>
-				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][memo];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][1]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
+				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][memo];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][memo]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
  					<td align='left'><?php echo $ponder_array[$select_seme_key[$c_curr_seme]][data];?></td>
 			<?php } else { ?>
 					<td align='left'>1. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][1][1]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][1][1];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][1][1]) echo " STYLE=\"background-color:#FFFF00\"";?>>&nbsp;／&nbsp;
 													 2. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][1][2]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][1][2];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][1][2]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
 		  		<td align='left'>1. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][2][1]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][2][1];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][1]) echo " STYLE=\"background-color:#FFFF00\"";?>>&nbsp;／&nbsp;
 		  										 2. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][2][2]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][2][2];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][2]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
- 				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][memo];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][1]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
+ 				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][memo];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][memo]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
 					<td align='left'><?php echo $ponder_array[$select_seme_key[$c_curr_seme]][data];?></td>
   		  <?php }
   		  } 

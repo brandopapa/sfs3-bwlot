@@ -1,5 +1,5 @@
 <?php
-// $Id: function.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: function.php 8102 2014-08-31 15:06:51Z infodaes $
 
 //列出某個班級的課表
 function search_class_table($sel_year="",$sel_seme="",$class_id="",$tsn="" , $view_room="") {
@@ -17,13 +17,14 @@ function search_class_table($sel_year="",$sel_seme="",$class_id="",$tsn="" , $vi
 	//每週的日數
 	$dayn=sizeof($weekN)+1;
 	
-	$sql_select = "select course_id,teacher_sn,day,sector,ss_id,room from score_course where class_id='$class_id' order by day,sector";
+	$sql_select = "select course_id,teacher_sn,cooperate_sn,day,sector,ss_id,room from score_course where class_id='$class_id' order by day,sector";
 
 	$recordSet=$CONN->Execute($sql_select) or user_error("錯誤訊息：",$sql_select,256);
-	while (list($course_id,$teacher_sn,$day,$sector,$ss_id,$room)= $recordSet->FetchRow()) {
+	while (list($course_id,$teacher_sn,$cooperate_sn,$day,$sector,$ss_id,$room)= $recordSet->FetchRow()) {
 		$k=$day."_".$sector;
 		$a[$k]=$ss_id;
 		$b[$k]=$teacher_sn;
+		$co[$k]=$cooperate_sn;
 		$r[$k]=$room;
 	}
 
@@ -63,6 +64,7 @@ function search_class_table($sel_year="",$sel_seme="",$class_id="",$tsn="" , $vi
 				
 				//教師的下拉選單
 				$teacher_sel="<font size=2><a href='teacher_class.php?sel_year=$sel_year&sel_seme=$sel_seme&view_tsn=$b[$k2]'>".get_teacher_name($b[$k2])."</a></font>";
+				if($co[$k2]) $teacher_sel.="<br><font size=1><a href='teacher_class.php?sel_year=$sel_year&sel_seme=$sel_seme&view_tsn=$co[$k2]'>*".get_teacher_name($co[$k2])."*</a></font>";
 				
 				$room_name=(empty($r[$k2]))?"&nbsp;":"<font color='red'>$r[$k2]</font>";
 				

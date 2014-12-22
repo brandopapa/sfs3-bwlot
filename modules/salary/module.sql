@@ -73,5 +73,5 @@ CREATE TABLE `salary` (
   KEY `Person_ID` (`ID`),
   KEY `upload_date` (`AnnounceDate`),
   KEY `No` (`No`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

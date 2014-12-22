@@ -1,11 +1,15 @@
 <?php
 
-// $Id: stud_seme_talk2.php 6753 2012-05-01 05:04:30Z infodaes $
+// $Id: stud_seme_talk2.php 8108 2014-09-02 14:17:44Z infodaes $
 
 // 載入設定檔
 include "config.php";
 // 認證檢查
 sfs_check();
+
+$m_arr = get_sfs_module_set("stud_class");
+extract($m_arr, EXTR_OVERWRITE);
+
 $this_year = sprintf("%03d",curr_year());
 
 //目前學年學期
@@ -46,7 +50,7 @@ switch($do_key) {
 	$seme_year_seme = $_POST[sel_seme_year_seme];
 	if ($seme_year_seme =='')
 		$seme_year_seme = $this_seme_year_seme;
-	$sql_insert = "insert into stud_seme_talk (seme_year_seme,stud_id,sst_date,sst_name,sst_main,sst_memo,teach_id,interview) values ('$sel_seme_year_seme','$_POST[stud_id]','$_POST[sst_date]','$_POST[sst_name]','$_POST[sst_main]','$_POST[sst_memo]','{$_SESSION['session_tea_sn']}','$interview')";
+	$sql_insert = "insert into stud_seme_talk (seme_year_seme,stud_id,sst_date,sst_name,sst_main,sst_memo,teach_id,interview,interview_method) values ('$sel_seme_year_seme','$_POST[stud_id]','$_POST[sst_date]','$_POST[sst_name]','$_POST[sst_main]','$_POST[sst_memo]','{$_SESSION['session_tea_sn']}','$interview','$_POST[interview_method]')";
 	$CONN->Execute($sql_insert) or die($sql_insert);
 	$sst_date ='';
 	$sst_name ='';
@@ -78,6 +82,7 @@ switch($do_key) {
 		$sst_main = $recordSet->fields["sst_main"];		
 		$sst_memo = $recordSet->fields["sst_memo"];
 		$interview = $recordSet->fields["interview"];
+		$interview_method = $recordSet->fields["interview_method"];
 		$teach_id = $recordSet->fields["teach_id"];
 	}
 
@@ -85,7 +90,7 @@ switch($do_key) {
 	
 	//確定修改
 	case $editBtn:
-	$sql_update = "update stud_seme_talk set seme_year_seme='$_POST[seme_year_seme]',sst_date='$_POST[sst_date]',sst_name='$_POST[sst_name]',sst_main='$_POST[sst_main]',sst_memo='$_POST[sst_memo]',interview='$interview' where sst_id='$_POST[sst_id]'";
+	$sql_update = "update stud_seme_talk set seme_year_seme='$_POST[seme_year_seme]',sst_date='$_POST[sst_date]',sst_name='$_POST[sst_name]',sst_main='$_POST[sst_main]',sst_memo='$_POST[sst_memo]',interview='$interview',interview_method='$_POST[interview_method]' where sst_id='$_POST[sst_id]'";
 	$CONN->Execute($sql_update) or die($sql_update);
 	break;
 	
@@ -268,6 +273,21 @@ function setfocus(element) {
 </tr>
 
 
+<tr id="nor_form6">
+    <td align="right" CLASS="title_sbody1">訪談方式</td>
+	<?php 
+		$im="<select name='interview_method'><option value=''></option>";
+		$methods=explode(',',$interview_methods);
+
+		foreach($methods as $key=>$value) {
+			$selected=($value == $interview_method)?'selected':'';
+			$im.="<option value='$value' $selected>$value</option>";		
+		}
+		$im.="</select><font size=1 color='red'> (選項由班級學籍管理模組變數中設定!)</font>";
+
+	?>
+    <td CLASS="gendata"><?php echo $im ?></td>
+</tr>
 
 <tr>
     <td align="right" CLASS="title_sbody1">連絡對象</td>
@@ -311,7 +331,7 @@ function setfocus(element) {
 
 </FORM>
 <table border="1" cellspacing="0" cellpadding="2" bordercolorlight="#333354" bordercolordark="#FFFFFF"  width="100%" class=main_body >
-<tr><td>學期</td><td>記錄日期</td><td>連絡對象</td><td>連絡事項</td><td>訪談者</td><td>建檔者</td><td>動作</td></tr>
+<tr><td>學期</td><td>記錄日期</td><td>連絡對象</td><td>連絡事項</td><td>訪談者</td><td>訪談方式</td><td>建檔者</td><td>動作</td></tr>
 <?php
 $sql_select = "select a.*,b.name from stud_seme_talk a left join teacher_base b on a.teach_id=b.teacher_sn where  a.seme_year_seme like '$sel_this_year%' and a.stud_id='$stud_id' order by a.seme_year_seme desc ,a.sst_id desc ";
 
@@ -327,6 +347,7 @@ while (!$recordSet->EOF) {
 	$sst_main = $recordSet->fields["sst_main"];
 	$sst_memo = $recordSet->fields["sst_memo"];
 	$interview = $recordSet->fields["interview"];
+	$interview_method = $recordSet->fields["interview_method"];
 	$name = $recordSet->fields["name"];
     	$seme_str = substr($seme_year_seme,0,3)."學年第".substr($seme_year_seme,-1)."學期";
 	$oth_link = "c_curr_class=$c_curr_class&c_curr_seme=$c_curr_seme&sel_this_year=".substr($seme_year_seme,0,-1);
@@ -335,7 +356,7 @@ while (!$recordSet->EOF) {
 	else
 		echo "<tr class=\"nom_2\">";
 		
-	echo "<td>$seme_str</td><td>$sst_date</td><td>$sst_name</td><td>$sst_main</td><td>$interview</td><td>$name</td><td >&nbsp;";
+	echo "<td>$seme_str</td><td>$sst_date</td><td>$sst_name</td><td>$sst_main</td><td>$interview</td><td>$interview_method</td><td>$name</td><td >&nbsp;";
 	if($sel_this_year == $this_year || $old_year_is_edit) {
 		echo " <a href=\"{$_SERVER['SCRIPT_NAME']}?do_key=edit&sst_id=$sst_id&$oth_link\"";
 		$ol->pover($sst_name,$sst_memo);

@@ -80,15 +80,25 @@ if ($result) {
 	$query = "select * from jboard_kind order by bk_order,bk_id ";
 	$result= $CONN->Execute($query) or die ($query);
 	while( $row = $result->fetchRow()){
-		$P=($row['position']>0)?"|".str_repeat("--",$row['position']):"";
-		
+		$P=($row['position']>0)?"".str_repeat("|--",$row['position']):"";
+		/*
 		if ($row["bk_id"] == $bk_id  ){
 			echo sprintf(" <option style='color:%s' value=\"%s\" selected>[%05d] %s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row['bk_order'],$row["board_name"]);
 			$board_name = $row["board_name"];
 		}
 		else
 			echo sprintf(" <option style='color:%s' value=\"%s\">[%05d] %s%s%s</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row['bk_order'],$row["board_name"]);
-	}
+  	}
+	 */
+		if ($row["bk_id"] == $bk_id  ){
+			echo sprintf(" <option style='color:%s' value=\"%s\" selected>[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+			$board_name = $row["board_name"];
+		}
+		else
+			echo sprintf(" <option style='color:%s' value=\"%s\">[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+	  }
+
+	
 	echo "</select>";
 
 	?>

@@ -1,5 +1,5 @@
 <?php
-//$Id: chc_check.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: chc_check.php 8132 2014-09-23 07:59:30Z smallduh $
 include_once "../../include/config.php";
 require_once "./module-cfg.php";
 
@@ -112,7 +112,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 .bur2{border-style: groove;border-width:1px: groove;background-color:#FFCCCC;font-size:12px;Padding-left:0 px;Padding-right:0 px;}
 .f8{font-size:9pt;color:blue;}
 .f9{font-size:9 pt;}
-</style><?
+</style><?php
 }
 
 

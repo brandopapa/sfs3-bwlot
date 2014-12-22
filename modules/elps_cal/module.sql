@@ -11,7 +11,7 @@ user varchar(20) NOT NULL default '',
 day datetime NOT NULL default '0000-00-00 00:00:00',
 event text NOT NULL,
 PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `cal_elps_set`
@@ -24,6 +24,6 @@ weeks tinyint(3) NOT NULL default '0',
 unit varchar(255) NOT NULL default '',
 PRIMARY KEY (syear),
 UNIQUE KEY syear (syear)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 

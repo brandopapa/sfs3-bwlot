@@ -284,4 +284,9 @@ class chc_seme{
 		return $Y.$S;
 	}
 
+function tol20($max,$a) {
+	if ($a>$max) return $max;
+	return $a;
+}
+
 }

@@ -5,7 +5,7 @@ include "config.php";
 sfs_check();
 
 //秀出網頁
-head("學生身分與低收失業");
+head("基本資料 ");
 print_menu($menu_p);
 
 //學期別
@@ -78,18 +78,25 @@ if($stud_class)
 		$birth_month=$student_data[$student_sn]['birth_month'];
 		$birth_day=$student_data[$student_sn]['birth_day'];
 		
-		//學生聯絡資料處理		
-		$stud_tel_2=$student_data[$student_sn]['stud_tel_2']?$student_data[$student_sn]['stud_tel_2']:$student_data[$student_sn]['stud_tel_1'];
-		$addr_zip=$student_data[$student_sn]['addr_zip'];
-		$stud_addr_2=$student_data[$student_sn]['stud_addr_2']?$student_data[$student_sn]['stud_addr_2']:$student_data[$student_sn]['stud_addr_1'];
-		
 		$guardian_name=$domicile_data[$student_sn]['guardian_name'];
-		$guardian_phone=$domicile_data[$student_sn]['guardian_phone'];
-		$guardian_hand_phone=$domicile_data[$student_sn]['guardian_hand_phone']?$domicile_data[$student_sn]['guardian_hand_phone']:$student_data[$student_sn]['stud_tel_3'];
 		
-		$guardian_phone=$guardian_phone?$guardian_phone:$stud_tel_2;
-		$guardian_address=$domicile_data[$student_sn]['guardian_address']?$domicile_data[$student_sn]['guardian_address']:$stud_addr_2;
+		//學生聯絡資料處理		
+		$addr_zip=$student_data[$student_sn]['addr_zip'];
+		if($data_source) { //依照學校指定輸出聯絡資料
+				$guardian_phone=$student_data[$student_sn][$tel_family];
+				$guardian_hand_phone=$student_data[$student_sn][$tel_mobile];
+				$guardian_address=$student_data[$student_sn][$address_family];
+		} else {        //未設定則依照原先的判斷機制
+				$stud_tel_2=$student_data[$student_sn]['stud_tel_2']?$student_data[$student_sn]['stud_tel_2']:$student_data[$student_sn]['stud_tel_1'];
+				$stud_addr_2=$student_data[$student_sn]['stud_addr_2']?$student_data[$student_sn]['stud_addr_2']:$student_data[$student_sn]['stud_addr_1'];
 
+				
+				$guardian_phone=$domicile_data[$student_sn]['guardian_phone'];
+				$guardian_hand_phone=$domicile_data[$student_sn]['guardian_hand_phone']?$domicile_data[$student_sn]['guardian_hand_phone']:$student_data[$student_sn]['stud_tel_3'];
+
+				 $guardian_phone=$guardian_phone?$guardian_phone:$stud_tel_2;
+				$guardian_address=$domicile_data[$student_sn]['guardian_address']?$domicile_data[$student_sn]['guardian_address']:$stud_addr_2;
+		}
 		
 		$my_pic=$pic_checked?get_pic($stud_study_year,$stud_id):'';
 		$seme_num=sprintf('%02d',$seme_num);

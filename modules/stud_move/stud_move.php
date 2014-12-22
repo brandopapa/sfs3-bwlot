@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_move.php 7466 2013-09-04 12:42:07Z infodaes $
+// $Id: stud_move.php 8159 2014-10-02 13:07:56Z hsiao $
 
 // 載入設定檔
 include "stud_move_config.php";
@@ -121,6 +121,10 @@ switch($key) {
 				
 				//去除確認顯示
 				$confirm_in="";
+                                $isTaichung=substr($SCHOOL_BASE['sch_id'],0,2);
+                                if ($isTaichung=='06' || $isTaichung=='19'){
+                                        echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                                }
 			}
 		}
 	break;
@@ -165,6 +169,9 @@ switch($key) {
 		$stud_birthday="";
 		$stud_class="";
 		$stud_sex="";
+                if ($isTaichung=='06' || $isTaichung=='19'){
+                    echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                }
 	break;
 
 	case "edit" :
@@ -201,6 +208,9 @@ switch($key) {
 		}
 		$postInBtn=$sure;
 		$edit='1';
+                if ($isTaichung=='06' || $isTaichung=='19'){
+                    echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                }
 	break;
 
 	case "delete" :
@@ -215,6 +225,9 @@ switch($key) {
 		$CONN->Execute($query) or die($query);
 		$query ="delete from stud_seme where student_sn ='$student_sn'";
 		$CONN->Execute($query) or die($query);
+                if ($isTaichung=='06' || $isTaichung=='19'){
+                    echo "<script>alert('學生轉入資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/');window.open('http://www.google.com');</script>";
+                }
 	break;
 	
 	case $clean :
@@ -269,6 +282,18 @@ function checkok()
 	{	alert('性別未選擇');
 		OK=false;
 	}
+	if(document.myform.city.value=='')
+        {       alert('原就讀縣市未輸入');
+                OK=false;
+        }
+	if(document.myform.school.value=='')
+        {       alert('原就讀學校未輸入');
+                OK=false;
+        }
+	if(document.myform.school_id.value=='')
+        {       alert('原就讀學校教育部代碼未輸入');
+                OK=false;
+        }
 	return OK
 }
 
@@ -277,6 +302,15 @@ function setfocus(element) {
 	element.focus();
  return;
 }
+
+
+function openModal(studentnewsn,stud_name,stud_id,stud_birthday,stud_in_class,stud_out_school_info)
+{
+  var para = studentnewsn + ';' + stud_name.trim() + ';' + stud_id + ';' + stud_birthday+ ';' + stud_in_class.trim() + ';' + stud_out_school_info.trim() + ';' + '<?php echo  $SCHOOL_BASE["sch_cname_ss"].'('.$SCHOOL_BASE['sch_id'].')'; ?>';
+  para = encodeURIComponent(para);
+  var targeturi = encodeURI("<?php echo $SFS_PATH_HTML;?>modules/stud_move/session_in.php?para="+para);
+  window.open(targeturi);}
+
 //-->
 </script>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -393,16 +427,21 @@ function setfocus(element) {
 	</td>
 </tr>
 <tr>
+        <td align="right" CLASS="title_sbody1">請選擇原就讀學校</td>
+        <td><SELECT  NAME="selectcity" onChange="SelectCity();" ><Option value="">請選擇縣市</option></SELECT>&nbsp;<SELECT  NAME="selectdistrict" onChange="SelectDistrict();" ><Option value="">請選擇區域</option></SELECT>&nbsp;<SELECT NAME="selectschool" onchange="disp_text();"><Option value="">請選擇學校</option></SELECT></td>
+</tr>
+
+<tr>
 	<td align="right" CLASS="title_sbody1">原就讀縣市</td>
-	<td><input type="text" size="20" maxlength="20" name="city" value="<?php echo $city ?>"></td>
+	<td><input type="text" size="20" maxlength="20" name="city" value="<?php echo $city ?>" readonly></td>
 </tr>
 <tr>
 	<td align="right" CLASS="title_sbody1">原就讀學校</td>
-	<td><input type="text" size="20" maxlength="20" name="school" value="<?php echo $school ?>"></td>
+	<td><input type="text" size="20" maxlength="20" name="school" value="<?php echo $school ?>" readonly></td>
 </tr>
   <tr> 
           <td align="right" CLASS="title_sbody1">原就讀學校教育部代碼</td>   
-          <td><input type="text" size="10" maxlength="6" name="school_id" value="<?php echo $school_id ?>"></td>   
+          <td><input type="text" size="10" maxlength="6" name="school_id" value="<?php echo $school_id ?>" readonly></td>   
   </tr> 
 
 <tr>
@@ -452,22 +491,23 @@ function setfocus(element) {
 		$result = $CONN->Execute($query) or die ($query);
 		if (!$result->EOF) {
 			echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"2\" bordercolorlight=\"#333354\" bordercolordark=\"#FFFFFF\" width=\"100%\" class=main_body >";
-			echo "<tr><td colspan=10 class=title_top1 align=center >本學期轉入學生</td></tr>";
+			echo "<tr><td colspan=11 class=title_top1 align=center >本學期轉入學生</td></tr>";
 			echo "
 			<TR class=title_mbody >
-				<TD>轉入日期</TD>
-				<TD>學號</TD>
-				<TD>姓名</TD>
-				<TD>身分證字號</TD>
-				<TD>出生年月日</TD>
-				<TD>轉入班級</TD>
-				<TD>核准單位</TD>
-				<TD>字號</TD>
-				<TD>原就讀縣市</TD>
-				<TD rowspan=2>編修</TD>
+				<TD  align='center'>轉入日期</TD>
+				<TD align='center'>學號</TD>
+				<TD align='center'>姓名</TD>
+				<TD align='center'>身分證字號</TD>
+				<TD align='center'>出生年月日</TD>
+				<TD  align='center'>轉入班級</TD>
+				<TD align='center'>核准單位</TD>
+				<TD align='center'>字號</TD>
+				<TD rowspan=2 align='center'>原就讀縣市</TD>
+				<TD rowspan=2 align='center'>編修</TD>
+                                <TD rowspan=2 align='center'>XML自動匯入</TD>
 			</TR>
 			<TR class=title_mbody >
-				<TD colspan=7>轉入原因</TD><TD>原就讀學校</TD>
+				<TD colspan=7 align='center'>轉入原因</TD><TD align='center'>原就讀學校</TD>
 			</TR>";
 		}
 		while(!$result->EOF) {
@@ -504,12 +544,13 @@ function setfocus(element) {
 					<TD>$stud_clss</TD>					
 					<TD>$move_c_unit</TD>
 					<TD>".DtoCh($move_c_date)." ".$move_c_word."字第".$move_c_num."號</TD>
-					<TD>$city</TD>
+					<TD rowspan=2 align='center'>$city</TD>
 					<TD rowspan=2>
 					<a href=\"{$_SERVER['SCRIPT_NAME']}?key=edit&move_id=$move_id&stud_id=$stud_id&curr_seme=$seme_year_seme\">編輯</a> 
 					<a href=\"{$_SERVER['SCRIPT_NAME']}?key=delete&move_id=$move_id&stud_id=$stud_id&curr_seme=$seme_year_seme\" onClick=\"return confirm('確定刪除 $stud_name ?');\">刪除</a>
 					<a href=\"$edit_data\" target='_BLANK'>資料補登</a>
 					</TD>
+					<TD rowspan=2 align='center'><input type='button' value='自動匯入' onclick='openModal(\"$stud_id\",\"$stud_name\",\"$stud_person_id\",\"$stud_birthday\",\"$stud_clss".(($stud_clss=="")?"":"")."\",\"$school_id-$city-$school\");'></TD>
 				</TR>";
 			echo ($i++ %4 >1)?"<TR class=nom_1>":"<TR class=nom_2>";
 			echo "<TD colspan=7>".$result->fields["reason"]."　</TD><TD>$school_id $school</TD></TR>";
@@ -525,5 +566,14 @@ function setfocus(element) {
 
 </table>
 </form>
-
+<?php
+if ($IS_JHORES){
+	echo "<script type='text/javascript' src='jhslist.js'></script>";
+}else{
+	echo "<script type='text/javascript' src='pslist.js'></script>";
+}
+?>
+<script language='javascript'>
+$(function(){fillCity();});
+</script>
 <?php foot(); ?>

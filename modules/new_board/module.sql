@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8150 2014-09-29 03:41:14Z smallduh $
 #
 # 資料表格式： `new_board`
 #
@@ -14,4 +14,4 @@ CREATE TABLE new_board (
   image_url varchar(255) default NULL,
   PRIMARY KEY  (serial),
   KEY serial (serial)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

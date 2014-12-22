@@ -1,25 +1,28 @@
 <?php
-// $Id: newslist.php 7820 2013-12-20 02:27:30Z hami $
+// $Id: newslist.php 8079 2014-06-24 07:51:09Z smallduh $
 
 ob_start();
 //session_start();
 include "config.php";
 
 //這支程式是新聞瀏覽的程式, 不須做 sys_check的動作
-if ($m_arr["IS_STANDALONE"]=='0'):?>
-	//秀出網頁布景標頭
-<?php 	head("新聞發佈"); ?>
-<?php else :?>
+if ($m_arr["IS_STANDALONE"]=='0') {
+ //秀出網頁布景標頭
+ head("新聞發佈"); 
+
+?>
+<?php } else { ?>
 <html lang="zh-TW">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=Big5" >
 </head>
 <body>
-<?php endif;?>
+<?php }?>
 <?php 
 // $title,$postdate,$schname,$poster,$news,$imagename
 
 function tblistnews($news_sno,$title,$user_name,$news,$postdate,$newslink,$imagename){
+
 	// $newscontent 的長度切為 244(122個中文字)
 	$news=substr($news,0,244);
 	$news=substr_replace($news,"．．．．",-8);
@@ -51,8 +54,15 @@ function setBGOff(TheColor,thetable) {
 </script>
 
 <?php
+
+ $search_key=$_POST['search_key'];
+
+
 //先找出共幾筆資料, 分成幾頁
 $sql_totalnews = "SELECT * FROM newsmig";
+if ($search_key!='') {
+$sql_totalnews .= " where title like '%".$search_key."%' or news like '%".$search_key."%' ";
+}
 $rs1 = $CONN->Execute($sql_totalnews);
 $numbers = $rs1->RecordCount();
 
@@ -69,21 +79,25 @@ if ($numbers%$nums_perpage==0){
 	$pages = floor($numbers/$nums_perpage)+1;
 }
 
+
 //第一次進入, 設pagenow的SESSION變數, 起始值=1
-if (!session_is_registered("nm_pagenow")) {
-	session_register("nm_pagenow");
-	$_SESSION["nm_pagenow"]= 1;
-}
+//if (!session_is_registered("nm_pagenow")) {
+//	session_register("nm_pagenow");
+	$_SESSION["nm_pagenow"]=($_SESSION["nm_pagenow"]<1)?1:$_SESSION["nm_pagenow"];
+//}
 
 
 //若使用者有點上一頁, 下一頁 --> pagenow 可加加減減
-if ($_GET["cp"]== "goback" and $_SESSION["nm_pagenow"]!= 1){
+if ($_POST["cp"]== "goback" and $_SESSION["nm_pagenow"]!= 1){
 	$_SESSION["nm_pagenow"]=$_SESSION["nm_pagenow"]-1;
-}elseif($_GET["cp"]=="gonext" and $_SESSION["nm_pagenow"]!= $pages){
+}elseif($_POST["cp"]=="gonext" and $_SESSION["nm_pagenow"]<=$pages){
 	$_SESSION["nm_pagenow"]=$_SESSION["nm_pagenow"]+1;
-}elseif($_GET["cp"]==""){
+}elseif($_POST["cp"]==""){
 	$_SESSION["nm_pagenow"]=1;
 }
+
+//若目前頁數大於總頁數, 把目前頁數設為最大值 2014.06.24
+if ($_SESSION["nm_pagenow"]>$pages) { $_SESSION["nm_pagenow"]=$pages; }
 
 /****
   `news_sno` int(10) unsigned NOT NULL auto_increment,
@@ -94,8 +108,11 @@ if ($_GET["cp"]== "goback" and $_SESSION["nm_pagenow"]!= 1){
   `newslink` varchar(70) default NULL
 ******/
 
-$sql_listnews = "SELECT news_sno,title,posterid,news,postdate,newslink \n\r";
-$sql_listnews .= "FROM newsmig ORDER BY postdate DESC \n\r";
+$sql_listnews = "SELECT news_sno,title,posterid,news,postdate,newslink FROM newsmig ";
+if ($search_key!='') {
+$sql_listnews .= "where title like '%".$search_key."%' or news like '%".$search_key."%' ";
+}
+$sql_listnews .= "ORDER BY postdate DESC \n\r";
 
 //本頁最後一筆
 $rdend = ($_SESSION["nm_pagenow"]*$nums_perpage > $numbers)?($numbers % $nums_perpage):$nums_perpage;
@@ -105,23 +122,30 @@ $rdstart = ($_SESSION["nm_pagenow"]-1) * $nums_perpage;
 // SQL語法加上 LIMIT 子句, 限定本頁該出現的資料
 $sql_listnews .= " LIMIT $rdstart , $rdend\n\r";
 $rs = $CONN->Execute($sql_listnews);
-
+?>
+<form method="post" name="myform" action="<?php echo $_SERVER['php_self'];?>">
+	<input type="hidden" name="cp" value="">
+<?php
 echo "<table align='center' width='696' bgcolor='#C3FF74'>";
 echo "<tr>\n\r";
-echo "	<td>共 ".$numbers." 筆新聞　分成 ".$pages." 頁</td>\n\r";
+echo "	<td>共 ".$numbers." 筆新聞　分成 ".$pages." 頁 <input type='text' name='search_key' value='".$search_key."' size='10'><input type='submit' value='篩選'> </td>\n\r";
 
 //若 pagenow = 1 , 停在第一頁, 就如無法再 上一頁 了
 if ($_SESSION["nm_pagenow"]==1) {
 	echo "	<td>上一頁</td>\n\r";
 }else{
-	echo "	<td><a href='newslist.php?cp=goback'>上一頁</a></td>\n\r";
+	?>
+ 		<td><a href="#" onclick="document.myform.cp.value='goback';document.myform.submit()" title="第<?php echo $_SESSION["nm_pagenow"]-1; ?>頁">上一頁</a></td>
+  <?php
 }
 
 //若 pagenow = pages , 停在最後一頁, 就如無法再 下一頁 了 
 if ($_SESSION["nm_pagenow"]==$pages) {
 	echo "	<td>下一頁</td>\n\r";
 }else{
-	echo "	<td><a href='newslist.php?cp=gonext'>下一頁</a></td>\n\r";
+	?>
+		<td><a href="#" onclick="document.myform.cp.value='gonext';document.myform.submit()" title="第<?php echo $_SESSION["nm_pagenow"]+1; ?>頁">下一頁</a></td>
+  <?php
 }
 echo "	<td><a href='postnews.php?act=add'>新增新聞</a></td>\n\r";
 echo "</tr>";
@@ -167,6 +191,7 @@ if ($rs){
 
 ?>
 </table>
+</form>
 
 <?php
 if ($m_arr["IS_STANDALONE"]=='0'){

@@ -1,4 +1,4 @@
-# // $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# // $Id: module.sql 8152 2014-09-30 01:15:55Z smallduh $
 CREATE TABLE sign_data (
   id bigint(20) NOT NULL auto_increment,
   kind bigint(20) NOT NULL default '0',
@@ -11,7 +11,7 @@ CREATE TABLE sign_data (
   class_id varchar(10) default NULL,
   PRIMARY KEY  (id),
   UNIQUE KEY myindex (class_id,kind,item,order_pos)
-) TYPE=MyISAM COMMENT='報名人資料表';
+) ENGINE=MyISAM COMMENT='報名人資料表';
 
 
 #
@@ -32,7 +32,7 @@ CREATE TABLE sign_kind (
   helper varchar(80) NOT NULL default '',
   is_hide tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (id)
-) TYPE=MyISAM COMMENT='報名單設計';
+) ENGINE=MyISAM COMMENT='報名單設計';
 
 
     

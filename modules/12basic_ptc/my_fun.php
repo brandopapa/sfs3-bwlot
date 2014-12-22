@@ -213,9 +213,9 @@ function get_student_balance($academic_year)
 
 function get_student_diversification($academic_year)
 {
-	global $CONN;
+	global $CONN,$diversification_score_max;
 	//取得前已開列學生資料
-	$sql_select="select student_sn,score_service,score_fault,score_competetion,score_fitness,diversification_memo from 12basic_ptc where academic_year=$academic_year";
+	$sql_select="select student_sn,score_service,score_fault,score_competetion,score_fitness,score_fitness_assign,diversification_memo from 12basic_ptc where academic_year=$academic_year";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
 	$diversification=array();
 	while(!$recordSet->EOF)
@@ -225,7 +225,10 @@ function get_student_diversification($academic_year)
 		$diversification[$student_sn]['score_fault']=$recordSet->fields['score_fault'];
 		$diversification[$student_sn]['score_competetion']=$recordSet->fields['score_competetion'];
 		$diversification[$student_sn]['score_fitness']=$recordSet->fields['score_fitness'];
-		$diversification[$student_sn]['score']=$recordSet->fields['score_service']+$recordSet->fields['score_fault']+$recordSet->fields['score_competetion']+$recordSet->fields['score_fitness'];
+		$diversification[$student_sn]['score_fitness_assign']=$recordSet->fields['score_fitness_assign'];
+		$fitness_score=($recordSet->fields['score_fitness_assign'] > $recordSet->fields['score_fitness'])?$recordSet->fields['score_fitness_assign']:$recordSet->fields['score_fitness'];
+		$diversification[$student_sn]['score']=$recordSet->fields['score_service']+$recordSet->fields['score_fault']+$recordSet->fields['score_competetion']+$fitness_score;
+			$diversification[$student_sn]['score']=min($diversification[$student_sn]['score'],$diversification_score_max);
 		$diversification[$student_sn]['diversification_memo']=$recordSet->fields['diversification_memo'];
 		$recordSet->MoveNext();
 	}
@@ -235,6 +238,7 @@ function get_student_diversification($academic_year)
 
 
 //體適能紀錄
+/*  103年度的
 function count_student_score_fitness($sn_array)
 {
         global $CONN,$fitness_score_one,$fitness_score_one_max,$fitness_addon,$fitness_semester,$fitness_keyword,$work_year,$fitness_score_disability;
@@ -274,7 +278,39 @@ function count_student_score_fitness($sn_array)
         }
         return $score_fitness;
 }
+*/
+function count_student_score_fitness($sn_array)
+{
+        global $CONN,$fitness_score_one,$fitness_score_one_max,$fitness_addon,$fitness_date_limit,$fitness_keyword,$work_year,$fitness_score_disability,$fitness_score_test_all;
+        $score_fitness=array();
+        foreach($sn_array as $student_sn){
+				$sql_select="SELECT prec1,prec2,prec3,prec4,c_curr_seme FROM fitness_data WHERE student_sn=$student_sn AND up_date<='$fitness_date_limit' AND organization like '%$fitness_keyword%' ORDER BY c_curr_seme";  //AND c_curr_seme IN ($fitness_semester)  改為以日期限定
+                $recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗，有可能是未安裝體適能(fitness)模組！<br>$sql_select",256);
+                while(!$recordSet->EOF) {
+                        $passed=0;  //通過項目次數
+						$tested=0;	//完成檢測項目數
+                        for($i=0;$i<=3;$i++) {
+                                $my_pre=$recordSet->fields[$i];
+								if($my_pre) $tested++;
+                                if($my_pre>=25) $passed++;  //通過門檻標準  程式現設為25%以上
+                        }
+                        //判定級分
+                        $myscore=$fitness_score_one*$passed;
+                        if($tested>=4)	$myscore+=$fitness_score_test_all;
 
+                        $score_fitness[$student_sn]=max($myscore,$score_fitness[$student_sn]);
+                        $recordSet->MoveNext();
+                }
+				
+				//身心障礙給8分($fitness_score_disability) 如果體適能記錄高於8分 取其高值
+				$sql="SELECT disability_id FROM 12basic_ptc WHERE academic_year=$work_year AND student_sn=$student_sn";
+				$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
+				if($res->fields[0]) {
+					$score_fitness[$student_sn]=max($fitness_score_disability,$score_fitness[$student_sn]);
+				}
+        }
+        return $score_fitness;
+}
 
 //學生歷年學期競賽紀錄
 function count_student_score_competetion($sn_array)
@@ -376,13 +412,13 @@ function get_graduate_data($academic_year)
 
 function count_student_score_fault($sn_array)
 {
-	global $CONN,$fault_none,$fault_warning,$fault_peccadillo;
+	global $CONN,$fault_none,$fault_warning,$fault_peccadillo,$reward_date_limit;
 	$fault=array();
 	$fault_semester_list=implode(',',$fault_semester);	
 	foreach($sn_array as $student_sn){
 		$fault_count=0;
-		//抓取學生未銷過的獎懲紀錄
-		$sql="SELECT reward_year_seme,reward_kind FROM reward WHERE student_sn='$student_sn' AND reward_kind<0 AND reward_cancel_date='0000-00-00' ORDER BY reward_year_seme";
+		//抓取學生未銷過的獎懲紀錄   ////2014-11-23校對新增日期限定
+		$sql="SELECT reward_year_seme,reward_kind FROM reward WHERE student_sn='$student_sn' AND reward_date<='$reward_date_limit' AND reward_kind<0 AND reward_cancel_date='0000-00-00' ORDER BY reward_year_seme";
 		$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 		while(!$res->EOF)
 		{
@@ -455,6 +491,7 @@ function count_student_score_service($sn_array)  //屏東區使用
 					if($key<>'data'){
 						foreach($value as $leader_name){
 							if($leader_name and array_search($leader_name,$leader_allowed))	$service[$sn]['leader']+=$class_leader;
+							if($leader_name=='特殊服務表現') $service[$sn]['leader']--;  //104年度特殊服務表現積分為2分  幹部為3分  相差1分  須扣掉
 						}
 					}
 				}
@@ -599,6 +636,10 @@ function get_final_data($work_year)
 		{
 				$final_data[$student_sn][$key]=$rs->fields[$key];
 		}
+		
+		//體適能計算值與指定值特別判斷
+		if($final_data[$student_sn]['score_fitness_assign']>$final_data[$student_sn]['score_fitness']) $final_data[$student_sn]['score_fitness']=$final_data[$student_sn]['score_fitness_assign'];
+		
 		$rs->MoveNext();
 	}
 	return $final_data;

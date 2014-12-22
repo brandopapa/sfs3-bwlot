@@ -17,7 +17,7 @@ CREATE TABLE `hd_dir` (
   `level` enum('a','b','c') NOT NULL default 'a',
   `enable` enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (`dir_sn`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 
 #
@@ -33,7 +33,7 @@ CREATE TABLE `hd_file` (
   `file_level` enum('a','b','c') NOT NULL default 'a',
   `enable` enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (`file_sn`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 
 #
@@ -46,7 +46,7 @@ CREATE TABLE `hd_quota` (
   `many` int(11) NOT NULL default '0',
   `enable` enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (`teacher_sn`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 

@@ -12,9 +12,11 @@
     <th>服務學習</th>
     <th>獎勵紀錄</th>
     <th>生活教育</th>
+    <th>品德服務</th>
     <th>均衡學習</th>
     <th>競賽表現</th>
     <th>體適能</th>
+    <th>績優表現</th>
   </tr>
   {{foreach key=key1 item=data from=$data_array }} 
   <tr>
@@ -28,9 +30,11 @@
     <td>{{$data.score_service}}</td>
     <td>{{$data.score_reward}}</td>
     <td>{{$data.score_fault}}</td>
+    <td>{{$data.score_morality}}</td>
     <td>{{$data.score_balance}}</td>
     <td>{{$data.score_race}}</td>
     <td>{{$data.score_physical}}</td>
+    <td>{{$data.score_display}}</td>
   </tr>
   {{/foreach}} 
 </table>

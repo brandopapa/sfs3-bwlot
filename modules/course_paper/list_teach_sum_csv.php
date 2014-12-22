@@ -64,9 +64,8 @@ $max_day=$res->fields['day'];
 $max_sector=$res->fields['sector'];
 
 //抓取選定學期的課表資料
-$sql="select course_id,teacher_sn,day,sector,ss_id,room,class_id,c_kind
-	      from score_course where teacher_sn=teacher_sn
-          and year='$sel_year' and semester='$sel_seme' order by teacher_sn,day,sector";
+$sql="select course_id,teacher_sn,cooperate_sn,day,sector,ss_id,room,class_id,c_kind
+	  from score_course where year='$sel_year' and semester='$sel_seme' order by teacher_sn,day,sector";
 $res=$CONN->Execute($sql) or trigger_error("錯誤訊息： $sql", E_USER_ERROR);
 $course_data=array();	  
 while(!$res->EOF) {
@@ -79,6 +78,18 @@ while(!$res->EOF) {
 	$course_data[$teacher_sn][$day][$sector]['c_kind']=$res->fields['c_kind']?'★':'';
 	$course_data[$teacher_sn][$day][$sector]['ss_id']=$course_data[$teacher_sn][$day][$sector]['c_kind'].$course_data[$teacher_sn][$day][$sector]['ss_id'];
 	$course_data[$teacher_sn][$day][$sector]['class_name']=$class_name[sprintf('%d%02d',$class_data[0],$class_data[1])];
+	
+	
+	$cooperate_sn=$res->fields['cooperate_sn'];
+	if($cooperate_sn){
+		$course_data[$cooperate_sn][$day][$sector]['ss_id']=$subject_array[$res->fields['ss_id']];
+		$course_data[$cooperate_sn][$day][$sector]['room']=$res->fields['room'];
+		$course_data[$cooperate_sn][$day][$sector]['c_kind']=$res->fields['c_kind']?'★':'';
+		$course_data[$cooperate_sn][$day][$sector]['ss_id']='*'.$course_data[$teacher_sn][$day][$sector]['c_kind'].$course_data[$teacher_sn][$day][$sector]['ss_id'];
+		$course_data[$cooperate_sn][$day][$sector]['class_name']=$class_name[sprintf('%d%02d',$class_data[0],$class_data[1])];
+	}
+	
+	
 	$res->MoveNext();
 }
 

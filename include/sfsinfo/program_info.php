@@ -1,6 +1,6 @@
 <?php
 
-// $Id: program_info.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: program_info.php 8131 2014-09-23 07:58:12Z smallduh $
 
 include "sfsinfo_config.php";
 
@@ -68,7 +68,7 @@ $curr_dir = $root_dir.$dir;
 	</tr>
 </table>
 
-<?
+<?php
 foot();
 
 ?>

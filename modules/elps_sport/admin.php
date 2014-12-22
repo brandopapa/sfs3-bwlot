@@ -1,4 +1,4 @@
-<?
+<?php
 include "config.php";
  include "$SFS_PATH/pnadodb/tohtml.inc.php";
 sfs_check();
@@ -62,7 +62,7 @@ echo "<img src='images/dia_bluve.gif'><A HREF='$_SERVER[PHP_SELF]?tb=add'>新增選
 <td width=10%>編號</td><td width=30%>分類/變數名稱</td>
 <td width=20%>索引值</td><td width=40%>資料值</td>
 </tr>
-<?
+<?php
 if($_GET[tb]!='') {
 	echo "<tr bgcolor=white align=center><td colspan=4 align=right>
 <INPUT TYPE='reset' value='重新選擇' class=bur>&nbsp;
@@ -123,6 +123,6 @@ echo "
 </tr>
 </table>
 <BR><BR><BR>
-<?
+<?php
 foot();
 ?>

@@ -75,7 +75,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 .bur2{border-style: groove;border-width:1px: groove;background-color:#FFCCCC;font-size:12px;Padding-left:0 px;Padding-right:0 px;}
 .f8{font-size:9pt;color:blue;}
 .f9{font-size:9 pt;}
-</style><?
+</style><?php
 }
 
 ##################  學期下拉式選單函式  ##########################

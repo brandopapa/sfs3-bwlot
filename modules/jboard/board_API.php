@@ -211,10 +211,20 @@ if ($_GET['act']=='GetImage' and $_GET['b_id']!="" and $_GET['name']!="") {
 if ($_GET['act']=='GetFile' and $_GET['b_id']!="" and $_GET['name']!="") {	
 	$name=$_GET['name'];
 	$b_id=$_GET['b_id'];
-	$query="select org_filename,filetype,content from jboard_files where b_id='".$b_id."' and new_filename='".$name."'";
+	//不再讀取資料 MySQL 資料庫內 content 值 , 2014.09.30起改為檔案方式
+	//$query="select org_filename,filetype,content from jboard_files where b_id='".$b_id."' and new_filename='".$name."'";
+	
+	$query="select org_filename,filetype from jboard_files where b_id='".$b_id."' and new_filename='".$name."'";
 	$res=$CONN->Execute($query) or die($query);
 	$row= $res->fetchRow();	
 	$row['org_filename']=base64_encode(addslashes($row['org_filename']));
+	
+	// 2014.09.30 改為讀檔方式, 把檔案讀入, 編碼, 存入變數 $row['content'] , 不再讀取資料 MySQL 資料庫內 content 值
+	$sFP=fopen($Download_Path.$name,"r");				//載入檔案
+	$sFilesize=filesize($Download_Path.$name); 	//檔案大小       		
+	$sFile=addslashes(fread($sFP,$sFilesize));
+  $row['content']=base64_encode($sFile);
+	
 }
 
 

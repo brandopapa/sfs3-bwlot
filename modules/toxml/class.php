@@ -49,6 +49,7 @@ class sfsxmlfile
         $subject_name_arr=get_subject_name_arr();
 		
 		//輔導資料參照陣列
+		$sse_relation_arr = sfs_text("父母關係");
 		$sse_family_kind_arr=sfs_text("家庭類型");
 		$sse_family_air_arr=sfs_text("家庭氣氛");
 		$sse_teach_arr=sfs_text("管教方式");
@@ -193,7 +194,9 @@ class sfsxmlfile
 			$current_seme_year_seme=$res->fields[seme_year_seme];
 			$row_data=$res->FetchRow();
 			//$this->out_arr[$current_student_sn][semester_eduh][$current_seme_year_seme]=$row_data;
-
+ 			
+ 			//父母關係
+			$this->out_arr[$current_student_sn][semester_eduh][$current_seme_year_seme][sse_relation]=$sse_relation_arr[$row_data[sse_relation]];
 			//家庭類型
 			$this->out_arr[$current_student_sn][semester_eduh][$current_seme_year_seme][sse_family_kind]=$sse_family_kind_arr[$row_data[sse_family_kind]];
 			//家庭氣氛

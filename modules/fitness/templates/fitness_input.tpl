@@ -1,4 +1,4 @@
-{{* $Id: fitness_input.tpl 7816 2013-12-17 14:10:29Z infodaes $ *}}
+{{* $Id: fitness_input.tpl 8065 2014-06-13 06:18:06Z smallduh $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -10,6 +10,7 @@ function openwindow(t){
 
 <table bgcolor="#DFDFDF" cellspacing="1" cellpadding="4">
 <form action="{{$smarty.server.PHP_SELF}}" method="post">
+<input type="hidden" name="act" value="">
 <tr>
 <td bgcolor="#FFFFFF" valign="top">
 <p>{{$seme_menu}} {{$class_menu}} <font size="3" color="blue">按下項目名稱即可輸入成績</font> {{if $admin}}<input type='submit' value='抓取本學期全校學生身高體重資料' name='copy_wh' onclick='return confirm("學生人數多的話可能會耗時很久，確定要這樣做嗎？")'>{{else}}<input type='submit' value='抓取本學期身高體重資料' name='copy_wh'>{{/if}}</p>

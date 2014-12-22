@@ -16,7 +16,7 @@ CREATE TABLE `blog_home` (
   PRIMARY KEY  (`bh_sn`),
   UNIQUE KEY `owner_id` (`owner_id`),
   KEY `owner_id_2` (`owner_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 #
 # 資料表格式： `blog_content`
@@ -34,7 +34,7 @@ CREATE TABLE `blog_content` (
   `freq` int(11) NOT NULL default '0',
   `enable` enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (`bc_sn`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 #
 # 資料表格式： `blog_kind`
@@ -48,7 +48,7 @@ CREATE TABLE `blog_kind` (
   `enable` enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (`kind_sn`),
   UNIQUE KEY `bh_sn` (`bh_sn`,`kind_name`,`enable`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 #
 # 資料表格式： `blog_feelback`
@@ -62,7 +62,7 @@ CREATE TABLE `blog_feelback` (
   `feel_date` datetime NOT NULL default '0000-00-00 00:00:00',
   `ip` varchar(15) NOT NULL default '',
   PRIMARY KEY  (`bf_sn`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 #
 # 資料表格式： `hd_quota`
@@ -74,7 +74,7 @@ CREATE TABLE `blog_quota` (
   `many` int(11) NOT NULL default '0',
   `enable` enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (`teacher_sn`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 

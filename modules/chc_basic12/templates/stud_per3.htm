@@ -10,7 +10,7 @@
 {{if $TheStu=='找不到學生！'}}學生SN:{{$StuSN}}無資料!!<br />
 {{else}}
 <div align="center" style="font-size: 16; font-weight: bold;width:600 px;">
-103學年度彰化區免試入學超額比序積分檢核表
+104學年度彰化區免試入學超額比序積分檢核表
 <span style='font-size:10pt;font-weight: normal;'>
 (列印日期:{{$smarty.now|date_format:"%Y-%m-%d"}})</span>
 </div>
@@ -27,6 +27,29 @@
 <strong>{{$TheStu.base.stud_name}}</strong>
 學號:<strong>{{$TheStu.base.stud_id}}</strong>
 </td><td>身分證統一編號：<strong>{{$TheStu.base.stud_person_id}}</strong></td></tr>
+<tr><td colspan=2>
+<table cellPadding='0' border=1 cellSpacing='0' style='border-collapse:collapse;font-size:12pt;text-align: left; width: 100%;' >
+<tr align=center>
+<td>項目</td>
+<td>身分別<br><span  style="font-size:10pt;">(最高9分)</span></td>
+<td>品德服務<br><span  style="font-size:10pt;">(最高20分)</span></td>
+<td>績優表現<br><span  style="font-size:10pt;">(最高16分)</span></td>
+<td>總分</td>
+</tr>
+{{assign var="Ta20" value=$TheStu.base.income+$TheStu.base.score_nearby}}
+{{assign var="Tb20" value=$this->tol20(20,$TheStu.base.score_service+$TheStu.base.score_reward+$TheStu.base.score_fault)}}
+{{assign var="Tc20" value=$this->tol20(16,$TheStu.base.score_balance+$TheStu.base.score_race+$TheStu.base.score_physical)}}
+<tr align=center>
+<td>目前得分</td>
+<td>{{$Ta20}}</td>
+<td>{{$Tb20}}</td>
+<td>{{$Tc20}}</td>
+<td>{{$Ta20+$Tb20+$Tc20}}</td>
+</tr>
+</table>
+</td>
+</tr>
+
 <tr>
 <td colspan=2 style='font-size:10pt;'>
 ※ 如有疑問者，請洽相關處室處理。(身分別與均衡學習請洽教務處，其他項目請洽學務處)
@@ -43,13 +66,11 @@
 <td><strong>小計</strong></td>
 <td><strong>積分</strong></td>
 </tr>
-
-
 <tr align=center><td style="vertical-align: center;" rowspan=2><b>身<br>分<br>別</b></td>
 <td colspan=2>經濟弱勢</td><td align=left>
-□非經濟弱勢者　　
-□低收入戶　　
-□中低收入戶
+{{if $TheStu.base.income=='0'}}■{{else}}□{{/if}}非經濟弱勢者　　
+{{if $TheStu.base.income=='1'}}■{{else}}□{{/if}}中低收入戶　　
+{{if $TheStu.base.income=='2'}}■{{else}}□{{/if}}低收入戶
 </td>
 <td>&nbsp;</td>
 <td>{{$TheStu.base.income}}</td>
@@ -64,8 +85,8 @@
 
 
 <tr align=center>
-<td style="vertical-align: center;" rowspan=5><b>品<br>德<br>服<br>務</b></td>
-<td rowspan=2>服務<br>學習</td>
+<td style="vertical-align: center;" rowspan=5><b>品<br>德<br>服<br>務</b><br>︵<br>最<br>高<br>20<br>分<br>︶</td>
+<td rowspan=2>服務<br>學習<br>︵<br>上限<br>8分<br>︶</td>
 <td>幹部</td>
 <td align=left>
 {{assign var="serviceA" value=$this->gLeader($StuSN)}}
@@ -113,7 +134,7 @@
 <tr align=center style="border-bottom-style:solid;border-width:1px;font-size:9pt; ">
 <td>{{$S.year_seme}}</td>
 <td>{{$S.service_date}}</td>
-<td align=left>{{$S.item}} {{$S.memo}}</td>
+<td align=left>{{$S.item}} {{$S.memo}}{{if $S.studmemo!=''}}-{{$S.studmemo}}{{/if}}</td>
 <td>{{$S.minutes/60|string_format:"%.1f"}}</td>
 <td>{{$S.sponsor}}</td>
 <td>□</td>
@@ -128,7 +149,7 @@
 </tr>
 
 <tr align=center>
-<td colspan="2">獎勵紀錄</td>
+<td colspan="2">獎勵紀錄<br>(上限6分)</td>
 <td align=left style="font-size:10pt;">
 {{assign var="Reward_A" value=$this->get_reward($StuSN)}}
 {{if $Reward_A!=''}}
@@ -164,7 +185,7 @@
 </tr>
 
 <tr align=center>
-<td rowspan=2>生活<br>教育</td>
+<td rowspan=2>生活<br>教育<br>︵<br>上限<br>8分<br>︶</td>
 <td>懲處<br>紀錄</td>
 <td align=left style="font-size:10pt;">
 {{assign var="Reward_B" value=$this->get_reward2($StuSN)}}
@@ -189,7 +210,7 @@
 </table>
 {{else}}
  ■完全或銷過後無紀錄<br />
-{{/if}}※100學年入學學生,在103學年度只採計國二及國三上,共三個學期。
+{{/if}}
 &nbsp;
 </td>
 <td>&nbsp;</td>
@@ -218,15 +239,15 @@
 </tr>
 {{/foreach}}
 </table>
-{{else}}■曠課紀錄<br />
-{{/if}}※100學年入學學生,在103學年度只採計國二及國三上,共三個學期。
+{{else}}■無曠課紀錄<br />
+{{/if}}
 
 </td>
 <td>&nbsp;</td>
 </tr>
 
 <tr align=center>
-<td style="vertical-align: center;" rowspan=3><b>績<br>優<br>表<br>現</b></td>
+<td style="vertical-align: center;" rowspan=3><b>績<br>優<br>表<br>現</b><br>︵<br>最<br>高<br>16<br>分<br>︶</td>
 <td colspan="2">均衡學習</td>
 <td align=left style="font-size:10pt;">
 {{assign var="SCO" value=$this->get_balance($StuSN)}}
@@ -255,7 +276,7 @@
 <td>{{$TheStu.base.score_balance}}&nbsp;</td>
 </tr>
 <tr align=center>
-<td>競賽<br>表現</td><td align=left colspan="2">
+<td>競賽<br>表現<br>(上限<br>6分)</td><td align=left colspan="2">
 {{assign var="Race" value=$this->get_race($StuSN)}}
 
 {{if $Race!=''}}
@@ -296,7 +317,7 @@
 <td>{{$TheStu.base.score_race}}&nbsp;</td>
 </tr>
 <tr align=center>
-<td colspan="2">體適能<br />(最優一次)</td>
+<td colspan="2">體適能<br />(最優一次<br>上限6分)</td>
 <td align=left style="font-size:11pt;">
 請至教育部健康體育網路護照，自行列印成績核章後，<br>連同本表交至學務處登錄。<br>
 http://www.fitness.org.tw/
@@ -304,10 +325,6 @@ http://www.fitness.org.tw/
 &nbsp;</td>
 <td>&nbsp;</td>
 <td>{{$TheStu.base.score_physical}} </td>
-</tr>
-<tr>
-<td colspan="4" align=right>積分總計：</td>
-<td align=left style="font-size:11pt;"  colspan="2">&nbsp;</td>
 </tr>
 </tbody></table>
 <table border=0 table style="width: 600px;">
@@ -322,3 +339,4 @@ http://www.fitness.org.tw/
 {{/foreach}}
 
 </body>
+</html>

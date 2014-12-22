@@ -1,5 +1,5 @@
 <?php
-//$Id: index2.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: index2.php 8147 2014-09-23 08:28:28Z smallduh $
 include"config.php";
 include_once "cal_elps_class.php";
 
@@ -25,7 +25,7 @@ class cal_index extends cal_elps{
 	function display(){
 		?>
 		<html><meta http-equiv="Content-Type" content="text/html; Charset=Big5"><head>
-		<title><?=$this->cal_name?></title></head><body>	
+		<title><?php echo $this->cal_name; ?></title></head><body>	
 		<?php
 		$tpl=dirname(__file__)."/templates/ind.html";
 		$this->smarty->assign("this",$this);

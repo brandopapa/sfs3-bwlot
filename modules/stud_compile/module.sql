@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8152 2014-09-30 01:15:55Z smallduh $
 CREATE TABLE stud_compile (
   compile_sn int(10) unsigned NOT NULL auto_increment,
   student_sn int(10) unsigned NOT NULL default '0',
@@ -11,4 +11,4 @@ CREATE TABLE stud_compile (
   update_time datetime NOT NULL default '0000-00-00 00:00:00',
   bs varchar(11) NOT NULL default '',
   PRIMARY KEY  (compile_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

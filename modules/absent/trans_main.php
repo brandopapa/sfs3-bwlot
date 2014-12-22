@@ -1,6 +1,6 @@
 <?php
 
-// $Id: trans_main.php 7726 2013-10-28 08:15:30Z smallduh $
+// $Id: trans_main.php 8207 2014-11-18 01:06:34Z smallduh $
 	//新增一個 EasyZip 實例
 	$ttt = new EasyZip;
 	$ttt->setPath($oo_path);
@@ -130,7 +130,7 @@
 		$rs=$CONN->Execute($sql);
 		$room_name=$rs->fields['room_name'];
 		$replace_data=$ttt->read_file(dirname(__FILE__)."/$oo_path/content_head.xml");
-		reset($enable);
+		//reset($enable);
 		while(list($i,$v)=each($enable)) {
 			if ($v!=3) continue;
 			$content_body=$ttt->read_file(dirname(__FILE__)."/$oo_path/content_body.xml");
@@ -152,6 +152,7 @@
 			$temp_arr["class_num"]=substr($curr_class_num,-4,-2);
 			$temp_arr["site_num"]=substr($curr_class_num,-2);
 			$temp_arr["stud_addr"] = $rs->fields['stud_addr_2'];
+			$temp_arr["addr_zip"] = ($rs->fields['addr_zip']=='')?"□□□":$rs->fields['addr_zip'];
 			$sql="select guardian_name from stud_domicile where student_sn='".$rs->fields['student_sn']."'";
 			$rs=$CONN->Execute($sql);
 			$temp_arr["guardian_name"] = $rs->fields['guardian_name'];
@@ -185,7 +186,7 @@
 	} else {
 	$pp=1;
 	$temp="";
-	reset($enable);
+	//reset($enable);
 	while(list($i,$v)=each($enable)) {
 		if ($act=="分班列印" && $temp!="" && ($class[$i][year]!=$ocy || $class[$i][name]!=$ocn) && ($pp % $report_line)!=1) {
 			for ($j=($pp % $report_line);$j<$report_line;$j++) {

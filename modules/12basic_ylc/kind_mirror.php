@@ -79,7 +79,7 @@ if($_POST['act']=='儲存並重新設定報名身分'){
 			}	
 							
 			//決定低收或中低收入戶級分
-			$score_disadvantage=($stud_free_rate[$free_id]>0)?2:0;
+			$score_disadvantage=($stud_free_rate[$free_id]>0)?1:0;
 			
 			//判定族語認證與否
 // 			if($kind_id=='1' or $kind_id=='2'){

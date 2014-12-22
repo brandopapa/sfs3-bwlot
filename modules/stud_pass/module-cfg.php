@@ -1,5 +1,5 @@
 <?php
-//$Id: module-cfg.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: module-cfg.php 8106 2014-09-02 08:37:04Z smallduh $
 
 //---------------------------------------------------
 //
@@ -64,7 +64,8 @@ $MODULE_UPDATE="2004-07-31";
 //目錄內程式
 $school_menu_p = array(
 "index.php"=>"學生密碼設定",
-"query.php"=>"學生密碼查詢"
+"query.php"=>"學生密碼查詢",
+"query_class.php"=>"以班級座號查詢在籍學生密碼"
 );
 
 

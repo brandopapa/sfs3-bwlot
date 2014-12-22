@@ -26,7 +26,7 @@ head("更改個人密碼");
 print_menu($menu_p); 
 
 
-if ($LDAP['enable']) {
+if ($LDAP['enable1']) {
 	echo "系統已啟用 LDAP 認證，請直接登入 LDAP 伺服器進行密碼變更。<br>";
 	if ($LDAP['chpass_url']!="") {
 	 echo "你可以經由以下連結前往變更密碼：<a href=\"".$LDAP['chpass_url']."\">前往變更密碼</a>";

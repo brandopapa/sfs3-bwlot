@@ -10,4 +10,4 @@ CREATE TABLE seme_score_nor (
   score7 smallint(3) NOT NULL default '0',
   PRIMARY KEY  (seme_year_seme,stud_id),
   KEY stud_id (stud_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

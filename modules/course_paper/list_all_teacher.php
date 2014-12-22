@@ -1,6 +1,6 @@
 <?php
 
-// $Id: list_all_teacher.php 7776 2013-11-19 02:35:57Z infodaes $
+// $Id: list_all_teacher.php 8103 2014-08-31 16:38:02Z infodaes $
 
 /* 取得基本設定檔 */
 include "config.php";
@@ -78,9 +78,11 @@ if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/content-c.xml");
 	//$data =iconv("Big5","UTF-8",$data);
 	
-	$sql_select = "select teacher_sn  ,year ,semester   from score_course 
+	
+	/*
+	$sql_select = "select teacher_sn ,year ,semester from score_course 
 	   where year=$sel_year and semester=$sel_seme and teacher_sn <> 0
-	   group by teacher_sn   order by teacher_sn  ";
+	   group by teacher_sn order by teacher_sn  ";
 	
 	$recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
 	while (list($teacher_sn ,$year ,$semester)= $recordSet->FetchRow()) {	
@@ -88,7 +90,20 @@ if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 	     //加入換頁
 		   $replace_data .="<text:p text:style-name=\"break_page\"/>" ;
 	     
-	}     
+	} 
+	*/
+	
+	$sql_select = "select DISTINCT teacher_sn from score_course 
+	   where year=$sel_year and semester=$sel_seme and teacher_sn>0 order by teacher_sn";
+	
+	$recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
+	while (list($teacher_sn)= $recordSet->FetchRow()) {	
+	     $replace_data .= get_class_sect($teacher_sn  ,$sel_year ,$sel_seme ,$data ) ;
+	     //加入換頁
+		   $replace_data .="<text:p text:style-name=\"break_page\"/>" ;
+	     
+	} 
+    
 	//將 content.xml 的 tag 取代
 
 
@@ -130,9 +145,12 @@ function get_class_sect($teacher_sn  , $sel_year="",$sel_seme="" ,$data="" ){
     
   $global_classname = get_global_class_name($sel_year,$sel_seme,"短") ;
 	
-	$sql_select = "select c.course_id,c.teacher_sn,c.day,c.sector,c.ss_id,c.room ,c.class_id , t.name
-	      from score_course c , teacher_base t where c.teacher_sn = t.teacher_sn
-          and c.year='$sel_year' and c.semester = '$sel_seme'  and c.teacher_sn  = '$teacher_sn' order by day,sector";
+	$sql= "select name from teacher_base where teacher_sn = $teacher_sn";
+	$rs=$CONN->Execute($sql) or trigger_error("錯誤訊息： $sql", E_USER_ERROR);
+	$teach_name=$rs->fields['name'];
+	
+	$sql_select = "select course_id,teacher_sn,day,sector,ss_id,room,class_id
+	      from score_course where year='$sel_year' and semester = '$sel_seme' and (teacher_sn=$teacher_sn or cooperate_sn=$teacher_sn) order by day,sector";
     //echo $sql_select . "<br> " ;
 	$recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
 	while (list($course_id,$teacher_sn,$day,$sector,$ss_id,$room ,$class_id , $t_name)= $recordSet->FetchRow()) {
@@ -140,7 +158,7 @@ function get_class_sect($teacher_sn  , $sel_year="",$sel_seme="" ,$data="" ){
 		$a[$k]=$ss_id;
 		$c[$k] = $global_classname[$class_id] ;
 		$r[$k]=$room;
-		$teach_name=$t_name ;
+		
 	}
 	/*
 		while (list($course_id,$teacher_sn,$day,$sector,$ss_id,$room)= $recordSet->FetchRow()) {

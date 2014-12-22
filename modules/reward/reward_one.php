@@ -1,6 +1,6 @@
 <?php
 
-// $Id: reward_one.php 7854 2014-01-13 07:22:37Z smallduh $
+// $Id: reward_one.php 8052 2014-06-03 23:54:43Z hsiao $
 
 //取得設定檔
 include_once "config.php";
@@ -58,7 +58,9 @@ elseif (!empty($_REQUEST[reward_id])) {
 		//$class_num="";
 		//$One="";
                 //修正改變班級選單時不會即時顯示學號問題
-                $class_num="01";
+                //$class_num="01";
+                //修正如果1號轉學後改變選單會發生班級跳掉的問題
+                $class_num=$CONN->Execute("select a.seme_num from stud_seme a,stud_base b where a.seme_year_seme='$seme_year_seme' and a.seme_class='$seme_class' and b.student_sn=a.student_sn and b.stud_study_cond='0'")->fields[seme_num];
                 $sql="select a.stud_id,b.stud_study_cond from stud_seme a,stud_base b where a.seme_year_seme='$seme_year_seme' and a.seme_class='$seme_class' and a.seme_num='$class_num' and b.student_sn=a.student_sn and b.stud_study_cond='0'";
                 $rs=$CONN->Execute($sql);
                 $stud_id=$rs->fields[stud_id];

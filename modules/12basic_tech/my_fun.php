@@ -336,12 +336,12 @@ function count_student_score_competetion($sn_array)
 			$spe_flag=0;
 			foreach($spe_item_arr as $item_name){
 				if(strpos($name,$item_name)!==false){
-					$score_competetion[$student_sn]['detail'][$i]['bonus']=$spe_bonus_arr[$rank]*$squad_weight[$squad];
+					$score_competetion[$student_sn]['detail'][$i]['bonus']=$spe_bonus_arr[$rank]*$squad_weight[$squad]; //*$weight
 					$spe_flag=1;
 				}
 			}
 			//再判定正常情形
-			if(!$spe_flag) $score_competetion[$student_sn]['detail'][$i]['bonus']=$race_score[$level][$rank]*$squad_weight[$squad];
+			if(!$spe_flag) $score_competetion[$student_sn]['detail'][$i]['bonus']=$race_score[$level][$rank]*$squad_weight[$squad]*$weight;
 		} else $score_competetion[$student_sn]['detail'][$i]['bonus']=0;
 
 		$score_competetion[$student_sn]['score']+=$score_competetion[$student_sn]['detail'][$i]['bonus'];

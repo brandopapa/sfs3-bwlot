@@ -1,5 +1,5 @@
 <?php
-//$Id: module-cfg.php 6260 2010-11-18 08:30:29Z infodaes $
+//$Id: module-cfg.php 8125 2014-09-16 08:02:52Z smallduh $
 
 //---------------------------------------------------
 //
@@ -70,6 +70,7 @@ $school_menu_p = array(
 "fix_score_batch.php"=>"課程成績轉正",
 "fix_sendmit.php"=>"開鎖器",
 "fix_grad.php"=>"畢業修正",
+"fix_stud_seme_rew_1.php"=>"修正獎懲統計",
 "view_seme.php"=>"學期資料查詢",
 "del_comment.php"=>"備註清除",
 "compare_table.php"=>"資料表欄位比對",

@@ -1,4 +1,4 @@
-# $Id: course_room.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: course_room.sql 8150 2014-09-29 03:41:14Z smallduh $
 
 # phpMyAdmin MySQL-Dump
 # version 2.3.3pl1
@@ -27,7 +27,7 @@ CREATE TABLE course_room (
   KEY teacher_sn (teacher_sn),
   KEY sector (sector),
   KEY day (day)
-) TYPE=MyISAM COMMENT='      ';
+) ENGINE=MyISAM COMMENT='      ';
 
 
 
@@ -40,4 +40,4 @@ CREATE TABLE spec_classroom (
   enable enum('0','1') NOT NULL default '1',
   notfree_time varchar(250) default NULL,
   PRIMARY KEY  (room_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

@@ -30,15 +30,15 @@ if(isset($_POST) and count($_POST)>0){
 		get_stud_data($aa,'excel');
 	}elseif($_POST[basic_excel_2]=='匯出EXCEL(方法2)'){
 		get_stud_data($aa,'excel_2');
-	}elseif($_POST[chc_excel]=='匯出EXCEL(方法1)'){
+	}elseif($_POST[chc_excel]=='匯出EXCEL(方法1)'){ //彰化縣資料
 		output_excel($obj,'chc','excel');
-	}elseif($_POST[chc_excel_2]=='匯出EXCEL(方法2)'){
+	}elseif($_POST[chc_excel_2]=='匯出EXCEL(方法2)'){  //彰化縣資料
 		output_excel($obj,'chc','excel_2');
 	}elseif($_POST[basic_txt]=='匯出TXT'){
 		get_stud_data($aa,'txt');
-	}elseif($_POST[chc_txt]=='匯出TXT'){
-		get_chc_data($aa);
-	}elseif($_POST[chc_excel_103]=='匯出EXCEL'){
+//	}elseif($_POST[chc_txt]=='匯出TXT'){  //彰化縣資料
+//		get_chc_data($aa);
+	}elseif($_POST[chc_excel_103]=='匯出EXCEL'){  //彰化縣資料103年
 		get_chc_data_103year($aa,$obj);
 	}
 }
@@ -55,6 +55,16 @@ function output_excel($obj,$kind, $output_type) {
 	$mem=0;
 	if($kind=='chc'){
 		foreach($obj->stu as $key=>$val){
+			//品德服務分數最高20分
+            $score_morality=$val['score_service']+$val['score_reward']+$val['score_fault'];
+			if($score_morality>20){
+				$score_morality=20;
+			}
+			//績優表現分數最高16分
+            $score_display=$val['score_balance']+$val['score_race']+$val['score_physical'];
+			if($score_display>16){
+				$score_display=16;
+			}
 			if($output_type=='excel'){
 				$data1[$mem][stud_name]=$val[stud_name];
 				$data1[$mem][stud_person_id]=$val[stud_person_id];
@@ -63,12 +73,14 @@ function output_excel($obj,$kind, $output_type) {
 				$data1[$mem][birth_day]=intval($val[birth_day]);
 				$data1[$mem][income]=$val[income];
 				$data1[$mem][score_nearby]=$val[score_nearby];
-				$data1[$mem][score_service]=$val[score_service];
-				$data1[$mem][score_reward]=$val[score_reward];
-				$data1[$mem][score_fault]=$val[score_fault];
-				$data1[$mem][score_balance]=$val[score_balance];
-				$data1[$mem][score_race]=$val[score_race];
-				$data1[$mem][score_physical]=$val[score_physical];
+				$data1[$mem][score_service]=$val[score_service]; //服務學習
+				$data1[$mem][score_reward]=$val[score_reward];  //獎勵紀錄
+				$data1[$mem][score_fault]=$val[score_fault];   //生活教育
+                $data1[$mem][score_morality]=$score_morality;    //品德服務
+				$data1[$mem][score_balance]=$val[score_balance];  //均衡學習
+				$data1[$mem][score_race]=$val[score_race];   //競賽表現
+				$data1[$mem][score_physical]=$val[score_physical];   //體適能
+                $data1[$mem][score_display]=$score_display;    //績優表現
 			}elseif($output_type=='excel_2'){
 				//102.10.28起採用xls匯出方式，整理資料順序
 				$data1[$mem][]=$val[stud_name];
@@ -81,9 +93,11 @@ function output_excel($obj,$kind, $output_type) {
 				$data1[$mem][]=$val[score_service];
 				$data1[$mem][]=$val[score_reward];
 				$data1[$mem][]=$val[score_fault];
+                $data1[$mem][]=$score_morality;    //品德服務
 				$data1[$mem][]=$val[score_balance];
 				$data1[$mem][]=$val[score_race];
 				$data1[$mem][]=$val[score_physical];
+                $data1[$mem][]=$score_display;    //績優表現
 			}
 			$mem++;
 		}
@@ -115,7 +129,7 @@ function output_excel($obj,$kind, $output_type) {
 	}elseif($output_type=='excel_2'){
 		//102.10.28起採用xls匯出方式
 		$filename ="chc_export_2.xls" ;
-		$myhead1=array('學生姓名','身分證統一編號','出生年(民國年)','出生月','出生日','經濟弱勢','就近入學','服務學習','獎勵紀錄','生活教育','均衡學習','競賽表現','體適能');
+		$myhead1=array('學生姓名','身分證統一編號','出生年(民國年)','出生月','出生日','經濟弱勢','就近入學','服務學習','獎勵紀錄','生活教育','品德服務','均衡學習','競賽表現','體適能','績優表現');
 
 		$x=new sfs_xls();
 		$x->setUTF8();//$x->setVersion(8);
@@ -580,6 +594,16 @@ function get_chc_data_103year($year, $obj){
 //取得第二部份資料(彰化縣專屬資料)
 	$obj->all();
 	foreach($obj->stu as $key=>$val){
+    	//品德服務分數最高20分
+        $score_morality=$val['score_service']+$val['score_reward']+$val['score_fault'];
+		if($score_morality>20){
+			$score_morality=20;
+		}
+		//績優表現分數最高16分
+        $score_display=$val['score_balance']+$val['score_race']+$val['score_physical'];
+		if($score_display>16){
+			$score_display=16;
+		}
 		$stud_person_id=$val[stud_person_id];
 		$mem=$stud_person_id;
 		//$data1[$mem][]=$val[stud_name];
@@ -596,9 +620,11 @@ function get_chc_data_103year($year, $obj){
 		$data1[$mem][]=$val[score_service];
 		$data1[$mem][]=$val[score_reward];
 		$data1[$mem][]=$val[score_fault];
+		$data1[$mem][]=$score_morality;   //品德服務分數
 		$data1[$mem][]=$val[score_balance];
 		$data1[$mem][]=$val[score_race];
 		$data1[$mem][]=$val[score_physical];
+        $data1[$mem][]=$score_display;    //績優表現分數
 		//$mem++;
 	}
 
@@ -607,7 +633,7 @@ function get_chc_data_103year($year, $obj){
 
 	$filename ="chc_export_".$grad_year.".xls" ;
 	//103.03.21起採用
-	$myhead=array("考區代碼","集報單位代碼","序號","學號","班級","座號","學生姓名","身分證統一編號","性別","出生年(民國年)","出生月","出生日","畢業學校代碼","畢業年(民國年)","畢肄業","學生身分","身心障礙","就學區","低收入戶","中低收入戶","失業勞工子女","資料授權","家長姓名","市內電話","行動電話","郵遞區號","通訊地址","原住民是否含母語認證","非中華民國身分證號","經濟弱勢","就近入學","服務學習","獎勵紀錄","生活教育","均衡學習","競賽表現","體適能");
+	$myhead=array("考區代碼","集報單位代碼","序號","學號","班級","座號","學生姓名","身分證統一編號","性別","出生年(民國年)","出生月","出生日","畢業學校代碼","畢業年(民國年)","畢肄業","學生身分","身心障礙","就學區","低收入戶","中低收入戶","失業勞工子女","資料授權","家長姓名","市內電話","行動電話","郵遞區號","通訊地址","原住民是否含母語認證","非中華民國身分證號","經濟弱勢","就近入學","服務學習","獎勵紀錄","生活教育","品德服務","均衡學習","競賽表現","體適能","績優表現");
 	//include_once "../../include/sfs_case_excel.php";
 	$x=new sfs_xls();
 	$x->setUTF8();//$x->setVersion(8);
@@ -715,6 +741,9 @@ class chc_seme{
 		echo '<tr style="font-size:11pt" bgcolor="#9EBCDD">
 	
 	<td>';
+
+//  <input type="submit" name="chc_txt" value="匯出TXT">　||　
+
 		echo '<form name="form1" method="post" action="">
      學生基本資料檔<br>
   <input type="submit" name="basic_txt" value="匯出TXT">　||　 
@@ -724,18 +753,17 @@ class chc_seme{
 <hr>
 <form name="form2" method="post" action="">
   彰化縣免試入學超額比序項目積分資料檔<br>
-  <input type="submit" name="chc_txt" value="匯出TXT">　||　
   <input type="submit" name="chc_excel" value="匯出EXCEL(方法1)">
   <input type="submit" name="chc_excel_2" value="匯出EXCEL(方法2)">
 </form>
 <hr>
 <form name="form2" method="post" action="">
-  103年度彰化區高級中等學校免試入學分發學生資料檔(103.3.19新增)<br>
+  彰化區高級中等學校免試入學分發學生資料檔<br>
   <font color=red>※※操作步驟</font><br>
   1.在資料檔中，「原住民是否含母語認證」、「非中華民國身分證號」兩欄位請自行輸入。<br>
-  2.將本資料檔內容資料貼到「103學年度彰化區高級中等學校報名免試系統平臺」的範本檔中。<br>
+  2.將本資料檔內容資料貼到「彰化區高級中等學校報名免試系統平臺」的範本檔中。<br>
   　　方法：開啟匯出檔，「全選」->「複製」->「貼上」（請用「選擇性貼上」->「值」），<br>
-  　　再匯入到「103學年度彰化區高級中等學校報名免試系統平臺」<br>
+  　　再匯入到「彰化區高級中等學校報名免試系統平臺」<br>
   
 
   <input type="submit" name="chc_excel_103" value="匯出EXCEL">

@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 
 #
 # 資料表格式： `eyesight`
@@ -11,4 +11,4 @@ CREATE TABLE eyesight (
   side varchar(1) NOT NULL default 'r',
   eyesight_value float(1,1) NOT NULL default '0.0',
   PRIMARY KEY (year,semester,student_sn,side)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

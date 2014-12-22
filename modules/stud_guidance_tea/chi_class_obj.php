@@ -1,5 +1,5 @@
 <?php
-//$Id: chi_class_obj.php 7819 2013-12-20 01:33:04Z infodaes $
+//$Id: chi_class_obj.php 8060 2014-06-10 13:55:57Z chiming $
 
 $question_kind=array("未填寫",
 	1=>"犯案、嚴重行為偏差行為",
@@ -36,7 +36,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 A:link  {text-decoration:none;color:blue; }
 A:visited {text-decoration:none;color:blue; }
 A:hover {background-color:FF8000;color: #000000;  }
-</style><?
+</style><?php
 }
 
 ##################陣列列示函式2##########################

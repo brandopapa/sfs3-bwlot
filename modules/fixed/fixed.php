@@ -1,5 +1,5 @@
 <?php
-  // $Id: fixed.php 6821 2012-06-22 12:46:57Z infodaes $
+  // $Id: fixed.php 8082 2014-06-30 11:50:10Z kwcmath $
   require "config.php" ;
 
   //sfs2 升級 sfs3 欄位調整
@@ -193,10 +193,12 @@
       echo "<td >$user $edit_link</td>\n" ;      
 
       
-
+			$u_edit_link ='' ;
       //負責單位
       $ti = $nb[unitId] ;
-      echo "<td >$unitstr[$ti]</td> \n " ;
+      if ((board_checkid($ti)) and ($rep_mode <> 2))
+      	$u_edit_link = "<a href=\"fixedadmin.php?do=edit&id=$nb[ID]\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ;
+      echo "<td >$unitstr[$ti] $u_edit_link</td> \n " ;
 
       //回覆者
       echo "<td >$nb[rep_user] &nbsp;</td> \n" ;

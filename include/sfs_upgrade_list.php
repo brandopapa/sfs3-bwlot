@@ -1,6 +1,6 @@
 <?php
 
-//$Id: sfs_upgrade_list.php 7734 2013-10-29 11:42:30Z smallduh $
+//$Id: sfs_upgrade_list.php 8164 2014-10-08 13:05:57Z infodaes $
 
 if(!$CONN){
         echo "go away !!";
@@ -824,6 +824,45 @@ if (!is_file($up_file_name)){
 $dstr="2013-10-29";
 $dsstr=str_replace("-","",$dstr);
 $temp_str = "建立學校上課日欄位 ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+$up_file_name =$upgrade_str.$dstr.".txt";
+if (!is_file($up_file_name)){
+	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_str);
+	fclose ($fp);
+}
+
+
+// 檢查輔導訪談記錄表interview欄位是否有資料
+$dstr="2014-08-03";
+$dsstr=str_replace("-","",$dstr);
+$temp_str = "檢查輔導訪談記錄表interview欄位是否有資料 ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+$up_file_name =$upgrade_str.$dstr.".txt";
+if (!is_file($up_file_name)){
+	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_str);
+	fclose ($fp);
+}
+
+// 刪除新生匯入資料暫存檔
+$dstr="2014-09-15";
+$dsstr=str_replace("-","",$dstr);
+$temp_str = "刪除新生匯入資料暫存檔 ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+$up_file_name =$upgrade_str.$dstr.".txt";
+if (!is_file($up_file_name)){
+    require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+    $fp = fopen ($up_file_name, "w");
+    fwrite($fp,$temp_str);
+    fclose ($fp);
+}
+
+
+// 學生基本資料加入 學籍取得原因、個案保護類別 欄位
+
+$dstr="2014-10-08";
+$dsstr=str_replace("-","",$dstr);
+$temp_str = "學生基本資料加入 學籍取得原因、個案保護類別 欄位: ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
 $up_file_name =$upgrade_str.$dstr.".txt";
 if (!is_file($up_file_name)){
 	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";

@@ -79,8 +79,11 @@ if($_POST['act']){
 			//$stud_sex=$student_data[$student_sn]['stud_sex']==1?'男':'女';
 			$stud_sex=$student_data[$student_sn]['stud_sex'];
 			//畢修業級分
+			if($graduate_source<2) $graduate_data[$student_sn]=$graduate_source;
 			$graduate=($graduate_data[$student_sn]==1)?1:0;
 			$score_graduate=$graduate_score[$graduate];
+			
+			$guardian_name=$domicile_data[$student_sn]['guardian_name'];
 			
 			//學生聯絡資料處理
 			$addr_zip=$student_data[$student_sn]['addr_zip'];
@@ -92,7 +95,7 @@ if($_POST['act']){
 				$stud_tel_2=$student_data[$student_sn]['stud_tel_2']?$student_data[$student_sn]['stud_tel_2']:$student_data[$student_sn]['stud_tel_1'];
 				$stud_addr_2=$student_data[$student_sn]['stud_addr_2']?$student_data[$student_sn]['stud_addr_2']:$student_data[$student_sn]['stud_addr_1'];
 				
-				$guardian_name=$domicile_data[$student_sn]['guardian_name'];
+				
 				$guardian_phone=$domicile_data[$student_sn]['guardian_phone'];
 				$guardian_hand_phone=$domicile_data[$student_sn]['guardian_hand_phone']?$domicile_data[$student_sn]['guardian_hand_phone']:$student_data[$student_sn]['stud_tel_3'];
 
@@ -109,7 +112,7 @@ if($_POST['act']){
 				$stud_name=substr($stud_name,0,-2).'○';
 				$stud_person_id=substr($stud_person_id,0,-4).'0000';
 				$stud_tel_2=substr($stud_tel_2,0,-3).'888';
-				$stud_addr_2=substr($stud_addr_2,0,18).'○○○○○';
+				$guardian_address=substr($guardian_address,0,18).'○○○○○';
 				$guardian_name=substr($guardian_name,0,-2).'○';
 				$guardian_hand_phone=$guardian_hand_phone?substr($guardian_hand_phone,0,-3).'777':'';
 			}
@@ -155,10 +158,10 @@ if($_POST['act']){
 			//輸出資料
 			switch($_POST['act']){
 				case 'EXCEL':
-					$x->items[]=array($area_code,$school_id,$no,$stud_id,$seme_class,$seme_num,$stud_name,$stud_person_id,$stud_sex,$birth_year,$birth_month,$birth_day,$school_id,$work_year,$graduate,$kind_id,$disability_id,'',$free_1,$free_2,$free_3,0,$guardian_name,$guardian_phone,$guardian_hand_phone,$addr_zip,$stud_addr_2);
+					$x->items[]=array($area_code,$school_id,$no,$stud_id,$seme_class,$seme_num,$stud_name,$stud_person_id,$stud_sex,$birth_year,$birth_month,$birth_day,$school_id,$work_year,$graduate,$kind_id,$disability_id,'',$free_1,$free_2,$free_3,0,$guardian_name,$guardian_phone,$guardian_hand_phone,$addr_zip,$guardian_address);
 					break;
 				case 'HTML':
-					$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>0</td><td>$guardian_name</td><td>$guardian_phone</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$stud_addr_2</tr>";
+					$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>0</td><td>$guardian_name</td><td>$guardian_phone</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$guardian_address</td></tr>";
 					break;
 				case 'EXCEL_SCORE':
 					$x->items[]=array($stud_name,$stud_person_id,$birth_year,$birth_month,$birth_day,$score_graduate,$score_disadvantage,$score_balance,$score_service,$score_fault,$score_competetion,$score_fitness,$score_personality);

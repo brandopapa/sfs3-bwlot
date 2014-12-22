@@ -4,7 +4,7 @@
  * @package Smarty
  * @subpackage plugins
  */
-//$Id: shared.escape_special_chars.php 6117 2010-09-10 15:13:53Z brucelyc $
+//$Id: shared.escape_special_chars.php 8062 2014-06-11 00:38:55Z hami $
 /**
  * escape_special_chars common function
  *
@@ -19,7 +19,7 @@ function smarty_function_escape_special_chars($string)
 {
     if(!is_array($string)) {
         $string = preg_replace('!&(#?\w+);!', '%%%SMARTY_START%%%\\1%%%SMARTY_END%%%', $string);
-        $string = htmlspecialchars($string);
+     //   $string = htmlspecialchars($string);
         $string = str_replace(array('%%%SMARTY_START%%%','%%%SMARTY_END%%%'), array('&',';'), $string);
     }
     return $string;

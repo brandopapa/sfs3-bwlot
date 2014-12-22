@@ -1,5 +1,5 @@
 <?php 
-//$Id: tape_delete.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: tape_delete.php 8146 2014-09-23 08:24:22Z smallduh $
 
 include "config.php";  //軟體設定
 //登入檢查
@@ -21,12 +21,12 @@ include "header.php";
    <center><img src="eye.gif">
    <b>刪除 <?php echo $ap_name ?></b>
    <form method="post" name="tapeform" action="<?php echo $_SERVER[PHP_SELF] ?>"> 
-   <input type="hidden" name="tapem_id" value="<? echo("$row[tapem_id]") ?>">
-   <input type="hidden" name="tape_id" value="<? echo("$row[tape_id]") ?>">   
+   <input type="hidden" name="tapem_id" value="<?php echo("$row[tapem_id]") ?>">
+   <input type="hidden" name="tape_id" value="<?php echo("$row[tape_id]") ?>">   
    <table border="1" width="80%">
-   <tr ><td width=80>類別編號</td><td><? echo("$row[tapem_id]") ?><? echo("$row[tape_id]") ?>     
+   <tr ><td width=80>類別編號</td><td><?php echo("$row[tapem_id]") ?><?php echo("$row[tape_id]") ?>     
    </td></tr>
-   <tr><td width=80>名稱</td><td><? echo("$row[tape_name]") ?></td></tr>
+   <tr><td width=80>名稱</td><td><?php echo("$row[tape_name]") ?></td></tr>
    <tr><td colspan=2 align=center><input type="submit" name="dopost" value="確定刪除">&nbsp;&nbsp;<input type="button" value="回上一頁" onClick="history.back()"></td></tr>   
    </table>
    </form>

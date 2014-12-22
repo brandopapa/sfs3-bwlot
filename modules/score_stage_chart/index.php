@@ -1,5 +1,5 @@
 <?php
-// $Id: index.php 7686 2013-10-22 05:17:44Z smallduh $
+// $Id: index.php 8232 2014-12-10 08:12:04Z brucelyc $
 /* 取得設定檔 */
 include "config.php";
 
@@ -16,6 +16,8 @@ $start_date=($_POST[start_date])?$_POST[start_date]: $_GET[start_date];
 $end_date=($_POST[end_date])?$_POST[end_date]: $_GET[end_date];
 $avg=$_REQUEST['avg'];
 if ($stage=="") $stage=1;
+
+$M_SETUP=get_module_setup('score_stage_chart');
 
 //若為輸出檔案狀態, 算出正確學期
 if (($class_id)&&($act)) {
@@ -327,7 +329,7 @@ function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$sc
 
 //下載成績單
 function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$sel_year="",$sel_seme="",$mode="",$stage,$start_date,$end_date,$avg){
-	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,$draw_img_width,$draw_img_height,$REWARD_KIND,$year_seme;
+	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,$M_SETUP,$REWARD_KIND,$year_seme;
   
   global $IS_JHORES;
 
@@ -353,9 +355,10 @@ function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$se
 	//換頁 tag
 	$break ='<text:p text:style-name="P10"/>';
 
-
-	if ($draw_img_width=='') $draw_img_width="1.27cm";
-	if ($draw_img_height=='') $draw_img_height="1.27cm";
+	if ($M_SETUP['hborder']=="") $M_SETUP['hborder'] = 1.27;
+	if ($M_SETUP['wborder']=="") $M_SETUP['wborder'] = 1.27;
+	if ($draw_img_width=='') $draw_img_width=$M_SETUP['hborder']."cm";
+	if ($draw_img_height=='') $draw_img_height=$M_SETUP['wborder']."cm";
 	//校長簽章檔
 	if (is_file($UPLOAD_PATH."school/title_img/title_1")){
  		$title_img = "http://".$_SERVER["SERVER_ADDR"].$UPLOAD_URL."school/title_img/title_1";

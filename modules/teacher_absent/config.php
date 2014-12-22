@@ -1,10 +1,11 @@
 <?php
-//$Id: config.php 7833 2013-12-26 06:36:44Z infodaes $
+//$Id: config.php 8104 2014-09-01 05:56:02Z hami $
 //預設的引入檔，不可移除。
 require_once "./module-cfg.php";
 include_once "../../include/config.php";
 include "../../include/sfs_case_PLlib.php";
 include "../../include/sfs_case_dataarray.php";
+require_once "./module-upgrade.php";
 
 //您可以自己加入引入檔
 $status_kind=array("0"=>"待確認","1"=>"");

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: index.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: index.php 8086 2014-08-07 07:07:12Z smallduh $
 
 //
 // MiG - A general purpose photo gallery management system.
@@ -308,7 +308,7 @@ if ($pageType == 'folder' or $pageType == '') {
                                 $presort_img, $desc);
 
     // Only frame the lists in table code when appropriate
-
+  
     // no folders or images - print the "no contents" line
     if ($folderList == 'NULL' and $imageList == 'NULL') {
         $folderList = $mig_messages[$mig_language]['no_contents'];
@@ -422,4 +422,14 @@ if (!$is_standalone)
 
 ?>
 
-                                                                                
+<Script>
+   $(".check_year").click(function(){
+  
+	   var sn='#f_'+$(this).attr("id");
+   
+	   $(".year_folder").hide();
+	   $(sn).show();
+	   
+	  });
+</Script>
+                                                                            

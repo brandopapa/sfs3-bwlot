@@ -296,6 +296,7 @@ if ($_POST['mode']=='arrange') {
 		  }
   } // end if choice_auto==1
   
+  //°O¿ý½s¯Z¹Lµ{
   $Write_Record=addslashes($RECORD."<br>".$SETUP['arrange_record']);
   $query="update stud_club_setup set arrange_record='$Write_Record' where year_seme='$c_curr_seme'";
   if (mysql_query($query)) {

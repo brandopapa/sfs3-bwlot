@@ -1,5 +1,5 @@
 <?php
-//$Id: module-cfg.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: module-cfg.php 8232 2014-12-10 08:12:04Z brucelyc $
 
 //---------------------------------------------------
 //
@@ -117,15 +117,8 @@ $gridBoy_color = "blue";
 $gridGirl_color = "#FF6633";
 //預設第一個開啟年級
 $default_begin_class = 6;
-//$SFS_MODULE_SETUP[0] =
-//        array('var'=>"xxxx", 'msg'=>"yyyy", 'value'=>1);
-
-// 第2,3,4....個，依此類推：
-
-// $SFS_MODULE_SETUP[1] =
-//        array('var'=>"xxxx", 'msg'=>"yyyy", 'value'=>0);
-
-// $SFS_MODULE_SETUP[2] =
-//        array('var'=>"ssss", 'msg'=>"tttt", 'value'=>1);
-
+$SFS_MODULE_SETUP[0] =
+        array('var'=>"hborder", 'msg'=>"印章邊界(高)", 'value'=>1.27);
+$SFS_MODULE_SETUP[1] =
+        array('var'=>"wborder", 'msg'=>"印章邊界(寬)", 'value'=>1.27);
 ?>

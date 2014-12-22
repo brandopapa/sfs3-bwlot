@@ -99,8 +99,9 @@ if ($my_club=get_student_join_club($STUD['student_sn'],$c_curr_seme)) {
 	 </tr>
 	
 	<?php
+	$my_club=get_student_join_club($STUD['student_sn']);
 	foreach ($my_club as $My) {
-		 if ($My['seme_year_seme']==$c_curr_seme) {
+		 //if ($My['seme_year_seme']==$c_curr_seme) {
 		 	$My['score']=($My['score']>0)?$My['score']:"-";
 	     ?>
 	 <tr>
@@ -112,7 +113,7 @@ if ($my_club=get_student_join_club($STUD['student_sn'],$c_curr_seme)) {
 	   <td width="300" style="font-size:10pt"><?php echo $My['stud_feedback'];?></td>
 	 </tr>
 	     <?php	
-		 }
+		 //}
 	}
 	?>
 	</table>

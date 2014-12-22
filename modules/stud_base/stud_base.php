@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_base.php 6669 2012-01-11 08:21:51Z infodaes $
+// $Id: stud_base.php 8165 2014-10-08 15:11:08Z infodaes $
 
 // 載入設定檔
 include "config.php";
@@ -48,7 +48,7 @@ switch ($do_key){
 		$res=$CONN->Execute($query);
 		$stud_id=trim($res->fields['stud_id']);
 			
-		$sql_update = "update stud_base set stud_kind='$stud_kind_temp',stud_addr_1='$stud_addr_1',stud_addr_2='$stud_addr_2',stud_tel_1='$stud_tel_1',stud_tel_2='$stud_tel_2',stud_tel_3='$stud_tel_3',stud_mail='$stud_mail',stud_addr_a='$stud_addr_a',stud_addr_b='$stud_addr_b',stud_addr_c='$stud_addr_c',stud_addr_d='$stud_addr_d',stud_addr_e='$stud_addr_e',stud_addr_f='$stud_addr_f',stud_addr_g='$stud_addr_g',stud_addr_h='$stud_addr_h',stud_addr_i='$stud_addr_i',stud_addr_j='$stud_addr_j',stud_addr_k='$stud_addr_k',stud_addr_l='$stud_addr_l',stud_addr_m='$stud_addr_m',addr_zip='$addr_zip' where student_sn='$student_sn'";
+		$sql_update = "update stud_base set stud_kind='$stud_kind_temp',stud_addr_1='$stud_addr_1',stud_addr_2='$stud_addr_2',stud_tel_1='$stud_tel_1',stud_tel_2='$stud_tel_2',stud_tel_3='$stud_tel_3',stud_mail='$stud_mail',stud_addr_a='$stud_addr_a',stud_addr_b='$stud_addr_b',stud_addr_c='$stud_addr_c',stud_addr_d='$stud_addr_d',stud_addr_e='$stud_addr_e',stud_addr_f='$stud_addr_f',stud_addr_g='$stud_addr_g',stud_addr_h='$stud_addr_h',stud_addr_i='$stud_addr_i',stud_addr_j='$stud_addr_j',stud_addr_k='$stud_addr_k',stud_addr_l='$stud_addr_l',stud_addr_m='$stud_addr_m',addr_zip='$addr_zip',obtain='$obtain',safeguard='$safeguard' where student_sn='$student_sn'";
 		$CONN->Execute($sql_update) or die($sql_update);
 
 		//圖檔處理
@@ -201,6 +201,8 @@ while (!$recordSet->EOF) {
 	$curr_class_num = $recordSet->fields["curr_class_num"];
 	$stud_study_cond = $recordSet->fields["stud_study_cond"];
 	$addr_zip = $recordSet->fields["addr_zip"];
+	$obtain = $recordSet->fields["obtain"];
+	$safeguard = $recordSet->fields["safeguard"];
 	$recordSet->MoveNext();
 };
 
@@ -311,6 +313,31 @@ function do_same(){
 	<td width="180"><?php echo $stud_country_name." " ?></td>
 
   </tr>
+
+<tr bgcolor="#ffcccc">
+<td align="right" nowrap>學籍取得原因:</td><td>
+	<?php
+    	$sel1 = new drop_select(); //選單類別
+    	$sel1->s_name = "obtain"; //選單名稱
+	$sel1->id = intval($obtain);
+	$sel1->has_empty = true;
+	$sel1->arr = stud_obtain_kind(); //內容陣列
+	$sel1->do_select();	
+    	?>
+</td>
+<td align="right" nowrap>個案保護類別:</td><td>
+	<?php
+    	$sel1 = new drop_select(); //選單類別
+    	$sel1->s_name = "safeguard"; //選單名稱
+	$sel1->id = intval($safeguard);
+	$sel1->has_empty = true;
+	$sel1->arr = stud_safeguard_kind(); //內容陣列
+	$sel1->do_select();	
+    	?>
+</td>
+<td align='center'>*本列資料非XML交換標準！</td>
+</tr>
+
 <tr>
   	<td align="right" CLASS="title_sbody1" nowrap>住址</td>
 	<td   colspan="4" >
@@ -326,6 +353,7 @@ function do_same(){
 	<input type="button" name="same_addr" value="<?php echo $sameBtn ?>" <?php echo $disable_str ?> onclick="do_same()">
 </tr>
 <tr>
+
 <td   colspan="5" >
 	<!-- 中輟時戶籍地址 -->
 	中輟時戶籍地址 &nbsp;&nbsp;&nbsp;<input type="checkbox" name="same_key" value="1"><b><?php echo $sameBtn ?></b>

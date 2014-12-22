@@ -1,6 +1,6 @@
 <?php
 
-// $Id: list_teach_sum.php 7705 2013-10-23 08:58:49Z smallduh $
+// $Id: list_teach_sum.php 8103 2014-08-31 16:38:02Z infodaes $
 
 /* 取得基本設定檔 */
 include "config.php";
@@ -37,6 +37,7 @@ function get_class_sect($teacher_sn  , $sel_year="",$sel_seme="" ,$data="" ){
     
     $global_classname = get_global_class_name($sel_year,$sel_seme,"短") ;
 	
+	/*
 	$sql_select = "select c.course_id,c.teacher_sn,c.day,c.sector,c.ss_id,c.room ,c.class_id , t.name
 	      from score_course c , teacher_base t where c.teacher_sn = t.teacher_sn
           and c.year='$sel_year' and c.semester = '$sel_seme'  and c.teacher_sn  = '$teacher_sn' order by day,sector";
@@ -48,6 +49,22 @@ function get_class_sect($teacher_sn  , $sel_year="",$sel_seme="" ,$data="" ){
 		$c[$k] = $global_classname[$class_id] ;
 		$r[$k]=$room;
 		$teach_name=$t_name ;
+	}
+	*/
+	$sql= "select name from teacher_base where teacher_sn = $teacher_sn";
+	$rs=$CONN->Execute($sql) or trigger_error("錯誤訊息： $sql", E_USER_ERROR);
+	$teach_name=$rs->fields['name'];
+	
+	$sql_select = "select course_id,teacher_sn,day,sector,ss_id,room,class_id
+	      from score_course where year='$sel_year' and semester = '$sel_seme' and (teacher_sn=$teacher_sn or cooperate_sn=$teacher_sn) order by day,sector";
+    //echo $sql_select . "<br> " ;
+	$recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
+	while (list($course_id,$teacher_sn,$day,$sector,$ss_id,$room ,$class_id , $t_name)= $recordSet->FetchRow()) {
+		$k=$day."_".$sector;
+		$a[$k]=$ss_id;
+		$c[$k] = $global_classname[$class_id] ;
+		$r[$k]=$room;
+		
 	}
 	
 	for ($w = 1; $w<= $dayn ; $w++) {

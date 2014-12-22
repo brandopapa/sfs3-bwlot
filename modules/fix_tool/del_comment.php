@@ -1,9 +1,9 @@
 <?php
-//$Id: del_comment.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: del_comment.php 8238 2014-12-11 08:32:12Z chiming $
 require_once("config.php");
 //使用者認證
 sfs_check();
-if ($_POST[form_act]=='del_comm' && $_POST[ACT]!='no' && $_POST[ACT]!='' ){
+if ($_POST['form_act']=='del_comm' && $_POST['ACT']!='no' && $_POST['ACT']!='' ){
 	$Show_SQL='';
 	$link=mysql_pconnect($mysql_host,$mysql_user,$mysql_pass) or die("無法連線");
 	mysql_select_db($mysql_db,$link);
@@ -11,12 +11,28 @@ if ($_POST[form_act]=='del_comm' && $_POST[ACT]!='no' && $_POST[ACT]!='' ){
 	$rs=mysql_query($SQL,$link) or die($SQL);
 	while ($row = mysql_fetch_array ($rs)){
 		$SQL="ALTER TABLE `$row[0]` COMMENT ='' ";
-		if ($_POST[ACT]=='list') {$Show_SQL=$Show_SQL.$SQL."<br>";}
-    	if ($_POST[ACT]=='run_sql') {mysql_query($SQL,$link) or die($SQL);}
+		if ($_POST['ACT']=='list') {$Show_SQL=$Show_SQL.$SQL."<br>";}
+    	if ($_POST['ACT']=='run_sql') {mysql_query($SQL,$link) or die($SQL);}
     	}
-	if ($_POST[ACT]=='run_sql') header("Location:".$_SERVER[PHP_SELF]);
+	if ($_POST['ACT']=='run_sql') header("Location:".$_SERVER['PHP_SELF']);
 }
-
+if ($_GET['act']=='ToMyISAM'){
+	$a=array('student_view','teacher_course_view','teacher_post_view');
+	$link=mysql_pconnect($mysql_host,$mysql_user,$mysql_pass) or die("無法連線");
+	mysql_select_db($mysql_db,$link);
+	$SQL="SHOW TABLE STATUS FROM  $mysql_db ";
+	$rs=mysql_query($SQL,$link) or die($SQL);
+	while ($row = mysql_fetch_array ($rs)){
+	//if ($row['Engine']!='MyISAM' and !in_array($row['Name'],$a)){ 
+	if ($row['Engine']=='InnoDB' and !in_array($row['Name'],$a)){ 
+		//$SQL="use ".$mysql_db.";ALTER TABLE `".$row['Name']."` ENGINE=MYISAM; flush privileges;";
+		$SQL="ALTER TABLE `".$row['Name']."` ENGINE=MYISAM";
+		$rs1=mysql_query($SQL,$link) or die($SQL);
+		}
+	}
+	mysql_query("flush privileges",$link);
+	header("Location:".$_SERVER['PHP_SELF']);
+}
 
 head("資料庫備份輔助");
 print_menu($school_menu_p);
@@ -52,7 +68,37 @@ mysqldump&nbsp; -u帳號&nbsp; -p密碼&nbsp; --default-character-set=latin1&nbsp; s
 </td></tr>
 </FORM>
 <TR><td colspan=2 style='font-size:9pt'>
-<?php if ($_POST[ACT]=='list') echo $Show_SQL; ?>
+<?php if ($_POST['ACT']=='list') echo $Show_SQL; ?>
+<TR><td colspan=2 style='font-size:14pt'>
+InnoDB格式的資料表如下：
+</td></tr>
+<TR><td colspan=2 style='font-size:10pt'>
+<?php
+$a=array('student_view','teacher_course_view','teacher_post_view');
+$link=mysql_pconnect($mysql_host,$mysql_user,$mysql_pass) or die("無法連線");
+mysql_select_db($mysql_db,$link);
+$SQL="SHOW TABLE STATUS FROM  $mysql_db ";
+$rs=mysql_query($SQL,$link) or die($SQL);
+$ck='N';
+// $Show_SQL='';
+while ($row = mysql_fetch_array ($rs)){
+if (!in_array($row['Name'],$a) and $row['Engine']=='InnoDB'){
+	echo $row['Name'].'<br>';$ck='Y';
+	//echo $row['Engine']."<br>";
+}
+
+//if ($row['Engine']!='MyISAM' and !in_array($row['Name'],$a)) $Show_SQL[]=$row['Name'];	
+//echo "ALTER TABLE `".$row['Name']."`  ENGINE=MyISAM; flush privileges;<br>";
+//echo "ALTER TABLE `".$row['Name']."` ENGINE=INNODB; flush privileges;<br>";
+}
+if ($ck=='Y'){
+echo "<INPUT TYPE='button' value='將上述資料表全部改為MyISAM,以方便備份。' onclick=\"if( window.confirm('確定資料表改為MyISAM？確定？')){location.href='del_comment.php?act=ToMyISAM';}\">";
+}else{
+echo "<b style='color:red;'>沒有任何InnoDB的資料表</b><br>
+InnoDB的資料表不支援以拷貝的方式備份<br>
+改為MyISAM,備份及回復上會較方便。
+";}
+?></td></tr>
 </table>
 
 <?foot();?>

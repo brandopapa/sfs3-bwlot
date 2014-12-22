@@ -1,5 +1,5 @@
 <?php
-//$Id: chi_fun.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: chi_fun.php 8061 2014-06-10 14:21:11Z chiming $
 ########-      get_subj  取得該班所有SS_ID科目名稱函式 --------#################
 ##   $type=all全部,seme有學期成績,stage須段考,no_test不須段考
 ##    計分need_exam  完整print  加權
@@ -176,7 +176,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 A:link  {text-decoration:none;color:blue; }
 A:visited {text-decoration:none;color:blue; }
 A:hover {background-color:FF8000;color: #000000;  }
-</style><?
+</style><?php
 }
 function backe($st="未填妥!按下後回上頁重填!") {
 echo "<BR><BR><BR><CENTER><form>
@@ -185,4 +185,4 @@ echo "<BR><BR><BR><CENTER><form>
 	exit;
 	}
 
-?>
+

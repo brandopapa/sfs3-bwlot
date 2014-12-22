@@ -1,6 +1,6 @@
 <?php
 
-//$Id: docup_p_add.php 5321 2009-01-15 07:52:35Z brucelyc $
+//$Id: docup_p_add.php 8142 2014-09-23 08:17:57Z smallduh $
 
 //設定檔載入檢查
 include "docup_config.php";
@@ -29,7 +29,7 @@ $state .= "</select>";
 ?>
 
 <form method="post" action="<?php echo $_SERVER[PHP_SELF] ?>">
-<input type=hidden name="doc_kind_id" value="<? echo $_GET[doc_kind_id] ?>">
+<input type=hidden name="doc_kind_id" value="<?php echo $_GET[doc_kind_id] ?>">
 <table  class=module_body align=center>
 <caption><b>新增文件專案</b></caption>  
 <tr> 
@@ -63,6 +63,6 @@ $state .= "</select>";
 </tr>
 </table>
 </form>
-<?
+<?php
 if ($is_standalone!="1") foot();
 ?>

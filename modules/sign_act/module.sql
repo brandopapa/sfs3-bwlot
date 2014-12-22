@@ -1,4 +1,4 @@
-# // $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# // $Id: module.sql 8152 2014-09-30 01:15:55Z smallduh $
 # 資料表格式： `sign_act_kind`
 #
 CREATE TABLE sign_act_kind (
@@ -17,7 +17,7 @@ CREATE TABLE sign_act_kind (
   manager varchar(40) default NULL,
   school_list text NOT NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
     
 
     

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_setup3_teacher.php 6869 2012-08-30 03:58:07Z infodaes $
+// $Id: course_setup3_teacher.php 8101 2014-08-31 14:51:15Z infodaes $
 
 /* 取得基本設定檔 */
 require_once "config.php";
@@ -37,8 +37,7 @@ if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 
 
 if($act == "儲存課表"){
-
-	save_class_table($sel_year,$sel_seme,$hide_class_id,$ss_id,$teacher_sn,$room,$c_kind);
+	save_class_table($sel_year,$sel_seme,$hide_class_id,$ss_id,$teacher_sn,$co_sn,$room,$c_kind);
 	//$to="list_class_table" ;
 	$act="list_class_table";
 	$main=list_teacher_table($sel_year,$sel_seme,$teacher_sn,$set_class_id);
@@ -328,12 +327,14 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 	$dayn=sizeof($weekN)+1;
 	
 	//找出某教師所有課程
-	$sql_select = "select course_id,teacher_sn,day,sector,ss_id,room,c_kind ,class_id from score_course where `year` = '$sel_year' and semester='$sel_seme' and  teacher_sn='$teacher_sn' order by day,sector";
+	$sql_select = "select course_id,teacher_sn,cooperate_sn,day,sector,ss_id,room,c_kind ,class_id from score_course where `year` = '$sel_year' and semester='$sel_seme' and  teacher_sn='$teacher_sn' order by day,sector";
+//echo $sql_select.'<br>';
 	$recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
-	while (list($course_id,$t_sn,$day,$sector,$ss_id,$room,$c_kind ,$class_id)= $recordSet->FetchRow()) {
+	while (list($course_id,$t_sn,$co_sn,$day,$sector,$ss_id,$room,$c_kind ,$class_id)= $recordSet->FetchRow()) {
 		$k=$day."_".$sector;
 		$a[$k]=$ss_id;
 		$b[$k]=$t_sn;
+		$co[$k]=$co_sn;
 		$c[$k]=$class_id;
 		$r[$k]=$room;
 		$ckind[$k]=$c_kind;
@@ -442,6 +443,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 	  $set_teacher_sn_select = $sel->get_select();    
 	  
 	  
+	  
 	  //----------------------------------------------------------
 		//取得科目名稱陣列
 		$subject_name_arr =  &get_subject_name_arr();
@@ -512,7 +514,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
     */
     
     //取得全部排課內容
- 	  $query = " SELECT class_id , teacher_sn, class_year, class_name, day ,sector ,ss_id FROM `score_course`
+ 	  $query = " SELECT class_id , teacher_sn,cooperate_sn, class_year, class_name, day ,sector ,ss_id FROM `score_course`
               WHERE `year` = '$sel_year' AND `semester` = '$sel_seme'  and  teacher_sn <> '$teacher_sn' ORDER BY `class_id` ASC  " ;
    // echo  $query ;           
     $res = $CONN->Execute($query) or trigger_error("SQL 錯誤",E_USER_ERROR);
@@ -527,7 +529,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 			 	     $sn_end[$now_class_id] = $i ;	
 			     }				 	 	
 			 	   //$js_str1 .= "the_class_course[$i]= '".  $class_array[$res->fields[class_id]] .  addslashes($select_ss_arr[$res->fields[ss_id]]) . "(". addslashes( $all_teacher_array[ $res->fields[teacher_sn] ] )  . ")' ;\n " ;
-			 	   $js_str1 .= "the_class_course[$i]= '".  addslashes($select_ss_arr[$res->fields[ss_id]]) . "(". addslashes( $all_teacher_array[ $res->fields[teacher_sn] ] )  . ")' ;\n " ;
+				   $js_str1 .= "the_class_course[$i]= '".  addslashes($select_ss_arr[$res->fields[ss_id]]) . "(". addslashes( $all_teacher_array[ $res->fields[teacher_sn] ] ) . ")' ;\n " ;
 			 	   
 				   $js_str2 .= "the_class_course_pos[$i] = '" .$res->fields[day] ."_" . $res->fields[sector] ."' ;\n " ;
 				   $sn_end[$now_class_id] = $i ;				
@@ -576,7 +578,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 
     " ;		
     
-		
+	
 		//取得課表
 		for ($j=1;$j<=$sections;$j++){
 
@@ -599,7 +601,17 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 				$room_sel='';
 				$re_set ='';
 				$class_cel_sel ='' ;
-
+				//$co_sn_name ='' ;
+				
+				//協同教學教師選單	
+				$sel = new drop_select();
+				$sel->id= $co[$k2];
+				$sel->s_name = "co_sn[$k2]";
+				$sel->arr = $all_teacher_array;
+				$sel->top_option = "";
+				$sel->is_submit = False ;
+				$co_sn_name = $sel->get_select();
+					
 
 				if(!empty( $a[$k2] )) {
 					//有排課
@@ -624,6 +636,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 					$checked=$ckind[$k2]?'checked':'';
 					$kind_check="<input type='radio' name='c_kind[$k2]' value='0' checked>否";
 					$kind_check.="<input type='radio' name='c_kind[$k2]' value='1' $checked>是";
+					
 					$re_set ="";					
 				}
 				//未排課
@@ -637,13 +650,14 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 					$subject_sel = " <input name=\"inp_ss_id[$k2]\" type=\"text\" value=\"\" size=\"8\" readonly  class=\"showborder\" > \n" ;
 					$subject_sel .= "<input type=\"hidden\" name=\"ss_id[$k2]\" value=\"0\">\n";
 					
-          $class_cel_sel = "班級:<input name=\"show_class_id[$k2]\" type=\"text\" value=\"\" size=\"8\" readonly class=\"showborder\" > <br>\n" ;
-					$class_cel_sel .= "<input type=\"hidden\" name=\"hide_class_id[$k2]\" value=\"\">\n";					
+					  $class_cel_sel = "班級:<input name=\"show_class_id[$k2]\" type=\"text\" value=\"\" size=\"8\" readonly class=\"showborder\" > <br>\n" ;
+								$class_cel_sel .= "<input type=\"hidden\" name=\"hide_class_id[$k2]\" value=\"\">\n";
 					
 					$room_sel =&select_room($sel_year,$sel_seme,"room[$k2]",$r[$k2]);
 					$checked=$ckind[$k2]?'checked':'';
 					$kind_check="<input type='radio' name='c_kind[$k2]' value='0' checked>否";
 					$kind_check.="<input type='radio' name='c_kind[$k2]' value='1' $checked>是";
+
 					$re_set ="";
 				}
 				
@@ -657,6 +671,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 				$class_cel_sel
 				教室:$room_sel 
 				<br>兼課:$kind_check
+				<br>協同教學教師: $co_sn_name
 				</td>\n";
 			
 
@@ -670,7 +685,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 		//該班課表
 		$main_class_list="
 		<form action='{$_SERVER['PHP_SELF']}' method='post' name= 'F2' >
-	<tr><td colspan='6'  bgcolor='#FFFFFF'><font color=red>先選定[班級]及[□節次]，再指定科目。注意：在離開、換排課教師前要先做儲存！</font>		$submit<br>
+		<tr><td colspan='6'  bgcolor='#FFFFFF'><font color=red>先選定[班級]及[□節次]，再指定科目。注意：在離開、換排課教師前要先做儲存！</font>		$submit<br>
 		$set_kmo_str</td></tr>
 		<tr bgcolor='#E1ECFF'><td align='center'>節</td>$main_a</tr>
 		$all_class
@@ -679,7 +694,6 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 		<input type='hidden' name='sel_year' value='$sel_year'>
 		<input type='hidden' name='sel_seme' value='$sel_seme'>
 		<input type='hidden' name='teacher_sn' value='$teacher_sn'>
-
 
 		$submit
 		</td></tr>
@@ -713,8 +727,9 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 		<form action='{$_SERVER['PHP_SELF']}' method='post' name='myform'>
 		<input type='hidden' name='act' value='list_class_table'>
 		<tr><td colspan='6' nowrap bgcolor='#FFFFFF'>
-
-		$date_text 任課教師: $set_teacher_sn_select $open_window &nbsp;&nbsp; 任教班級:$class_select $open_window2
+		$date_text 
+		任教班級:$class_select $open_window2
+		任課教師: $set_teacher_sn_select $open_window &nbsp;&nbsp; 
 
     </td>
 		</tr>
@@ -733,7 +748,7 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 
 
 //儲存課表
-function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",$teacher_sn="",$room="",$c_kind=""){
+function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",$teacher_sn="",$co_sn="",$room="",$c_kind=""){
 	global $CONN;
 	while(list($k,$v)=each($ss_id)){
 		$kk=explode("_",$k);
@@ -741,6 +756,7 @@ function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",
 		$sector=$kk[1];
 
 		$teacher=$teacher_sn;
+		$cooperate=$co_sn[$k];
 		$class_id = $hide_class_id[$k] ;
 		
 		if (substr($ss_id[$k],0,3) == '**-' ) {
@@ -757,7 +773,7 @@ function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",
 		$r=$room[$k];
 		
 		if ($subject == 0 and $class_id) {
-			 delete_course($c[course_id],$sel_year,$sel_seme,$teacher,$class_id,$day,$sector,$subject,$r); 
+			 delete_course($c[course_id],$sel_year,$sel_seme,$teacher,$cooperate,$class_id,$day,$sector,$subject,$r); 
 		}	else {
     		//先取得看看有無課程
     		$c=&get_course("",$day,$sector,$class_id);
@@ -765,9 +781,9 @@ function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",
     		if(empty($subject) and empty($c[course_id]))continue;
     		
     		if(empty($c[course_id])){
-    			add_course($sel_year,$sel_seme,$teacher,$class_id,$day,$sector,$subject,$r,$c_kind);
+    			add_course($sel_year,$sel_seme,$teacher,$cooperate,$class_id,$day,$sector,$subject,$r,$c_kind);
     		}else{
-    			update_course($c[course_id],$sel_year,$sel_seme,$teacher,$class_id,$day,$sector,$subject,$r,$c_kind);
+    			update_course($c[course_id],$sel_year,$sel_seme,$teacher,$cooperate,$class_id,$day,$sector,$subject,$r,$c_kind);
     		}
 		}
 
@@ -776,21 +792,21 @@ function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",
 }
 
 //儲存一筆課程資料（一班一天的某一節）
-function add_course($sel_year,$sel_seme,$teacher,$class_id,$day,$sector,$subject,$room,$c_kind){
+function add_course($sel_year,$sel_seme,$teacher,$cooperate,$class_id,$day,$sector,$subject,$room,$c_kind){
 	global $CONN;
 	//把class_id換成舊的學年
 	$c=class_id_2_old($class_id);
 
 	$sql_insert = "insert into score_course
-	 (year,semester,class_id,teacher_sn, class_year,class_name,day,sector,ss_id,room,c_kind) values
-	($sel_year,'$sel_seme','$class_id','$teacher','$c[3]','$c[4]','$day','$sector','$subject','$room','$c_kind')";
+	 (year,semester,class_id,teacher_sn,cooperate_sn, class_year,class_name,day,sector,ss_id,room,c_kind) values
+	($sel_year,'$sel_seme','$class_id','$teacher','$cooperate','$c[3]','$c[4]','$day','$sector','$subject','$room','$c_kind')";
 	if($CONN->Execute($sql_insert))	return true;
 	die($sql_insert);
 	return false;
 }
 
 //更新一筆課程資料（一班一天的某一節）
-function update_course($course_id="",$sel_year="",$sel_seme="",$teacher,$class_id="",$day,$sector,$subject,$room,$c_kind){
+function update_course($course_id="",$sel_year="",$sel_seme="",$teacher,$cooperate,$class_id="",$day,$sector,$subject,$room,$c_kind){
 	global $CONN;
 	//把class_id換成舊的?レ~
 	$c=class_id_2_old($class_id);
@@ -800,7 +816,7 @@ function update_course($course_id="",$sel_year="",$sel_seme="",$teacher,$class_i
 	}else{
 		$where="where class_id = '$class_id'  and  day='$day'  and sector='$sector'";
 	}
-	$sql_update = "update score_course set year=$sel_year, semester='$sel_seme', class_id='$class_id',teacher_sn='$teacher', class_year='$c[3]',class_name='$c[4]', day='$day', sector='$sector', ss_id='$subject', room='$room', c_kind='$c_kind' $where";
+	$sql_update = "update score_course set year=$sel_year, semester='$sel_seme', class_id='$class_id',teacher_sn='$teacher',cooperate_sn='$cooperate', class_year='$c[3]',class_name='$c[4]', day='$day', sector='$sector', ss_id='$subject', room='$room', c_kind='$c_kind' $where";
 //	echo $sql_update;
 	$CONN->Execute($sql_update) or die($sql_update);
 	return true;
@@ -903,11 +919,12 @@ function get_Cyear_class_id($sel_year,$sel_seme,$cyear=""){
 //某班的排課情形
 function get_course_class_arr($sel_year,$sel_seme,$class_id) {
 	global $CONN;
-	$query = "SELECT a.teacher_sn,a.ss_id,a.day,a.sector,a.c_kind,b.name FROM score_course a RIGHT JOIN teacher_base b ON a.teacher_sn=b.teacher_sn WHERE a.year='$sel_year' and a.semester='$sel_seme' and a.class_id='$class_id' ";
+	$query = "SELECT a.teacher_sn,a.cooperate_sn,a.ss_id,a.day,a.sector,a.c_kind,b.name FROM score_course a RIGHT JOIN teacher_base b ON a.teacher_sn=b.teacher_sn WHERE a.year='$sel_year' and a.semester='$sel_seme' and a.class_id='$class_id' ";
 	$res = $CONN->Execute($query) or trigger_error("SQL 錯誤",E_USER_ERROR);
 	while (!$res->EOF) {
 		$temp_ds = $res->fields[day]."_".$res->fields[sector];
 		$temp_arr[$temp_ds][teacher_sn]=$res->fields[teacher_sn];
+		$temp_arr[$temp_ds][cooperate]=$res->fields[cooperate];
 		$temp_arr[$temp_ds][name]=$res->fields[name];
 		$temp_arr[$temp_ds][ss_id]=$res->fields[ss_id];
 		$temp_arr[$temp_ds][c_kind]=$res->fields[c_kind];

@@ -33,8 +33,8 @@ if  ( $key)  {
   //           g.grad_sn , g.grad_word , grad_num   from stud_base as s  LEFT JOIN grad_stud as g ON s.stud_id=g.stud_id 
   //           where s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";   
   $sqlstr = "select s.stud_id  , s.stud_person_id, s.stud_name ,s.curr_class_num ,s.stud_birthday ,s.stud_sex , 
-             g.grad_sn , g.grad_word , grad_num   from stud_base as s , grad_stud as g where  s.stud_id=g.stud_id 
-             and s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";   
+             g.grad_sn , g.grad_word , grad_num   from stud_base as s , grad_stud as g where s.student_sn=g.student_sn 
+             and s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";  
 
   //echo  $sqlstr ;         
   $result =$CONN->Execute($sqlstr) or user_error("Åª¨ú¥¢±Ñ¡I<br>$sqlstr",256) ; 
@@ -49,6 +49,7 @@ if  ( $key)  {
 		$clear_arr["person_id". $i] ="" ;
         $clear_arr["birth" . $i] ="" ;
         $clear_arr["num". $i] ="";
+		$clear_arr["grad_id". $i] ="";
   }  
   $clear_arr["ttt"]=$title_str ; 
   $clear_arr["grad_id"] ="" ;
@@ -103,7 +104,7 @@ if  ( $key)  {
       $temp_arr["sex" . $i ]=$stud_sex_temp ;
 	  $temp_arr["person_id" . $i ]=$stud_person_id;
       $temp_arr["birth" . $i]=$stud_birthday ;
-      $temp_arr["grad_id"]=$stud_graduate_num ;
+      $temp_arr["grad_id". $i]=$stud_graduate_num ;
       $temp_arr["num" . $i]=$grad_num ;
       $have_data_out = true ;    
         

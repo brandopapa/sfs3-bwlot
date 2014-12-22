@@ -11,7 +11,7 @@ function jampb(id) {
 function chk_sco() {
 var SS=Fix2.score_balance.value;
 var X=0;
-if ( SS!=0 && SS!=2 && SS!=4 && SS!=7 ) {alert('§¡¿Å¾Ç²ß¿é¤J¿ù»~!!');X=1;}
+if ( SS!=0 && SS!=2 && SS!=4 && SS!=6 ) {alert('§¡¿Å¾Ç²ß¿é¤J¿ù»~!!');X=1;}
 if(X==0) {Fix2.form_act.value='update';Fix2.submit();}
 }
 
@@ -58,6 +58,8 @@ if(X==0) {Fix2.form_act.value='update';Fix2.submit();}
 
 {{foreach from=$this->stu item=stu key=st_sn}}
 
+{{assign var="T20" value=$this->tol20(20,$stu.score_service+$stu.score_reward+$stu.score_fault)}}
+{{assign var="T16" value=$this->tol20(16,$stu.score_balance+$stu.score_race+$stu.score_physical)}}
 
 {{if $smarty.post.student_sn==$stu.student_sn}}
 <tr align=center  style='font-size:10pt' bgcolor=#9EBCDD>
@@ -75,7 +77,7 @@ if(X==0) {Fix2.form_act.value='update';Fix2.submit();}
 
 <td>{{$stu.score_nearby}}</td>
 <td>{{if $stu.score_balance!='0' and $stu.score_balance!=''}}{{$stu.score_balance}}{{/if}}</td>
-<td>{{$stu.income+$stu.score_nearby+$stu.score_service+$stu.score_reward+$stu.score_fault+$stu.score_balance+$stu.score_race+$stu.score_physical}}</td>
+<td>{{$stu.income+$stu.score_nearby+$T20+$T16}}</td>
 
 </tr>
 <tr align=center  style='font-size:11pt' bgcolor=white>
@@ -122,7 +124,8 @@ bgcolor=white ondblclick="jampb('{{$stu.student_sn}}')"  onMouseOver="this.style
 
 <td>{{$stu.score_nearby}}</td>
 <td>{{if $stu.score_balance!='0' and $stu.score_balance!=''}}{{$stu.score_balance}}{{/if}}</td>
-<td>{{$stu.income+$stu.score_nearby+$stu.score_service+$stu.score_reward+$stu.score_fault+$stu.score_balance+$stu.score_race+$stu.score_physical}}</td>
+
+<td>{{$stu.income+$stu.score_nearby+$T20+$T16}}</td>
 
 </tr>
 

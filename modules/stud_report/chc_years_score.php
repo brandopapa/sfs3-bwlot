@@ -74,7 +74,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 .bur2{border-style: groove;border-width:1px: groove;background-color:#FFCCCC;font-size:12px;Padding-left:0 px;Padding-right:0 px;}
 .f8{font-size:9pt;color:blue;}
 .f9{font-size:9 pt;}
-</style><?
+</style><?php
 }
 
 ##################  學期下拉式選單函式  ##########################
@@ -117,7 +117,7 @@ return $str;
  }
 ###########################################################
 ##  傳入年級,學年度,學期 預設值為all表示將傳出所有年級與班級
-##  傳出以  class_id  為索引的陣列  
+##  傳出以  class_id  為索引的陣列
 function get_class_info1($grade='all',$year_seme='') {
 	global $CONN ;
 if ($year_seme=='') {

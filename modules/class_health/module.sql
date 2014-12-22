@@ -20,7 +20,7 @@ CREATE TABLE health_disease_report (
   teacher_sn int(10) unsigned NOT NULL default '0',
   PRIMARY KEY (student_sn,dis_date),
   KEY `id` (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `health_inflection_item`
@@ -32,7 +32,7 @@ CREATE TABLE health_inflection_item (
   memo text NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (iid)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 INSERT INTO health_inflection_item VALUES (1,'類流感','急性呼吸道感染且具有下列症狀：1.突然發病有發燒（耳溫≧38℃）及呼吸道感染 2.且有肌肉酸痛或頭痛或極度厭倦感',1);
 INSERT INTO health_inflection_item VALUES (2,'手足口病或&#30129;疹性咽峽炎','手足口病：口、手掌、腳掌及或膝蓋、臀部出現小水泡或紅疹；疹性咽峽炎：發燒且咽部出現小水泡或潰瘍',1);
 INSERT INTO health_inflection_item VALUES (3,'腹瀉','每日腹瀉三次以上，且合併下列任何一項以上：1.嘔吐 2.發燒 3.黏液液狀或血絲 4.水瀉',1);
@@ -56,4 +56,4 @@ CREATE TABLE health_inflection_record (
   teacher_sn int(10) unsigned NOT NULL default '0',
   PRIMARY KEY (student_sn,dis_date),
   KEY `id` (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

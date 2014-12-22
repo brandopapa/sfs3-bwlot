@@ -1,5 +1,5 @@
 <?php
-// $Id: module-upgrade.php 6877 2012-09-07 02:45:37Z hsiao $
+// $Id: module-upgrade.php 8054 2014-06-04 12:04:49Z smallduh $
 if(!$CONN){
         echo "go away !!";
         exit;
@@ -129,5 +129,45 @@ if (!is_file($up_file_name)){
 	fclose ($fp);
 }
 
+
+
+$up_file_name =$upgrade_str."2014-06-04.txt";
+
+$str="";
+
+if (!is_file($up_file_name)){
+	$q[1]="ALTER TABLE stud_ext_data ADD student_sn int(10)";
+	$t[1]="stud_ext_data資料表增加 student_sn 欄位";
+	$q[2]="ALTER TABLE stud_ext_data DROP PRIMARY KEY";
+	$t[2]="stud_ext_data資料表移除原本的primary key";
+	$q[3]="ALTER TABLE `stud_ext_data` ADD `sn` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY";
+	$t[3]="stud_ext_data資料表增加 sn 欄位, 並設為 primary key";
+  
+  foreach ($q as $k=>$query) {	
+	if ($CONN->Execute($query))
+	 {
+		$str.=$t[$k]." success\n";
+	 } else {
+		$str.=$t[$k]." failed\n";
+	 }
+  }
+	$temp_query = $str." -- by smallduh 2014-06-04 \n$query";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+	//填入 student_sn
+	$query="select * from stud_ext_data";
+	$res=$CONN->Execute($query);
+	while ($row=$res->fetchRow()) {
+		$edit_year=substr($row['ed_date'],0,4)-1911;
+	  $sql="select student_sn from stud_base where stud_id='".$row['stud_id']."' and ".$edit_year."-stud_study_year<9 and ".$edit_year."-stud_study_year>0 limit 1";
+		$res_stud=$CONN->Execute($sql) or die ($sql);
+		if ($res_stud->RecordCount()>0) {
+			$student_sn=$res_stud->fields['student_sn'];
+			$sql="update stud_ext_data set student_sn='$student_sn' where mid='".$row['mid']."' and stud_id='".$row['stud_id']."'";					
+			$CONN->Execute($sql) or die ($sql);
+		}	  
+	}
+}
 
 ?>

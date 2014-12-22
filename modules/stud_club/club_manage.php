@@ -29,6 +29,7 @@ $c_curr_seme=($_POST['c_curr_seme']!="")?$_POST['c_curr_seme']:sprintf('%03d%1d'
 
 //目前選定年級，100指未指定
 $c_curr_class=($_POST['c_curr_class']!="")?$_POST['c_curr_class']:"100";
+$school_kind_name[100]="跨年";
 
 //取得學期社團設定
 $SETUP=get_club_setup($c_curr_seme);
@@ -130,6 +131,8 @@ if ($_POST['mode']=="setting_pass_score") {
 		exit();
    }
 }
+
+
 //新增社團 ********************************************************************
 if ($_POST['mode']=="inserting") {
 
@@ -337,7 +340,8 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
     if ($SETUP['arrange_record']!='') {
     ?>
     <input type="button" value="編班記錄" onclick="document.myform.mode.value='list_record';document.myform.submit()">
-    <?
+		<input type="button" value="清除編班資料" style="color:#0000FF" onclick="club_clear()">
+    <?php
     }
     ?>
 		<!--第一列左側, 功能表之後提示最後動作訊息 $INFO -->
@@ -350,7 +354,7 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
 	  <!--左列視窗, 學期社團列表 -->
 	  <td width="160" valign="top" style="color:#FF00FF;font-size:10pt">
 	  	<select name="c_curr_class" onchange="document.myform.club_sn.value='';document.myform.mode.value='';document.myform.submit()">
-	  		<option value="" style="color:#FF00FF">請選擇..</option>
+	  		<optgroup style="color:#FF00FF" label="請選擇..">
 	  	<?php
 			    $class_year_array=get_class_year_array(sprintf('%d',substr($c_curr_seme,0,3)),sprintf('%d',substr($c_curr_seme,-1)));
                 foreach ($class_year_array as $K=>$class_year_name) {
@@ -530,7 +534,7 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
 	  <?php
 	  } // end if ($_POST['mode']=="insert") =======================================
 	  
-	 	//複製上學期社團 ================================================================
+	 	//複製上學期社團 =============================================================
 	  if ($_POST['mode']=="club_copy") {
 	  	$last_seme=($curr_seme==2)?sprintf('%03d%1d',$curr_year,1):sprintf('%03d%1d',$curr_year-1,2);
 	   	
@@ -550,7 +554,7 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
 		   </table>
 		   <?php
 		   }
-			$school_kind_name[100]="跨年";
+			
 			$class_year_array=get_class_year_array(sprintf('%d',substr($last_seme,0,3)),sprintf('%d',substr($last_seme,-1)));
 			$class_year_array[100]="100";
 			
@@ -628,6 +632,40 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
 		 <?php
 		} //end if club_copy
 
+//
+//清除已編班名單 ********************************************************************
+if ($_POST['mode']=="club_clear") {
+	
+ $year_seme=$_POST['c_curr_seme'];
+ 
+ /*
+		把所有開放選修社團名單全部清除 
+ */
+  echo "清除".$year_seme."的編班資料! <br>";
+  
+ 	$query="select * from stud_club_base where year_seme='$year_seme' and club_open=1 order by club_class";
+ 	$res=$CONN->Execute($query);
+ 	while ($row=$res->Fetchrow()) {
+ 	 $club_sn=$row['club_sn'];
+ 	 $club_name=$row['club_name'];
+ 	 $club_class=$row['club_class'];
+ 	 $sql="select * from association where club_sn='$club_sn' and seme_year_seme='$year_seme'";
+ 	 $res_stud=$CONN->Execute($sql);
+ 	 $stud_num=$res_stud->RecordCount();  //人數
+ 	 $sql="delete from association where club_sn='$club_sn' and seme_year_seme='$year_seme'";
+ 	 $res_del=$CONN->Execute($sql) or die("刪除失敗!");
+	 echo $school_kind_name[$club_class]."級社團：".$club_name."，已編".$stud_num."人 =>清除 <br>";
+ 	
+ 	}
+  echo "清除學生選社志願序註記資料!<br>";
+  $sql="update stud_club_temp set arranged=0 where year_seme='$year_seme'";
+	$res=$CONN->Execute($sql) or die("清除失敗!");  
+  echo "清除編班記錄!<br>";
+  $sql="update stud_club_setup set arrange_record='' where year_seme='$year_seme'";
+	$res=$CONN->Execute($sql) or die("清除失敗!");  
+
+}
+
 	 
 	  	
 	  //手動指定某社團學員 ================================================================
@@ -658,3 +696,14 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
   </td>
 	</tr>
 </table>
+<Script>
+		function club_clear() {
+			if_confirm=confirm('您確定要清除所有編班資料？\n（注意！本動作會把本學期「所有開放選課的社團」名單全數清除！）');
+			if (if_confirm) {
+			 document.myform.mode.value='club_clear';
+			 document.myform.submit();
+			} else {
+			 return false;
+			}
+		}		
+</Script>

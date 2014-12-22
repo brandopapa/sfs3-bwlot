@@ -85,7 +85,7 @@ if($stud_class)
 
 	while(list($student_sn,$seme_num,$stud_name,$stud_sex,$stud_id,$stud_study_year)=$recordSet->FetchRow()) {
 		if($pic_checked) $my_pic=get_pic($stud_study_year,$stud_id);
-		$seme_num=sprintf('%02d',$seme_num);
+		$seme_num=sprintf('%01d',$seme_num);
 		$stud_sex_color=($stud_sex==1)?"#EEFFEE":"#FFEEEE";
 		//$remote=$disadvantage_array[$student_sn]['remote'];
 		$disadvantage=$disadvantage_array[$student_sn]['disadvantage'];

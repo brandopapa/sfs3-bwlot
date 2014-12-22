@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 7665 2013-10-09 08:36:12Z infodaes $
+// $Id: module-cfg.php 8225 2014-12-04 02:28:13Z infodaes $
 
 //---------------------------------------------------
 //
@@ -70,6 +70,7 @@ $menu_p = array(
 "grad_word.php"=>"畢業字號",
 "prolin.php"=>"名冊列印",
 "new_school_cvs.php"=>"新生入學檔案轉出",
+"sr_tc_csv.php"=>"臺中市就學管控系統檔案轉出",
 "grad_chi.php"=>"証書列印(橫)",
 "grad_edit.php"=>"例外編修",
 "edu_txt.php"=>"教育程度資料檔",

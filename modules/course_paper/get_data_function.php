@@ -1,5 +1,5 @@
-<?
-// $Id: get_data_function.php 5310 2009-01-10 07:57:56Z hami $
+<?php
+// $Id: get_data_function.php 8105 2014-09-02 05:44:58Z hami $
 //取得全校班級名稱，陣列["091_2_01_02"]
 function get_global_class_name($sel_year="",$sel_seme="",$mode="長") {
     global $CONN, $school_kind_name ,$c_name;

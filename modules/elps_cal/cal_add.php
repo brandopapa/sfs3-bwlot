@@ -36,13 +36,13 @@ echo cal_sel("xxx",$_GET[syear])."<B style='color:red'> << </B>請先選擇";
 ?>
 <TABLE border=0 width=85% style='font-size:12pt;' cellspacing='1' cellpadding=3 bgcolor='lightGray'>
 <TR bgcolor=white><td colspan=2 align=center>
-<h3><?=$cal_name?></h3>
-</td></tr><form action="<?=$SERVER[PHP_SELF]?>" method="post" name=f1>
+<h3><?php echo $cal_name; ?></h3>
+</td></tr><form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name=f1>
 <TR bgcolor=#9EBCDD>
 <td width=25%>名稱</td>
 <td width=75%>設定值</td></tr>
 <tr bgcolor=white><td>學年度</td>
-<td><input type="text" name="syear" size=6 value="<?=$barr[syear]?>" class=ipmei>
+<td><input type="text" name="syear" size=6 value="<?php echo $barr[syear]; ?>" class=ipmei>
 </td></tr>
 <tr bgcolor=white><td>選擇行事週別<BR><B style='color:red'>(可複選)</B></td>
 <td>

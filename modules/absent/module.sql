@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 # phpMyAdmin MySQL-Dump
 # version 2.4.0
 # http://www.phpmyadmin.net/ (download page)
@@ -31,5 +31,5 @@ CREATE TABLE stud_absent (
   UNIQUE KEY date (stud_id,date,section),
   KEY year (year,semester,class_id,stud_id),
   KEY sign_man_sn (sign_man_sn)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

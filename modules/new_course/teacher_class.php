@@ -1,5 +1,5 @@
 <?php
-// $Id: teacher_class.php 7482 2013-09-05 05:57:13Z infodaes $
+// $Id: teacher_class.php 8102 2014-08-31 15:06:51Z infodaes $
 
 /* 取得基本設定檔 */
 include "config.php";
@@ -102,7 +102,7 @@ function search_teacher_class_table($sel_year="",$sel_seme="",$view_tsn=""){
 	$main=teacher_all_class($sel_year,$sel_seme,$view_tsn)."<br>";
 
 	//取得教師授課的班級資料（陣列）
-	$sql_select = "SELECT class_id FROM score_course WHERE year = $sel_year AND semester=$sel_seme AND teacher_sn ='$view_tsn' group by class_id";
+	$sql_select = "SELECT class_id FROM score_course WHERE year = $sel_year AND semester=$sel_seme AND (teacher_sn ='$view_tsn' OR cooperate_sn ='$view_tsn') group by class_id";
 	$recordSet=$CONN->Execute($sql_select) or user_error("錯誤訊息：",$sql_select,256);
 	while(list($clas_id)= $recordSet->FetchRow()){
 		$clas_id_array[]=$clas_id;
@@ -127,7 +127,7 @@ function teacher_all_class($sel_year="",$sel_seme="",$tsn=""){
 	$dayn=sizeof($weekN)+1;
 
 	//找出教師該年度所有課程
-	$sql_select = "select course_id,class_id,day,sector,ss_id,room,c_kind from score_course where teacher_sn='$tsn' and year='$sel_year' and semester='$sel_seme' order by day,sector";
+	$sql_select = "select course_id,class_id,day,sector,ss_id,room,c_kind from score_course where year='$sel_year' and semester='$sel_seme' and (teacher_sn='$tsn' or cooperate_sn='$tsn') order by day,sector";
 	$recordSet=$CONN->Execute($sql_select) or user_error("錯誤訊息：",$sql_select,256);
 	while (list($course_id,$class_id,$day,$sector,$ss_id,$room,$c_kind)= $recordSet->FetchRow()) {
 		$k=$day."_".$sector;
@@ -237,7 +237,7 @@ function &select_teacher_in_course($col_name="teacher_sn",$teacher_sn="",$enable
 	
 
 	//有排課教師 sn 標記
-	$sql_select2 =" SELECT teacher_sn  FROM score_course where teacher_sn<>'0'  and year='$sel_year' and  semester='$sel_seme'  group by teacher_sn " ;
+	$sql_select2 =" SELECT teacher_sn FROM score_course where teacher_sn<>'0'  and year='$sel_year' and  semester='$sel_seme'  group by teacher_sn " ;
   $recordSet2=$CONN->Execute($sql_select2) or trigger_error($sql_select2, E_USER_ERROR);
   while (list($tsn)= $recordSet2->FetchRow()) {
   	$sn_list[$tsn]=1 ;

@@ -1,6 +1,6 @@
 <?php
 
-//$Id: myfun2.php 7710 2013-10-23 12:40:27Z smallduh $
+//$Id: myfun2.php 8245 2014-12-16 05:09:34Z smallduh $
 
 //¦sÀÉ
 function save_semester_score($sel_year,$sel_seme) {
@@ -32,10 +32,10 @@ function save_semester_score($sel_year,$sel_seme) {
 				$class_id=student_sn_2_class_id($sel_year,$sel_seme,$val);
 				$score = trim($_POST["s_$val"]);
 				if($score=='') $score= -100;
-//				if (in_array($val,$temp_sn_arr[$i]))
-//					$query = "UPDATE $score_semester set score='$score',update_time='$now',teacher_sn='$_SESSION[session_tea_sn]' where class_id='$class_id' and ss_id='$_POST[ss_id]' and test_sort='$i' and test_kind='$test_kind' and student_sn='$val'";
-//				else
-					$query = "REPLACE INTO $score_semester(class_id,student_sn,ss_id,score,test_name,test_kind,test_sort,update_time,teacher_sn) values('$class_id','$val','$_POST[ss_id]','$score','$test_kind','$test_kind','$i','$now','$_SESSION[session_tea_sn]')";
+				if (in_array($val,$temp_sn_arr[$i]))
+					$query = "UPDATE $score_semester set score='$score',update_time='$now',teacher_sn='$_SESSION[session_tea_sn]' where class_id='$class_id' and ss_id='$_POST[ss_id]' and test_sort='$i' and test_kind='$test_kind' and student_sn='$val'";
+				else
+					$query = "insert INTO $score_semester(class_id,student_sn,ss_id,score,test_name,test_kind,test_sort,update_time,teacher_sn) values('$class_id','$val','$_POST[ss_id]','$score','$test_kind','$test_kind','$i','$now','$_SESSION[session_tea_sn]')";
 				$CONN->Execute($query) or die($query);
 			}
 		}
@@ -52,10 +52,10 @@ function save_semester_score($sel_year,$sel_seme) {
 			$class_id=student_sn_2_class_id($sel_year,$sel_seme,$val);
 			$score = trim($_POST["s_$val"]);
 			if($score=='') $score= -100;
-		//	if (in_array($val,$temp_sn_arr))
-//				$query = "UPDATE $score_semester set score='$score',update_time='$now',teacher_sn='$_SESSION[session_tea_sn]' where class_id='$class_id' and ss_id='$_POST[ss_id]' and test_sort='$_POST[test_sort]' and test_kind='$test_kind' and student_sn='$val'";
-		//	else
-				$query = "REPLACE INTO $score_semester(class_id,student_sn,ss_id,score,test_name,test_kind,test_sort,update_time,teacher_sn) values('$class_id','$val','$_POST[ss_id]','$score','$test_kind','$test_kind','$_POST[test_sort]','$now','$_SESSION[session_tea_sn]')";
+			if (in_array($val,$temp_sn_arr))
+				$query = "UPDATE $score_semester set score='$score',update_time='$now',teacher_sn='$_SESSION[session_tea_sn]' where class_id='$class_id' and ss_id='$_POST[ss_id]' and test_sort='$_POST[test_sort]' and test_kind='$test_kind' and student_sn='$val'";
+			else
+				$query = "insert INTO $score_semester(class_id,student_sn,ss_id,score,test_name,test_kind,test_sort,update_time,teacher_sn) values('$class_id','$val','$_POST[ss_id]','$score','$test_kind','$test_kind','$_POST[test_sort]','$now','$_SESSION[session_tea_sn]')";
 			$CONN->Execute($query) or die($query);
 		}
 	}

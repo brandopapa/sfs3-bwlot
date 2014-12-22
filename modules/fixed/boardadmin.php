@@ -1,6 +1,6 @@
 <?php
 
-// $Id: boardadmin.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: boardadmin.php 8129 2014-09-23 07:39:39Z smallduh $
 
 //設定檔載入檢查
   require "config.php" ;
@@ -102,7 +102,7 @@ if ($key == "刪除"){
   </td>
 
 <td width="100%" valign=top bgcolor="#CCCCCC">
-   <form action="<?php echo $PHP_SELF ?>" name='eform' method="post" > 
+   <form action="<?php echo $PHP_SELF; ?>" name='eform' method="post" > 
 
         <table border="1" cellspacing="0" cellpadding="2" bordercolorlight="#333354" bordercolordark="#FFFFFF"  width="100%" class=main_body >
           <tr> 

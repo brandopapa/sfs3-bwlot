@@ -8,7 +8,6 @@
 include "config.php";
 include "sfs_oo_date2.php";
 include "../../include/sfs_case_PLib.php";
-//$m_arr = get_sfs_module_set("stud_sta",1); //更新 module-cfg.php 中的 var 對應的 value 時 要改成上面一行，才會執行更新
 $m_arr = get_sfs_module_set("stud_sta");
 
 //新增一個 zipfile 實例

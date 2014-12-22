@@ -1,5 +1,5 @@
 <?php 
-// $Id: view_list.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: view_list.php 8198 2014-11-05 01:41:25Z smallduh $
   // 看一頁的圖片
   require "config.php" ;
 
@@ -75,15 +75,15 @@ scrollbar-shadow-color:black ;
 ">
 <table width="40%" border="0" cellspacing="0" cellpadding="4" align="center">
   <tr>
-    <td><? echo $prev_str ?></td>
-    <td><? echo $index_str ?></td>
-    <td><? echo $next_str ?></td>
+    <td><?php echo $prev_str ?></td>
+    <td><?php echo $index_str ?></td>
+    <td><?php echo $next_str ?></td>
   </tr>
 </table>
 
 
 
-<?
+<?php
  echo "<div align=\"center\"><img src=\"$now_pic\"  border=\"1\"></div>" ;
 ?>
 </html>

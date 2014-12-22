@@ -191,7 +191,10 @@ function grade() {
 	
 	
 	
-	
+function tol20($max,$a) {
+	if ($a>$max) return $max;
+	return $a;
+}
 	
 	
 	

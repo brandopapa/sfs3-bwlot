@@ -9,7 +9,7 @@ function list_club_select($c_curr_seme,$c_curr_class) {
 	$result=mysql_query($query);
 	?>
 	<select size="20" name="select_club_sn" onchange="document.myform.club_sn.value=document.myform.select_club_sn.value;document.myform.mode.value='list';document.myform.submit();">
-		<option value="" style="color:#FF00FF">請選擇社團</option>	
+		<optgroup style="color:#FF00FF" label="請選擇社團"></optgroup>	
 	<?php
 	while ($row=mysql_fetch_array($result)) {
 	  ?>
@@ -644,7 +644,7 @@ function print_student_record($student) {
 			</td>
 		</tr>
 	</table>
-
+	<p style='page-break-after:always'>&nbsp;</p>
 <?php
 } // end fucntion
 
@@ -1053,14 +1053,17 @@ function check_student_joined_club($student_sn,$seme_year_seme) {
 
 //取得學生參加的社團
 function get_student_join_club($student_sn,$seme_year_seme="") {
+	global $CONN;
   $query="select a.*,b.club_name from association a,stud_club_base b where a.student_sn='$student_sn' and a.club_sn=b.club_sn";
   if ($seme_year_seme!="") $query.=" and a.seme_year_seme='$seme_year_seme'";
   $query.=" order by seme_year_seme";
-  $result=mysql_query($query);
+  //$result=mysql_query($query);
   
-  if (mysql_num_rows($result)) {
+  $result=$CONN->Execute($query) or die("Error! Query=".$query);
+  
+  if ($result->RecordCount()) {
   	//整理該生的每個社團的資料
-   while ($row=mysql_fetch_array($result)) {
+   while ($row=$result->FetchRow()) {
     $my_club[$row['club_sn']]['club_sn']=$row['club_sn'];
     $my_club[$row['club_sn']]['club_name']=$row['club_name'];
     $my_club[$row['club_sn']]['seme_year_seme']=$row['seme_year_seme'];

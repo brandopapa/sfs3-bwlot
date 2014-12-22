@@ -6,6 +6,8 @@ include_once "../../include/sfs_case_dataarray.php";
 //使用者認證
 sfs_check();
 
+$summary=array();
+
 $obj=new sendmit();
 $obj->CONN=&$CONN;
 $obj->smarty=&$smarty;
@@ -33,6 +35,7 @@ class sendmit{
 
 
 function process() {
+	global $summary;
 	$this->init();
 
 	$this->YS_ary=$this->sel_year();//學期陣列
@@ -58,9 +61,11 @@ function init() {
 //顯示
 function display(){
 //include_once "module-cfg.php";
+	GLOBAL $summary;
 	if ($this->tpl=='') $this->tpl=dirname(__file__)."/chc_talk_all.htm";
-		$this->smarty->assign("this",$this);		
-		$this->smarty->display($this->tpl);		
+		$this->smarty->assign("this",$this);
+		$this->smarty->assign("summary",$summary);
+		$this->smarty->display($this->tpl);
 }
 //更新
 function update_memo(){
@@ -96,6 +101,7 @@ function get_stu(){
 
 	//本班所有訪談記錄
 	function get_sco(){
+		GLOBAL $summary;
 		$stu=join(",",$this->Stu_id);
 		$YS=sprintf("%03d",$this->year).$this->seme;
 		$SQL = "select *,b.name  from stud_seme_talk a 
@@ -106,6 +112,8 @@ function get_stu(){
 		$All_sco=&$rs->GetArray();
 		//print_r($All_sco);
 		foreach ($All_sco as $ary){
+			$method=$ary['interview_method'];
+			$summary[$method]++;
 			$stud_id=$ary['stud_id'];
 			$sco[$stud_id][]=$ary;
 			}

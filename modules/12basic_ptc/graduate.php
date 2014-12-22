@@ -28,8 +28,9 @@ $recent_semester=get_recent_semester_select('work_year_seme',$work_year_seme);
 //顯示班級
 $class_list=get_semester_graduate_select('stud_class',$work_year_seme,$graduate_year,$stud_class);
 
+$graduate_arr=array(''=>"全部為修業",'1'=>"全部為畢業",'2'=>"依據畢業生升學資料模組的設定");
 if($stud_class and $work_year_seme==$curr_year_seme){
-	$tool_icon="<font size=2 color='green'>*畢業資格的判定，來自畢業生升學資料模組的設定*</font>";
+	$tool_icon="<font size=2 color='green'>*畢業資格的判定(模組變數graduate_source的設定)：{$graduate_arr[$graduate_source]}*</font>";
 }
 $main.="<form name='myform' method='post' action='$_SERVER[PHP_SELF]'>$recent_semester $class_list $tool_icon<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1' width=60%>";
 
@@ -53,6 +54,7 @@ if($stud_class)
 		
 		$my_pic=$pic_checked?get_pic($stud_study_year,$stud_id):'';
 		
+		if($graduate_source<2) $graduate_data[$student_sn]=$graduate_source;
 		$graduate_kind=$graduate_data[$student_sn]==1?"<img src='./images/on.png'>":"<img src='./images/off.png'>";
 		$my_score=$graduate_score[$graduate_data[$student_sn]];
 		

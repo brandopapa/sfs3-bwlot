@@ -73,7 +73,6 @@ $post_office = $recordSet->fields["post_office"];
      <tr>
    	  <td><?php echo "【".$classid[5]."】學生服務明細總表";?></td>
    	  <td align="right">
-  	  	<input type="checkbox" name="all_past_data" value="">含歷年記錄
    	  	<input type="checkbox" name="init_check" onclick="checkall('STUD');">全選/全不選
    	  	<input type="button" value="列出勾選學生明細" onclick="document.myform.list_class_all.value='<?php echo $class;?>';document.myform.submit()"></td>
      </tr>
@@ -85,7 +84,7 @@ $post_office = $recordSet->fields["post_office"];
  ?>
  <table border="0" width="800">
  	<tr>
- 		<td style="color:#FF0000;font-size:10pt">※請直接點選學生觀看該生本學期的服務明細。</td>
+ 		<td style="color:#FF0000;font-size:10pt">※請直接點選學生觀看該生本學期的服務明細。<br>※觀看歷年服務明細，請利用「<a href="service_list_all.php">查詢學生總時數</a>」功能。</td>
  		<td align="right"><input type="button" value="友善列印勾選學生明細" onclick="print_kind()"></td>
  	</tr>
  </table>

@@ -1,5 +1,5 @@
 <?php
-// $Id: stud_pass_list.php 7712 2013-10-23 13:31:11Z smallduh $
+// $Id: stud_pass_list.php 8246 2014-12-16 05:25:12Z smallduh $
 
 include "config.php";
 
@@ -42,7 +42,8 @@ echo "<td><font size='2'>狀況</font></td>";
 echo "</tr>";
 //列出資料
 while ($array_stud = $record->FetchRow()) {
-      $array_stud[seme_class]=(substr($array_stud[seme_class],0,1)>6)?$array_stud[seme_class]=$array_stud[seme_class]-600:$array_stud[seme_class];
+      //$array_stud[seme_class]=(substr($array_stud[seme_class],0,1)>6)?$array_stud[seme_class]=$array_stud[seme_class]-600:$array_stud[seme_class];
+      
       $temp_bgcolor=($temp_bgcolor=="#EFE0ED")?"#ffffff":"#EFE0ED";//間隔變換背景顏色
       echo "<tr bgcolor='$temp_bgcolor'>";
       if ($array_stud[stud_study_cond]==0) $temp_color=""; else $temp_color="color='red'";

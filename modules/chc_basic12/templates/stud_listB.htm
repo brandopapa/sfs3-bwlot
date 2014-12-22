@@ -66,20 +66,25 @@ if(X==0) {if (window.confirm('確定？')){Fix2.form_act.value='update';Fix2.submit
 <td rowspan=2 colspan="1" width=6% nowrap>姓　名</td>
 <td rowspan=2 colspan="1" width=5% nowrap>學　號</td>
 
-<td rowspan=1 colspan="3" width=15% nowrap>品德服務</td>
-<td rowspan=1 colspan="3" width=15% nowrap>績優表現</td>
+<td rowspan=1 colspan="4" width=15% nowrap>品德服務<font color=blue>(上限20分)</font></td>
+<td rowspan=1 colspan="4" width=15% nowrap>績優表現<font color=blue>(上限16分)</font></td>
 <td rowspan=2 colspan="1" width=5% nowrap>積分狀況</td>
 </tr>
 <tr bgcolor='white' align=center>
-<td style='font-size:9pt' nowrap>1服務學習</td>
-<td style='font-size:9pt' nowrap>2獎勵記錄</td>
-<td style='font-size:9pt' nowrap>3生活教育</td>
+<td style='font-size:9pt' nowrap>1服務學習<br><font color=blue>(上限8分)</font></td>
+<td style='font-size:9pt' nowrap>2獎勵記錄<br><font color=blue>(上限6分)</font></td>
+<td style='font-size:9pt' nowrap>3生活教育<br><font color=blue>(上限8分)</font></td>
+<td style='font-size:9pt' nowrap>目前<br>得分</td>
 <td style='font-size:9pt' nowrap>均衡學習</td>
-<td style='font-size:9pt' nowrap>4競賽表現</td>
-<td style='font-size:9pt' nowrap>5體適能</td>
+<td style='font-size:9pt' nowrap>4競賽表現<br><font color=blue>(上限6分)</font></td>
+<td style='font-size:9pt' nowrap>5體適能<br><font color=blue>(上限6分)</font></td>
+<td style='font-size:9pt' nowrap>目前<br>得分</td>
 </tr>
 
 {{foreach from=$this->stu item=stu key=st_sn}}
+
+{{assign var="T20" value=$this->tol20(20,$stu.score_service+$stu.score_reward+$stu.score_fault)}}
+{{assign var="T16" value=$this->tol20(16,$stu.score_balance+$stu.score_race+$stu.score_physical)}}
 
 
 {{if $smarty.post.student_sn==$stu.student_sn}}
@@ -93,13 +98,14 @@ if(X==0) {if (window.confirm('確定？')){Fix2.form_act.value='update';Fix2.submit
 <td>{{$stu.score_service}}</td>
 <td>{{$stu.score_reward}}</td>
 <td>{{$stu.score_fault}}</td>
+<td>{{$T20}}</td>
+
 
 <td>{{$stu.score_balance}}</td>
 <td>{{$stu.score_race}}</td>
 <td>{{$stu.score_physical}}</td>
-<td>
-{{$stu.income+$stu.score_nearby+$stu.score_service+$stu.score_reward+$stu.score_fault+$stu.score_balance+$stu.score_race+$stu.score_physical}}
-</td>
+<td>{{$T16}}</td>
+<td>{{$stu.income+$stu.score_nearby+$T20+$T16}}</td>
 </tr>
 <tr align=center  style='font-size:10pt' bgcolor=white>
 <td colspan="9" align=left>
@@ -135,13 +141,14 @@ bgcolor=white ondblclick="jampb('{{$stu.student_sn}}')"  onMouseOver="this.style
 <td>{{$stu.score_service}}</td>
 <td>{{$stu.score_reward}}</td>
 <td>{{$stu.score_fault}}</td>
+<td>{{$T20}}</td>
 
 <td>{{if $stu.score_balance!='0' and $stu.score_balance!=''}}{{$stu.score_balance}}{{/if}}</td>
 <td>{{$stu.score_race}}</td>
 <td>{{$stu.score_physical}}</td>
-<td>
-{{$stu.income+$stu.score_nearby+$stu.score_service+$stu.score_reward+$stu.score_fault+$stu.score_balance+$stu.score_race+$stu.score_physical}}
-</td>
+<td>{{$T16}}</td>
+
+<td>{{$stu.income+$stu.score_nearby+$T20+$T16}}</td>
 </tr>
 
 {{/if}}

@@ -1,4 +1,4 @@
-{{* $Id: fitness_print.tpl 7262 2013-04-10 07:30:00Z smallduh $ *}}
+{{* $Id: fitness_print.tpl 8069 2014-06-19 01:56:26Z smallduh $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -10,6 +10,7 @@ function openwindow(sn){
 
 <table bgcolor="#DFDFDF" cellspacing="1" cellpadding="4">
 <form action="{{$smarty.server.PHP_SELF}}" method="post">
+<input type="hidden" name="act" value="">
 <tr>
 <td bgcolor="#FFFFFF" valign="top">
 {{$seme_menu}} {{$class_menu}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="submit" name="cal_age" value="計算年齡"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>

@@ -1,6 +1,6 @@
 <?php 
 
-// $Id: tpl_field.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: tpl_field.php 8141 2014-09-23 08:16:42Z smallduh $
 
 // 載入設定檔
 include "database_info_config.php";
@@ -201,7 +201,7 @@ echo "</form>";
 </table>
 </td></tr></table>
 </td></tr></table>
-<? 
+<?php 
 //印出檔頭
 foot();
 ?> 

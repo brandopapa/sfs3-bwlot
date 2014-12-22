@@ -1,4 +1,4 @@
-# $Id: module.sql 5741 2009-11-04 15:51:25Z brucelyc $
+# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
 
 #
 # 資料表格式： `csrc_record`
@@ -18,7 +18,7 @@ CREATE TABLE csrc_record (
   `oper` int(5) unsigned NOT NULL default '0',
   `update_date` timestamp,
   PRIMARY KEY (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # 資料表格式： `csrc_item`
@@ -29,4 +29,4 @@ CREATE TABLE csrc_item (
   `sub_id` int(5) unsigned NOT NULL default '0',
   `memo` text NOT NULL default '',
   PRIMARY KEY (main_id,sub_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
