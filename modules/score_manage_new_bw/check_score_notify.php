@@ -124,7 +124,7 @@ if ($year_name && ($section1 || $section1 || $section1) ) {
 		  $query="select a.*,b.stud_name from $score_semester a left join stud_base b on b.student_sn=a.student_sn where a.student_sn = $sn and a.ss_id = $ss_id and a.test_sort = '$test_sort' and b.stud_study_cond in( 0, 15 ) order by a.student_sn,a.ss_id,a.test_sort,a.test_kind";
 		  $res1=$CONN->Execute($query) or die('SQL°õ¦æ¿ù»~:'.$query);
 		  if ($res1->rowCount() > 0){
-			  $index = $sn.'_'.$ss_id.'_'.$test_kind;		  
+			  $index = $sn.'_'.$ss_id.'_'.$test_sort;		  
 			  $score_data_key[] = $index; 
 			  $score_data[$index] = $res1->GetRows();
 		  }
