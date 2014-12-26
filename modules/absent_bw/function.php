@@ -43,7 +43,7 @@ function getOneMdata($stud_id,$sel_year,$sel_seme,$date,$class_id,$grade_group_i
 		      concat(year,'_',semester,'_0',class_year) = substring('$class_id',1,8) 
 		      and scope_id in
 		      (
-		        select subject_id from score_subject where subject_name in ( '基礎主軸', '生命主軸', '生活主軸')
+		        select subject_id from score_subject where subject_name in ( '基礎主軸', '生命主軸', '生活主軸', '彈性課程')
 		      ) 
 		     ) order by day,sector";
 					
@@ -79,7 +79,7 @@ function getOneMdata($stud_id,$sel_year,$sel_seme,$date,$class_id,$grade_group_i
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
 	while(list($section,$kind)=$recordSet->FetchRow()){
 		if($mode=="種類"){
-			$n=($section=="allday")?7:1;
+			$n=($section=="allday")?8:1;
 			$m=($section=="allday")?2:1;
 			if ($kind=="曠課" && ($section=="uf" || $section=="df")) $theData[f]+=$m;
 			if ($section!="uf" && $section!="df") $theData[$kind]+=$n;

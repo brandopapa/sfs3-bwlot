@@ -33,7 +33,7 @@ if($act=="儲存登記"){
 }elseif($act=="取消返回"){
 	header("location: $_SERVER[PHP_SELF]?this_date=$_POST[date]&class_id=$_POST[class_id]");
 }else{
-	$main=&mainForm($sel_year,$sel_seme,$_REQUEST[class_id]);
+	$main=&mainForm($sel_year,$sel_seme,$_REQUEST[class_id],$_REQUEST[grade_group_id]);
 }
 
 
@@ -55,7 +55,7 @@ echo $main;
 foot();
 
 //主要輸入畫面
-function &mainForm($sel_year,$sel_seme,$class_id=""){
+function &mainForm($sel_year,$sel_seme,$class_id="",$grade_group_id=""){
 	global $school_menu_p,$year,$month,$day,$SFS_PATH_HTML,$school_menu_p;
 	//相關功能表
 	$tool_bar=&make_menu($school_menu_p);
@@ -63,10 +63,24 @@ function &mainForm($sel_year,$sel_seme,$class_id=""){
 
 	//取得該班及學生名單，以及填寫表格
 	if(!empty($class_id)){
-		$signForm=&statForm($sel_year,$sel_seme,$class_id);
+		$signForm=&statForm($sel_year,$sel_seme,$class_id,$grade_group_id);
 	}
 	//年級與班級選單
 	$class_select=&classSelect($sel_year,$sel_seme,"","class_id",$class_id);
+	
+  //領域與非領域選單
+  $grade_group_array['grade_group_1']="領域科目缺席記錄";
+  $grade_group_array['grade_group_2']="非領域科目缺席記錄";
+	$gga=new drop_select();
+	$gga->s_name="grade_group_id"; //選單名稱
+	$gga->id=$grade_group_id;	//索引ID
+	$gga->arr = $grade_group_array; //內容陣列
+	$gga->has_empty = true; //先列出空白
+	$gga->top_option = "請選擇項目";
+	$gga->bgcolor = "#FFFFFF";
+	$gga->font_style = "font-size:12px";
+	$gga->is_submit = true; //更動時送出查詢
+	$grade_group_select=$gga->get_select();
 	
 	if(!empty($class_id)){
 		$cal = new MyCalendar;
@@ -91,7 +105,7 @@ function &mainForm($sel_year,$sel_seme,$class_id=""){
 	<form action='$_SERVER[PHP_SELF]' method='post'>
 	<tr bgcolor='#FFFFFF'><td>
 	<font color='blue'>$sel_year</font>學年度第<font color='blue'>$sel_seme</font>學期開學至<font color='blue'>$year</font>年<font color='blue'>$month</font>月<font color='blue'>$day</font>日止
-	$class_select
+	$class_select$grade_group_select
 	缺曠課統計統計結果</td></tr>
 	</form>
 	</table>
@@ -109,7 +123,7 @@ function &mainForm($sel_year,$sel_seme,$class_id=""){
 
 
 //取得該班及學生名單，以及填寫表格
-function &statForm($sel_year,$sel_seme,$class_id,$mode){
+function &statForm($sel_year,$sel_seme,$class_id,$grade_group_id,$mode){
 	global $year,$month,$day,$CONN,$start_date;	
 	
 	//取得缺曠課類別
@@ -164,7 +178,7 @@ function &statForm($sel_year,$sel_seme,$class_id,$mode){
 	foreach($stud as $id=>$name){
 
 		//取得該學生資料
-		$aaa=getOneMdata($id,$sel_year,$sel_seme,"$year-$month-$day","種類",$start_day[st_start]);
+		$aaa=getOneMdata($id,$sel_year,$sel_seme,"$year-$month-$day",$class_id,$grade_group_id,"種類",$start_day[st_start]);
 
 		//各種缺曠課數
 		if ($mode=="print") {
