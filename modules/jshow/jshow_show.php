@@ -129,7 +129,10 @@ div.tab_container .tab_content h2 {
   		$INFO="<font color=red size=2>已於".date("Y-m-d H:i:s")."儲存完畢!</font>";
 		}
 		//設定那些圖片要展示	
-		echo "展圖模式：".$DISPLAY_M[$display_mode].$INFO;
+		$sql="select count(*) as num from jshow_pic where kind_id='$kind_id' and display='1'";
+	  $res=$CONN->Execute($sql) or die('SQL='.$sql);
+    $C=$res->fields['num'];
+		echo "展圖模式：".$DISPLAY_M[$display_mode].$INFO.',目前共有'.$C.'張圖在輪播';
 		show_setup_all($_POST['kind_id']);  //表單
 		?>
 		<input type="button" value="儲存" onclick="document.myform.act.value='save';document.myform.submit()">

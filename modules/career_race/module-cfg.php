@@ -68,6 +68,7 @@ $MODULE_UPDATE="2013-06-26";
 //目錄內程式
 $school_menu_p = array(
 "cr_input.php"=>"登錄/修改個別競賽記錄",
+"cr_input_group.php"=>"登錄團體競賽記錄",
 "cr_paste.php"=>"匯入多筆競賽記錄",
 "cr_list.php"=>"學期記錄瀏覽"
 );

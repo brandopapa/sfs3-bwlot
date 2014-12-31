@@ -78,7 +78,7 @@ if($_POST['act']){
 			$stud_person_id=$student_data[$student_sn]['stud_person_id'];
 			//$stud_sex=$student_data[$student_sn]['stud_sex']==1?'男':'女';
 			$stud_sex=$student_data[$student_sn]['stud_sex'];
-			//畢修業級分
+			//畢修業積分
 			if($graduate_source<2) $graduate_data[$student_sn]=$graduate_source;
 			$graduate=($graduate_data[$student_sn]==1)?1:0;
 			$score_graduate=$graduate_score[$graduate];

@@ -29,7 +29,7 @@ $squad_array=array(1=>'­Ó¤HÁÉ',2=>'¹ÎÅéÁÉ');
 $m_arr = &get_module_setup("career_race");
 extract($m_arr,EXTR_OVERWRITE);
 
-if ($rank_select=='') $rank_select="²Ä¤@¦W,«a­x,ª÷µP,¯SÀu,²Ä¤G¦W,¨È­x,»ÈµP,Àuµ¥,²Ä¤T¦W,©u­x,»ÉµP,¥Òµ¥,²Ä¥|¦W,·µ­x,¨Î§@,²Ä¤­¦W,¤J¿ï,²Ä¤»¦W,²Ä¤C¦W,²Ä¤K¦W"; 
+if ($rank_select=='') $rank_select="²Ä¤@¦W,«a­x,ª÷¼ú,¯SÀu,¥Õª÷¼ú,²Ä¤G¦W,¨È­x,»È¼ú,Àuµ¥,²Ä¤T¦W,©u­x,»É¼ú,¥Òµ¥,²Ä¥|¦W,·µ­x,¨Î§@,²Ä¤­¦W,¤J¿ï,²Ä¤»¦W,²Ä¤C¦W,²Ä¤K¦W,¯S§O¼ú,³Ì¨Î¶m¤g±Ð§÷¼ú,³Ì¨Î¹Î¶¤¦X§@¼ú,³Ì¨Î³Ð·N¼ú"; 
 if ($nature_select=='') $nature_select='Åé¨|Ãþ,¬ì¾ÇÃþ,»y¤åÃþ,­µ¼ÖÃþ,¬ü³NÃþ,»RÁÐÃþ,§ÞÃÀÃþ,ºî¦XÃþ';
 
 
@@ -40,6 +40,7 @@ if ($nature_select=='') $nature_select='Åé¨|Ãþ,¬ì¾ÇÃþ,»y¤åÃþ,­µ¼ÖÃþ,¬ü³NÃþ,»RÁÐÃ
 if (substr($sch_id,0,2)=='13') {
  $level_array=array(1=>'°ê»Ú©Ê',2=>'¥þ°ê©Ê',3=>'¥þ¿¤©Ê');
  $nature_select='Åé¨|Ãþ,¬ì¾ÇÃþ,»y¤åÃþ,­µ¼ÖÃþ,¬ü³NÃþ,»RÁÐÃþ,§ÞÃÀ±Ð¨|Ãþ,ºî¦XÃþ,¨ä¥LÃþ';
+ $rank_select="²Ä¤@¦W,«a­x,ª÷¼ú,¯SÀu,¥Õª÷¼ú,²Ä¤G¦W,¨È­x,»È¼ú,Àuµ¥,²Ä¤T¦W,©u­x,»É¼ú,¥Òµ¥,²Ä¥|¦W,·µ­x,¨Î§@,²Ä¤­¦W,¤J¿ï,²Ä¤»¦W,²Ä¤C¦W,²Ä¤K¦W,¯S§O¼ú,³Ì¨Î¶m¤g±Ð§÷¼ú,³Ì¨Î¹Î¶¤¦X§@¼ú,³Ì¨Î³Ð·N¼ú"; 
  $school_menu_p['cr_input.php']="µn¿ý/­×§ï­Ó§OÄvÁÉ°O¿ý(«ÌªFª©)";
 }
 

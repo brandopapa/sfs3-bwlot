@@ -1,4 +1,4 @@
-{{* $Id: fitness_print.tpl 8069 2014-06-19 01:56:26Z smallduh $ *}}
+{{* $Id: fitness_print.tpl 8254 2014-12-23 03:25:58Z smallduh $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -9,11 +9,12 @@ function openwindow(sn){
 </script>
 
 <table bgcolor="#DFDFDF" cellspacing="1" cellpadding="4">
-<form action="{{$smarty.server.PHP_SELF}}" method="post">
+<form action="{{$smarty.server.PHP_SELF}}" method="post" name="myform">
 <input type="hidden" name="act" value="">
+<input type="hidden" name="cal_age" value="">
 <tr>
 <td bgcolor="#FFFFFF" valign="top">
-{{$seme_menu}} {{$class_menu}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="submit" name="cal_age" value="計算年齡"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>
+{{$seme_menu}} {{$class_menu}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="button" value="計算年齡" onclick="check_years()"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>
 <font color="gold">■</font>85％以上 <font color="silver">■</font>75％以上 <font color="bronze">■</font>50％以上 <font color="red">■</font>24％以下
 <table bgcolor="#9ebcdd" cellspacing="1" cellpadding="4" width="100%">
 <tr bgcolor="#c4d9ff">
@@ -74,3 +75,16 @@ function openwindow(sn){
 </td></tr></form></table>
 
 {{include file="$SFS_TEMPLATE/footer.tpl"}}
+
+<script>
+function check_years() {
+ if (document.myform.test_m.value=='' || document.myform.test_y.value=='') { 
+   alert('注意! 測驗日期輸入不完整! \n 年:請輸入民國年, 若西元2014年, 請輸入 103');
+   return false; 
+ } else {
+   document.myform.cal_age.value="計算年齡";
+   document.myform.submit();
+ }
+
+}
+</Script>

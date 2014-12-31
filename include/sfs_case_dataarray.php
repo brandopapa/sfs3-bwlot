@@ -1,6 +1,6 @@
 <?php
 
-// $Id: sfs_case_dataarray.php 8164 2014-10-08 13:05:57Z infodaes $
+// $Id: sfs_case_dataarray.php 8252 2014-12-23 02:04:39Z smallduh $
 // 各種資料陣列
 // 取代原 data_array_function.php
 
@@ -449,7 +449,7 @@ function get_folk_kind(){
 	return array("父親","母親","祖父","祖母","兄","弟","姐","妹");
 }
 
-//教師選單
+//教師選單 (僅取在職)
 function teacher_array() {
 	global $CONN;
 	// 確定連線成立
@@ -458,6 +458,22 @@ function teacher_array() {
 	// init $teacher_array
 	$teacher_array=array();
 	$sql_select = "select name,teacher_sn from teacher_base where teach_condition='0' order by name";
+	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
+	while (list($name,$teacher_sn) = $recordSet->FetchRow()) {
+		$teacher_array[$teacher_sn]=$name;
+	}
+	return $teacher_array;
+}
+
+//教師選單 (不限在職)
+function teacher_array_all() {
+	global $CONN;
+	// 確定連線成立
+	if (!$CONN) user_error("資料庫連線不存在！請檢查相關設定！",256);
+
+	// init $teacher_array
+	$teacher_array=array();
+	$sql_select = "select name,teacher_sn from teacher_base order by name";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
 	while (list($name,$teacher_sn) = $recordSet->FetchRow()) {
 		$teacher_array[$teacher_sn]=$name;

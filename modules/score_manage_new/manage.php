@@ -1,5 +1,5 @@
 <?php
-// $Id: manage.php 6754 2012-05-02 05:10:55Z infodaes $
+// $Id: manage.php 8253 2014-12-23 02:05:47Z smallduh $
 
 /*引入設定檔*/
 include "config.php";
@@ -229,7 +229,7 @@ if ($year_name && $stage) {
 	}
 	if(is_object($rs)) {
 		//取得教師對照
-		$teacher_array=teacher_array();
+		$teacher_array=teacher_array_all();
         	while (!$rs->EOF) {
 			$ss_id=$rs->fields["ss_id"];
 			$subject_id[$ss_id]=$rs->fields["subject_id"];
