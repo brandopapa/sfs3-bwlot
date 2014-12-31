@@ -288,7 +288,7 @@ else
 <p><b><font size="4">公文資料批次建檔說明</font></b></p>
 <p>1.本程式只能建立收文公文資料。<br>
 2.利用 excel 或其他工具鍵入公文資料，存成 csv 檔，並保留第一列標題檔，如 
-<a href=docworddemo.csv target=new>範例檔</a><BR>
+<a href=docword.csv target=new>範例檔</a><BR>
 3.日期以西元為準。<br>';
 
 ?>
