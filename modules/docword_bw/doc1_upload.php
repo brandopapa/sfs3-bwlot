@@ -54,7 +54,6 @@ if ($do_key=="批次建立資料"){
 //		$class_year++;
 	//取出 csv 的值
 	$temp_file= $temp_path."docword.csv";
-	echo $temp_file;
 	if ($_FILES['docdata']['size'] >0 && $_FILES['docdata']['name'] != ""){
 //		copy($_FILES['docdata']['tmp_name'] , $temp_file);		
 		$fd = fopen ($_FILES['docdata']['tmp_name'],"r");
