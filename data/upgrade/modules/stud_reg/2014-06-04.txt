@@ -1,0 +1,5 @@
+stud_ext_data資料表增加 student_sn 欄位 success
+stud_ext_data資料表移除原本的primary key success
+stud_ext_data資料表增加 sn 欄位, 並設為 primary key success
+ -- by smallduh 2014-06-04 
+ALTER TABLE `stud_ext_data` ADD `sn` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY

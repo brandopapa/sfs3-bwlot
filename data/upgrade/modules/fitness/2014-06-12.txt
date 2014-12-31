@@ -1,0 +1,3 @@
+新增游泳資料表 fitness_data_swim -- by smallduh (2014-06-12)
+
+新增游泳資料表成功!

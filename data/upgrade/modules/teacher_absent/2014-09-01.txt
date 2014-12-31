@@ -1,0 +1,4 @@
+修改資料表 teacher_absent (教師請假記錄)-- by hami (2014-09-01)
+
+ALTER TABLE teacher_absent add note_file varchar(100) 
+ 更新成功 ! 
