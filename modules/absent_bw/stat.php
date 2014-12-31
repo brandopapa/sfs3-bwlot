@@ -333,7 +333,7 @@ function &stud_statForm($sel_year,$sel_seme,$this_date,$class_id,$stud_id,$grade
 	}
 
 	if ($grade_group_id != "grade_group_1" && $grade_group_id != "grade_group_2"){//全部
-	  $sql="select date,absent_kind,section from stud_absent where (date>='$start_date') and (date<='$this_date') and stud_id='$stud_id' order by date,section";			  
+	  $sql="select date,absent_kind,section from stud_absent where (date>='$start_date') and (date<='$this_date') and stud_id='$stud_id' order by date,section";
 	}
 	else{
 		$course_sql = "";
@@ -355,7 +355,7 @@ function &stud_statForm($sel_year,$sel_seme,$this_date,$class_id,$stud_id,$grade
 		      concat(year,'_',semester,'_0',class_year) = substring('$class_id',1,8) 
 		      and scope_id in
 		      (
-		        select subject_id from score_subject where subject_name in ( '基礎主軸', '生命主軸', '生活主軸')
+		        select subject_id from score_subject where subject_name in ( '基礎主軸', '生命主軸', '生活主軸', '彈性課程')
 		      ) 
 		     ) order by day,sector";
 					

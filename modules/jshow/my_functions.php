@@ -51,7 +51,7 @@ function show_setup_all($kind_id) {
 	while ($row=$res->Fetchrow()) {
  		  $a=explode(".",$row['filename']);
  		  $filename_s=$a[0]."_s.".$a[1];
- 		  $bgcolor=($row['b_id']==$_POST['b_id'])?"#FFDDDDDD":"#FFFFFF";
+ 		  $bgcolor=($row['display'])?"#FFCCCC":"#CCCCCC";
  		  //取得圖片資訊
  		  $id=$row['id'];
  		  $img_info = getimagesize($USR_DESTINATION.$row['filename']);
@@ -249,7 +249,9 @@ function show_upload($kind_id) {
 	while ($row=$res->Fetchrow()) {
  		  $a=explode(".",$row['filename']);
  		  $filename_s=$a[0]."_s.".$a[1];
- 		  $bgcolor=($row['b_id']==$_POST['b_id'])?"#FFCCCC":"#FFFFFF";
+ 		  
+ 		  $bgcolor=($row['display'])?"#FFCCCC":"#CCCCCC";
+ 		  if ($row['id']==$_POST['opt1']) $bgcolor="#FFFF00";
  		  //取得圖片資訊
  		  $img_info = getimagesize($USR_DESTINATION.$row['filename']);
       $width    = $img_info['0'];

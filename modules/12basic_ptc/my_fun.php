@@ -175,15 +175,15 @@ function get_student_disadvantage($academic_year)
 {
 	global $CONN;
 	//取得前已開列學生資料
-	$sql_select="select student_sn,score_remote,score_disadvantage,disadvantage_memo from 12basic_ptc where academic_year=$academic_year";
+	$sql_select="select student_sn,score_disadvantage,disadvantage_memo from 12basic_ptc where academic_year=$academic_year"; //,score_remote
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
 	$disadvantage=array();
 	while(!$recordSet->EOF)
 	{
 		$student_sn=$recordSet->fields['student_sn'];
-		$disadvantage[$student_sn]['remote']=$recordSet->fields['score_remote'];
+		//$disadvantage[$student_sn]['remote']=$recordSet->fields['score_remote'];
 		$disadvantage[$student_sn]['disadvantage']=$recordSet->fields['score_disadvantage'];
-		$disadvantage[$student_sn]['score']=$recordSet->fields['score_remote']+$recordSet->fields['score_disadvantage'];
+		$disadvantage[$student_sn]['score']=$recordSet->fields['score_disadvantage']; //$recordSet->fields['score_remote']+
 		$disadvantage[$student_sn]['disadvantage_memo']=$recordSet->fields['disadvantage_memo'];
 		$recordSet->MoveNext();
 	}
@@ -261,7 +261,7 @@ function count_student_score_fitness($sn_array)
                         }
                         //判定獎章
                         if($g==4) $medal="gold"; elseif($s==4) $medal="silver"; elseif($c==4) $medal="copper";
-                        //判定級分
+                        //判定積分
                         $myscore=min($fitness_score_one_max,$fitness_score_one*$passed);
                         $myscore+=$fitness_addon[$medal];
 
@@ -294,7 +294,7 @@ function count_student_score_fitness($sn_array)
 								if($my_pre) $tested++;
                                 if($my_pre>=25) $passed++;  //通過門檻標準  程式現設為25%以上
                         }
-                        //判定級分
+                        //判定積分
                         $myscore=$fitness_score_one*$passed;
                         if($tested>=4)	$myscore+=$fitness_score_test_all;
 
@@ -448,7 +448,7 @@ function count_student_score_fault($sn_array)
 			}
 			$res->MoveNext();
 		}
-		//無記過紀錄判定級分
+		//無記過紀錄判定積分
 		if(!$fault_count) $fault[$student_sn]=$fault_none;
 			elseif($fault_count<3) $fault[$student_sn]=$fault_warning; elseif($fault_count<6) $fault[$student_sn]=$fault_peccadillo; else $fault[$student_sn]=0;
 	}
@@ -461,7 +461,7 @@ function get_student_score_balance($sn)
 	$score_balance=array();
 	$fin_score=cal_fin_score($sn,$balance_semester);
 	
-	//判定級分
+	//判定積分
 	foreach($fin_score as $student_sn=>$score_data)
 	{
 		foreach($balance_area as $key=>$value)

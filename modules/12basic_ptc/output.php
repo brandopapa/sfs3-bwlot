@@ -55,7 +55,7 @@ if($_POST['act']){
 		$stud_name=str_replace(' ','',$student_data[$student_sn]['stud_name']);
 		$stud_person_id=$student_data[$student_sn]['stud_person_id'];
 		$stud_sex=$student_data[$student_sn]['stud_sex']==1?'男':'女';
-		//畢修業級分
+		//畢修業積分
 		$graduate=$graduate_score[$graduate_data[$student_sn]];
 		
 		//$stud_tel_2=$student_data[$student_sn]['stud_tel_2']?$student_data[$student_sn]['stud_tel_2']:$student_data[$student_sn]['stud_tel_1'];

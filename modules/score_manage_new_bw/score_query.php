@@ -726,7 +726,7 @@ if($year_seme && $year_name  && (($stage<250 && $kind) || $stage==255)){
 		$school_title=score_head($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind);
 		$filename = $year_seme."_".$c_year."_".$c_name."_stagescore.csv";
 
-		header("Content-type: text/x-csv ; Charset=Big5");
+		header("Content-type: text/x-csv ; Charset=utf-8");
 		header("Content-disposition:attachment ; filename=$filename");
 		//header("Pragma: no-cache");
 				//配合 SSL連線時，IE 6,7,8下載有問題，進行修改 

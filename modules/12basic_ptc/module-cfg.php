@@ -112,10 +112,10 @@ $SFS_MODULE_SETUP[] =array('var'=>"pic_checked", 'msg'=>"顯示學生大頭照", 'value
 $SFS_MODULE_SETUP[] =array('var'=>"pic_width", 'msg'=>"大頭照顯示的寬度", 'value'=>'60');
 $SFS_MODULE_SETUP[]=array('var'=>"comm_editable", 'msg'=>"可直接修改學生的聯絡資料", 'value'=>array(0=>"否",1=>"是"));
 $SFS_MODULE_SETUP[]=array('var'=>"kind_editable", 'msg'=>"可直接修改身分別資料", 'value'=>array(0=>"否",1=>"是"));
-$SFS_MODULE_SETUP[]=array('var'=>"disadvantage_editable", 'msg'=>"可直接修改經濟弱勢級分", 'value'=>array(0=>"否",1=>"是"));
-$SFS_MODULE_SETUP[]=array('var'=>"balance_editable", 'msg'=>"可直接修改均衡學習級分", 'value'=>array(0=>"否",1=>"是"));
-$SFS_MODULE_SETUP[]=array('var'=>"diversification_editable", 'msg'=>"可直接修改多元學習級分", 'value'=>array(0=>"否",1=>"是"));
-$SFS_MODULE_SETUP[]=array('var'=>"personality_editable", 'msg'=>"可直接修改適性發展級分", 'value'=>array(0=>"否",1=>"是"));
+$SFS_MODULE_SETUP[]=array('var'=>"disadvantage_editable", 'msg'=>"可直接修改經濟弱勢積分", 'value'=>array(0=>"否",1=>"是"));
+$SFS_MODULE_SETUP[]=array('var'=>"balance_editable", 'msg'=>"可直接修改均衡學習積分", 'value'=>array(0=>"否",1=>"是"));
+$SFS_MODULE_SETUP[]=array('var'=>"diversification_editable", 'msg'=>"可直接修改多元學習積分", 'value'=>array(0=>"否",1=>"是"));
+$SFS_MODULE_SETUP[]=array('var'=>"personality_editable", 'msg'=>"可直接修改適性發展積分", 'value'=>array(0=>"否",1=>"是"));
 //$SFS_MODULE_SETUP[]=array('var'=>"native_language_text", 'msg'=>"通過族語認證標記文字", 'value'=>'是');
 $SFS_MODULE_SETUP[]=array('var'=>"fitness_keyword", 'msg'=>"有效的體適能檢測單位關鍵字", 'value'=>'檢測站');
 $SFS_MODULE_SETUP[]=array('var'=>"uneditable_bgcolor", 'msg'=>"已封存記錄列顏色", 'value'=>'#ffffff');

@@ -216,6 +216,9 @@ function Check_select() {
   if (document.myform.r_name.value=='¨ä¥L') {
         document.myform.weight.value='0';
         document.myform.weight_tech.value='0';
+  } else {
+        document.myform.weight.value='1';
+        document.myform.weight_tech.value='1';
   }
 }
 

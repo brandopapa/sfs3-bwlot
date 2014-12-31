@@ -1,5 +1,5 @@
 <?php
-// $Id: print.php 7800 2013-12-12 09:00:15Z infodaes $
+// $Id: print.php 8254 2014-12-23 03:25:58Z smallduh $
 // 取得設定檔
 include "config.php";
 
@@ -9,8 +9,20 @@ if ($_POST['year_seme']=="") $_POST['year_seme']=sprintf("%03d",curr_year()).cur
 $sel_year=intval(substr($_POST['year_seme'],0,-1));
 $sel_seme=intval(substr($_POST['year_seme'],-1,1));
 $seme_year_seme = sprintf("%03d%d",$sel_year,$sel_seme);
-$_POST[test_y]=($_POST[test_y])?$_POST[test_y]:(intval(date("Y"))-1911);
-$_POST[test_m]=($_POST[test_m])?$_POST[test_m]:date("m");
+
+//檢查是否為屏東區, 若是, 將測驗日期預設為空值
+//取得學校代碼
+	$sql="select sch_id from school_base limit 1";
+	$res=$CONN->Execute($sql);
+	$sch_id=$res->fields['sch_id'];
+	if (substr($sch_id,0,2)=='13') {
+		$_POST[test_y]=($_POST[test_y])?$_POST[test_y]:(intval(date("Y"))-1911);
+		$_POST[test_m]=($_POST[test_m])?$_POST[test_m]:"";
+	} else {
+		$_POST[test_y]=($_POST[test_y])?$_POST[test_y]:(intval(date("Y"))-1911);
+		$_POST[test_m]=($_POST[test_m])?$_POST[test_m]:date("m");
+	}
+
 $class_arr=class_base($seme_year_seme);
 
 //管理者
@@ -82,6 +94,10 @@ if ($class_num) {
 
 	//計算年齡
 	if ($_POST[cal_age]) {
+		//echo "<pre>";
+		//print_r($_POST);
+		//print_r($seme_year_seme);
+		//exit();
 		reset($r);
 		while(list($k,$v)=each($r)) {
 			$sn=$v[student_sn];
