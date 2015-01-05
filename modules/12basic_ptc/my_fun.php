@@ -361,23 +361,24 @@ function count_student_score_competetion($sn_array)
 		$certificate_date=$res->fields['certificate_date'];		//證書日期
 		$weight=$res->fields['weight'];		//權重
 		
-		$year=$res->fields['year'];		//年度
-		$nature=$res->fields['nature'];		//類別
+		if($weight) {   //屏東區只要是有值就採計
+			$year=$res->fields['year'];		//年度
+			$nature=$res->fields['nature'];		//類別
 
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['level']=$level;
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['squad']=$squad;
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['name']=$name;
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['rank']=$rank;
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['weight']=$weight;
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['certificate_date']=$certificate_date;
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['sponsor']=$res->fields['sponsor'];
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['memo']=$res->fields['memo'];
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['word']=$res->fields['word'];
-		//單項分數
-		$score_competetion[$student_sn]['detail'][$year][$nature][$i]['bonus']=$race_score[$level][$rank]*$weight;
-		//類別最高分
-		$score_competetion[$student_sn]['detail'][$year][$nature]['nature_bonus']=max($score_competetion[$student_sn]['detail'][$year][$nature]['nature_bonus'],$score_competetion[$student_sn]['detail'][$year][$nature][$i]['bonus']);
-
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['level']=$level;
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['squad']=$squad;
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['name']=$name;
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['rank']=$rank;
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['weight']=$weight;
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['certificate_date']=$certificate_date;
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['sponsor']=$res->fields['sponsor'];
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['memo']=$res->fields['memo'];
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['word']=$res->fields['word'];
+			//單項分數
+			$score_competetion[$student_sn]['detail'][$year][$nature][$i]['bonus']=$race_score[$level][$rank];   //$race_score[$level][$rank]*$weight 他區使用
+			//類別最高分
+			$score_competetion[$student_sn]['detail'][$year][$nature]['nature_bonus']=max($score_competetion[$student_sn]['detail'][$year][$nature]['nature_bonus'],$score_competetion[$student_sn]['detail'][$year][$nature][$i]['bonus']);
+		}
 		$res->MoveNext();
 	}
 	//判定應得分數

@@ -1,13 +1,87 @@
 <?php
 //$Id: supply.php 5310 2009-01-10 07:57:56Z hami $
 include "config.php";
+sfs_check();
+//取得假別陣列
+$abs_kind_arr=tea_abs_kind();
+
+// 判斷是否為管理權限
+$isAdmin = (int)checkid($_SERVER[SCRIPT_FILENAME],1);
+
+if ($_POST[d_check]==1) {
+	$query1=" a.year='$sel_year'";
+	$sel="全學年";
+}else {
+	$query1 = " a.year='$sel_year' and a.semester='$sel_seme' ";
+	$sel = "第 " . $sel_seme . " 學期";
+}
+
+// 匯出處理
+if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
+
+	if ($_POST[month] ) {
+		$query1 .=" and a.month='$_POST[month]'";
+	}
+	$sql_select="SELECT  a.*, t.teach_id,t.name, t.teach_person_id, d.title_name FROM teacher_absent  a , teacher_base t, teacher_post c, teacher_title d
+			WHERE a.teacher_sn=t.teacher_sn AND t.teacher_sn=c.teacher_sn AND c.teach_title_id=d.teach_title_id AND
+		     a.check4_sn>0 and " .$query1 ;
+	$sql_select .=" order by d.rank, a.start_date  desc ";
+	$result = $CONN->Execute($sql_select) or die($sql_select);
+	$arr = array();
+	foreach ($result as $row) {
+		$tempArr = array();
+		$tempArr[] = $row['teach_person_id'];
+		$tempArr[] = $row['name'];
+		$tempArr[] = $row['teach_id'];
+		$tempArr[] = $absExportIdArr[$abs_kind_arr[$row['abs_kind']]];
+		$tempArr[] = $abs_kind_arr[$row['abs_kind']];
+		$startDate = explode(' ',$row['start_date']);
+		$startDate2 = explode('-', $startDate[0]);
+		$tempArr[] = ($startDate2[0]-1911).$startDate2[1].$startDate2[2];
+
+		$endDate = explode(' ',$row['end_date']);
+		$endDate2 = explode('-', $endDate[0]);
+		$tempArr[] = ($endDate2[0]-1911).$endDate2[1].$endDate2[2];
+
+		$startTime = explode(':', $startDate[1]);
+		$tempArr[] = $startTime[0].$startTime[1];
+
+		$endTime = explode(':', $endDate[1]);
+		$tempArr[] = $endTime[0].$endTime[1];
+
+		$tempArr[] = ($row['day']?$row['day'].'日':'').($row['hour']?($row['hour']%8).'時':'');
+
+		$tempArr[] = '';
+		$tempArr[] = $row['locale'];
+		// 公假具公假性質，無資料
+		$tempArr[] = '';
+		// 申請國民旅遊補助, 無資料
+		$tempArr[] = '';
+
+		$arr[] = '"'.implode('","' ,$tempArr).'"';
+
+	}
+	$filename = '請假本文檔.csv';
+	header("Content-disposition: attachment; filename=$filename");
+	header("Content-type: text/x-csv");
+	//header("Pragma: no-cache");
+	//配合 SSL連線時，IE 6,7,8下載有問題，進行修改
+	header("Cache-Control: max-age=0");
+	header("Pragma: public");
+	header("Expires: 0");
+
+	echo implode("\n", $arr);
+
+	exit;
+}
+
+
 head("差假統計");
 $tool_bar=make_menu($school_menu_p);
 echo $tool_bar;
 
 
-// 判斷是否為管理權限
-$isAdmin = (int)checkid($_SERVER[SCRIPT_FILENAME],1);
+
 
 //選擇學期
 $year_seme_menu=year_seme_menu($sel_year,$sel_seme);
@@ -21,29 +95,29 @@ $month=month_menu($_POST[month],$month_arr);
 //條件
 //$query1=" year='$sel_year' and semester='$sel_seme' ";
 
-if ($_POST[d_check]==1) {
-	$query1=" a.year='$sel_year'";
-	$sel="全學年";
-}else{
-	$query1=" a.year='$sel_year' and a.semester='$sel_seme' ";
-	$sel="第 ". $sel_seme ." 學期";
 
-}
+
+
 
 if ($_POST[month] ) {
 $query1 .=" and a.month='$_POST[month]'";
 }
 
+?>
 
-
-echo "<table width=100% border=0 cellspacing=1 cellpadding=4 ><form name='menu_form' method='post' action='{$_SERVER['PHP_SELF']}'>
-<tr><td> $year_seme_menu $d_check_menu $month</td>
-</tr>";
+<table width=100% border=0 cellspacing=1 cellpadding=4 >
+	<form name='menu_form' method='post' action='<?php echo $_SERVER['PHP_SELF']?>'>
+<tr>
+<td> <?php echo $year_seme_menu. $d_check_menu. $month ?>
+<?php if ($isAdmin):?><input type="button" class="button" id="export-btn" value="匯出人事總局格式(CSV 檔)" />
+<span style="padding: 3px"><span style="background: #FFFF00;">匯出限制</span>: 無法匯出"公假具公差性質" 及 "是否申請國民旅遊補助"兩個欄位</span>
+<?php endif ?>
+</td>
+</tr>
+		<?php
 //取得教師陣列
 $tea_name_arr=my_teacher_array();
 //$tea_name_arr=get_teacher_name();
-//取得假別陣列 
-$abs_kind_arr=tea_abs_kind();
 
 $t=count($tea_name_arr);
 $a=count($abs_kind_arr);
@@ -121,13 +195,20 @@ while (list($key, $val) = each($tea_name_arr2) ){
 	echo $main;
 }
 
-echo "</table></td></tr></form></table>";
+echo "</table></td></tr>
+<input type='hidden' id='mode' name='mode'/>
+</form></table>";
 foot();
 ?>
-
 <script language="JavaScript1.2">
 
 <!-- Begin
+$(function(){
+	$("#export-btn").click(function(){
+		$("#mode").val('export-csv');
+		$("form[name='menu_form']").submit();
+	});
+});
 
 function sbar(st){st.style.backgroundColor="#F3F3F3";}
 
