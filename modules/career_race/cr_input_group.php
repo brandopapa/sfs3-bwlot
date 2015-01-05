@@ -95,6 +95,11 @@ echo $tool_bar;
 						form_race_record($race_record);
 					?>
 			<input type="button" value="儲存記錄" onclick="check_save()">
+				<?php
+					if (substr($sch_id,0,2)=='13') {
+					 echo "<br><font size=\"2\">※說明：屏東區的「競賽類別」及「得獎名次」無法經由模組變數自行設定。</font>";
+					}
+					?>
 			</fieldset>
 			</td>
 		</tr>

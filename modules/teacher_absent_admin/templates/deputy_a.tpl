@@ -80,9 +80,9 @@ function check_select(item) {
 <tr bgcolor="#ddddff" align="center" OnMouseOver="sbar(this)" OnMouseOut="cbar(this)">
 
 <td width=30>{{$a.id}}<br>
-{{if ($a.status=="0" and $a.check1_sn =="0" and $a.check2_sn =="0" and $a.check3_sn =="0" and $a.check4_sn =="0") }} 
+{{if ($a.status=="0" and $a.check1_sn =="0" and $a.check2_sn =="0" and $a.check3_sn =="0" and $a.check4_sn =="0") or $isAdmin }}
 	<input type="image" src="images/edit.png" name="edit[{{$a.id}}]" alt="修改資料"> 
-	<input type="image" src="images/del.png" name="del[{{$a.id}}]" alt="刪除假單">
+	<input type="image" src="images/del.png" name="del[{{$a.id}}]" alt="刪除假單" onclick="return confirm('確定刪除假單?')">
 {{/if}}
 
 
