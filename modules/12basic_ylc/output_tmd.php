@@ -59,7 +59,7 @@ if($_POST['act']){
 	}
 
 	//取得指定學年已經開列的學生清單
-	$sql_select="SELECT a.student_sn,b.stud_id,b.seme_class,b.seme_class_name,b.seme_num FROM 12basic_ylc a INNER JOIN stud_seme b ON a.student_sn=b.student_sn INNER JOIN stud_base s1 on s1.student_sn = b.student_sn WHERE b.seme_year_seme='$work_year_seme' and s1.stud_study_cond in('0','15') ORDER BY seme_class,seme_num";
+	$sql_select="SELECT a.student_sn,b.stud_id,b.seme_class,b.seme_class_name,b.seme_num FROM 12basic_ylc a INNER JOIN stud_seme b ON a.student_sn=b.student_sn WHERE b.seme_year_seme='$work_year_seme' ORDER BY seme_class,seme_num";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
 	while(!$recordSet->EOF){
 		$no++;

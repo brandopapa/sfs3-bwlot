@@ -7,7 +7,7 @@ function SelectR_name(reset_option) {
     }
     //體育類
     //全縣
-    if (document.myform.level.value == '3' && document.myform.nature.value=='體育類') {
+    if (document.myform.level.value == '4' && document.myform.nature.value=='體育類') {
         addOption(document.myform.r_name, "縣（市）級運動會", "縣（市）級運動會", "");
         addOption(document.myform.r_name, "縣（市）級中等學校聯合運動會", "縣（市）級中等學校聯合運動會", "");
         addOption(document.myform.r_name, "全國球類聯賽初賽", "全國球類聯賽初賽", "");
@@ -44,7 +44,7 @@ function SelectR_name(reset_option) {
     
     //科學類
     //全縣
-    if (document.myform.level.value == '3' && document.myform.nature.value=='科學類') {
+    if (document.myform.level.value == '4' && document.myform.nature.value=='科學類') {
         addOption(document.myform.r_name, "縣（市）級中小學科學展覽會", "縣（市）級中小學科學展覽會", "");
         addOption(document.myform.r_name, "ContestWorld GreenMech Contest 世界機關王競賽縣(市)初賽", "ContestWorld GreenMech Contest 世界機關王競賽縣(市)初賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
@@ -94,7 +94,7 @@ function SelectR_name(reset_option) {
     //音樂類
     if (document.myform.nature.value=='音樂類') {
     	//全縣
-    	if (document.myform.level.value == '3') {
+    	if (document.myform.level.value == '4') {
         addOption(document.myform.r_name, "全國學生音樂比賽縣(市)初賽", "全國學生音樂比賽縣(市)初賽", "");
         addOption(document.myform.r_name, "全國師生鄉土歌謠比賽縣(市)初賽", "全國師生鄉土歌謠比賽縣(市)初賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
@@ -116,7 +116,7 @@ function SelectR_name(reset_option) {
     //美術類
     if (document.myform.nature.value=='美術類') {
     	//全縣
-    	if (document.myform.level.value == '3') {
+    	if (document.myform.level.value == '4') {
         addOption(document.myform.r_name, "全國學生美術比賽縣(市)初賽", "全國學生美術比賽縣(市)初賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
@@ -136,7 +136,7 @@ function SelectR_name(reset_option) {
     //舞蹈類
     if (document.myform.nature.value=='舞蹈類') {
     	//全縣
-    	if (document.myform.level.value == '3') {
+    	if (document.myform.level.value == '4') {
         addOption(document.myform.r_name, "全國學生舞蹈比賽縣(市)初賽", "全國學生舞蹈比賽縣(市)初賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
@@ -156,7 +156,7 @@ function SelectR_name(reset_option) {
     //技藝教育類
     if (document.myform.nature.value=='技藝教育類') {
     	//全縣
-    	if (document.myform.level.value == '3') {
+    	if (document.myform.level.value == '4') {
         addOption(document.myform.r_name, "縣（市）級技藝競賽", "縣（市）級技藝競賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
@@ -165,7 +165,7 @@ function SelectR_name(reset_option) {
     //綜合類
     if (document.myform.nature.value=='綜合類') {
     	//全縣
-    	if (document.myform.level.value == '3') {
+    	if (document.myform.level.value == '4') {
         addOption(document.myform.r_name, "全國學生創意戲劇比賽縣(市)初賽(原創意偶戲競賽)", "全國學生創意戲劇比賽縣(市)初賽(原創意偶戲競賽)", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
@@ -187,7 +187,7 @@ function SelectR_name(reset_option) {
 	  } // end if 綜合類
 	  
 	  //其他類
-    if (document.myform.level.value == '3' && document.myform.nature.value=='其他類') {
+    if (document.myform.level.value == '4' && document.myform.nature.value=='其他類') {
         addOption(document.myform.r_name, "其他", "其他", "");
         document.myform.weight.value='0';
         document.myform.weight_tech.value='0';
