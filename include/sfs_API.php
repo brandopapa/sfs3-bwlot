@@ -1,6 +1,6 @@
 <?php
 	if (!session_id()) session_start();
-// $Id: sfs_API.php 7929 2014-03-13 08:31:08Z brucelyc $
+// $Id: sfs_API.php 8266 2015-01-04 08:38:37Z brucelyc $
 // 本檔為核心函式庫上層檔，
 // 若非必要，請由相關核心函式庫去新增修改維護。
 
@@ -156,7 +156,7 @@
 	}
 
 	//自然人憑證設定
-	$temp_file=$UPLOAD_PATH."system/cdc";
+	$temp_file=$UPLOAD_PATH.$PREFIX_PATH."system/cdc";
 	if (is_file($temp_file)) {
 		$fp=fopen($temp_file,"r");
 		while(!feof($fp)) {
