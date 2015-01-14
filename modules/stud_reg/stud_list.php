@@ -107,16 +107,13 @@ switch ($do_key){
 		stud_preschool_status='$stud_preschool_status',stud_preschool_id='$stud_preschool_id',
 		stud_preschool_name='$stud_preschool_name',stud_Mschool_status='$stud_Mschool_status',
 		stud_mschool_id='$stud_mschool_id',stud_mschool_name='$stud_mschool_name',curr_class_num='$temp_num',
-		addr_zip='$addr_zip',enroll_school='$enroll_school' ,edu_key='$edu_key',
-		obtain='$obtain',safeguard='$safeguard' where student_sn='$student_sn'";
-
+		addr_zip='$addr_zip',enroll_school='$enroll_school' ,edu_key='$edu_key',obtain='$obtain',safeguard='$safeguard' where student_sn='$student_sn'";
 		
 		$sql_update=str_replace("addr_move_in=''","addr_move_in=NULL",$sql_update);
 		
 //echo $sql_update; 
 
-		//$CONN->Execute($sql_update) or die($sql_update);
-		$CONN->Execute($sql_update) or trigger_error("SQL 語法錯誤<BR>$sql_update", E_USER_ERROR);
+		$CONN->Execute($sql_update) or die($sql_update);
 		$CONN->Execute("update stud_seme set seme_num='$sit_num' where seme_year_seme ='$c_curr_seme' and  seme_class ='$seme_class' and student_sn='$student_sn'");                
 		$upload_str = set_upload_path("$img_path/$stud_study_year");
 		//圖檔處理

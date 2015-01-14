@@ -1,6 +1,6 @@
 <?php
 
-// $Id: read_card.php 6231 2010-10-19 12:59:04Z brucelyc $
+// $Id: $
 
 // --系統設定檔
 include "config.php";
@@ -371,7 +371,7 @@ if (($sel_file && !$trans) || ($trans && (!$des_subject || !$stage))) {
 		<td class='title_sbody2'><p align='center'>分數</p>
 		<td class='title_sbody2'><p align='center'>匯入科目或測驗名稱</p>";
 	if ($show_kind_menu) echo "<td class='title_sbody2'><p align='center'>$kind_str</p>";
-	if ($show_stage_menu) echo "<td class='title_sbody2'><p align='center'>匯入段次別</p>";
+	if ($show_stage_menu && !$spec_test_arr[$des_subject]) echo "<td class='title_sbody2'><p align='center'>匯入段次別</p>";
 	echo "	</tr>
 		<tr bgcolor='#ffffff'>
 		<td>".$tt[$vs[0]]."
@@ -381,7 +381,7 @@ if (($sel_file && !$trans) || ($trans && (!$des_subject || !$stage))) {
 		<td>".$tt[$vs[7]]."
 		<td>$ss_menu";
 	if ($show_kind_menu) echo "<td align='center'>$sk_menu";
-	if ($show_stage_menu) echo "<td>$st_menu";
+	if ($show_stage_menu && !$spec_test_arr[$des_subject]) echo "<td>$st_menu";
 	echo "	</tr>
 		</table>
 		$post_msg";

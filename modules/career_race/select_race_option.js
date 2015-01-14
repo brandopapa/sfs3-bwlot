@@ -78,7 +78,7 @@ function SelectR_name(reset_option) {
     //語文類
     if (document.myform.nature.value=='語文類') {
     	//全縣
-    	if (document.myform.level.value == '3') {
+    	if (document.myform.level.value == '4') {
         addOption(document.myform.r_name, "縣（市）語文競賽", "縣（市）語文競賽", "");
         addOption(document.myform.r_name, "縣（市）讀者劇場競賽", "縣（市）讀者劇場競賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
