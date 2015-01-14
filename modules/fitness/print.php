@@ -1,5 +1,5 @@
 <?php
-// $Id: print.php 8254 2014-12-23 03:25:58Z smallduh $
+// $Id: print.php 8272 2015-01-09 04:56:23Z smallduh $
 // 取得設定檔
 include "config.php";
 
@@ -101,6 +101,8 @@ if ($class_num) {
 		reset($r);
 		while(list($k,$v)=each($r)) {
 			$sn=$v[student_sn];
+			//2015.01.09 by smallduh 改成 坐姿前彎,仰臥起坐,立定跳遠,心肺適能 有資料再寫入
+			if (chk_fitness_data($sn,$seme_year_seme)) {
 			$d=array();
 			$d=explode("-",$v[stud_birthday]);
 			/*
@@ -116,6 +118,7 @@ if ($class_num) {
 			$age=floor((($t_y-$d[0])*12+$t_m-$d[1])/12);
       $age=(($a-$age)>0.58)?$age+1:$age; //滿七個月才進一歲
 			$CONN->Execute("update fitness_data set age='$age',test_y='$t_y',test_m='$t_m' where student_sn='$sn' and c_curr_seme='$seme_year_seme'");
+		  }
 		}
 		//重讀資料
 		$fd=read_fitness($seme_year_seme,$stud_str);
@@ -293,5 +296,20 @@ $GIRL_BID=array(6=>array(13.6,17.2,19.1),7=>array(14.4,18.0,20.3),8=>array(14.6,
  return $bmi;  //傳回 0,1,2,3
  
 } // end function
+
+//該生資料是否皆已建立
+function chk_fitness_data ($student_sn,$seme_year_seme) {
+  global $CONN;
+  
+  $sql="select * from fitness_data where c_curr_seme='$seme_year_seme' and student_sn='$student_sn'";
+  $res=$CONN->Execute($sql);
+  $f=$res->fetchrow();
+  
+  if ($f['test1']!="" and $f['test2']!="" and $f['test3']!="" and $f['test4']!="") {
+    return true;
+  } else {
+    return false;
+  }
+} //end function
 
 ?>

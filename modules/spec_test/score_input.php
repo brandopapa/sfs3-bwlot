@@ -1,5 +1,5 @@
 <?php
-//$Id: score_input.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: score_input.php 8273 2015-01-10 14:35:18Z brucelyc $
 include "config.php";
 
 //ป{รา
@@ -61,7 +61,7 @@ if ($id) {
 	$c_year=$res->fields[c_year];
 	$subject_str=$res->fields[subject_str];
 	$ratio_str=$res->fields[ratio_str];
-	$class_menu=class_menu($sel_year,$sel_seme,$c_year,&$class_id);
+	$class_menu=class_menu($sel_year,$sel_seme,$c_year,$class_id);
 }
 $main="<table border=0 cellspacing=1 cellpadding=2 width=100% bgcolor=#cccccc><tr><td bgcolor='#FFFFFF'>\n";
 $year_seme_menu=year_seme_menu($sel_year,$sel_seme);

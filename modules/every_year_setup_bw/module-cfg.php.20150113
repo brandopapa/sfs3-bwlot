@@ -78,7 +78,6 @@ $school_menu_p["classroom_setup.php"]="專科教室設定";
 $school_menu_p["course_setup3.php"]="課表設定";
 $school_menu_p["chc_teacher.v2.php"]=$dts;
 $school_menu_p["section_time.php"]="各節時間設定";
-$school_menu_p["course_section_setup_check.php"]="科目排課檢查";
 
 //起始年級
 $school_kind_start=1;
