@@ -68,10 +68,12 @@ switch ($kind) {
 		include ("my_fun.php");
 		if ($have_word) {
 			$d=explode("-",$m_date);
-			$m_content="經奉".$m_unit.num2str($d[0])."年".num2str($d[1])."月".num2str($d[2])."日".$m_word."字第".$m_num."號核准";
+			//$m_content="經奉".$m_unit.num2str($d[0])."年".num2str($d[1])."月".num2str($d[2])."日".$m_word."字第".$m_num."號核准";
+			$m_content="經奉".$m_unit.$d[0]."年".$d[1]."月".$d[2]."日".$m_word."字第".$m_num."號核准";
 		} else {
 			$d=explode("-",$n_date);
-			$m_content="因該生係".num2str($d[0])."年".num2str($d[1])."月".num2str($d[2])."日入學尚未報奉核准";
+			//$m_content="因該生係".num2str($d[0])."年".num2str($d[1])."月".num2str($d[2])."日入學尚未報奉核准";
+			$m_content="因該生係".$d[0]."年".$d[1]."月".$d[2]."日入學尚未報奉核准";
 		}
 		$oo_path="move_out";
 		include ("move_out.php");
