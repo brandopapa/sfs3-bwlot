@@ -655,7 +655,7 @@ class data_student {
 	var $seme_arr2="";
 	var $title_arr="";
 
-	function data_student($student_sn="") {
+	function data_student($student_sn="",$group_id) {
 		global $CONN;
 		if (!empty($student_sn)) {
 			$this->student_sn = $student_sn;
@@ -664,9 +664,11 @@ class data_student {
 			$this->seme = $this->get_seme_data($student_sn);
 			$this->service = $this->get_service_data($student_sn);  //服務學習
 			$this->club = $this->get_club_data($student_sn);				//社團
-			$this->get_abs_data($this->base[stud_id]);
-			$this->get_rew_data($this->base[stud_id]);
-			$this->get_rew_record($student_sn);
+			
+			$this->get_abs_data($this->base[stud_id],$group_id);
+			$this->get_rew_data($this->base[stud_id],$group_id);
+			$this->get_rew_record($student_sn,$group_id);
+			
 			$this->get_class_leader_data($student_sn);
 		}
 	}
@@ -779,13 +781,19 @@ class data_student {
 		return $arys;
 	}
 
-	function get_abs_data($stud_id="") {
+	function get_abs_data($stud_id="",$group_id) {
 		global $CONN;
 
 		if (!empty($stud_id)) {
 			$s=array_keys($this->seme_arr);
 			$seme_str="'".implode("','",$s)."'";
-			$query="select * from stud_seme_abs where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,abs_kind";
+			//$query="select * from stud_seme_abs where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,abs_kind";
+			if ($group_id == 'group_1'){//只取週一至週五的統計
+			  $query="select seme_year_seme,abs_kind,abs_days_5day_7section as abs_days from stud_seme_abs where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,abs_kind";
+			}
+			else{
+				$query="select seme_year_seme,abs_kind,abs_days from stud_seme_abs where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,abs_kind";
+			}  
 			$res=$CONN->Execute($query);
 			while(!$res->EOF) {
 				$this->abs[$this->seme_arr[$res->fields['seme_year_seme']]][$res->fields['abs_kind']]=$res->fields['abs_days'];
@@ -795,13 +803,19 @@ class data_student {
 		}
 	}
 
-	function get_rew_data($stud_id="") {
+	function get_rew_data($stud_id="",$group_id) {
 		global $CONN;
 
 		if (!empty($stud_id)) {
 			$s=array_keys($this->seme_arr);
 			$seme_str="'".implode("','",$s)."'";
-			$query="select * from stud_seme_rew where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,sr_kind_id";			
+			//$query="select * from stud_seme_rew where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,sr_kind_id";
+			if ($group_id == 'group_1'){//只取週一至週五的統計
+			  $query="select seme_year_seme,sr_kind_id,sr_num_5day as sr_num from stud_seme_rew where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,sr_kind_id";
+			}
+			else{
+				$query="select seme_year_seme,sr_kind_id,sr_num from stud_seme_rew where stud_id='$stud_id' and seme_year_seme in ($seme_str) order by seme_year_seme,sr_kind_id";
+			}
 			$res=$CONN->Execute($query);
 			while(!$res->EOF) {
 				$this->rew[$this->seme_arr[$res->fields['seme_year_seme']]][$res->fields['sr_kind_id']]=$res->fields['sr_num'];
@@ -811,11 +825,17 @@ class data_student {
 		}
 	}
 
-	function get_rew_record($student_sn="") {
+	function get_rew_record($student_sn="",$group_id) {
 		global $CONN;
 
 		if (!empty($student_sn)) {
-			$query="select * from reward where student_sn='$student_sn' order by reward_year_seme,reward_date";
+			//$query="select * from reward where student_sn='$student_sn' order by reward_year_seme,reward_date";
+			if ($group_id == 'group_1'){//只取週一至週五
+				$query="select * from reward where student_sn='$student_sn' and DATE_FORMAT(reward_date,'%w') <> '0' and DATE_FORMAT(reward_date,'%w') <> '6' order by reward_year_seme,reward_date";
+			}
+			else{
+				$query="select * from reward where student_sn='$student_sn' order by reward_year_seme,reward_date";
+			}
 			$res=$CONN->Execute($query);
 			$this->rew_record=$res->GetRows();
 		}

@@ -14,7 +14,10 @@ $work_year=substr($work_year_seme,0,-1);
 $session_tea_sn=$_SESSION['session_tea_sn'];
 $stud_class=$_REQUEST['stud_class'];
 $selected_stud=$_POST['selected_stud'];		//取得選擇開列成績證明單學生編號陣列
-
+$absent_group_id=$_POST['absent_group_id'];
+if ($absent_group_id == ''){
+	 $absent_group_id = 'absent_group_1';
+}
 //輸出成績證明單
 if($selected_stud && $_POST['act']=='輸出成績證明單') {
 	$data="";
@@ -22,12 +25,12 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$student_data=get_student_data($work_year);		//取得學生基本資料
 		$domicile_data=get_domicile_data($work_year);		//取得監護人資料
 		$final_data=get_final_data($work_year);		//取得12basic_ylc紀錄資料
-		$reward_data=count_student_reward($student_sn);		//取得學生歷年學期獎懲次數
-		$absence_data=count_student_seme_abs($student_data[$student_sn]['stud_id']);		//取得學生歷年學期出缺席次數		
+		$reward_data=count_student_reward($student_sn,$absent_group_id);		//取得學生歷年學期獎懲次數
+		$absence_data=count_student_seme_abs($student_data[$student_sn]['stud_id'],$absent_group_id);		//取得學生歷年學期出缺席次數		
 		$balance=get_student_score_balance($student_sn);		//學生歷年學期均衡學習分數-健體health,藝文art,綜合complex
 		$fitness=get_student_score_fitness($student_sn);		//學生歷年學期體適能紀錄
 		$competetion=get_student_score_competetion($student_sn);		//學生歷年學期競賽紀錄
-		$reward_list=get_student_reward_list($student_sn);		//學生獎懲明細
+		$reward_list=get_student_reward_list($student_sn,$absent_group_id);		//學生獎懲明細
 		//表頭
 		if(next($selected_stud)==true) $p_break="page-break-after:always;"; else $p_break="";
 		$data.="<div align='center' style='page-break-after:always;'><div align='left' style='width:1000px;line-height:30px;'>";
@@ -151,7 +154,7 @@ $recent_semester=get_recent_semester_select('work_year_seme',$work_year_seme);
 
 //顯示班級
 $class_list=get_semester_graduate_select('stud_class',$work_year_seme,$graduate_year,$stud_class);
-
+	
 //功能鍵
 if($stud_class && $work_year_seme==$curr_year_seme) {
 	$tool_icon="<input type='button' name='all_stud' value='全選' onClick='javascript:tagall(1);'><input type='button' name='clear_stud'  value='全不選' onClick='javascript:tagall(0);'>　";
@@ -159,7 +162,10 @@ if($stud_class && $work_year_seme==$curr_year_seme) {
 	$tool_icon.="<input type='submit' name='act' value='輸出成績證明單' onclick=\"document.myform.target='ts{$academic_year}'\">";
 }
 
-$main="<form name='myform' method='post' action='$_SERVER[SCRIPT_NAME]'>$recent_semester $class_list $tool_icon";
+//出席、獎懲計算週期選單
+$absent_group_list=get_absent_group_select($absent_group_id);
+
+$main="<form name='myform' method='post' action='$_SERVER[SCRIPT_NAME]'>$recent_semester $class_list $absent_group_list $tool_icon";
 
 //產出學生名單
 $data="";

@@ -58,7 +58,7 @@ objform.submit();}
 <TR bgcolor=#9EBCDD>
 <td width=100%  style="vertical-align: top;" colspan=2>
 <!-- 第1格內容 -->
-<font color="#FF0000">■</font>請選擇班級：{{$sel_year}}{{$sel_grade}}
+<font color="#FF0000">■</font>請選擇班級：{{$sel_year}}{{$sel_grade}}<font color="#FF0000">■</font>請選擇計算種類：{{$sel_group}}
 {{if $smarty.get.grade!='' && $smarty.get.year_seme!=''}}
 <INPUT TYPE=button  value='全選/反向' onclick="tagall();"  class=bur2>
 <INPUT TYPE=button  value='取消' onclick="untagall();" class=bur2>

@@ -60,7 +60,7 @@ if($selected_stud && $_POST['act']=='輸出積分審查表') {
 		}
 		$data.="<th width='8%' align='center' style='padding:30px 10px;'>偏遠<br>小校</th>";
 		$data.="<td width='46%' style='padding:20px 10px;'>
-					<p>".(($school_remote>0)?'■':'□')."符合偏遠小校資格：<u>&nbsp;&nbsp;&nbsp;".(($school_remote>0)?$stud_school_remote:'')."&nbsp;&nbsp;&nbsp;</u>分<br>&nbsp;&nbsp;".(($school_remote==2)?'■':'□')."9班以下<br>&nbsp;&nbsp;".(($school_remote==1)?'■':'□')."13班以下<br>&nbsp;&nbsp;".((($school_remote>0)&&($res_move->recordcount()>0))?'■':'□')."轉學生：<u>&nbsp;&nbsp;".$stud_move_date_y."&nbsp;&nbsp;</u>年<u>&nbsp;&nbsp;".$stud_move_date_m."&nbsp;&nbsp;</u>月<u>&nbsp;&nbsp;".$stud_move_date_d."&nbsp;&nbsp;</u>日轉入<br>&nbsp;&nbsp;".((($school_remote>0)&&($res_move->recordcount()==0))?'■':'□')."非轉學生</p>
+					<p>".(($school_remote>0)?'■':'□')."符合偏遠小校資格：<u>&nbsp;&nbsp;&nbsp;".(($school_remote>0)?$stud_school_remote:'')."&nbsp;&nbsp;&nbsp;</u>分<br>&nbsp;&nbsp;".(($school_remote==2)?'■':'□')."7班以下<br>&nbsp;&nbsp;".(($school_remote==1)?'■':'□')."8-12班<br>&nbsp;&nbsp;".((($school_remote>0)&&($res_move->recordcount()>0))?'■':'□')."轉學生：<u>&nbsp;&nbsp;".$stud_move_date_y."&nbsp;&nbsp;</u>年<u>&nbsp;&nbsp;".$stud_move_date_m."&nbsp;&nbsp;</u>月<u>&nbsp;&nbsp;".$stud_move_date_d."&nbsp;&nbsp;</u>日轉入<br>&nbsp;&nbsp;".((($school_remote>0)&&($res_move->recordcount()==0))?'■':'□')."非轉學生</p>
 					<p>".(($school_remote>0)?'□':'■')."不符合偏遠小校資格</p>
 				</td>";
 		$data.="<td width='46%' valign='top' style='padding:20px 10px;' colspan='2'>

@@ -132,20 +132,42 @@ function sum_abs($sel_year,$sel_seme,$stud_id) {
 	$sql="select sections from score_setup where year='$sel_year' and semester='$sel_seme' and class_year='$class_year'";
 	$rs=$CONN->Execute($sql);
 	$all_sections=$rs->fields['sections'];
-	$sql="select * from stud_absent where year='$sel_year' and semester='$sel_seme' and date>='".$seme_day[st_start]."' and date<='".$seme_day[st_end]."' and stud_id='$stud_id'";
+	$sql="select *,DATE_FORMAT(date,'%w') as date_w from stud_absent where year='$sel_year' and semester='$sel_seme' and date>='".$seme_day[st_start]."' and date<='".$seme_day[st_end]."' and stud_id='$stud_id'";
 	$rs=$CONN->Execute($sql);
 	while (!$rs->EOF) {
 		$abs_kind=$rs->fields['absent_kind'];
 		$section=$rs->fields['section'];
+		$date_w=$rs->fields['date_w'];
+		$fg = ($date_w == '0' || $date_w == '6');//¶g¤é ©Î ¶g¤»			
 		//echo $abs_kind."=".$section."<br>";
 		if ($section=='uf' || $section=='df') {
-			if ($abs_kind=='Ãm½Ò') $all_abs[4]++;
+			if ($abs_kind=='Ãm½Ò') {
+			  $all_abs[4]++;
+			  if (!$fg) {
+			  	$all_abs_5day_7section[4]++;
+			  }
+			}
 		} else {
-			$add_day=($section=='allday')?$all_sections:1;
-			if ($abskind[$abs_kind]!="")
+			$add_day=($section=='allday')?$all_sections:1;			
+			if ( ($section=='allday') && (!$fg) ){
+				$add_day_5day_7section=7;
+			}
+			else{
+				$add_day_5day_7section=1;
+			}
+			//$add_day_5day_7section=($section=='allday' && (!$fg))?$7:1;
+			if ($abskind[$abs_kind]!=""){
 				$all_abs[$abskind[$abs_kind]]+=$add_day;
-			else
+				if (!$fg) {
+					$all_abs_5day_7section[$abskind[$abs_kind]]+=$add_day_5day_7section;
+				}
+			}	
+			else{
 				$all_abs[6]+=$add_day;
+				if (!$fg) {
+					$all_abs_5day_7section[6]+=$add_day_5day_7section;
+				}
+			}	
 		}
 		$rs->MoveNext();
 	}
@@ -158,9 +180,11 @@ function sum_abs($sel_year,$sel_seme,$stud_id) {
 	for ($i=1;$i<=6;$i++) {
 		if ($h_abs[$i] != $all_abs[$i]) {
 			if ($h_abs[$i]!="")
-				$sql="update stud_seme_abs set abs_days='$all_abs[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$stud_id' and abs_kind='$i'";
+				//$sql="update stud_seme_abs set abs_days='$all_abs[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$stud_id' and abs_kind='$i'";
+				$sql="update stud_seme_abs set abs_days='$all_abs[$i]',abs_days_5day_7section='$all_abs_5day_7section[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$stud_id' and abs_kind='$i'";
 			else 
-				$sql="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days) values ('$seme_year_seme','$stud_id','$i','$all_abs[$i]')";
+				//$sql="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days) values ('$seme_year_seme','$stud_id','$i','$all_abs[$i]')";
+				$sql="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days,abs_days_5day_7section) values ('$seme_year_seme','$stud_id','$i','$all_abs[$i]','$all_abs_5day_7section[$i]')";
 			$CONN->Execute($sql);
 			//echo $sql."<br>";
 		}

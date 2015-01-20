@@ -1,4 +1,4 @@
-{{* $Id: score_certi_certi_htm_print.tpl 6605 2011-10-25 07:47:18Z infodaes $ *}}
+{{* $Id: score_certi_certi_htm_print.tpl 8291 2015-01-15 14:07:34Z brucelyc $ *}}
 <html>
 <head><meta http-equiv="Content-Type" content="text/html; charset=big5">
 <title>學生成績證明書</title>
@@ -47,7 +47,7 @@ td {
 <td {{if $sl=="chinese"}}rowspan="3"{{/if}} style="border-style: solid; border-width: 0pt 0.75pt {{if $smarty.foreach.ss_link.iteration==$ss_num}}1.5{{else}}0.75{{/if}}pt 0pt;">{{if $sl=="chinese"}}{{if $fin_score.$sn.language.avg.score==""}}---{{else}}{{$fin_score.$sn.language.avg.score}}{{/if}}{{else}}{{if $fin_score.$sn.$sl.avg.score==""}}---{{else}}{{$fin_score.$sn.$sl.avg.score}}{{/if}}{{/if}}</td>
 <td {{if $sl=="chinese"}}rowspan="3"{{/if}} style="border-style: solid; border-width: 0pt 0.75pt {{if $smarty.foreach.ss_link.iteration==$ss_num}}1.5{{else}}0.75{{/if}}pt 0pt;">{{if $sl=="chinese"}}{{if $fin_score.$sn.language.avg.score=="" || $fin_score.$sn.language.avg.str==""}}---{{else}}{{$fin_score.$sn.language.avg.str}}{{/if}}{{else}}{{if $fin_score.$sn.$sl.avg.score=="" || $fin_score.$sn.$sl.avg.str==""}}---{{else}}{{$fin_score.$sn.$sl.avg.str}}{{/if}}{{/if}}</td>
 {{/if}}
-{{if $sl=="chinese"}}
+{{if $sl=="chinese" || $sl=="language"}}
 <td rowspan="{{$area_span}}" style="border-style: solid; border-width: 0pt 0.75pt 1.5pt 0.75pt;">{{if $fin_score.$sn.avg.score == ""}}---{{else}}{{$fin_score.$sn.avg.score}}{{/if}}</td>
 <td rowspan="{{$area_span}}" style="border-style: solid; border-width: 0pt 1.5pt 1.5pt 0pt;">{{if $fin_score.$sn.avg.score == "" || $fin_score.$sn.avg.str == ""}}---{{else}}{{$fin_score.$sn.avg.str}}{{/if}}</td></tr>
 {{/if}}

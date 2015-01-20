@@ -13,6 +13,7 @@ $year_name=$_REQUEST['year_name'];
 $me=$_REQUEST['me'];
 $default=$_REQUEST['default'];
 $act=$_GET['act'];
+$group_id=$_REQUEST['group_id'];
 if (!$default) $stud_score=$_POST['stud_score'];
 
 //定義smarty使用的tag
@@ -74,12 +75,36 @@ if($year_seme && $year_name){
 	</form>";
 }
 
+//分類選單
+$group_select="<select name='group_id' onChange='jumpMenu3()'>";	
+if ($group_id == 'group_1'){
+  $group_select.="<option value='group_1' selected>週一~五 1~7</option>";	
+}
+else{
+	$group_select.="<option value='group_1'>週一~五 1~7</option>";	
+}
+if ($group_id == 'group_2'){
+  $group_select.="<option value='group_2' selected>週一~日 1~8</option>";	
+}
+else{
+	$group_select.="<option value='group_2'>週一~日 1~8</option>";	
+}
+$group_select.="</select>";
+$sel_group_menu="
+<form name='form3' method='post' action='{$_SERVER['PHP_SELF']}'>
+		$group_select
+		<input type='hidden' name='year_name' value='$year_name'>
+		<input type='hidden' name='year_seme' value='$year_seme'>		
+		<input type='hidden' name='me' value='$me'>		
+</form>";
+
 $menu="	<table border=0 cellspacing=1 cellpadding=2 width=100% bgcolor=#cccccc><tr><td bgcolor='#FFFFFF'>
 	<table cellspacing=0 cellpadding=0>
 	<tr>
-	<td>$year_seme_menu</td><td>$class_year_menu</td><td>$class_year_name_menu</td>
+	<td>$sel_group_menu</td><td>$year_seme_menu</td><td>$class_year_menu</td><td>$class_year_name_menu</td>
 	</tr>
 	</table>";
+
 if (!$act) echo $menu;
 
 if(($year_seme)&&($year_name)&&($me)){
@@ -195,7 +220,12 @@ if(($year_seme)&&($year_name)&&($me)){
 		}
 		$abs_kind="'事假','病假','曠課','集會'";
 		$abs_month=array();
-		$sql_abs="select distinct month from stud_absent where year='$sel_year' and semester='$sel_seme' and stud_id='$id' and absent_kind in ($abs_kind) order by month";
+		if ($group_id == 'group_1'){
+		  $sql_abs="select distinct month from stud_absent where year='$sel_year' and semester='$sel_seme' and stud_id='$id' and absent_kind in ($abs_kind) and DATE_FORMAT(date,'%w') <> '0' and DATE_FORMAT(date,'%w') <> '6' order by month";
+		}
+		else{
+			$sql_abs="select distinct month from stud_absent where year='$sel_year' and semester='$sel_seme' and stud_id='$id' and absent_kind in ($abs_kind) order by month";			
+		}  
 		$rs_abs=$CONN->Execute($sql_abs) or die($sql_abs);
 		if ($rs_abs->recordcount()>0) {
 			while (!$rs_abs->EOF) {
@@ -219,7 +249,14 @@ if(($year_seme)&&($year_name)&&($me)){
 		//取得出缺席值
 		if (intval($cl_days)==0) $cl_days=30;
 		if (intval($sl_days)==0) $sl_days=80;
-		$rs_abs=$CONN->Execute("select * from stud_seme_abs where seme_year_seme='$seme_year_seme' and stud_id='$id' order by abs_kind");
+		if ($group_id == 'group_1'){
+		  $sql_abs = "select abs_kind,abs_days_5day_7section as abs_days from stud_seme_abs where seme_year_seme='$seme_year_seme' and stud_id='$id' order by abs_kind";	
+		}  
+		else{
+			$sql_abs = "select abs_kind,abs_days from stud_seme_abs where seme_year_seme='$seme_year_seme' and stud_id='$id' order by abs_kind";	
+	  }  
+		//$rs_abs=$CONN->Execute("select * from stud_seme_abs where seme_year_seme='$seme_year_seme' and stud_id='$id' order by abs_kind");
+		$rs_abs=$CONN->Execute($sql_abs);
 		if ($rs_abs->recordcount()>0)
 			while (!$rs_abs->EOF) {
 				$stud_abs[$id][$rs_abs->fields['abs_kind']]=$rs_abs->fields['abs_days'];
@@ -234,7 +271,14 @@ if(($year_seme)&&($year_name)&&($me)){
 		$abs_score.="<td align='center'>".$stud_abs[$id][4]."</td>";
 		$abs_score.="<td align='center' bgcolor='#e6fbff'>".$stud_abs[$id][0]."</td>";
 		//取得獎懲值
-		$rs_rew=$CONN->Execute("select * from stud_seme_rew where seme_year_seme='$seme_year_seme' and stud_id='$id' order by sr_kind_id");
+		if ($group_id == 'group_1'){
+		  $sql_rew = "select sr_kind_id,sr_num_5day as sr_num from stud_seme_rew where seme_year_seme='$seme_year_seme' and stud_id='$id' order by sr_kind_id";
+		}  
+		else{
+			$sql_rew = "select sr_kind_id,sr_num from stud_seme_rew where seme_year_seme='$seme_year_seme' and stud_id='$id' order by sr_kind_id";
+	  }  		
+		//$rs_rew=$CONN->Execute("select * from stud_seme_rew where seme_year_seme='$seme_year_seme' and stud_id='$id' order by sr_kind_id");
+		$rs_rew=$CONN->Execute($sql_rew);
 		if ($rs_rew) {
 			while (!$rs_rew->EOF) {
 				$stud_rew[$id][$rs_rew->fields['sr_kind_id']]=$rs_rew->fields['sr_num'];
@@ -253,7 +297,6 @@ if(($year_seme)&&($year_name)&&($me)){
 		else
 			$stud_rew[$id][0]-=$stud_rew[$id][5]*2;
 		$rew_score.="<td align='center' bgcolor='#e6fbff'>".$stud_rew[$id][0]."</td>";
-		
 		$rs=&$CONN->Execute("select student_sn,ss_score_memo from stud_seme_score_nor where student_sn='$stud_sn[$m]' and ss_id='0' and seme_year_seme='$seme_year_seme'");
 		$ss_memo=addslashes($rs->fields['ss_score_memo']);
 		if ($stud_score[$id][$j]=="") $stud_score[$id][$j]=addslashes($rs->fields['ss_score_memo']);
@@ -335,9 +378,10 @@ function jumpMenu2(){
 
 function jumpMenu3(){
 	var str, classstr ;
- if ((document.form3.year_name.value!="") & (document.form3.me.value!="") & (document.form3.stud_id.options[document.form3.stud_id.selectedIndex].value!="")) {
-	location="<?php echo $_SERVER['PHP_SELF'] ?>?year_seme=" + document.form3.year_seme.value + "&year_name=" + document.form3.year_name.value + "&me=" +document.form3.me.value + "&stud_id=" + document.form3.stud_id.options[document.form3.stud_id.selectedIndex].value;
+ if ((document.form3.year_name.value!="") & (document.form3.me.value!="") & (document.form3.group_id.options[document.form3.group_id.selectedIndex].value!="")) {
+	location="<?php echo $_SERVER['PHP_SELF'] ?>?year_seme=" + document.form3.year_seme.value + "&year_name=" + document.form3.year_name.value + "&me=" +document.form3.me.value + "&group_id=" + document.form3.group_id.options[document.form3.group_id.selectedIndex].value;
 	}
 }
+
 //  End -->
 </script>

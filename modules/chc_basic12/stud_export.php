@@ -613,18 +613,19 @@ function get_chc_data_103year($year, $obj){
 		//$data1[$mem][]=intval($val[birth_day]);
 		//$result = array_merge((array)$beginning, (array)$end);
 		$data1[$mem]=$all_data[$mem];
-		$data1[$mem][]='';
-		$data1[$mem][]='';
+		$data1[$mem][]='';  //自補欄位
+		$data1[$mem][]='';  //自補欄位
+		$data1[$mem][]='';  //自補欄位
 		$data1[$mem][]=$val[income];
 		$data1[$mem][]=$val[score_nearby];
 		$data1[$mem][]=$val[score_service];
 		$data1[$mem][]=$val[score_reward];
 		$data1[$mem][]=$val[score_fault];
-		$data1[$mem][]=$score_morality;   //品德服務分數
+		//$data1[$mem][]=$score_morality;   //品德服務分數
 		$data1[$mem][]=$val[score_balance];
 		$data1[$mem][]=$val[score_race];
 		$data1[$mem][]=$val[score_physical];
-        $data1[$mem][]=$score_display;    //績優表現分數
+        //$data1[$mem][]=$score_display;    //績優表現分數
 		//$mem++;
 	}
 
@@ -633,7 +634,7 @@ function get_chc_data_103year($year, $obj){
 
 	$filename ="chc_export_".$grad_year.".xls" ;
 	//103.03.21起採用
-	$myhead=array("考區代碼","集報單位代碼","序號","學號","班級","座號","學生姓名","身分證統一編號","性別","出生年(民國年)","出生月","出生日","畢業學校代碼","畢業年(民國年)","畢肄業","學生身分","身心障礙","就學區","低收入戶","中低收入戶","失業勞工子女","資料授權","家長姓名","市內電話","行動電話","郵遞區號","通訊地址","原住民是否含母語認證","非中華民國身分證號","經濟弱勢","就近入學","服務學習","獎勵紀錄","生活教育","品德服務","均衡學習","競賽表現","體適能","績優表現");
+	$myhead=array("考區代碼","集報單位代碼","序號","學號","班級","座號","學生姓名","身分證統一編號","性別","出生年(民國年)","出生月","出生日","畢業學校代碼","畢業年(民國年)","畢肄業","學生身分","身心障礙","就學區","低收入戶","中低收入戶","失業勞工子女","資料授權","家長姓名","市內電話","行動電話","郵遞區號","通訊地址","原住民是否含母語認證","非中華民國身分證號","特殊生加分百分比","經濟弱勢","就近入學","服務學習","獎勵紀錄","生活教育","均衡學習","競賽表現","體適能");
 	//include_once "../../include/sfs_case_excel.php";
 	$x=new sfs_xls();
 	$x->setUTF8();//$x->setVersion(8);
@@ -760,7 +761,7 @@ class chc_seme{
 <form name="form2" method="post" action="">
   彰化區高級中等學校免試入學分發學生資料檔<br>
   <font color=red>※※操作步驟</font><br>
-  1.在資料檔中，「原住民是否含母語認證」、「非中華民國身分證號」兩欄位請自行輸入。<br>
+  1.在資料檔中，「原住民是否含母語認證」、「非中華民國身分證號」、「特殊生加分百分比」三欄位請自行輸入。<br>
   2.將本資料檔內容資料貼到「彰化區高級中等學校報名免試系統平臺」的範本檔中。<br>
   　　方法：開啟匯出檔，「全選」->「複製」->「貼上」（請用「選擇性貼上」->「值」），<br>
   　　再匯入到「彰化區高級中等學校報名免試系統平臺」<br>

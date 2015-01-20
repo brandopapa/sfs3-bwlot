@@ -101,46 +101,62 @@ function cal_abs($sel_year,$sel_seme){
 		}
 	}
 	if ($IS_JHORES==6)
-		$sql="select * from stud_absent where year='$sel_year' and semester='$sel_seme' order by stud_id,absent_kind";
+		$sql="select *,DATE_FORMAT(date,'%w') as date_w from stud_absent where year='$sel_year' and semester='$sel_seme' order by stud_id,absent_kind";
 	else
-		$sql="select distinct date,stud_id,absent_kind from stud_absent where year='$sel_year' and semester='$sel_seme' order by stud_id,absent_kind";
+		$sql="select distinct date,stud_id,absent_kind,DATE_FORMAT(date,'%w') as date_w from stud_absent where year='$sel_year' and semester='$sel_seme' order by stud_id,absent_kind";
 	$rs=$CONN->Execute($sql) or trigger_error("SQL»yªk¿ù»~¡G$sql", E_USER_ERROR);
 	if ($rs) {
 		while (!$rs->EOF) {
 			$stud_id=$rs->fields['stud_id'];
 			$absent_kind=$rs->fields['absent_kind'];
+			$date_w=$rs->fields['date_w'];
+			$fg = ($date_w == "0" || $date_w == "6");//¶g¤é ©Î ¶g¤»
 			if ($IS_JHORES==6) {
 				$section=$rs->fields['section'];
 				$class=explode("_",$rs->fields['class_id']);
 			}
 			if ($oid!=$stud_id && $oid) {
 				for ($i=1;$i<=6;$i++) {
-					if ($ab[$i]=="") $ab[$i]="0";
+					if ($ab[$i]=="") {
+						$ab[$i]="0";
+						$ab_days_5day_7section[$i]="0";
+					}
 					$query="select * from stud_seme_abs where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
 					$rs_c=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 					if ($rs_c->recordcount()>0) {
-						$query="update stud_seme_abs set abs_days='$ab[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
+						$query="update stud_seme_abs set abs_days='$ab[$i]',abs_days_5day_7section='$ab_days_5day_7section[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
 						$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 					} else {
-						$query="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days) values ('$seme_year_seme','$oid','$i','$ab[$i]')";
+						$query="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days,abs_days_5day_7section) values ('$seme_year_seme','$oid','$i','$ab[$i]','$ab_days_5day_7section[$i]')";
 						$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 					}
 				}
 				$ab="";
+				$ab_days_5day_7section="";
 			}
 			if ($IS_JHORES==6) {
 				if ($section=="allday") {
 					$ab[$abs_array[$absent_kind]]+=$all_sections[intval($class[2])];
-					if ($absent_kind=="Ãm½Ò") $ab[4]+=2;
+					if (!$fg) {$ab_days_5day_7section[$abs_array[$absent_kind]]+=7;}
+					if ($absent_kind=="Ãm½Ò"){ 
+						$ab[4]+=2;
+						if (!$fg) {$ab_days_5day_7section[4]+=2;}
+					}
 				} elseif ($section=="uf" || $section=="df") {
-					if ($absent_kind=="Ãm½Ò") $ab[4]+=1;
+					if ($absent_kind=="Ãm½Ò") {
+						$ab[4]+=1;
+						if (!$fg) {$ab_days_5day_7section[4]+=1;}
+					}
 				} elseif (in_array($absent_kind,$a_array)) {
 					$ab[$abs_array[$absent_kind]]+=1;
+					if (!$fg) {$ab_days_5day_7section[$abs_array[$absent_kind]]+=1;}
 				} else {
 					$ab[6]+=1;
+					if (!$fg) {$ab_days_5day_7section[6]+=1;}
 				}
 			} else {
 				$ab[$abs_array[$absent_kind]]++;
+				if (!$fg) {$ab_days_5day_7section[$abs_array[$absent_kind]]++;}
 			}
 			$oid=$stud_id;
 			$rs->MoveNext();
@@ -149,10 +165,11 @@ function cal_abs($sel_year,$sel_seme){
 			$query="select * from stud_seme_abs where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
 			$rs_c=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 			if ($rs_c) {
-				$query="update stud_seme_abs set abs_days='$ab[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
+				//$query="update stud_seme_abs set abs_days='$ab[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
+				$query="update stud_seme_abs set abs_days='$ab[$i]',abs_days_5day_7section='$ab_days_5day_7section[$i]' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and abs_kind='$i'";
 				$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 			} else {
-				$query="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days) values ('$seme_year_seme','$oid','$i','$ab[$i]')";
+				$query="insert into stud_seme_abs (seme_year_seme,stud_id,abs_kind,abs_days,abs_days_5day_7section) values ('$seme_year_seme','$oid','$i','$ab[$i]','$ab_days_5day_7section[$i]')";
 				$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 			}
 		}
@@ -165,25 +182,28 @@ function cal_rew($sel_year,$sel_seme) {
 	$reward_year_seme=$sel_year.$sel_seme;
 	$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 	$CONN->Execute("update stud_seme_rew set sr_num='' where seme_year_seme='$seme_year_seme'");
-	$sql="select * from reward where reward_year_seme='$reward_year_seme' and stud_id <> '' and reward_cancel_date='0000-00-00' order by stud_id,reward_kind";
+	$sql="select *,DATE_FORMAT(reward_date,'%w') as date_w from reward where reward_year_seme='$reward_year_seme' and stud_id <> '' and (reward_cancel_date='0000-00-00' or reward_cancel_date is null) order by stud_id,reward_kind";
 	$rs=$CONN->Execute($sql) or trigger_error("SQL»yªk¿ù»~¡G$sql", E_USER_ERROR);
 	if ($rs) {
 		if ($rs->recordcount()>0) {
 			while (!$rs->EOF) {
 				$stud_id=$rs->fields['stud_id'];
 				$reward_kind=intval($rs->fields['reward_kind']);
+				$date_w=$rs->fields['date_w'];
+				$fg = ($date_w == '0' || $date_w == '6');
 				$ow=($reward_kind>0)?0:3;
 				$ork=abs($reward_kind);
 				if ($oid!=$stud_id && $oid!="") {
 					for ($i=1;$i<=6;$i++) {
-						$val=$stud_rew[$oid][$i];
+						$val=$stud_rew[$oid][$i];						
+						$val_5day=$stud_rew_5day[$oid][$i];
 						$query="select * from stud_seme_rew where seme_year_seme='$seme_year_seme' and stud_id='$oid' and sr_kind_id='$i'";
 						$rs_c=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 						if ($rs_c->recordcount() > 0) {
-							$query="update stud_seme_rew set sr_num='$val' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and sr_kind_id='$i'";
+							$query="update stud_seme_rew set sr_num='$val',sr_num_5day='$val_5day' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and sr_kind_id='$i'";
 							$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 						} else {
-							$query="insert into stud_seme_rew (seme_year_seme,stud_id,sr_kind_id,sr_num) values ('$seme_year_seme','$oid','$i','$val')";
+							$query="insert into stud_seme_rew (seme_year_seme,stud_id,sr_kind_id,sr_num,sr_num_5day) values ('$seme_year_seme','$oid','$i','$val','$val_5day')";
 							$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 						}
 					}
@@ -191,7 +211,7 @@ function cal_rew($sel_year,$sel_seme) {
 				if($rs->fields[reward_sub] ==1){
 					switch ($ork) {
 						case 1:
-							$stud_rew[$stud_id][3+$ow]++;
+							$stud_rew[$stud_id][3+$ow]++;							
 							break;
 						case 2:
 							$stud_rew[$stud_id][3+$ow]+=2;
@@ -212,6 +232,31 @@ function cal_rew($sel_year,$sel_seme) {
 							$stud_rew[$stud_id][1+$ow]+=3;
 							break;
 					}
+					if(!$fg){
+						switch ($ork) {
+							case 1:
+								$stud_rew_5day[$stud_id][3+$ow]++;							
+								break;
+							case 2:
+								$stud_rew_5day[$stud_id][3+$ow]+=2;
+								break;
+							case 3:
+								$stud_rew_5day[$stud_id][2+$ow]++;
+								break;
+							case 4:
+								$stud_rew_5day[$stud_id][2+$ow]+=2;
+								break;
+							case 5:
+								$stud_rew_5day[$stud_id][1+$ow]++;
+								break;
+							case 6:
+								$stud_rew_5day[$stud_id][1+$ow]+=2;
+								break;
+							case 7:
+								$stud_rew_5day[$stud_id][1+$ow]+=3;
+								break;
+						}						
+					}
 				}
 				$oid=$stud_id;
 				$rs->MoveNext();
@@ -223,13 +268,14 @@ function cal_rew($sel_year,$sel_seme) {
 
 			for ($i=1;$i<=6;$i++) {
 				$val=$stud_rew[$oid][$i];
+				$val_5day=$stud_rew_5day[$oid][$i];
 				$query="select * from stud_seme_rew where seme_year_seme='$seme_year_seme' and stud_id='$oid' and sr_kind_id='$i'";
 				$rs_c=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 				if ($rs_c->recordcount() > 0) {
-					$query="update stud_seme_rew set sr_num='$val' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and sr_kind_id='$i'";
+					$query="update stud_seme_rew set sr_num='$val',sr_num_5day='$val_5day' where seme_year_seme='$seme_year_seme' and stud_id='$oid' and sr_kind_id='$i'";
 					$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
 				} else {
-					$query="insert into stud_seme_rew (seme_year_seme,stud_id,student_sn,sr_kind_id,sr_num) values ('$seme_year_seme','$oid','$student_sn','$i','$val')";
+					$query="insert into stud_seme_rew (seme_year_seme,stud_id,student_sn,sr_kind_id,sr_num,sr_num_5day) values ('$seme_year_seme','$oid','$student_sn','$i','$val','$val_5day')";
 					$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);;
 				}
 			}
@@ -303,6 +349,7 @@ function cal_nor($sel_year,$sel_seme) {
 		while (!$rs_rew->EOF) {
 			$id=$rs_rew->fields['stud_id'];
 			$stud_rew[$id][$rs_rew->fields['sr_kind_id']]=$rs_rew->fields['sr_num'];
+			$stud_rew_5day[$id][$rs_rew->fields['sr_kind_id']]=$rs_rew->fields['sr_num_5day'];
 			$rs_rew->MoveNext();
 		}
 	}
@@ -322,49 +369,89 @@ function cal_nor($sel_year,$sel_seme) {
 		$abs_month=array();
 		$query="select distinct month from stud_absent where year='$sel_year' and semester='$sel_seme' and stud_id='$id' and absent_kind in ($abs_kind) order by month";
 		$rs_abs=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
-		if ($rs_abs)
+		if ($rs_abs){
 			if ($rs_abs->recordcount()>0) {
 				while (!$rs_abs->EOF) {
 					$abs_month[$rs_abs->fields['month']]=1;
 					$rs_abs->MoveNext();
 				}
 			}
+		}
+		//-------------------------------
+		//­pºâ¥þ¶Ô
+		$abs_month_5day=array();
+		$query="select distinct month from stud_absent where year='$sel_year' and semester='$sel_seme' and stud_id='$id' and absent_kind in ($abs_kind) and DATE_FORMAT(date,'%w') <> '0' and DATE_FORMAT(date,'%w') <> '6' order by month";
+		$rs_abs=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);
+		if ($rs_abs){
+			if ($rs_abs->recordcount()>0) {
+				while (!$rs_abs->EOF) {
+					$abs_month_5day[$rs_abs->fields['month']]=1;
+					$rs_abs->MoveNext();
+				}
+			}
+		}		
+		//-------------------------------	
 		$abs_all=0;
+		$abs_all_5day=0;
 		$k=0;
 		for ($i=intval($st[1]);$i<=$se[1];$i++) {
 			$j=$i;
 			$k++;
 			if ($i>12) $j=$i-12;
 			if ($abs_month[$j]!=1) $abs_all++;
+			if ($abs_month_5day[$j]!=1) $abs_all_5day++;
 		}
-		if ($a_score!="1") $abs_all=($abs_all==$k)?5:0;
+		if ($a_score!="1") {
+			$abs_all=($abs_all==$k)?5:0;
+			$abs_all_5day=($abs_all_5day==$k)?5:0;
+		}	
 
 		//¨ú±o¥X¯Ê®u­È
-		for ($i=1;$i<=6;$i++) if ($stud_abs[$id][$i]=="") $stud_abs[$id][$i]=0;
+		for ($i=1;$i<=6;$i++) {
+			if ($stud_abs[$id][$i]=="") $stud_abs[$id][$i]=0;
+			if ($stud_abs_5day[$id][$i]=="") $stud_abs_5day[$id][$i]=0;
+		}	
 		$stud_abs[$id][0]=$abs_all-floor($stud_abs[$id][3]/2+$stud_abs[$id][2]/$sl_days+$stud_abs[$id][1]/$cl_days+$stud_abs[$id][4]/4);
+		$stud_abs_5day[$id][0]=$abs_all_5day-floor($stud_abs_5day[$id][3]/2+$stud_abs_5day[$id][2]/$sl_days+$stud_abs_5day[$id][1]/$cl_days+$stud_abs_5day[$id][4]/4);
 
 		//¨ú±o¼úÃg­È
 		for ($i=1;$i<=6;$i++) {
 			if ($stud_rew[$id][$i]=="") $stud_rew[$id][$i]=0;
+			if ($stud_rew_5day[$id][$i]=="") $stud_rew_5day[$id][$i]=0;
 		}
 		$stud_rew[$id][0]=$stud_rew[$id][1]*9+$stud_rew[$id][2]*3+$stud_rew[$id][3]-$stud_rew[$id][4]*7;
+		$stud_rew_5day[$id][0]=$stud_rew_5day[$id][1]*9+$stud_rew_5day[$id][2]*3+$stud_rew_5day[$id][3]-$stud_rew_5day[$id][4]*7;
 		if ($f_w=="") $f_w=0;
+		
 		if ($stud_rew[$id][6] > 0) $stud_rew[$id][0]-=$stud_rew[$id][6]-1+$f_w;
+		if ($stud_rew_5day[$id][6] > 0) $stud_rew_5day[$id][0]-=$stud_rew_5day[$id][6]-1+$f_w;
+		
 		if ($stud_rew[$id][5] > 2)
 			$stud_rew[$id][0]-=($stud_rew[$id][5]-2)*3+4;
 		else
 			$stud_rew[$id][0]-=$stud_rew[$id][5]*2;
+
+		if ($stud_rew_5day[$id][5] > 2)
+			$stud_rew_5day[$id][0]-=($stud_rew_5day[$id][5]-2)*3+4;
+		else
+			$stud_rew_5day[$id][0]-=$stud_rew_5day[$id][5]*2;
 		
 		$nor_total=80+$stud_abs[$id][0]+$stud_score[$id][7]+$stud_rew[$id][0];
+		$nor_total_5day=80+$stud_abs_5day[$id][0]+$stud_score_5day[$id][7]+$stud_rew_5day[$id][0];
+		
 		if ($u_score && $nor_total>100) $nor_total=100;
+		if ($u_score && $nor_total_5day>100) $nor_total_5day=100;
+		
 		if ($d_score && $nor_total<0) $nor_total=0;
+		if ($d_score && $nor_total_5day<0) $nor_total_5day=0;
+
 		$query="select * from stud_seme_score_nor where seme_year_seme='$seme_year_seme' and student_sn='$sn' and ss_id='0'";
 		$rs_nor=$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);;
 		if ($rs_nor->recordcount()>0) {
-			$query="update stud_seme_score_nor set ss_score='$nor_total' where seme_year_seme='$seme_year_seme' and student_sn='$sn' and ss_id='0'";
+			$query="update stud_seme_score_nor set ss_score='$nor_total',ss_score_5day='$nor_total_5day' where seme_year_seme='$seme_year_seme' and student_sn='$sn' and ss_id='0'";
 			$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);;
 		} else {
-			$query="insert into stud_seme_score_nor (seme_year_seme,student_sn,ss_id,ss_score,ss_score_memo) values ('$seme_year_seme','$sn','0','$nor_total','')";
+			$query="insert into stud_seme_score_nor (seme_year_seme,student_sn,ss_id,ss_score,ss_score_memo,ss_score_5day) values ('$seme_year_seme','$sn','0','$nor_total','','$nor_total_5day')";
 			$CONN->Execute($query) or trigger_error("SQL»yªk¿ù»~¡G$query", E_USER_ERROR);;
 		}
 		$rs->MoveNext();

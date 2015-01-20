@@ -18,7 +18,7 @@ include_once "function.php";
 $abskind=array("ㄆ安"=>"1","痜安"=>"2","胢揭"=>"3","そ安"=>"5");
 
 //穝﹚竡琍戳
-$weekN=array('','','','','き','せ');
+//$weekN=array('','','','','き','せ','ら');
 
 //眔家舱砞﹚
 $m_arr = get_sfs_module_set();

@@ -161,7 +161,7 @@ if($abs_base_days){
 	$show_ss=array("language"=>"語文","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
 	$student_data="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1' width='100%'><tr align='center' bgcolor='#ccffcc'><td>班級</td><td>座號</td><td>學號</td><td>姓名</td>";
 	foreach($show_ss as $key=>$value) $student_data.="<td bgcolor='#ccccff'>$value</td>";
-	$student_data.="<td>丙等以上</td><td>獎懲</td><td>事曠集缺席日數</td></tr>";
+	$student_data.="<td>丙等以上</td><td>獎懲</td><td>事曠集缺席節次</td></tr>";
 
 	
 	$succ_count=array(7=>0,6=>0,5=>0,4=>0,3=>0,2=>0,1=>0,0=>0);

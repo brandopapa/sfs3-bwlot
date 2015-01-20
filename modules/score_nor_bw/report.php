@@ -60,10 +60,9 @@ if ($_POST[act]=='OK') {
  		$title_img_3 = "http://".$_SERVER["SERVER_ADDR"].$UPLOAD_URL."school/title_img/title_3";
  	  $smarty->assign('title_img_3',$title_img_3);
  	}
-
-	foreach($sn_ary as $student_sn) {	
-		
-		$student_data=new data_student($student_sn);
+  $group_id = $_POST[group_id];
+	foreach($sn_ary as $student_sn) {			
+		$student_data=new data_student($student_sn,$group_id);
 		$prn_page++;
 		if ($IS_JHORES==0) 
 			$seme_width=7;
@@ -75,11 +74,11 @@ if ($_POST[act]=='OK') {
 		$smarty->assign('base',$student_data->base);//基本資料
 		$smarty->assign('move_data',$student_data->move);			//所有異動記錄
 		$smarty->assign('seme_ary',$student_data->seme);
-		$smarty->assign('abs_data',$student_data->abs);
-		$smarty->assign('rew_data',$student_data->rew);
-		$smarty->assign('abs_data_total',$student_data->abs_total);
-		$smarty->assign('rew_data_total',$student_data->rew_total);
-		$smarty->assign('rew_record',$student_data->rew_record);
+	  $smarty->assign('abs_data',$student_data->abs);
+	  $smarty->assign('rew_data',$student_data->rew);
+	  $smarty->assign('abs_data_total',$student_data->abs_total);
+	  $smarty->assign('rew_data_total',$student_data->rew_total);
+	  $smarty->assign('rew_record',$student_data->rew_record);
 		$smarty->assign('seme_arr2',$student_data->seme_arr2);
 		$smarty->assign('service',$student_data->service);		//服務學習
 		$smarty->assign('club',$student_data->club);					//社團
@@ -100,7 +99,11 @@ if ($_POST[act]=='OK') {
 
 // 指派下拉式選擇年級
 	$url=$_SERVER[PHP_SELF]."?type=".$_REQUEST[type]."&year_seme=".$year_seme."&grade=";
-	$smarty->assign("sel_grade",sel_grade('grade',$_GET[grade],$url));
+	$smarty->assign("sel_grade",sel_grade('grade',$_GET[grade],$url));	
+//指派下拉式選擇計算種類	
+	$group_id=$_GET[group_id];
+	$smarty->assign("sel_group",get_group_select($group_id));
+	
 	$smarty->assign("phpself",$_SERVER[PHP_SELF]);
 	$smarty->assign("school_name",$sch_data[sch_cname]);
 
@@ -127,6 +130,7 @@ if ($_POST[act]=='OK') {
 	else {
 		$smarty->assign("sel_class","<CENTER>使用方式：先選學期，再選年級！</CENTER>");
 	}
+	
 	$form_type[intval($_REQUEST[type])]="checked";
 	$smarty->assign("type",$form_type);
 	$smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE); 
@@ -191,6 +195,25 @@ foreach($all_grade as $key=>$val) {
 $str.="</select>";
 return $str;
  }
+
+function get_group_select($group_id){
+  $group_select="<select name='group_id'>";	
+  if ($group_id == 'group_1'){
+ 	  $group_select.="<option value='group_1' selected>週一~五 1~7</option>";	
+	}
+	else{
+		$group_select.="<option value='group_1'>週一~五 1~7</option>";	
+	}
+  if ($group_id == 'group_2'){
+ 	  $group_select.="<option value='group_2' selected>週一~日 1~8</option>";	
+	}
+	else{
+		$group_select.="<option value='group_2'>週一~日 1~8</option>";	
+	}
+  $group_select.="</select>";
+  
+  return $group_select;
+}
 
 ###########################################################
 ##  傳入年級,學年度,學期 預設值為all表示將傳出所有年級與班級

@@ -1,4 +1,4 @@
-{{* $Id: score_certi_certi_htm.tpl 6605 2011-10-25 07:47:18Z infodaes $ *}}
+{{* $Id: score_certi_certi_htm.tpl 8291 2015-01-15 14:07:34Z brucelyc $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 <script>
@@ -61,7 +61,7 @@ function check() {
 <input type="button" value="全選" onClick="javascript:tagall('sel_stud[]',1);"><input type="button" value="取消全選" onClick="javascript:tagall('sel_stud[]',0);">
 </fieldset>
 <span class="small"><input type="checkbox" name="include_nor">含日常成績 <input type="checkbox" name="include_avg" checked>含平均  <input type="checkbox" name="include_no">含證明字列  起始號：<input type="text" name="start_no" size=3 value=""></span> <br>
-<input type="submit" name="form1" value="列印成績表"><input type="submit" name="form1" value="列印英文成績表">
+<input type="submit" name="form1" value="列印成績表(八科)"><input type="submit" name="form1" value="列印成績表(七領域)"><input type="submit" name="form1" value="列印英文成績表">
 <input type="hidden" name="stud_study_year" value="{{$stud_study_year}}">
 </td><td>
 <fieldset>
