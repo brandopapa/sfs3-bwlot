@@ -259,10 +259,10 @@ function &ss_class_num($sel_year,$sel_seme){
 	global $CONN,$SFS_PATH_HTML,$school_kind_name;
 	
 	//先取得已有資料
-	$sql_select = "select ss_id,num from course_ss_num where year='$sel_year' and seme='$sel_seme'";
-	$recordSet=$CONN->Execute($sql_select);
-	while (list($ss_id,$num) = $recordSet->FetchRow()) {
-		$data[$ss_id]=$num;
+	$sql_select = "select ss_id,sections from score_ss where year='$sel_year' and semester='$sel_seme'";
+	$recordSet=$CONN->Execute($sql_select) or trigger_error("SQL語法執行錯誤： $sql_select", E_USER_ERROR);;
+	while (list($ss_id,$sections) = $recordSet->FetchRow()) {
+		$data[$ss_id]=$sections;
 	}
 	
 	//$class_year_array=get_class_year_array($sel_year,$sel_seme);
@@ -306,7 +306,7 @@ function &ss_class_num($sel_year,$sel_seme){
 		if(sizeof($n)==0){
 			trigger_error("n", E_USER_ERROR);
 		}
-		$tr2.="<tr><td colspan='2' align='center'>科目節數設定</td>";
+		$tr2.="<tr><td colspan='2' align='center'>科目</td><td align='center'>節數</td>";
 		for($i=0;$i < sizeof($class_id_array[$Cyear]) ;$i++){
 			$class_id = $class_id_array[$Cyear][$i];
 			$class_data=get_class_stud($class_id);
@@ -317,8 +317,8 @@ function &ss_class_num($sel_year,$sel_seme){
 		for($j=0;$j < $n;$j++){
 			$ss_id=$class[$j][ss_id];
 			$ss_name=&get_ss_name("","","長",$ss_id);
-			
-			$td.="<tr bgcolor='#FFFFF0'><td class='small'>$ss_name</td>";
+			$ss_session = $data[$ss_id];
+			$td.="<tr bgcolor='#FFFFF0'><td class='small'>$ss_name</td><td class='small'>$ss_session</td>";
 			for($k=0;$k < $c_year_class[$Cyear];$k++){
 				$sector=$ss_yc_array[$ss_id][$class_id];
 				if ($sector != ''){
@@ -1881,4 +1881,42 @@ function re_start_go($sel_year,$sel_seme,$del_null,$del_room,$del_auto_fix,$re_s
 	return $mode;
 }
 
+//列出課程設定中有設定年級與班級
+function get_ss_yc_bw($sel_year,$sel_seme){
+	global $CONN;
+	// 確定連線成立
+	if (!$CONN) user_error("資料庫連線不存在！請檢查相關設定！",256);
+
+	$sql_select = "select class_id,c_year as class_year from school_class where year=$sel_year and semester='$sel_seme' and enable='1' group by c_year,class_id";
+
+	$recordSet=$CONN->Execute($sql_select) or user_error("SQL語法執行錯誤： $sql_select", 256);
+	
+	$i=0 ;
+	while(list($class_id,$class_year)= $recordSet->FetchRow()){
+		$id[$i][Cyear]=$class_year;
+		$id[$i][class_id]=$class_id;
+		$i++;
+	}
+	return $id;
+}
+
+//列出課程設定中班級課程節數資料-例：一忠數學第七節
+function get_ss_yc_sector_bw($sel_year,$sel_seme){
+	global $CONN;
+	// 確定連線成立
+	if (!$CONN) user_error("資料庫連線不存在！請檢查相關設定！",256);
+
+	$sql_select="select ss.ss_id,s.class_id,s.sector from score_ss ss
+	              left join score_course s on s.ss_id = ss.ss_id and s.year = ss.year and s.semester = ss.semester and s.class_year = ss.class_year
+	              where ss.year=$sel_year and ss.semester='$sel_seme' and ss.enable = 1
+	              order by ss.ss_id,s.class_id,s.sector";
+	$recordSet=$CONN->Execute($sql_select) or user_error("SQL語法執行錯誤： $sql_select", 256);
+	
+	while(list($ss_id,$class_id,$sector)= $recordSet->FetchRow()){
+		if ($sector != ''){
+		  $id[$ss_id][$class_id].='['.$sector.']';
+	  }
+	}
+	return $id;
+}
 ?>
