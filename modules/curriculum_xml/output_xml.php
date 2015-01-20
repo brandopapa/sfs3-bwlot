@@ -5,9 +5,18 @@ require "config.php";
 
 sfs_check();
 
-
 //如果確定輸出XML檔案
 if ($_POST[act]) {
+	//如果按下彰化縣匯出(20150112學籍小組於線西國中修正)
+	if($_POST['act']=='彰縣匯出XML'){
+	$_POST['order'] = 1 ;
+	$_POST['cert'] = 1 ;
+	$_POST['mask'] = array();
+	$_POST['name'] = 3 ;
+	$_POST['stylesheet'] = 2 ;
+	
+	}//(20150112學籍小組於線西國中修正)
+	
 	$out_arr=array();
 	//設定參照陣列
 	$semester_arr=array(1=>'上學期',2=>'下學期');
@@ -111,7 +120,16 @@ if ($_POST[act]) {
 			$class_year=$res->fields['class_year'];
 			$out_arr[$year_seme]['curriculums'][$course_id]['classyear']=iconv("Big5","UTF-8",$class_year_arr[$class_year]);
 			$class_id=$res->fields['class_id'];
-			$out_arr[$year_seme]['curriculums'][$course_id]['classname']=iconv("Big5","UTF-8",$class_name_arr[$class_id].'班');
+			
+			//如果按下彰化縣匯出(20150112學籍小組於線西國中修正)
+			if($_POST['act']=='彰縣匯出XML'){
+				$class_num = explode("_",$class_id);//改一班.甲班.忠班為01班
+				$out_arr[$year_seme]['curriculums'][$course_id]['classname'] = iconv("Big5","UTF-8",$class_num[3].'班');
+			}else{
+				$out_arr[$year_seme]['curriculums'][$course_id]['classname']=iconv("Big5","UTF-8",$class_name_arr[$class_id].'班');
+			}
+			//如果按下彰化縣匯出(20150112學籍小組於線西國中修正)
+			
 			$dow=$res->fields['day'];
 			$out_arr[$year_seme]['curriculums'][$course_id]['week']=iconv("Big5","UTF-8",$dow_arr[$dow]);
 			$sector=$res->fields['sector'];
@@ -232,7 +250,11 @@ $main.="</td><td valign='top'>
 <br><br>◎檢視樣式參照：<input type='radio' name='stylesheet' value=0>無 <input type='radio' name='stylesheet' value=1 checked>相對路徑(./excoursetransform.xsl) <input type='radio' name='stylesheet' value=2>學校SFS3樣式檔的參照絕對路徑
 </td></tr>
 <tr><td colspan=2>
-<input type='submit' style='border-width:1px; cursor:hand; color:white; background:#ff5555; font-size:20px; width=100%; height=80' value='匯出XML' name='act' onclick='return check_select();'></td></tr></table></form>";
+<input type='submit' style='border-width:1px; cursor:hand; color:white; background:#ff5555; font-size:20px; width=100%; height=80' value='匯出XML' name='act' onclick='return check_select();'>
+<!---(20150112學籍小組於線西國中修正)--->
+<input type='submit' style='border-width:1px; cursor:hand; color:white; background:#ff5555; font-size:20px; width=100%; height=80' value='彰縣匯出XML' name='act' onclick='return check_select();'>
+<!---(20150112學籍小組於線西國中修正)--->
+</td></tr></table></form>";
 
 echo $main;
 

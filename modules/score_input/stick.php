@@ -1,5 +1,5 @@
 <?php
-// $Id: stick.php 7390 2013-07-25 06:08:32Z infodaes $
+// $Id: stick.php 8298 2015-01-16 16:16:28Z smallduh $
 include "config.php";
 include "stick/stick-cfg.php";
 include_once "stick/dl_pdf.php";
@@ -26,7 +26,7 @@ if (!ini_get('register_globals')) {
 
 //°õ¦æ°Ê§@§PÂ_
 if($pdf_file){
-	readfile ("http://".$_SERVER["SERVER_NAME"].$UPLOAD_URL.basename($pdf_file), "r");
+	readfile ($SFS_PATH_HTML.$UPLOAD_URL.basename($pdf_file), "r");
 	exit;
 	//http://".$_SERVER["SERVER_NAME"].$UPLOAD_URL.basename($pdf_file)
 }

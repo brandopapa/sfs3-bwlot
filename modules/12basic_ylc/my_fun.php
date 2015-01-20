@@ -547,7 +547,7 @@ function count_student_score_competetion()
 	global $CONN,$work_year_seme,$race_score;
 	$score_competetion=array();
 	
-	$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=3";
+	$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=4";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗，有可能是未安裝生涯輔導相關模組！<br>$sql_select",256);
 	while(!$recordSet->EOF)
 	{

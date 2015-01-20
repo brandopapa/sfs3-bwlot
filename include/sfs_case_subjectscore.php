@@ -276,44 +276,8 @@ function get_ss_yc($sel_year,$sel_seme){
 	return $id;
 }
 
-//列出課程設定中有設定年級與班級
-function get_ss_yc_bw($sel_year,$sel_seme){
-	global $CONN;
-	// 確定連線成立
-	if (!$CONN) user_error("資料庫連線不存在！請檢查相關設定！",256);
 
-	$sql_select = "select class_id,c_year as class_year from school_class where year=$sel_year and semester='$sel_seme' and enable='1' group by c_year,class_id";
 
-	$recordSet=$CONN->Execute($sql_select) or user_error("SQL語法執行錯誤： $sql_select", 256);
-	
-	$i=0 ;
-	while(list($class_id,$class_year)= $recordSet->FetchRow()){
-		$id[$i][Cyear]=$class_year;
-		$id[$i][class_id]=$class_id;
-		$i++;
-	}
-	return $id;
-}
-
-//列出課程設定中班級課程節數資料-例：一忠數學第七節
-function get_ss_yc_sector_bw($sel_year,$sel_seme){
-	global $CONN;
-	// 確定連線成立
-	if (!$CONN) user_error("資料庫連線不存在！請檢查相關設定！",256);
-
-	$sql_select="select ss.ss_id,s.class_id,s.sector from score_ss ss
-	              left join score_course s on s.ss_id = ss.ss_id and s.year = ss.year and s.semester = ss.semester and s.class_year = ss.class_year
-	              where ss.year=$sel_year and ss.semester='$sel_seme' and ss.enable = 1
-	              order by ss.ss_id,s.class_id,s.sector";
-	$recordSet=$CONN->Execute($sql_select) or user_error("SQL語法執行錯誤： $sql_select", 256);
-	
-	while(list($ss_id,$class_id,$sector)= $recordSet->FetchRow()){
-		if ($sector != ''){
-		  $id[$ss_id][$class_id].='['.$sector.']';
-	  }
-	}
-	return $id;
-}
 
 //取出某學科（ss）的資料
 function &get_one_ss($ss_id){

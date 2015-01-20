@@ -1,5 +1,5 @@
 <?php
-//$Id: certi_htm.php 7569 2013-09-24 06:05:35Z hami $
+//$Id: certi_htm.php 8291 2015-01-15 14:07:34Z brucelyc $
 include "config.php";
 include_once "my_fun.php";
 
@@ -51,9 +51,14 @@ if ($_POST[form1]) {
 		$stud_id[$res->fields[student_sn]]=$res->fields[stud_id];
 		
 		$sb=explode("-",$res->fields[stud_birthday]);
-		if ($_POST[form1]=='列印成績表') {
+		if (mb_substr($_POST[form1],0,5,"big5")=='列印成績表') {
 			$stud_birthday[$res->fields[student_sn]]=($sb[0]-1911)."年".$sb[1]."月".$sb[2]."日";
 			$stud_name[$res->fields[student_sn]]=$res->fields[stud_name];
+			if($_POST[form1]=='列印成績表(七領域)') {
+				$link_ss=array("language"=>"語文","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
+				$ss_link=array("語文"=>"language","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
+				$area_span=7;
+			}
 		} else {
 			$stud_birthday[$res->fields[student_sn]]=$sb[0].".".$sb[1].".".$sb[2];
 			$stud_name[$res->fields[student_sn]]=$res->fields[stud_name_eng]?$res->fields[stud_name_eng]:$res->fields[stud_name];
@@ -194,7 +199,8 @@ if ($_POST[form1]) {
 	$start_no=$_POST['start_no'];
 	$smarty->assign("start_no",$start_no--);
 	
-	if($_POST[form1]=='列印成績表') $smarty->display("score_certi_certi_htm_print.tpl"); else $smarty->display("score_certi_certi_htm_print_2.tpl");
+	if(mb_substr($_POST[form1],0,5,"big5")=='列印成績表') $smarty->display("score_certi_certi_htm_print.tpl");
+	else $smarty->display("score_certi_certi_htm_print_2.tpl");
 } else	$smarty->display("score_certi_certi_htm.tpl");
 
 ?>

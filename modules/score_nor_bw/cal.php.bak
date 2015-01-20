@@ -9,7 +9,7 @@ $year_seme=$_POST['year_seme'];
 sfs_check();
 
 //祘Α郎繷
-head("参璸ら盽Θ罿");
+head("参璸キ盽Θ罿");
 print_menu($menu_p);
 
 echo "	<script language=\"JavaScript\">
@@ -64,7 +64,7 @@ if ($IS_JHORES==6) {
 
 if ($IS_JHORES==6) {
 	$ops="<input type='submit' name='absent' value='参璸畊'> <input type='submit' name='reward' value='参璸贱胓'>";
-	//if ($ncount) $ops.=" <input type='submit' name='nor' value='参璸ら盽Θ罿' OnClick=\"OK=true\">";
+	//if ($ncount) $ops.=" <input type='submit' name='nor' value='参璸キ盽Θ罿' OnClick=\"OK=true\">";
 } else
 	$ops="<input type='submit' name='absent' value='参璸畊'>";
 echo "	<table border=0 cellspacing=1 cellpadding=2 width=100% bgcolor=#cccccc><tr><td bgcolor='#FFFFFF'>";

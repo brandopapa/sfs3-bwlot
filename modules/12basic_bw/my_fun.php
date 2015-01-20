@@ -54,6 +54,26 @@ function get_semester_graduate_select($select_name,$work_year_seme,$graduate_yea
 	return $class_list;
 }
 
+function get_absent_group_select($absent_group_id)
+{
+  $absent_group_select="<select name='absent_group_id'>";	
+  if ($absent_group_id == 'absent_group_1'){
+ 	  $absent_group_select.="<option value='absent_group_1' selected>週一~五 1~7</option>";	
+	}
+	else{
+		$absent_group_select.="<option value='absent_group_1'>週一~五 1~7</option>";	
+	}
+  if ($absent_group_id == 'absent_group_2'){
+ 	  $absent_group_select.="<option value='absent_group_2' selected>週一~日 1~8</option>";	
+	}
+	else{
+		$absent_group_select.="<option value='absent_group_2'>週一~日 1~8</option>";	
+	}
+  $absent_group_select.="</select>";
+  
+  return $absent_group_select;
+}
+
 function get_csv_reference($method=0)
 {
 	global $UPLOAD_PATH;
@@ -252,11 +272,16 @@ function get_graduate_data($academic_year)
 }
 
 //學生歷年學期獎懲次數
-function count_student_reward($student_sn)
+function count_student_reward($student_sn,$absent_group_id='absent_group_1')
 {
 	global $CONN,$reward_semester,$fault_start_semester;
 	$reward=array();
-	$sql="SELECT reward_year_seme,reward_kind,reward_cancel_date FROM reward WHERE student_sn='$student_sn' AND reward_bonus=1 AND reward_year_seme IN ($reward_semester) ORDER BY reward_year_seme";
+	if ($absent_group_id == 'absent_group_1'){//只取週一至週五
+	  $sql="SELECT reward_year_seme,reward_kind,reward_cancel_date FROM reward WHERE student_sn='$student_sn' AND reward_bonus=1 AND reward_year_seme IN ($reward_semester) and DATE_FORMAT(reward_date,'%w') <> '0' and DATE_FORMAT(reward_date,'%w') <> '6' ORDER BY reward_year_seme";
+	}  
+	else{
+		$sql="SELECT reward_year_seme,reward_kind,reward_cancel_date FROM reward WHERE student_sn='$student_sn' AND reward_bonus=1 AND reward_year_seme IN ($reward_semester) ORDER BY reward_year_seme";		
+	}  
 	$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 	while(!$res->EOF) {
 		$reward_year_seme=$res->fields['reward_year_seme'];
@@ -318,11 +343,16 @@ function count_student_reward($student_sn)
 }
 
 //學生獎懲明細
-function get_student_reward_list($student_sn)
+function get_student_reward_list($student_sn,$absent_group_id='absent_group_1')
 {
 	global $CONN,$reward_semester,$fault_start_semester;
 	$reward=array();
-	$sql="SELECT reward_kind,reward_year_seme,reward_date,reward_reason,reward_base,reward_cancel_date,reward_bonus FROM reward WHERE student_sn='$student_sn' AND reward_year_seme IN ($reward_semester) ORDER BY reward_year_seme,reward_date";
+	if ($absent_group_id == 'absent_group_1'){//只取週一至週五
+	  $sql="SELECT reward_kind,reward_year_seme,reward_date,reward_reason,reward_base,reward_cancel_date,reward_bonus FROM reward WHERE student_sn='$student_sn' AND reward_year_seme IN ($reward_semester) and DATE_FORMAT(reward_date,'%w') <> '0' and DATE_FORMAT(reward_date,'%w') <> '6' ORDER BY reward_year_seme,reward_date";
+	}
+	else{
+		$sql="SELECT reward_kind,reward_year_seme,reward_date,reward_reason,reward_base,reward_cancel_date,reward_bonus FROM reward WHERE student_sn='$student_sn' AND reward_year_seme IN ($reward_semester) ORDER BY reward_year_seme,reward_date";
+	}
 	$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 	$i=1;
 	while(!$res->EOF) {
@@ -429,16 +459,21 @@ function get_student_reward($sn_array)
 }
 
 //學生歷年學期出缺席次數
-function count_student_seme_abs($stud_id)
+function count_student_seme_abs($stud_id,$absent_group_id='absent_group_1')
 {
 	global $CONN,$absence_semester;
 	$absence=array();
 	//$sql="SELECT seme_year_seme,abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 AND seme_year_seme IN ($absence_semester) ORDER BY seme_year_seme";
-	$sql="SELECT seme_year_seme,abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
+	if ($absent_group_id == 'absent_group_1'){
+	  $sql="SELECT seme_year_seme,abs_days_5day_7section as my_abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
+  }
+  else{
+  	$sql="SELECT seme_year_seme,abs_days as my_abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
+  }
 	$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 	while(!$res->EOF) {
 		$seme_year_seme=$res->fields['seme_year_seme'];
-		$abs_days=$res->fields['abs_days'];
+		$abs_days=$res->fields['my_abs_days'];
 		$absence[$seme_year_seme]=$abs_days;
 		$res->MoveNext();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Id: dl_pdf.php 5833 2010-01-20 16:00:52Z brucelyc $
+// $Id: dl_pdf.php 8298 2015-01-16 16:16:28Z smallduh $
 
 require('../../include/sfs_case_chinese.php');
 
@@ -169,7 +169,7 @@ function creat_pdf($title,$header,$data,$comment1="",$comment2="",$ht,$wd){
             $pdf->Output($file);
 
             head("自訂成績單");
-                    echo "<a href='http://".$_SERVER["SERVER_ADDR"].$UPLOAD_URL."stick_PDF/".basename($file)."'>下載PDF</a>";
+                    echo "<a href='".$SFS_PATH_HTML.$UPLOAD_URL."stick_PDF/".basename($file)."'>下載PDF</a>";
             foot();
         }else $pdf->Output();
 }

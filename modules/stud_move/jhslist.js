@@ -21,7 +21,7 @@ function fillCity() {
     addOption(document.myform.selectcity, "臺南市", "臺南市", "");
     addOption(document.myform.selectcity, "高雄市", "高雄市", "");
     addOption(document.myform.selectcity, "宜蘭縣", "宜蘭縣", "");
-    addOption(document.myform.selectcity, "桃園縣", "桃園縣", "");
+    addOption(document.myform.selectcity, "桃園市", "桃園市", "");
     addOption(document.myform.selectcity, "新竹縣", "新竹縣", "");
     addOption(document.myform.selectcity, "苗栗縣", "苗栗縣", "");
     addOption(document.myform.selectcity, "彰化縣", "彰化縣", "");
@@ -133,6 +133,9 @@ function SelectCity() {
         addOption(document.myform.selectdistrict, "南屯區", "南屯區", "");
     }
     if (document.myform.selectcity.value == '臺南市') {
+        addOption(document.myform.selectdistrict, "北區", "北區", "");
+        addOption(document.myform.selectdistrict, "東區", "東區", "");
+        addOption(document.myform.selectdistrict, "南區", "南區", "");
         addOption(document.myform.selectdistrict, "仁德區", "仁德區", "");
         addOption(document.myform.selectdistrict, "歸仁區", "歸仁區", "");
         addOption(document.myform.selectdistrict, "關廟區", "關廟區", "");
@@ -222,20 +225,20 @@ function SelectCity() {
         addOption(document.myform.selectdistrict, "大同鄉", "大同鄉", "");
         addOption(document.myform.selectdistrict, "南澳鄉", "南澳鄉", "");
     }
-    if (document.myform.selectcity.value == '桃園縣') {
-        addOption(document.myform.selectdistrict, "龍潭鄉", "龍潭鄉", "");
-        addOption(document.myform.selectdistrict, "中壢市", "中壢市", "");
-        addOption(document.myform.selectdistrict, "桃園市", "桃園市", "");
-        addOption(document.myform.selectdistrict, "蘆竹市", "蘆竹市", "");
-        addOption(document.myform.selectdistrict, "大園鄉", "大園鄉", "");
-        addOption(document.myform.selectdistrict, "龜山鄉", "龜山鄉", "");
-        addOption(document.myform.selectdistrict, "八德市", "八德市", "");
-        addOption(document.myform.selectdistrict, "大溪鎮", "大溪鎮", "");
-        addOption(document.myform.selectdistrict, "平鎮市", "平鎮市", "");
-        addOption(document.myform.selectdistrict, "楊梅市", "楊梅市", "");
-        addOption(document.myform.selectdistrict, "新屋鄉", "新屋鄉", "");
-        addOption(document.myform.selectdistrict, "觀音鄉", "觀音鄉", "");
-        addOption(document.myform.selectdistrict, "復興鄉", "復興鄉", "");
+    if (document.myform.selectcity.value == '桃園市') {
+        addOption(document.myform.selectdistrict, "桃園區", "桃園區", "");
+        addOption(document.myform.selectdistrict, "八德區", "八德區", "");
+        addOption(document.myform.selectdistrict, "大溪區", "大溪區", "");
+        addOption(document.myform.selectdistrict, "蘆竹區", "蘆竹區", "");
+        addOption(document.myform.selectdistrict, "龜山區", "龜山區", "");
+        addOption(document.myform.selectdistrict, "大園區", "大園區", "");
+        addOption(document.myform.selectdistrict, "中壢區", "中壢區", "");
+        addOption(document.myform.selectdistrict, "龍潭區", "龍潭區", "");
+        addOption(document.myform.selectdistrict, "平鎮區", "平鎮區", "");
+        addOption(document.myform.selectdistrict, "楊梅區", "楊梅區", "");
+        addOption(document.myform.selectdistrict, "新屋區", "新屋區", "");
+        addOption(document.myform.selectdistrict, "復興區", "復興區", "");
+        addOption(document.myform.selectdistrict, "觀音區", "觀音區", "");
     }
     if (document.myform.selectcity.value == '新竹縣') {
         addOption(document.myform.selectdistrict, "竹東鎮", "竹東鎮", "");
@@ -736,6 +739,8 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "411303", "私立華興中學附設國中", "");
         addOption(document.myform.selectschool, "413301", "市立陽明高中附設國中", "");
         addOption(document.myform.selectschool, "413302", "市立百齡高中附設國中", "");
+				addOption(document.myform.selectschool, "413F01", "市立啟智學校", "");
+        addOption(document.myform.selectschool, "413F02", "市立啟明學校", "");
     }
     if (document.myform.selectcity.value == '臺北市' && document.myform.selectdistrict.value == '北投區') {
         addOption(document.myform.selectschool, "421501", "私立奎山國中", "");
@@ -777,6 +782,7 @@ function SelectDistrict() {
     if (document.myform.selectcity.value == '臺中市' && document.myform.selectdistrict.value == '后里區') {
         addOption(document.myform.selectschool, "064507", "市立后里國中", "");
         addOption(document.myform.selectschool, "064308", "市立后綜高中附設國中", "");
+        addOption(document.myform.selectschool, "060F01", "國立臺中啟明學校", "");
     }
     if (document.myform.selectcity.value == '臺中市' && document.myform.selectdistrict.value == '外埔區') {
         addOption(document.myform.selectschool, "064509", "市立外埔國中", "");
@@ -1283,98 +1289,98 @@ function SelectDistrict() {
     if (document.myform.selectcity.value == '宜蘭縣' && document.myform.selectdistrict.value == '南澳鄉') {
         addOption(document.myform.selectschool, "024322", "縣立南澳高中附設國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '中壢市') {
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '中壢區') {
         addOption(document.myform.selectschool, "031502", "私立有得國中(小)", "");
-        addOption(document.myform.selectschool, "034521", "縣立新明國中", "");
-        addOption(document.myform.selectschool, "034522", "縣立內壢國中", "");
-        addOption(document.myform.selectschool, "034523", "縣立大崙國中", "");
-        addOption(document.myform.selectschool, "034524", "縣立龍岡國中", "");
-        addOption(document.myform.selectschool, "034525", "縣立興南國中", "");
-        addOption(document.myform.selectschool, "034526", "縣立自強國中", "");
-        addOption(document.myform.selectschool, "034527", "縣立東興國中", "");
-        addOption(document.myform.selectschool, "034545", "縣立龍興國中", "");
-        addOption(document.myform.selectschool, "034563", "縣立過嶺國中", "");
+        addOption(document.myform.selectschool, "034521", "市立新明國中", "");
+        addOption(document.myform.selectschool, "034522", "市立內壢國中", "");
+        addOption(document.myform.selectschool, "034523", "市立大崙國中", "");
+        addOption(document.myform.selectschool, "034524", "市立龍岡國中", "");
+        addOption(document.myform.selectschool, "034525", "市立興南國中", "");
+        addOption(document.myform.selectschool, "034526", "市立自強國中", "");
+        addOption(document.myform.selectschool, "034527", "市立東興國中", "");
+        addOption(document.myform.selectschool, "034545", "市立龍興國中", "");
+        addOption(document.myform.selectschool, "034563", "市立過嶺國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '桃園市') {
-        addOption(document.myform.selectschool, "034501", "縣立桃園國中", "");
-        addOption(document.myform.selectschool, "034502", "縣立青溪國中", "");
-        addOption(document.myform.selectschool, "034503", "縣立文昌國中", "");
-        addOption(document.myform.selectschool, "034504", "縣立建國國中", "");
-        addOption(document.myform.selectschool, "034505", "縣立中興國中", "");
-        addOption(document.myform.selectschool, "034542", "縣立慈文國中", "");
-        addOption(document.myform.selectschool, "034546", "縣立福豐國中", "");
-        addOption(document.myform.selectschool, "034551", "縣立同德國中", "");
-        addOption(document.myform.selectschool, "034554", "縣立大有國中", "");
-        addOption(document.myform.selectschool, "034556", "縣立會稽國中", "");
-        addOption(document.myform.selectschool, "034562", "縣立經國國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '桃園區') {
+        addOption(document.myform.selectschool, "034501", "市立桃園國中", "");
+        addOption(document.myform.selectschool, "034502", "市立青溪國中", "");
+        addOption(document.myform.selectschool, "034503", "市立文昌國中", "");
+        addOption(document.myform.selectschool, "034504", "市立建國國中", "");
+        addOption(document.myform.selectschool, "034505", "市立中興國中", "");
+        addOption(document.myform.selectschool, "034542", "市立慈文國中", "");
+        addOption(document.myform.selectschool, "034546", "市立福豐國中", "");
+        addOption(document.myform.selectschool, "034551", "市立同德國中", "");
+        addOption(document.myform.selectschool, "034554", "市立大有國中", "");
+        addOption(document.myform.selectschool, "034556", "市立會稽國中", "");
+        addOption(document.myform.selectschool, "034562", "市立經國國中", "");
         addOption(document.myform.selectschool, "031313", "私立振聲高中附設國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '蘆竹市') {
-        addOption(document.myform.selectschool, "034506", "縣立南崁國中", "");
-        addOption(document.myform.selectschool, "034507", "縣立山腳國中", "");
-        addOption(document.myform.selectschool, "034508", "縣立大竹國中", "");
-        addOption(document.myform.selectschool, "034550", "縣立光明國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '蘆竹區') {
+        addOption(document.myform.selectschool, "034506", "市立南崁國中", "");
+        addOption(document.myform.selectschool, "034507", "市立山腳國中", "");
+        addOption(document.myform.selectschool, "034508", "市立大竹國中", "");
+        addOption(document.myform.selectschool, "034550", "市立光明國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '大園鄉') {
-        addOption(document.myform.selectschool, "034509", "縣立大園國中", "");
-        addOption(document.myform.selectschool, "034510", "縣立竹圍國中", "");
-        addOption(document.myform.selectschool, "034565", "縣立青埔國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '大園區') {
+        addOption(document.myform.selectschool, "034509", "市立大園國中", "");
+        addOption(document.myform.selectschool, "034510", "市立竹圍國中", "");
+        addOption(document.myform.selectschool, "034565", "市立青埔國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '大溪鎮') {
-        addOption(document.myform.selectschool, "034511", "縣立大溪國中", "");
-        addOption(document.myform.selectschool, "034513", "縣立仁和國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '大溪區') {
+        addOption(document.myform.selectschool, "034511", "市立大溪國中", "");
+        addOption(document.myform.selectschool, "034513", "市立仁和國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '龜山鄉') {
-        addOption(document.myform.selectschool, "034515", "縣立大崗國中", "");
-        addOption(document.myform.selectschool, "034552", "縣立幸福國中", "");
-        addOption(document.myform.selectschool, "034555", "縣立龜山國中", "");
-        addOption(document.myform.selectschool, "034559", "縣立迴龍國中(小)", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '龜山區') {
+        addOption(document.myform.selectschool, "034515", "市立大崗國中", "");
+        addOption(document.myform.selectschool, "034552", "市立幸福國中", "");
+        addOption(document.myform.selectschool, "034555", "市立龜山國中", "");
+        addOption(document.myform.selectschool, "034559", "市立迴龍國中(小)", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '八德市') {
-        addOption(document.myform.selectschool, "034516", "縣立八德國中", "");
-        addOption(document.myform.selectschool, "034517", "縣立大成國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '八德區') {
+        addOption(document.myform.selectschool, "034516", "市立八德國中", "");
+        addOption(document.myform.selectschool, "034517", "市立大成國中", "");
         addOption(document.myform.selectschool, "031320", "私立新興高中附設國中", "");
-        addOption(document.myform.selectschool, "034347", "縣立永豐高中附設國中", "");
+        addOption(document.myform.selectschool, "034347", "市立永豐高中附設國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '平鎮市') {
-        addOption(document.myform.selectschool, "034518", "縣立中壢國中", "");
-        addOption(document.myform.selectschool, "034520", "縣立平南國中", "");
-        addOption(document.myform.selectschool, "034543", "縣立平興國中", "");
-        addOption(document.myform.selectschool, "034549", "縣立東安國中", "");
-        addOption(document.myform.selectschool, "034560", "縣立平鎮國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '平鎮區') {
+        addOption(document.myform.selectschool, "034518", "市立中壢國中", "");
+        addOption(document.myform.selectschool, "034520", "市立平南國中", "");
+        addOption(document.myform.selectschool, "034543", "市立平興國中", "");
+        addOption(document.myform.selectschool, "034549", "市立東安國中", "");
+        addOption(document.myform.selectschool, "034560", "市立平鎮國中", "");
         addOption(document.myform.selectschool, "031310", "私立六和高中附設國中", "");
         addOption(document.myform.selectschool, "031311", "私立復旦高中附設國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '楊梅市') {
-        addOption(document.myform.selectschool, "034528", "縣立楊梅國中", "");
-        addOption(document.myform.selectschool, "034529", "縣立仁美國中", "");
-        addOption(document.myform.selectschool, "034530", "縣立富岡國中", "");
-        addOption(document.myform.selectschool, "034531", "縣立瑞原國中", "");
-        addOption(document.myform.selectschool, "034544", "縣立楊明國中", "");
-        addOption(document.myform.selectschool, "034557", "縣立楊光國中(小)", "");
-        addOption(document.myform.selectschool, "034564", "縣立瑞坪國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '楊梅區') {
+        addOption(document.myform.selectschool, "034528", "市立楊梅國中", "");
+        addOption(document.myform.selectschool, "034529", "市立仁美國中", "");
+        addOption(document.myform.selectschool, "034530", "市立富岡國中", "");
+        addOption(document.myform.selectschool, "034531", "市立瑞原國中", "");
+        addOption(document.myform.selectschool, "034544", "市立楊明國中", "");
+        addOption(document.myform.selectschool, "034557", "市立楊光國中(小)", "");
+        addOption(document.myform.selectschool, "034564", "市立瑞坪國中", "");
         addOption(document.myform.selectschool, "031312", "私立治平高中附設國中", "");
         addOption(document.myform.selectschool, "031326", "私立大華高中附設國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '觀音鄉') {
-        addOption(document.myform.selectschool, "034533", "縣立觀音國中", "");
-        addOption(document.myform.selectschool, "034534", "縣立草漯國中", "");
-        addOption(document.myform.selectschool, "034332", "縣立觀音高中附設國中部", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '觀音區') {
+        addOption(document.myform.selectschool, "034533", "市立觀音國中", "");
+        addOption(document.myform.selectschool, "034534", "市立草漯國中", "");
+        addOption(document.myform.selectschool, "034332", "市立觀音高中附設國中部", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '新屋鄉') {
-        addOption(document.myform.selectschool, "034535", "縣立新屋國中", "");
-        addOption(document.myform.selectschool, "034536", "縣立大坡國中", "");
-        addOption(document.myform.selectschool, "034537", "縣立永安國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '新屋區') {
+        addOption(document.myform.selectschool, "034535", "市立新屋國中", "");
+        addOption(document.myform.selectschool, "034536", "市立大坡國中", "");
+        addOption(document.myform.selectschool, "034537", "市立永安國中", "");
         addOption(document.myform.selectschool, "031319", "私立清華高中附設國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '龍潭鄉') {
-        addOption(document.myform.selectschool, "034538", "縣立龍潭國中", "");
-        addOption(document.myform.selectschool, "034539", "縣立凌雲國中", "");
-        addOption(document.myform.selectschool, "034540", "縣立石門國中", "");
-        addOption(document.myform.selectschool, "034561", "縣立武漢國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '龍潭區') {
+        addOption(document.myform.selectschool, "034538", "市立龍潭國中", "");
+        addOption(document.myform.selectschool, "034539", "市立凌雲國中", "");
+        addOption(document.myform.selectschool, "034540", "市立石門國中", "");
+        addOption(document.myform.selectschool, "034561", "市立武漢國中", "");
     }
-    if (document.myform.selectcity.value == '桃園縣' && document.myform.selectdistrict.value == '復興鄉') {
-        addOption(document.myform.selectschool, "034541", "縣立介壽國中", "");
+    if (document.myform.selectcity.value == '桃園市' && document.myform.selectdistrict.value == '復興區') {
+        addOption(document.myform.selectschool, "034541", "市立介壽國中", "");
     }
     if (document.myform.selectcity.value == '新竹縣' && document.myform.selectdistrict.value == '竹北市') {
         addOption(document.myform.selectschool, "041501", "私立康乃薾國中(小)", "");

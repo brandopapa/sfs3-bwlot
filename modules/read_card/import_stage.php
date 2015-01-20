@@ -1,6 +1,6 @@
 <?php
 
-// $Id: $
+// $Id:$
 
 // --系統設定檔
 include "config.php";
@@ -24,6 +24,7 @@ $subject=$_POST['subject'];
 $tkind=intval($_POST['tkind']);
 $stage=intval($_POST['stage']);
 $trans=$_POST['trans'];
+$aseme=$_POST['aseme'];
 
 //印出檔頭
 head("匯入讀卡成績");
@@ -64,8 +65,7 @@ if (is_uploaded_file($_FILES['upload_file']['tmp_name']) && !$_FILES['upload_fil
 	move_uploaded_file($_FILES['upload_file']['tmp_name'],$temp_path.$_FILES['upload_file']['name']);
 }
 $today=date("Y-m-d G:i:s",mktime (date("G"),date("i"),date("s"),date("m"),date("d"),date("Y")));
-
-if (!$trans || ($trans && (!$des_subject || !($stage||$spec_test_arr[$des_subject])))) {
+if (!$trans || ($trans && (!$des_subject || !($stage||$spec_test_arr[$des_subject]||$aseme)))) {
 	//檔案選單
 	$temp4="<select name='sel_file' onChange='this.form.submit();'>
 	<option value=''>請選擇檔案";
@@ -97,6 +97,59 @@ if (!$trans || ($trans && (!$des_subject || !($stage||$spec_test_arr[$des_subjec
 		$help=help($help_text);
 	}
 	*/
+} elseif ($trans && $des_subject=="makeup_exam" && $_POST['aseme']) {
+	//取出本學期學生名單
+	$stud=array();
+	$sql="select curr_class_num,student_sn from stud_base where stud_study_cond='0' order by curr_class_num";
+	$rs=$CONN->Execute($sql);
+	while (!$rs->EOF) {
+		$stud[$rs->fields[curr_class_num]]=$rs->fields[student_sn];
+		$rs->MoveNext();
+	}
+
+	//領域陣列
+	$scope_arr = array("language","math","nature","social","health","art","complex");
+	$cscope_arr = array("語文","數學","自然","社會","健體","藝文","綜合");
+
+	//讀取成績檔
+	$file_name=$temp_path.$sel_file;
+	$fd=fopen($file_name,"r");
+	$stud_study_year=date("Y")-1911;
+	while ($tt = sfs_fgetcsv ($fd, 2000, ",")) {
+		if (in_array("座號",$tt)) {
+			chk_data($tt);
+		}
+		//判斷是否有年級欄位
+		if ($vs[0]==99) {
+			$tt[99]=$tt[$vs[99]].sprintf("%02d",$tt[$vs[98]]);
+		}
+		$c_year=intval(substr($tt[$vs[0]],0,1));
+		if ($c_year > 0 && $subject==$tt[$vs[4]]) {
+			if ($c_year<$IS_JHORES) $c_year+=$IS_JHORES;
+			$curr_class_num=sprintf("%d%02d%02d",$c_year,substr($tt[$vs[0]],-2,2),$tt[$vs[1]]);
+			$has_score=0;
+			$score=$tt[$vs[7]];
+			if ($score<>"") {
+				$score=floatval($score);
+				$has_score=1;
+			}
+			if ($score>100 || $score<0) {
+				$score="";
+				$has_score=0;
+			}
+			$now=date("Y-m-d H:i:s");
+			$query="select * from makeup_exam_scope where seme_year_seme='$aseme' and student_sn='".$stud[$curr_class_num]."' and scope_ename='".$scope_arr[$tkind]."'";
+			$res=$CONN->Execute($query);
+			if($res->RecordCount()>0) {
+				$query="update makeup_exam_scope set nscore='$score', has_score='$has_score', update_time='$now', teacher_sn='".$_SESSION['session_tea_sn']."' where seme_year_seme='$aseme' and student_sn='".$stud[$curr_class_num]."' and scope_ename='".$scope_arr[$tkind]."'";
+				$res=$CONN->Execute($query);
+				echo $tt[$vs[0]]."班".sprintf("%2d",$tt[$vs[1]])."號".$tt[$vs[2]]."--".$cscope_arr[$tkind]."領域補行評量--".$tt[$vs[7]]."分---匯入完成<br>";
+			} else {
+				echo $tt[$vs[0]]."班".sprintf("%2d",$tt[$vs[1]])."號".$tt[$vs[2]]."--無".$cscope_arr[$tkind]."領域補行評量記錄<br>";
+			}
+		}
+	}
+//print_r($_POST);
 } elseif ($trans && $tkind && $des_subject && ($stage||$spec_test_arr[$des_subject])) {
 	$stud=array();
 	$sql="select curr_class_num,student_sn from stud_base where stud_study_cond='0' order by curr_class_num";
@@ -267,6 +320,8 @@ if (($sel_file && !$trans) || ($trans && (!$des_subject || !$stage))) {
 		$subject_name[$ss_id] = $rs_s->fields["subject_name"].$k;
 		$rs->MoveNext();
 	}
+	//加入補行評量類別
+	$subject_name["makeup_exam"]="補行評量";
 	reset($temp_score_arr);
 	while(list($k,$v)=each($temp_score_arr)) {
 		$subject_name[$k]=$v;
@@ -339,24 +394,51 @@ if (($sel_file && !$trans) || ($trans && (!$des_subject || !$stage))) {
 		unset($kind_arr[0]);
 		$post_msg="";
 		$kind_str="匯入科目";
+	} elseif ($des_subject=="makeup_exam") {
+		$show_seme_menu=1;
+		$kind_arr=array("語文","數學","自然","社會","健體","藝文","綜合");
+		$post_msg="";
+		$kind_str="匯入領域";
 	} else {
 		$kind_str="匯入成績類別";
 	}
 	if ($show_kind_menu) {
-		if (count($kind_arr)==1) {
-			$sk_menu=$kind_arr[0];
-		} else {
-			$sk = new drop_select();
-			$sk->s_name ="tkind";
-			if ($spec_test_arr[$des_subject])
-				$sk->top_option = "選擇科目";
-			else
-				$sk->top_option = "選擇類別";
-			$sk->id = $tkind;
-			$sk->arr = $kind_arr;
-			$sk->is_submit = true;
-			$sk_menu=$sk->get_select();
+		if ($kind_arr[$tkind]=="") $tkind="";
+		$sk = new drop_select();
+		$sk->s_name ="tkind";
+		if ($spec_test_arr[$des_subject])
+			$sk->top_option = "選擇科目";
+		else
+			$sk->top_option = "選擇類別";
+		$sk->id = $tkind;
+		$sk->arr = $kind_arr;
+		$sk->is_submit = true;
+		$sk_menu=$sk->get_select();
+	}
+	if ($show_seme_menu) {
+		//從年級算出合理的學期
+		$c_year = intval(substr($tt[$vs[0]],0,1));
+		if ($c_year<$IS_JHORES) $c_year+=$IS_JHORES;
+		$query="select student_sn from stud_seme where seme_year_seme='$seme_year_seme' and seme_class like '".$c_year."%' limit 0,10";
+		$res=$CONN->Execute($query);
+		while($rr=$res->FetchRow()) {
+			$temp_arr[] = $rr['student_sn'];
 		}
+		$temp_str = "'".implode("','",$temp_arr)."'";
+		$query="select distinct seme_year_seme from stud_seme where student_sn in ($temp_str) order by seme_year_seme desc";
+		$res=$CONN->Execute($query);
+		while($rr=$res->FetchRow()) {
+			$aseme_arr[$rr['seme_year_seme']] = substr($rr['seme_year_seme'],0,-1)."學年度第".substr($rr['seme_year_seme'],-1,1)."學期";
+		}
+		if ($aseme_arr[$aseme]=="") $aseme="";
+		$sm = new drop_select();
+		$sm->s_name ="aseme";
+		$sm->top_option = "選擇學期";
+		$sm->id = $aseme;
+		$sm->arr = $aseme_arr;
+		$sm->is_submit = true;
+		$sm_menu=$sm->get_select();
+		$aseme_str="匯入成績的學期";
 	}
 
 	$show_stage_menu=($des_subject && $tkind && $st_menu!="");
@@ -364,28 +446,30 @@ if (($sel_file && !$trans) || ($trans && (!$des_subject || !$stage))) {
 		<form name='form2' enctype='multipart/form-data' action='{$_SERVER['SCRIPT_NAME']}' method='post'>
 		<table cellspacing='1' cellpadding='3' class='main_body'>
 		<tr>
-		<td class='title_sbody2'><p align='center'>班級</p>
-		<td class='title_sbody2'><p align='center'>座號</p>
-		<td class='title_sbody2'><p align='center'>姓名</p>
-		<td class='title_sbody2'><p align='center'>科目</p>
-		<td class='title_sbody2'><p align='center'>分數</p>
-		<td class='title_sbody2'><p align='center'>匯入科目或測驗名稱</p>";
-	if ($show_kind_menu) echo "<td class='title_sbody2'><p align='center'>$kind_str</p>";
-	if ($show_stage_menu && !$spec_test_arr[$des_subject]) echo "<td class='title_sbody2'><p align='center'>匯入段次別</p>";
+		<td class='title_sbody2'><p align='center'>班級</p></td>
+		<td class='title_sbody2'><p align='center'>座號</p></td>
+		<td class='title_sbody2'><p align='center'>姓名</p></td>
+		<td class='title_sbody2'><p align='center'>科目</p></td>
+		<td class='title_sbody2'><p align='center'>分數</p></td>
+		<td class='title_sbody2'><p align='center'>匯入科目或測驗名稱</p></td>";
+	if ($show_kind_menu) echo "<td class='title_sbody2'><p align='center'>$kind_str</p></td>";
+	if ($show_stage_menu && !$spec_test_arr[$des_subject]) echo "<td class='title_sbody2'><p align='center'>匯入段次別</p></td>";
+	if ($show_seme_menu) echo "<td class='title_sbody2'><p align='center'>$aseme_str</p></td>";
 	echo "	</tr>
 		<tr bgcolor='#ffffff'>
-		<td>".$tt[$vs[0]]."
-		<td>".$tt[$vs[1]]."
-		<td>".$tt[$vs[2]]."
-		<td>".$tt[$vs[4]]."
-		<td>".$tt[$vs[7]]."
-		<td>$ss_menu";
-	if ($show_kind_menu) echo "<td align='center'>$sk_menu";
-	if ($show_stage_menu && !$spec_test_arr[$des_subject]) echo "<td>$st_menu";
+		<td>".$tt[$vs[0]]."</td>
+		<td>".$tt[$vs[1]]."</td>
+		<td>".$tt[$vs[2]]."</td>
+		<td>".$tt[$vs[4]]."</td>
+		<td>".$tt[$vs[7]]."</td>
+		<td>$ss_menu</td>";
+	if ($show_kind_menu) echo "<td align='center'>$sk_menu</td>";
+	if ($show_stage_menu && !$spec_test_arr[$des_subject]) echo "<td>$st_menu</td>";
+	if ($show_seme_menu) echo "<td align='center'>$sm_menu</td>";
 	echo "	</tr>
 		</table>
 		$post_msg";
-	if ($des_subject && ($post_msg!="" || ($tkind!=0 && $stage!=0)) || ($spec_test_arr[$des_subject]&&$tkind!="")) echo "<p align='left'><input type='submit' name='trans' value='開始匯入'></p>";
+	if ($des_subject && ($post_msg!="" || ($tkind!=0 && $stage!=0)) || ($spec_test_arr[$des_subject]&&$tkind!="") || $aseme) echo "<p align='left'><input type='submit' name='trans' value='開始匯入'></p>";
 	echo "	<input type='hidden' name='sel_file' value='$sel_file'>
 		<input type='hidden' name='subject' value='".$tt[$vs[4]]."'>
 		</form></p>";
