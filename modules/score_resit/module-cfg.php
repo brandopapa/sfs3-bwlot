@@ -24,7 +24,7 @@
 
 $MODULE_TABLE_NAME[0] = "resit_seme_setup";  			//補考學期別設定
 $MODULE_TABLE_NAME[1] = "resit_paper_setup";			//試卷設定
-$MODULE_TABLE_NAME[2] = "resit_exam_item";				//試題庫
+$MODULE_TABLE_NAME[2] = "resit_exam_items";				//試題庫
 $MODULE_TABLE_NAME[3] = "resit_exam_score";				//補考成績及作答記錄
 $MODULE_TABLE_NAME[4] = "resit_images";						//圖庫
 

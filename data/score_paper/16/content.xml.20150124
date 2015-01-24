@@ -205,7 +205,7 @@
 <style:properties style:font-name="標楷體" fo:font-size="16pt" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="16pt" style:font-weight-asian="bold" style:font-size-complex="16pt" style:font-weight-complex="bold" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
 <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
-<style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="end" style:justify-single-word="false" fo:line-height="0.3cm"/>
+<style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="end" style:justify-single-word="false" fo:line-height="0.2cm"/>
 </style:style>
 <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard">
 <style:properties fo:color="#000000" style:font-name="標楷體" fo:font-size="14pt" style:text-underline="none" fo:font-weight="bold" style:font-name-asian="標楷體" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-weight-complex="bold" fo:text-align="start" style:justify-single-word="false"/>
@@ -254,6 +254,9 @@
 </style:style>
 <style:style style:name="P17" style:family="paragraph" style:parent-style-name="Table Contents">
 <style:properties style:font-name="標楷體" style:font-name-asian="標楷體" fo:text-align="center" style:justify-single-word="false"/>
+</style:style>
+<style:style style:name="P17a" style:family="paragraph" style:parent-style-name="Table Contents">
+<style:properties style:font-name="標楷體" fo:font-size="9pt" style:font-name-asian="標楷體" style:font-size-asian="9pt" fo:text-align="center" style:justify-single-word="false"/>
 </style:style>
 <style:style style:name="P18" style:family="paragraph" style:parent-style-name="Standard">
 <style:properties fo:color="#000080" style:font-name="標楷體" style:text-underline="none" style:text-underline-color="font-color" style:font-name-asian="標楷體" fo:text-align="center" style:justify-single-word="false"/>
@@ -368,6 +371,12 @@
 </style:style>
 <style:style style:name="T17" style:family="text">
 <style:properties fo:font-size="9pt" fo:language="en" fo:country="US"/>
+</style:style>
+<style:style style:name="T16a" style:family="text">
+<style:properties style:font-size-asian="7pt"/>
+</style:style>
+<style:style style:name="T17a" style:family="text">
+<style:properties fo:font-size="7pt" fo:language="en" fo:country="US"/>
 </style:style>
 <style:style style:name="T18" style:family="text">
 <style:properties style:font-size-asian="12pt"/>
@@ -571,16 +580,16 @@
 <table:table-column table:style-name="Table1.F"/>
 <table:table-row>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P6">理化</text:p>
+<text:p text:style-name="P6">生物</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P7">{自然與生活科技-理化加權}</text:p>
+<text:p text:style-name="P7">{自然與生活科技-生物加權}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P7">{自然與生活科技-理化等第}</text:p>
+<text:p text:style-name="P7">{自然與生活科技-生物等第}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.B2.2.1.4.1" table:value-type="string">
-<text:p text:style-name="P7">{自然與生活科技-理化努力程度}</text:p>
+<text:p text:style-name="P7">{自然與生活科技-生物努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
 </table:sub-table>
@@ -703,7 +712,7 @@
 <table:table-column table:style-name="Table1.F"/>
 <table:table-row>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P6">綜合一</text:p>
+<text:p text:style-name="P6">童軍</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
 <text:p text:style-name="P7">{綜合活動-綜合一加權}</text:p>
@@ -717,7 +726,7 @@
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P6">綜合二</text:p>
+<text:p text:style-name="P6">家政</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
 <text:p text:style-name="P7">{綜合活動-綜合二加權}</text:p>
@@ -1037,7 +1046,7 @@
 </table:table-row>
 </table:table>
 <text:p text:style-name="P21"/>
-<text:p text:style-name="P1">{屬性}{縣市別}{學校全銜}{學年}學年度{學期}學期成績單</text:p>
+<text:p text:style-name="P1">{學校全銜}{學年}學年度{學期}學期成績單</text:p>
 <text:p text:style-name="P2"/>
 <text:p text:style-name="P22">
 班級：
@@ -1164,14 +1173,12 @@
 <text:p text:style-name="P17"/>
 </table:table-cell>
 </table:table-row>
-
 </table:sub-table>
 </table:table-cell>
 <table:covered-table-cell/>
 <table:covered-table-cell/>
 <table:covered-table-cell/>
 </table:table-row>
-
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
 <text:p text:style-name="P25">生命主軸</text:p>
@@ -1200,13 +1207,13 @@
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">
-<text:span text:style-name="T16">倫理道德</text:span>
-<text:span text:style-name="T17">(</text:span>
-<text:span text:style-name="T16">孝經</text:span>
-<text:span text:style-name="T17">/</text:span>
-<text:span text:style-name="T16">德討</text:span>
-<text:span text:style-name="T17">)</text:span>
+<text:p text:style-name="P17a">
+<text:span text:style-name="T16a">倫理道德</text:span>
+<text:span text:style-name="T17a">(</text:span>
+<text:span text:style-name="T16a">孝經</text:span>
+<text:span text:style-name="T17a">/</text:span>
+<text:span text:style-name="T16a">德討</text:span>
+<text:span text:style-name="T17a">)</text:span>
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
@@ -1374,6 +1381,9 @@
 <table:covered-table-cell/>
 </table:table-row>
 </table:table>
+<text:p text:style-name="P26">
+<text:span text:style-name="T18">成績說明</text:span>
+</text:p>
 <text:p text:style-name="P27">四、學習目標及內容</text:p>
 <text:p text:style-name="P28"/>
 <text:p text:style-name="P29">(一) 基礎主軸：</text:p>
@@ -1430,7 +1440,8 @@
 <text:p text:style-name="P32">
 <text:s text:c="4"/>
 <text:span text:style-name="T20">正確的認識及規劃的能力。</text:span>
-</text:p><text:p text:style-name="P33">
+</text:p>
+<text:p text:style-name="P33">
 <text:span text:style-name="T19">3.</text:span>
 <text:span text:style-name="T20">修學項目：</text:span>
 <text:span text:style-name="T19">(1)</text:span>
@@ -1499,7 +1510,7 @@
 <text:span text:style-name="T19">(6)</text:span>
 <text:span text:style-name="T20">服務學習</text:span>
 </text:p>
-<text:p text:style-name="P34">(四) 領域主軸：</text:p>
+<text:p text:style-name="P34">(四)領域主軸：</text:p>
 <text:p text:style-name="P33">
 <text:span text:style-name="T19">1.</text:span>
 <text:span text:style-name="T20">一切學問與技能以德育為根本，塑造一個建全與崇高理想的人文素養。</text:span>

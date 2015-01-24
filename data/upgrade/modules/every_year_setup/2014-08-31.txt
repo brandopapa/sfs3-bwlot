@@ -1,0 +1,4 @@
+新增協同教學教師代碼欄位 -- by chi (2014-08-31)
+
+ALTER TABLE `score_course` ADD `cooperate_sn` INT NULL AFTER `teacher_sn`; 
+ 新增協同教學教師代碼欄位建立成功 ! 

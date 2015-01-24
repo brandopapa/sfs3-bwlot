@@ -109,7 +109,7 @@ if ($_POST['class_year']>0 && $_POST['act_year_seme']) {
 }
 
 //篩選學生
-if ($_POST['cal'] || $_POST['export'] || $_POST['insert'] || $_POST['noti1']) {
+if ($_POST['cal'] || $_POST['export'] || $_POST['insert'] || $_POST['noti1']  || $_POST['list']) {
 	$query="select a.student_sn,a.stud_id,a.seme_class,a.seme_num,b.stud_name,b.stud_sex from stud_seme a left join stud_base b on a.student_sn=b.student_sn where a.seme_year_seme='".$_POST['year_seme']."' and mid(a.seme_class,1,LENGTH(a.seme_class)-2)='".$_POST['class_year']."' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
 	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
 	while($rr=$res->FetchRow()) {
@@ -157,6 +157,12 @@ if ($_POST['cal'] || $_POST['export'] || $_POST['insert'] || $_POST['noti1']) {
 			}
 		}
 		$smarty->assign("msg","已完成 ".$i." 筆資料寫入");
+	}
+	if ($_POST['list']) {
+		$smarty->assign("sel_year",$act_year);
+		$smarty->assign("sel_seme",$act_seme);
+		$smarty->display("count.html");
+		exit;
 	}
 	//print_r($all_arr);
 }

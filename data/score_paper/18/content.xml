@@ -726,7 +726,7 @@
 <table:table-column table:style-name="Table1.F"/>
 <table:table-row>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P6">童軍</text:p>
+<text:p text:style-name="P6">綜合一</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
 <text:p text:style-name="P7">{綜合活動-綜合一加權}</text:p>
@@ -740,7 +740,7 @@
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
-<text:p text:style-name="P6">家政</text:p>
+<text:p text:style-name="P6">綜合二</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table1.A2" table:value-type="string">
 <text:p text:style-name="P7">{綜合活動-綜合二加權}</text:p>
