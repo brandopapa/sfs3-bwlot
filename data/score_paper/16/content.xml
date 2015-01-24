@@ -1316,13 +1316,13 @@
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生活主軸-生活技能-農耕加權}</text:p>
+<text:p text:style-name="P17">{生活主軸-生活技能加權}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生活主軸-生活技能-農耕等第}</text:p>
+<text:p text:style-name="P17">{生活主軸-生活技能等第}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
-<text:p text:style-name="P17">{生活主軸-生活技能-農耕努力程度}</text:p>
+<text:p text:style-name="P17">{生活主軸-生活技能努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
 <table:table-row>
@@ -1332,13 +1332,13 @@
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生活主軸-群己活動-社團加權}</text:p>
+<text:p text:style-name="P17">{生活主軸-群己活動加權}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生活主軸-群己活動-社團等第}</text:p>
+<text:p text:style-name="P17">{生活主軸-群己活動等第}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
-<text:p text:style-name="P17">{生活主軸-群己活動-社團努力程度}</text:p>
+<text:p text:style-name="P17">{生活主軸-群己活動努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
 <table:table-row>
