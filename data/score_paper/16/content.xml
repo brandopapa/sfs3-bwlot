@@ -1196,13 +1196,13 @@
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生命主軸- 生命教育加權}</text:p>
+<text:p text:style-name="P17">{生命主軸-生命課程加權}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生命主軸- 生命教育等第}</text:p>
+<text:p text:style-name="P17">{生命主軸-生命課程等第}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
-<text:p text:style-name="P17">{生命主軸- 生命教育努力程度}</text:p>
+<text:p text:style-name="P17">{生命主軸-生命課程努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
 <table:table-row>

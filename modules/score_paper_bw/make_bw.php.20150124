@@ -438,16 +438,16 @@ function make_ooo($sel_year,$sel_seme,$class_id,$sp_sn,$data_arr){
     $score_array=get_score_array($sel_year,$sel_seme,$stud_id,$student_sn,$class_id);
     
     $score_array["生活主軸_學期總平均加權"]=
-    $score_array["生活主軸-生活技能加權"]+
-    $score_array["生活主軸-群己活動加權"]+
+    $score_array["生活主軸-生活技能-農耕加權"]+
+    $score_array["生活主軸-群己活動-社團加權"]+
     $score_array["生活主軸-理念學習加權"]+
     $score_array["生活主軸-生活規範加權"]+
     $score_array["生活主軸-健康生活加權"]+
     $score_array["生活主軸-服務學習加權"];
     
     $score_array["生活主軸_學期總分數"]= 
-    $score_array["生活主軸-生活技能分數"]*$score_array["生活主軸-生活技能加權"]+
-    $score_array["生活主軸-群己活動分數"]*$score_array["生活主軸-群己活動加權"]+
+    $score_array["生活主軸-生活技能-農耕分數"]*$score_array["生活主軸-生活技能-農耕加權"]+
+    $score_array["生活主軸-群己活動-社團分數"]*$score_array["生活主軸-群己活動-社團加權"]+
     $score_array["生活主軸-理念學習分數"]*$score_array["生活主軸-理念學習加權"]+
     $score_array["生活主軸-生活規範分數"]*$score_array["生活主軸-生活規範加權"]+
     $score_array["生活主軸-健康生活分數"]*$score_array["生活主軸-健康生活加權"]+
@@ -455,8 +455,8 @@ function make_ooo($sel_year,$sel_seme,$class_id,$sp_sn,$data_arr){
 
 	  $score_array["生活主軸_學期總平均分數"]=round($score_array["生活主軸_學期總分數"]/$score_array["生活主軸_學期總平均加權"],2);
 	  $score_array["生活主軸_學期總平均等第"]=score2str($score_array["生活主軸_學期總平均分數"],$class);    
-    $score_array["生命主軸_學期總平均加權"]=$score_array["生命主軸-德討/孝經加權"]+$score_array["生命主軸-生命課程加權"];
-    $score_array["生命主軸_學期總平均加權"]=$score_array["生命主軸-德討/孝經加權"]+$score_array["生命主軸-生命課程加權"];
+    
+    $score_array["生命主軸_學期總平均加權"]=$score_array["生命主軸-德討/孝經加權"]+$score_array["生命主軸-生命課程加權"];    
     $score_array["生命主軸_學期總分數"]=$score_array["生命主軸-德討/孝經分數"]*$score_array["生命主軸-德討/孝經加權"]+$score_array["生命主軸-生命課程分數"]*$score_array["生命主軸-生命課程加權"]; 
     $score_array["生命主軸_學期總平均分數"]=round($score_array["生命主軸_學期總分數"]/$score_array["生命主軸_學期總平均加權"],2);
     $score_array["生命主軸_學期總平均等第"]=score2str($score_array["生命主軸_學期總平均分數"],$class);
