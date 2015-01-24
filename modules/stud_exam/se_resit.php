@@ -14,7 +14,7 @@ $res=$CONN->Execute($sql);
 $SETUP=$res->fetchrow();
 
 //目前時間
-$nowsec=date("U",mktime(date("H"),date("i"),0,date("n"),date("j"),date("Y")));
+$nowsec=date("U",mktime(date("H"),date("i"),date("s"),date("n"),date("j"),date("Y")));
 
 $seme_year_seme=$SETUP['now_year_seme'];
 
@@ -84,12 +84,22 @@ if ($_POST['act']=='start_test') {
 					$end_time=$paper_setup['end_time']; 		  
  			  }
  //檢查是否考試時段內
- 				 $StartSec=date("U",mktime(substr($start_time,11,2),substr($start_time,14,2),0,substr($start_time,5,2),substr($start_time,8,2),substr($start_time,0,4)));
-				 $EndSec=date("U",mktime(substr($end_time,11,2),substr($end_time,14,2),0,substr($end_time,5,2),substr($end_time,8,2),substr($end_time,0,4)));
+ 		$StartSec=date("U",mktime(substr($start_time,11,2),substr($start_time,14,2),substr($start_time,17,2),substr($start_time,5,2),substr($start_time,8,2),substr($start_time,0,4)));
+		$EndSec=date("U",mktime(substr($end_time,11,2),substr($end_time,14,2),substr($start_time,17,2),substr($end_time,5,2),substr($end_time,8,2),substr($end_time,0,4)));
   if ($nowsec<$StartSec or $nowsec>$EndSec) {
   	echo "<br>考試時間：$start_time - $end_time <br> 現在不是考試時間！請離開!!!";
     exit();
   }
+  
+ //timer時間
+ if ($paper_setup['timer_mode']==1) {
+	//同時結束  
+  $timer=$EndSec-$nowsec;          
+ } else {
+ //個別計時 
+  $timer=$paper_setup['timer']*60;  //秒
+ } 
+  
   
  //檢查是否已領卷，是否允許重覆領卷
  			 $sql="select * from resit_exam_score where student_sn='".$STUD['student_sn']."' and paper_sn='".$paper_setup['sn']."'";
@@ -177,6 +187,13 @@ if ($_POST['act']=='start_test') {
  $main= "<input type='hidden' name='score_sn' value='$score_sn'>
  <input type='hidden' name='paper_sn' value='$paper_sn'>
  <input type='hidden' name='exam_items' value='$test_count'>".$main.$item_form;
+ 
+ $main.="\n
+  <Script>
+   var intsec=".$timer.";\n
+   checktime();
+  </Script>
+ "; 
    
  echo $main;
  
@@ -239,6 +256,12 @@ echo $tool_bar;
  .bg_0 { background-color:#FFFFFF  }
  .bg_Click { background-color:#FFCC99  }
  .bg_Over { background-color:#CCFFFF  }
+
+ #st {
+ position: absolute;  /*絕對位置*/
+ z-index:99;  /*避免被其他浮動div蓋到*/
+ width:80px;  /*DIV的寬，請設定此項*/
+ }
 </style>
 <form name="myform" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 	<input type="hidden" name="act" value="">
@@ -251,6 +274,26 @@ echo $tool_bar;
 //未進行任何選擇時的畫面
 
 ?>
+ <div id="show_timer" style="display:none">
+  <table border="1"style=" border-collapse:collapse;font-size:10pt" bordercolor="#111111" cellpadding="3" width="100%">
+    <tr bgcolor="FFCCCC">
+    	<td align="center">剩餘時間：<input type="text" name="quiztimer" value="" size="10"><font color=red> (注意！時間到自動交卷)</font></td>
+    </tr>
+  </table>
+</div>
+<div id="st" style="display:none;left: 0px; top: 300px;">
+  <table bgcolor="#FFCCCC" border="1" cellpadding="0" cellspacing="0" border-collapse:collapse" bordercolor="#111111" width="68" name="formtable" id="formtable">
+  <tr>
+    <td width="50" align="center" style="font-size:9pt;color:#0000FF">剩餘時間</td>
+  </tr>
+  <tr>
+    <td width="50" align="center">
+    	<input type="text" name="timer1" id="timer1" size="6" style="text-align: center; color: #FF6060; background-color: #D7FFEB" value=""><br>
+    	<input type="button" value="立即交卷" name="submit1" class="start_test_submit" style="font-size:10 px;">
+　	</td>
+  </tr>
+	</table>
+ </div>
  <table border="0">
   <tr>
   	<!--左畫面 -->
@@ -350,7 +393,7 @@ echo $tool_bar;
  <table border="0">
    	<tr id='start_test_submit_button' style="display:none">
 			<td>
-			  <input type="button" id="start_test_submit" value="交卷">
+			  <input type="button" class="start_test_submit" value="交卷">
 			</td>
    	</tr>
  </table> 	
@@ -377,7 +420,7 @@ foot();
  }
 
 
-//設定試卷
+//開始測驗
 $(".start_test").click(function(){
 	var scope=$(this).attr("id");
 	var act='start_test';
@@ -395,14 +438,17 @@ $(".start_test").click(function(){
     	$('#show_buttom').html(response);
       $('#show_buttom').fadeIn(); 
       if (response.substr(0,4)!='<br>') {
+		   //開始
         start_test_submit_button.style.display='block';
+				show_timer.style.display='block';	
+				st.style.display='block';		   
 		  }
     } // end success
 	});   // end $.ajax	
 })
 
-//設定試卷
-$("#start_test_submit").click(function(){
+//交卷
+$(".start_test_submit").click(function(){
 	
 	//檢查是否有未作答
 	 var i=0;
@@ -465,5 +511,40 @@ $("#start_test_submit").click(function(){
    document.getElementById(w).className = strMouseClick;
   }
  } 
+
+function checktime() {
+intsec=intsec-1;
+if (intsec>0) {
+	m=Math.floor(intsec/60);
+	sec=intsec%60;
+	if (sec<10) sec='0'+sec;
+	show=m+':'+sec;
+	document.myform.quiztimer.value=show;
+	document.myform.timer1.value=show;
+}
+//if (intsec==180) window.alert('時間剩下3分鐘囉! 請注意！ 時間到會自動交卷!'); 
+ if (intsec<=0) {
+  document.myform.act.value='start_test_submit';
+  document.myform.submit();
+ }
+ TimerID=setTimeout("checktime()",1000);
+}
+
+$(function(){ 
+	var div_id='st';  //自訂Div區塊id名稱 
+	var seat ='up'; //down=緊黏右下角   up=緊黏右上角 
+	var nowTop2 =0; 
+		w = $(window); 
+	div_left=48;
+	$("#"+div_id).css('left', div_left); 
+  $("#"+div_id).css('top', 280); 
+
+   w.scroll(function(){ 
+    nowHight =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10); 
+    nowTop =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10); 
+    $("#"+div_id).css('top', nowTop+280); 
+    nowTop2 =nowTop; 
+   }); 
+}); 
 
 </script>

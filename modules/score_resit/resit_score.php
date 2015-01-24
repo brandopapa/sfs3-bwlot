@@ -331,7 +331,7 @@ echo $tool_bar;
  		<font size='2' color='#0000cc'>
       <img src='./images/filefind.png'>說明:<br>
    1.匯出資料皆採用 Excel 格式，以供套印各類通知單。<br>
-   2.本統計表若有錯誤，請按<input type="button" value="更新補考名單" id="get_all_resit_name">重新計算並取得補考名單。
+   2.本統計表若有錯誤或第一次啟用本學期補考，請按<input type="button" value="更新補考名單" id="get_all_resit_name">重新計算並取得補考名單。
    </font>
    <?php echo "<br><br><font color=red>$INFO</font>";?>
    	 <div id="waiting" style="display:none">

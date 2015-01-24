@@ -37,7 +37,13 @@ $class_seme_p = get_class_seme(); //學年度
 //讀取補考學期別設定
 $sql="select * from resit_seme_setup limit 1";
 $res=$CONN->Execute($sql);
-$SETUP=$res->fetchrow();
+if ($res->recordcount()==0) {
+ $SETUP['start_time']=date("Y-m-d H:i:s");
+ $SETUP['end_time']=date("Y-m-d H:i:s");
+ $SETUP['paper_mode']='0';
+} else {
+ $SETUP=$res->fetchrow();
+}
 
 //讀取 POST 值
 
@@ -89,8 +95,8 @@ echo $tool_bar;
 </tr>
 </table>
 <input type="submit" name="act" value="儲存設定">
-<br>
-<font color='red"><?php echo $INFO;?></font>
+<br><br>
+<font color="red"><?php echo $INFO;?></font>
 </form>
 
 <?php
@@ -105,12 +111,22 @@ foot();
    var start_time=document.myform.start_time.value;
 	 var end_time=document.myform.end_time.value;
     
+    
     //考試時間比較
    	starttime=start_time.replace(/-/g, "/"); 
    	starttime=(Date.parse(starttime)).valueOf() ; // 直接轉換成Date型別所代表的值
    	endtime=end_time.replace(/-/g, "/"); 
    	endtime=(Date.parse(endtime)).valueOf() ; // 直接轉換成Date型別所代表的值
-    if (starttime>=endtime) {
+   	
+   	//讀取領卷模式
+   	for (var i=0; i<myform.paper_mode.length; i++) {
+   	if (myform.paper_mode[i].checked)
+   		{
+      	var paper_mode = myform.paper_mode[i].value;
+   		}
+  	}
+   	   	
+    if (starttime>=endtime && paper_mode==1) {
      alert ("考試結束時間不得早於或等於開始時間!");
      return false;
     }	

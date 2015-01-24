@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_seme_talk2.php 8094 2014-08-24 16:25:12Z infodaes $
+// $Id: stud_seme_talk2.php 8302 2015-01-21 01:22:29Z smallduh $
 
 // 載入設定檔
 include "stud_reg_config.php";
@@ -138,7 +138,7 @@ switch($do_key) {
 
 		   //變成二維陣列
 		   $student=explode("\t",$data_arr[$i]);  //某筆學生的資料
-		   if (count($student)==5) { //5個欄位都有資料再處理
+		   if (count($student)==6) { //6個欄位都有資料再處理
 			foreach ($student as $k=>$v) {
 			 $student[$k]=trim($v);  //去掉前後空白
 			}   	 
@@ -383,7 +383,7 @@ function past_form() {
        <td style="color:#800000;font-size:9pt">
        ※說明 : 如果您習慣以 Excel 等方式管理學生訪談資料 (Excel範例檔:<a href="images/demo.xls">下載</a>) ,請直接選擇內容部分如圖, 複製/貼上再送出即可.<br>
        <img src="images/demo.jpg"><br>
-       注意! 欄位的順序必須正確,一列為一筆資料,複製要輸入的內容, 再貼上即可.
+       注意! 欄位的順序必須正確,一列為一筆資料(必須含6欄資料),複製要輸入的內容, 再貼上即可.
        </td>
      </tr>
    </table>	
