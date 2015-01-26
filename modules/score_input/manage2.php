@@ -1,5 +1,5 @@
 <?php
-// $Id: manage2.php 8169 2014-10-14 05:26:07Z smallduh $
+// $Id: manage2.php 8307 2015-01-23 08:06:49Z smallduh $
 
 
 /*引入學務系統設定檔*/
@@ -321,6 +321,15 @@ if(($teacher_course)&&($curr_sort)){
 
 	//階段成績
 	if ($curr_sort<254){
+		//把前幾次的平均列出來  by smallduh 2015.01.23 ================================
+		if ($curr_sort>1) {
+				$pre_text="";
+       for ($PRE_SORT=1;$PRE_SORT<$curr_sort;$PRE_SORT++) {
+       	$main.="<td>".$test_sort_name[$PRE_SORT]."平均</td>";
+			 } // end for
+    } // end if		
+		//=================================================
+
 		if ($yorn=='n'){
 			$main .="<td>定期評量*".$test_ratio[0]."%";
 			if ($is_send==0) $main.="<br><$url_str_1 title=\"".$full_class_name.$test_sort_name[$curr_sort]."定期評量\"><img src='./images/wedit.png' border='0'></a><a href=\"{$_SERVER['SCRIPT_NAME']}?edit=s1&teacher_course=$teacher_course&curr_sort=$curr_sort\"><img src='./images/pen.png' border='0'></a><a href=\"{$_SERVER['SCRIPT_NAME']}?del=ds1&edit=s1&teacher_course=$teacher_course&curr_sort=$curr_sort\" onClick=\"return confirm('確定刪除這次成績 ?');\"><img src='./images/del.png' border='0'></a></td>";
@@ -335,8 +344,9 @@ if(($teacher_course)&&($curr_sort)){
                         	if ($is_send==0) $main.="<br><$url_str_2 title=\"".$full_class_name.$test_sort_name[$curr_sort]."平時成績\"><img src='./images/wedit.png' border='0'></a><a href=\"{$_SERVER['SCRIPT_NAME']}?edit=s2&teacher_course=$teacher_course&curr_sort=$curr_sort\"><img src='./images/pen.png' border='0'></a><a href=\"{$_SERVER['SCRIPT_NAME']}?del=ds2&edit=s2&teacher_course=$teacher_course&curr_sort=$curr_sort\" onClick=\"return confirm('確定刪除這次成績 ?');\"><img src='./images/del.png' border='0'></a></td>";
                         }
 		}
-		$main .="<td>平均</td></tr>\n";
-
+		$main .="<td>本次平均</td>";
+		
+		$main .="<tr>\n";
 		//評量成績
 		if ($yorn=='n'){
 			if(strstr ($teacher_course, 'g')) {
@@ -361,7 +371,25 @@ if(($teacher_course)&&($curr_sort)){
 			$score_arr[$tt][$res->fields[student_sn]] = $res->fields[score];
 			$res->MoveNext();
 		}
-		
+		//載入前幾次評量成績 2015.01.23 by smallduh.=======================================
+		$score_arr_pre=array();
+		if ($curr_sort>1) {
+		 for ($PRE_SORT=1;$PRE_SORT<$curr_sort;$PRE_SORT++) {
+		  $query_pre = "select student_sn,test_kind,score from $score_semester where ss_id='$ss_id' and test_sort='$PRE_SORT' and student_sn in ($all_sn)";
+			$res_pre = $CONN->Execute($query_pre) or trigger_error($query_pre,E_USER_ERROR);
+			while(!$res_pre->EOF){
+				$tt =1;
+				if ($res_pre->fields[test_kind] =="定期評量")
+				$tt = 0;
+				$student_sn=$res_pre->fields[student_sn];
+				$score_arr_pre[$PRE_SORT][$tt][$student_sn] = $res_pre->fields[score];
+				//echo $res_pre->fields[test_kind]."$student_sn=>".$score_arr_pre[$PRE_SORT][$tt][$res->fields[student_sn]]."<br>";
+				$res_pre->MoveNext();
+		  } //end while
+		 } // end for
+		} // end if ($curr_sort>1)
+		//=================================================================================
+	
 		//顯示學生成績
 		if(strstr ($teacher_course, 'g')){
 			//分組課程的階段下拉選單 ------------
@@ -426,6 +454,35 @@ if(($teacher_course)&&($curr_sort)){
 				$ratio_sum = $test_ratio[0]+$test_ratio[1];
 				$avg_score = sprintf("%01.2f",($score_1*$test_ratio[0]+$score_2*$test_ratio[1])/$ratio_sum);
 			}
+			
+		
+			//列出前幾階段的平均成績 by smallduh. 2015.01.23 =======================
+			//echo "<pre>";
+			//print_r($score_arr_pre);
+			//exit();
+
+			if ($curr_sort>1) {
+				$pre_text="";
+       for ($PRE_SORT=1;$PRE_SORT<$curr_sort;$PRE_SORT++) {
+     				
+								$score_1 = $score_arr_pre[$PRE_SORT][0][$student_sn];			
+								$score_2 = $score_arr_pre[$PRE_SORT][1][$student_sn];
+
+							if ($score_1==-100 || $score_2==-100 || $score_1=="" || $score_2=="") {
+								if ($score_1>0)
+									$avg_pre_score= $score_1_s;
+								else
+									$avg_pre_score= $score_2_s;
+							} else {
+								$ratio_sum = $test_ratio[0]+$test_ratio[1];
+								$avg_pre_score = sprintf("%01.2f",($score_1*$test_ratio[0]+$score_2*$test_ratio[1])/$ratio_sum);
+							}
+       	 $red_3 = ($avg_pre_score>=60)?"#000000":"#ff0000";
+				$pre_text.="<td><font color=$red_3>$avg_pre_score</font></td>"; 
+       	
+       } // end for			
+		  } //end if
+		  //======================================================================
 			$red_3 = ($avg_score>=60)?"#000000":"#ff0000";
 			$stud_num_arr[$i]=$stud_num;
 			$stud_name_arr[$stud_num]=$stud_name;
@@ -433,9 +490,9 @@ if(($teacher_course)&&($curr_sort)){
 			$stud_score_n_arr[$stud_num]=$score_2_s;
 			$stud_id_arr[$stud_num]=$stud_id;
 			if ($yorn == 'n')
-				$main .="<tr bgcolor=#FFFFFF align='center'><td>$stud_id</td><td>$stud_num</td><td>".stripslashes($stud_name)."</td>$pic_data $score1_text <td><font color=$red_3>$avg_score</font></td></tr>\n";
+				$main .="<tr bgcolor=#FFFFFF align='center'><td>$stud_id</td><td>$stud_num</td><td>".stripslashes($stud_name)."</td>$pic_data $pre_text $score1_text <td><font color=$red_3>$avg_score</font></td></tr>\n";
 			else
-				$main .="<tr bgcolor=#FFFFFF align='center'><td>$stud_id</td><td>$stud_num</td><td>".stripslashes($stud_name)."</td>$pic_data $score1_text $score2_text <td><font color=$red_3>$avg_score</font></td></tr>\n";
+				$main .="<tr bgcolor=#FFFFFF align='center'><td>$stud_id</td><td>$stud_num</td><td>".stripslashes($stud_name)."</td>$pic_data $pre_text $score1_text $score2_text <td><font color=$red_3>$avg_score</font></td></tr>\n";
 			$avg_temp_hidden .= "<input type=\"hidden\" name=\"avg_hidden_$student_sn\" value=\"$avg_score\">";
 			$temp_hidden .="$student_sn,";
 			$i++;
