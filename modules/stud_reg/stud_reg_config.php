@@ -1,5 +1,5 @@
 <?php
-//$Id: stud_reg_config.php 6598 2011-10-19 08:33:38Z infodaes $
+//$Id: stud_reg_config.php 8316 2015-01-29 08:48:04Z smallduh $
 
 	//系統設定檔
 	include_once "../../include/config.php";
@@ -39,7 +39,7 @@
 	$img_width = 120;
 	
 	//目錄內程式
-	$menu_p = array("stud_list.php"=>"基本資料","chi_edit.php"=>"整班編修","chi_photo.php"=>"相片","stud_dom1.php"=>"戶口資料","stud_ext_data.php"=>"補充資料","stud_bs.php"=>"兄弟姐妹","stud_kinfolk.php"=>"其他親屬","../stud_move/"=>"學生異動","stud_drop.php"=>"學籍資料刪除","../stud_query/check_error2.php"=>"學籍資料檢查^" ,"show_ext_data.php"=>"補充資料管理",);
+	$menu_p = array("stud_list.php"=>"基本資料","chi_edit.php"=>"整班編修","chi_photo.php"=>"相片","stud_photo.php"=>"相片2","stud_dom1.php"=>"戶口資料","stud_ext_data.php"=>"補充資料","stud_bs.php"=>"兄弟姐妹","stud_kinfolk.php"=>"其他親屬","../stud_move/"=>"學生異動","stud_drop.php"=>"學籍資料刪除","../stud_query/check_error2.php"=>"學籍資料檢查^" ,"show_ext_data.php"=>"補充資料管理",);
 	
 	//設定上傳檔案路徑
 	$img_path = "photo/student";
@@ -55,7 +55,7 @@
 
 	//目錄內程式
 	if ($modify_flag)
-		$menu_p = array("stud_list.php"=>"基本資料","chi_edit.php"=>"整班編修","chi_photo.php"=>"相片","stud_dom1.php"=>"戶口資料","stud_ext_data.php"=>"補充資料","stud_bs.php"=>"兄弟姐妹","stud_kinfolk.php"=>"其他親屬","../stud_move/"=>"學生異動","stud_drop.php"=>"學籍資料刪除","basisdata_check.php"=>"學籍基本資料完整性檢查" ,"show_ext_data.php"=>"補充資料管理",);
+		$menu_p = array("stud_list.php"=>"基本資料","chi_edit.php"=>"整班編修","chi_photo.php"=>"相片","stud_photo.php"=>"相片2","stud_dom1.php"=>"戶口資料","stud_ext_data.php"=>"補充資料","stud_bs.php"=>"兄弟姐妹","stud_kinfolk.php"=>"其他親屬","../stud_move/"=>"學生異動","stud_drop.php"=>"學籍資料刪除","basisdata_check.php"=>"學籍基本資料完整性檢查" ,"show_ext_data.php"=>"補充資料管理",);
 	else
 		$menu_p = array("stud_list.php"=>"基本資料","chi_edit.php"=>"整班編修","stud_dom1.php"=>"戶口資料","stud_ext_data.php"=>"補充資料","stud_bs.php"=>"兄弟姐妹","stud_kinfolk.php"=>"其他親屬");
 	

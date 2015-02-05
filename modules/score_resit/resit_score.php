@@ -85,9 +85,15 @@ if ($_POST['act']=='html_resit_list') {
 	     <td style='font-size:10pt' align='center'>".$row['org_score']."</td>
 	     <td style='font-size:10pt' align='center'>".$row['score']."</td>
 	     <td style='font-size:9pt'>".$row['entrance_time']."</td>		
-	     <td style='font-size:9pt'>".$row['complete_time']."</td>		
-			</tr>
-		";
+	     <td style='font-size:9pt'>".$row['complete_time'];
+		
+		if ($row['complete']==1) {
+		 $main.="<a href='resit_list_paper.php?seme_year_seme=$seme_year_seme&Cyear=$Cyear&scope=$scope&sn=".$row['sn']."' target='_blank' title='ÂsÄý¡m".$row['stud_name']."¡nªº§@µª'><img src='images/filefind.png'></a></td>
+			</tr>";
+		} else {
+		 $main.="</td>
+			</tr>";
+		}
 		
 
 	}

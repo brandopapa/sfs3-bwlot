@@ -21,6 +21,8 @@ function SelectR_name(reset_option) {
         addOption(document.myform.r_name, "全國球類聯賽", "全國球類聯賽", "");
         addOption(document.myform.r_name, "全民運動會", "全民運動會", "");
         addOption(document.myform.r_name, "全國各單項錦標賽", "全國各單項錦標賽", "");
+		addOption(document.myform.r_name, "全國身心障礙國民運動會", "全國身心障礙國民運動會賽", "");
+		addOption(document.myform.r_name, "全國原住民族運動會", "全國原住民族運動會", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     }
 
@@ -38,7 +40,13 @@ function SelectR_name(reset_option) {
         addOption(document.myform.r_name, "青年奧林匹克運動會", "青年奧林匹克運動會", "");
         addOption(document.myform.r_name, "東亞運動會", "東亞運動會", "");
         addOption(document.myform.r_name, "亞洲青年運動會", "亞洲青年運動會", "");
-        addOption(document.myform.r_name, "亞洲沙灘運動會", "亞洲沙灘運動會", "");
+        addOption(document.myform.r_name, "亞洲沙灘運動會", "亞洲沙灘運動會", "");		
+		addOption(document.myform.r_name, "亞洲室內及武藝運動會", "亞洲室內及武藝運動會", "");
+		addOption(document.myform.r_name, "亞洲帕拉運動會", "亞洲帕拉運動會", "");
+		addOption(document.myform.r_name, "帕拉林匹克運動會", "帕拉林匹克運動會", "");
+		addOption(document.myform.r_name, "聽障達福林匹克運動會", "聽障達福林匹克運動會", "");
+		addOption(document.myform.r_name, "亞太聽障運動會", "亞太聽障運動會", "");
+		addOption(document.myform.r_name, "世界運動會", "世界運動會", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     }
     
@@ -87,6 +95,7 @@ function SelectR_name(reset_option) {
     	if (document.myform.level.value == '2') {
         addOption(document.myform.r_name, "全國語文競賽", "全國語文競賽", "");
         addOption(document.myform.r_name, "教育部文藝創作獎", "教育部文藝創作獎", "");
+		addOption(document.myform.r_name, "原住民族語單詞競賽", "原住民族語單詞競賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
 	  } // end if 語文類
@@ -123,6 +132,7 @@ function SelectR_name(reset_option) {
     	//全國
     	if (document.myform.level.value == '2') {
         addOption(document.myform.r_name, "全國學生美術比賽", "全國學生美術比賽", "");
+		addOption(document.myform.r_name, "全國原住民兒童繪畫創作比賽", "全國原住民兒童繪畫創作比賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
 
@@ -176,6 +186,8 @@ function SelectR_name(reset_option) {
         addOption(document.myform.r_name, "全國法規資料庫競賽活動", "全國法規資料庫競賽活動", "");
         addOption(document.myform.r_name, "全國環保知識挑戰擂臺賽", "全國環保知識挑戰擂臺賽", "");
         addOption(document.myform.r_name, "臺灣學校網界博覽會", "臺灣學校網界博覽會", "");
+		addOption(document.myform.r_name, "全國中小學客家藝文競賽", "全國中小學客家藝文競賽", "");
+		addOption(document.myform.r_name, "原住民族語戲劇競賽", "原住民族語戲劇競賽", "");
         addOption(document.myform.r_name, "其他", "其他", "");
     	}
 

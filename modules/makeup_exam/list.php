@@ -145,12 +145,24 @@ if ($_POST['cal'] || $_POST['export'] || $_POST['insert'] || $_POST['noti1']  ||
 			exit;
 	}
 	if ($_POST['insert']) {
+		//先取出先前的名冊
+		$query="select * from makeup_exam_scope where seme_year_seme='".$_POST['act_year_seme']."' and class_year='".($_POST['class_year']-($sel_year-$act_year))."' order by student_sn,scope_ename";
+		$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+		$temp_arr = array();
+		while($rr=$res->FetchRow()) {
+			$temp_arr[$rr['student_sn']][$rr['scope_ename']]=array('oscore'=>$rr['oscore'], 'nscore'=>$rr['nscore'], 'has_score'=>$rr['has_score'], 'act'=>$rr['act']);
+		}
+		//刪除名冊以免沒有更新到
+		$query="delete from makeup_exam_scope where seme_year_seme='".$_POST['act_year_seme']."' and class_year='".($_POST['class_year']-($sel_year-$act_year))."' order by student_sn,scope_ename";
+		$res=$CONN->Execute($query) or user_error("寫入失敗！<br>$query",256);
+		//重新新增名冊並把先前的資料寫入
 		$i=0;
+		$now=date("Y-m-d H:i:s");
 		foreach($base_arr as $sn=>$d) {
 			foreach($m_arr as $dd) {
 				$score=$all_arr[$sn][$dd['e']]['avg']['score'];
 				if ($score<60) {
-					$query="insert into makeup_exam_scope (seme_year_seme,student_sn,scope_ename,class_year,oscore) values ('".$_POST['act_year_seme']."','$sn','".$dd['e']."','".($_POST['class_year']-($sel_year-$act_year))."','$score')";
+					$query="insert into makeup_exam_scope (seme_year_seme,student_sn,scope_ename,class_year,oscore,nscore,has_score,act,update_time,teacher_sn) values ('".$_POST['act_year_seme']."','$sn','".$dd['e']."','".($_POST['class_year']-($sel_year-$act_year))."','$score','".$temp_arr[$sn][$dd['e']]['nscore']."','".$temp_arr[$sn][$dd['e']]['has_score']."','".$temp_arr[$sn][$dd['e']]['act']."','$now','".$_SESSION['session_tea_sn']."')";
 					$res=$CONN->Execute($query) or user_error("寫入失敗！<br>$query",256);
 					$i++;
 				}

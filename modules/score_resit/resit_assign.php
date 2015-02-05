@@ -265,8 +265,8 @@ if ($_POST['act']=='edit_paper_delete') {
   $_POST['act']=$_POST['opt2'];  
 } // end if $_POST['act']=='edit_paper_delete'
 
-//儲存匯入的試題
-if ($_POST['act']=='upload_paper_save') {		 
+//儲存快貼的試題
+if ($_POST['act']=='paste_paper_save') {		 
 	$item_scope=$_POST['item_scope'];
 	$paper_setup=get_paper_sn($SETUP['now_year_seme'],$Cyear,$item_scope);
   
@@ -292,7 +292,6 @@ if ($_POST['act']=='upload_paper_save') {
 } // end if edit_paper_submit
 
 //調整解答 - 儲存
-//儲存匯入的試題
 if ($_POST['act']=='list_paper_answer_save') {		 
 	$item_scope=$_POST['item_scope'];
   
@@ -304,6 +303,121 @@ if ($_POST['act']=='list_paper_answer_save') {
   $_POST['act']='list_paper';  
 } // end if list_paper_answer_save
 
+
+//匯出試題 
+ if ($_POST['act']=='download_paper') {
+			$scope=$_POST['opt1'];
+ 			$main=$SETUP['now_year_seme']."-".$Cyear."-".$scope."\r\n";
+ 			$sql="select a.* from resit_exam_items a, resit_paper_setup b where a.paper_sn=b.sn and b.seme_year_seme='".$SETUP['now_year_seme']."' and b.class_year='$Cyear' and b.scope='$scope'";
+ 			$res=$CONN->Execute($sql);
+ 			$row=$res->GetRows();
+ 			foreach ($row as $K) {
+       $main.=$K['sort']."\r\n";
+       $main.=$K['question']."\r\n";
+       $main.=$K['cha']."\r\n";
+       $main.=$K['chb']."\r\n";
+       $main.=$K['chc']."\r\n";
+       $main.=$K['chd']."\r\n";
+       
+       $fig_array=array("q","a","b","c","d");
+       foreach ($fig_array as $v) {
+		    $target_fig_name="fig_".$v;
+        $ssn=$K[$target_fig_name];
+        if ($ssn!="") {
+       		$query="select filetype,xx,yy,content from resit_images where sn='".$ssn."'";
+			 		$res=$CONN->Execute($query);
+			 		$filetype=$res->fields['filetype'];
+			 		$xx=$res->fields['xx'];
+			 		$yy=$res->fields['yy'];
+			 		$picture=$res->fields['content'];
+			 		$main.=$filetype.",".$xx.",".$yy."\r\n";
+			 		$main.=$picture."\r\n";
+			 	} else {
+			 	  $main.="\r\n\r\n";
+			 	} // end if
+       } // end foreach
+
+       $main.=$K['answer']."\r\n";
+ 			}
+
+		$filename=$SETUP['now_year_seme']."_".$Cyear."年級_".$link_ss[$scope]."考題檔.wit";
+		
+		//以串流方式送出
+		header("Content-disposition: attachment; filename=$filename");
+		header("Content-type: application/vnd.sun.xml.writer");
+		header("Cache-Control: max-age=0");
+		header("Pragma: public");
+		header("Expires: 0");
+
+		echo $main;  
+  exit();
+  
+  } // end if $_POST['act']=='download_paper'
+
+//匯入試題 - submit
+if ($_POST['act']=='upload_paper_submit') {
+	$item_scope=$_POST['item_scope'];
+	$paper_setup=get_paper_sn($SETUP['now_year_seme'],$Cyear,$item_scope);
+
+	//開始轉檔
+  $aFile=fopen($_FILES['thefile']['tmp_name'],"r");
+  $try_title=preg_replace("/\\r\\n/","",fgets($aFile,1024));
+  
+  $C=explode("-",$try_title);
+  //檢驗是否為 wit檔  
+	if (!in_array($C[2], $ss_link)) {
+    echo "檔案格式不符！";
+    exit();
+	}
+  
+  while (!feof($aFile)) {
+   $sort=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $question=addslashes(preg_replace("/\\r\\n/","",fgets($aFile,2048000)));
+   $cha=addslashes(preg_replace("/\\r\\n/","",fgets($aFile,2048000)));
+   $chb=addslashes(preg_replace("/\\r\\n/","",fgets($aFile,2048000)));
+   $chc=addslashes(preg_replace("/\\r\\n/","",fgets($aFile,2048000)));
+   $chd=addslashes(preg_replace("/\\r\\n/","",fgets($aFile,2048000)));
+   $fig_q_filetype=addslashes(preg_replace("/\\r\\n/","",fgets($aFile,2048000)));
+   $fig_q_content=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_a_filetype=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_a_content=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_b_filetype=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_b_content=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_c_filetype=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_c_content=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_d_filetype=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $fig_d_content=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $answer=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   if ($question=='') continue;
+
+   //先存入圖片
+    $fig_array=array("q","a","b","c","d");
+    foreach ($fig_array as $v) {
+		    $fig_filetype="fig_".$v."_filetype";
+		    $fig_content="fig_".$v."_content";
+		    $target_fig_name="fig_".$v;
+		    if (${$fig_content}!="") {
+		    	$F=explode(",",${$fig_filetype});
+		    	$filetype=$F[0];
+		    	$xx=$F[1];
+		    	$yy=$F[2];
+		    	$content=${$fig_content};
+    			$sql="insert into resit_images (filetype,xx,yy,content) values ('$filetype','$xx','$yy','$content')";
+					$res=$CONN->Execute($sql) or die("失入圖片失敗! SQL=".$sql);					
+		     	list(${$target_fig_name})=mysql_fetch_row(mysql_query("SELECT LAST_INSERT_ID()"));
+		     	//echo $target_fig_name.'='.${$target_fig_name};
+		     	//exit();
+		    } else {
+		     ${$target_fig_name}='';
+		    }
+    } // end foreach
+   
+   //存入試題
+	  $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer')";
+    $res=$CONN->Execute($sql) or die("儲存發生錯誤了! SQL=".$sql);
+  } // end while (!feof($aFile))
+	$_POST['act']='list_paper';
+}
 
 //**************** 開始秀出網頁 ******************/
 //秀出 SFS3 標題
@@ -357,10 +471,12 @@ echo $tool_bar;
  		    <td><?php echo $k;?></td>
  		    <td align="center"><?php echo $num;?></td>
  				<td align="center">
- 					<input type="button" value="設定試卷" class="setup_paper" id="btn-<?php echo $v;?>-setup">
- 					<input type="button" value="匯入試題" class="upload_paper" id="btn-<?php echo $v;?>-upload" <?php echo $disabled;?>>
+ 					<input type="button" value="設定" class="setup_paper" id="btn-<?php echo $v;?>-setup">
+ 					<input type="button" value="快貼" class="paste_paper" id="btn-<?php echo $v;?>-paste" <?php echo $disabled;?>>
  					<input type="button" value="線上命題" class="edit_paper" id="btn-<?php echo $v;?>-edit" <?php echo $disabled;?>>
- 					<input type="button" value="檢視試題" class="list_paper" id="btn-<?php echo $v;?>-list" <?php echo $disabled;?>>
+ 					<input type="button" value="匯出" class="download_paper" id="btn-<?php echo $v;?>-download" <?php echo $disabled;?>>
+					<input type="button" value="匯入" class="upload_paper" id="btn-<?php echo $v;?>-upload" <?php echo $disabled;?>>
+ 					<input type="button" value="檢視" class="list_paper" id="btn-<?php echo $v;?>-list" <?php echo $disabled;?>>
  				</td>
  		  </tr>
  		  <?php
@@ -424,14 +540,8 @@ echo $tool_bar;
       <img src='./images/filefind.png'>編輯試題說明:<br>
       1.試題可上傳附圖，系統並未限制附圖大小，但為了版面美觀及閱讀的舒適度，請適度調整試題的附圖大小。<br>
       2.題幹的附圖，寬度盡可能不超過 400px；選目的寬度盡可能不超過200px。<br>
-      3.選項若含圖片，建議先利用繪圖軟體調整四個選項的圖片大小(寬及高)相近。
-      </font>
-      </div>
-      
-  		<div id="edit_paper_readme" style="display:block">
-  		<font size='2' color='#0000cc'>
-      <img src='./images/filefind.png'>線上命題說明:<br>
-      1.如果該領域已有學生參加補考，試題資料庫切勿更動，。
+      3.選項若含圖片，建議先利用繪圖軟體調整四個選項的圖片大小(寬及高)相近。<br>
+      4.如果該領域已有學生參加補考，試題資料庫切勿隨意更動，以免檢視試卷時無法索引試題。
       </font>
       </div>
   	</td>
@@ -440,42 +550,74 @@ echo $tool_bar;
  	<?php
   
   } // end if $_POST['act']=='edit_paper'
-
- //匯入試題
+  
+//匯入試題 
  if ($_POST['act']=='upload_paper') {
- ?>
+?>			
  <input type="hidden" name="item_scope" value="<?php echo $item_scope;?>">
- <input type="hidden" name="item_sn" value="<?php echo $item['sn'];?>">
- <table border="0">
+ <table border="0" cellpadding="3">
  	<tr>
  	  <td>
  	  <span id="show_buttom">
- 	  <textarea name="items" cols="78" rows="5"></textarea><br>
- 	  請確認斷行分析字文符號：<br>
- 	  第1斷行符號<input type='text' name='cut[]' value='.' size='10'><br>
- 	  第2斷行符號<input type='text' name='cut[]' value='(A)' size='10'><br>
- 	  第3斷行符號<input type='text' name='cut[]' value='(B)' size='10'><br>
- 	  第4斷行符號<input type='text' name='cut[]' value='(C)' size='10'><br>
- 	  第5斷行符號<input type='text' name='cut[]' value='(D)' size='10'><br>
- 	  第6斷行符號<input type='text' name='cut[]' value='' size='10'><br>
- 	  第7斷行符號<input type='text' name='cut[]' value='' size='10'><br>
- 	  第8斷行符號<input type='text' name='cut[]' value='' size='10'><br>
- 	  第9斷行符號<input type='text' name='cut[]' value='' size='10'>
+ 	  	<input type="file" name="thefile" size="25">
 	  </span>
  	  </td>
  	</tr>
  	<tr>
   	<td>
   		<div id="edit_paper_readme" style="display:block">
-  			<input type="button" id="upload_paper_submit" value="分析試題">
+  			<input type="button" id="upload_paper_submit" value="上傳檔案">
   			<input type="button" id="edit_paper_end" value="離開">
   			<br>
   		<font size='2' color='#0000cc'>
       <img src='./images/filefind.png'>匯入試題說明:<br>
-      1.採用匯入方式，可同時建立多題文字型試題。<br>
-      2.關於附圖部分，必須匯入完畢後再採修改試題方式逐題上傳。<br>
-      3.貼上的文字必須為一題一行的格式。
-      
+      1.注意！您只能匯入附檔名為 .wit格式的試題檔。<br>
+      2.當您希望不同學期年度能使用同一份試卷時，可利用匯出功能，即可得到 wit 格式的檔案。<br>
+      </font>
+      </div>
+  	</td>
+  </tr> 
+ </table> 	
+			
+ 
+<?php  
+} // end if $_POST['act']=='upload_paper'
+
+ //快貼試題
+ if ($_POST['act']=='paste_paper') {
+ ?>
+ <input type="hidden" name="item_scope" value="<?php echo $item_scope;?>">
+ <input type="hidden" name="item_sn" value="<?php echo $item['sn'];?>">
+ <table border="0" cellpadding="3">
+ 	<tr>
+ 	  <td>
+ 	  <span id="show_buttom">
+ 	  <font color=red>◎快貼多題文字試題</font><br>
+ 	  <textarea name="items" cols="78" rows="5"></textarea><br>
+ 	  請確認斷行分析字文符號：<br>
+ 	  第1斷行符號：<input type='text' name='cut[]' value='.' size='10'><br>
+ 	  第2斷行符號：<input type='text' name='cut[]' value='(A)' size='10'><br>
+ 	  第3斷行符號：<input type='text' name='cut[]' value='(B)' size='10'><br>
+ 	  第4斷行符號：<input type='text' name='cut[]' value='(C)' size='10'><br>
+ 	  第5斷行符號：<input type='text' name='cut[]' value='(D)' size='10'><br>
+ 	  第6斷行符號：<input type='text' name='cut[]' value='' size='10'><br>
+ 	  第7斷行符號：<input type='text' name='cut[]' value='' size='10'><br>
+ 	  第8斷行符號：<input type='text' name='cut[]' value='' size='10'><br>
+ 	  第9斷行符號：<input type='text' name='cut[]' value='' size='10'>
+	  </span>
+ 	  </td>
+ 	</tr>
+ 	<tr>
+  	<td>
+  		<div id="edit_paper_readme" style="display:block">
+  			<input type="button" id="paste_paper_submit" value="分析試題">
+  			<input type="button" id="edit_paper_end" value="離開">
+  			<br>
+  		<font size='2' color='#0000cc'>
+      <img src='./images/filefind.png'>快貼試題說明:<br>
+      1.採用快貼方式，可同時建立多題文字型試題。<br>
+      2.關於附圖部分，必須儲存完畢後再採修改試題方式逐題上傳。<br>
+      3.貼上的文字必須為一題一行的格式。      
       </font>
       </div>
   	</td>
@@ -487,7 +629,7 @@ echo $tool_bar;
 
 
 //匯入試題上傳文字
-if ($_POST['act']=='upload_paper_submit') {	
+if ($_POST['act']=='paste_paper_submit') {	
 	
 	$items=stripslashes($_POST['items']);
 	$buffer = explode("\n",$items);  //以換行符號, 把資料切割
@@ -522,7 +664,7 @@ if ($_POST['act']=='upload_paper_submit') {
 	 }
 	 //列
 	 $content_tr="
-	  <tr class='upload_table'>
+	  <tr class='paste_table'>
 	   <td align='center'><input type='checkbox' name='save_it[$I]' value='1' checked></td>
 	   $content_td
 	  </tr>
@@ -558,7 +700,7 @@ if ($_POST['act']=='upload_paper_submit') {
 	<?php
   echo $main;
   ?>
-  <input type="button" id="upload_paper_save" value="儲存試題">
+  <input type="button" id="paste_paper_save" value="儲存試題">
 	<input type="button" id="edit_paper_end" value="離開">
 	<br>
  		<font size='2' color='#0000cc'>
@@ -609,7 +751,7 @@ if ($_POST['act']=='upload_paper_submit') {
   
   } // end if $_POST['act']=='list_paper'
  
- //檢視試題 
+ //檢視試題 - 調整解答
  if ($_POST['act']=='list_paper_answer') {
  ?>
  <input type="hidden" name="item_scope" value="<?php echo $item_scope;?>">
@@ -641,7 +783,7 @@ if ($_POST['act']=='upload_paper_submit') {
  	</tr>
  </table> 	
  	<?php  
-  } // end if $_POST['act']=='list_paper_answer_save' 
+  } // end if $_POST['act']=='list_paper_answer' 
  
  } //end if $Cyear 
 ?>
@@ -669,7 +811,7 @@ $(".scope_table").hover(function(){
 })
 
 //滑鼠移出移入
-$(".upload_table").hover(function(){
+$(".paste_table").hover(function(){
 	 $(this).css("background-color","#AAFFAA");
 	},function(){
 	 $(this).css("background-color","#FFFFFF");	
@@ -772,7 +914,7 @@ $("#setup_paper_submit").click(function(){
         //document.getElementById(ss).style.display = 'block';
         //把按鈕的 disabled 取消
         if (ss==scope) {
-          var btnID="btn-"+ss+"-upload";
+          var btnID="btn-"+ss+"-paste";
           document.getElementById(btnID).disabled = false;         
           var btnID="btn-"+ss+"-edit";
           document.getElementById(btnID).disabled = false;         
@@ -796,6 +938,48 @@ $(".edit_paper").click(function(){
   document.myform.act.value='edit_paper';
   document.myform.opt1.value=scope;
   
+  document.myform.submit();
+
+})
+
+//匯出試題
+$(".download_paper").click(function(){
+	var btnID=$(this).attr("id");
+	var NewArray = new Array();
+　var NewArray = btnID.split("-");
+  var scope=NewArray[1];
+	  
+  document.myform.act.value='download_paper';
+  document.myform.opt1.value=scope;
+  
+  document.myform.submit();
+
+})
+
+//匯入試題
+$(".upload_paper").click(function(){
+	var btnID=$(this).attr("id");
+	var NewArray = new Array();
+　var NewArray = btnID.split("-");
+  var scope=NewArray[1];
+	  
+  document.myform.act.value='upload_paper';
+  document.myform.opt1.value=scope;
+  
+  document.myform.submit();
+
+})
+
+//匯入試題 - submit
+$("#upload_paper_submit").click(function(){
+	 
+	if (document.myform.thefile.value=='') {
+	  alert('您並未選擇檔案!');
+	  return false;
+	}
+	 
+	document.myform.opt1.value=document.myform.item_scope.value;
+  document.myform.act.value='upload_paper_submit';
   document.myform.submit();
 
 })
@@ -917,13 +1101,13 @@ $("#list_paper_answer_save").click(function(){
 
 
 //匯入試題
-$(".upload_paper").click(function(){
+$(".paste_paper").click(function(){
 	var btnID=$(this).attr("id");
 	var NewArray = new Array();
 　var NewArray = btnID.split("-");
   var scope=NewArray[1];
 		
-  document.myform.act.value='upload_paper';
+  document.myform.act.value='paste_paper';
   document.myform.opt1.value=scope;
   
   document.myform.submit();
@@ -931,10 +1115,10 @@ $(".upload_paper").click(function(){
 })
 
 //分析試題
-$("#upload_paper_submit").click(function(){
+$("#paste_paper_submit").click(function(){
 	//設定 opt1 為某領域, 以便列表僅顯示該領域
 	document.myform.opt1.value=document.myform.item_scope.value;
-  document.myform.act.value='upload_paper_submit';
+  document.myform.act.value='paste_paper_submit';
 
   if (document.myform.items.value=='') {
    alert('未貼入任何文字!');
@@ -944,10 +1128,10 @@ $("#upload_paper_submit").click(function(){
 })
 
 //儲存試題
-$("#upload_paper_save").click(function(){
+$("#paste_paper_save").click(function(){
 	//設定 opt1 為某領域, 以便列表僅顯示該領域
 	document.myform.opt1.value=document.myform.item_scope.value;
-  document.myform.act.value='upload_paper_save';
+  document.myform.act.value='paste_paper_save';
 	document.myform.submit();
 })
 

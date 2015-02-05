@@ -1346,7 +1346,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "114652", "市立善糖國小", "");
         addOption(document.myform.selectschool, "114653", "市立小新國小", "");
     }
-    if (document.myform.selectcity.value == '臺南市' && document.myform.selectdistrict.value == '新市') {
+    if (document.myform.selectcity.value == '臺南市' && document.myform.selectdistrict.value == '新市區') {
         addOption(document.myform.selectschool, "114654", "市立新市國小", "");
         addOption(document.myform.selectschool, "114655", "市立大社國小", "");
         addOption(document.myform.selectschool, "110328", "國立南科國際實驗高中附設國小", "");
@@ -1545,7 +1545,9 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "124752", "市立中崙國小", "");
         addOption(document.myform.selectschool, "124761", "市立文華國小", "");
         addOption(document.myform.selectschool, "124762", "市立鳳翔國小", "");
+        addOption(document.myform.selectschool, "124739", "市立鎮北國小", "");
     }
+  
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '林園區') {
         addOption(document.myform.selectschool, "124613", "市立林園國小", "");
         addOption(document.myform.selectschool, "124614", "市立中芸國小", "");
@@ -1729,9 +1731,6 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "124736", "市立興中國小", "");
         addOption(document.myform.selectschool, "124737", "市立寶山國小", "");
         addOption(document.myform.selectschool, "124738", "市立樟山國小", "");
-    }
-    if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '鳳山區鎮') {
-        addOption(document.myform.selectschool, "124739", "市立鎮北國小", "");
     }
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '鹽埕區') {
         addOption(document.myform.selectschool, "513601", "市立鹽埕國小　", "");
