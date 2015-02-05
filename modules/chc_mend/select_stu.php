@@ -160,7 +160,7 @@ class basic_chc{
 		AND b.stud_study_cond='0'
 		and c.seme_year_seme='$YS'
 		order by c.seme_class,c.seme_num";
-        echo $SQL; 
+        //echo $SQL; 
 		$rs=$this->CONN->Execute($SQL) or die($SQL);
 		//echo $SQL."<br>";
 		$All=$rs->GetArray();

@@ -190,7 +190,10 @@ function get_item($sn) {
 }
 
 //顯示試題
-function show_item($sn,$update_answer="") {
+//$update_answer 0 呈現答案
+//							 1 調整試題，以下拉式選單呈現
+//							 2 呈現 $stud_ans的答案，並比對，出現○或╳
+function show_item($sn,$update_answer=0,$stud_ans="") {
 	
 //	echo "顯示試題".$sn;
 //	exit();
@@ -199,6 +202,21 @@ function show_item($sn,$update_answer="") {
  $sql="select * from resit_exam_items where sn='$sn'";
  $res=$CONN->Execute($sql) or die($sql);
  $row=$res->fetchRow();
+ 
+ //檢查本份試卷有沒有作答記錄
+ $sql="select count(*) as num from resit_exam_score where paper_sn='".$row['paper_sn']."' and entrance='1'";
+ $res=$CONN->Execute($sql) or die($sql);
+ $NO_DEL=$res->fields['num'];
+ 
+ if ($NO_DEL==0) {
+  $del_url="<img src='./images/del.png' class='edit_paper_delete' id='item-".$row['sn']."'>";  
+ } else {
+  $del_url="";
+ }
+
+ $bg_A=$bg_B=$bg_C=$bg_D="#FFFFFF";
+ $target_bg="bg_".$row['answer'];
+ $$target_bg="#FFCCCC";  
  
  //決定顯示型式(題幹圖大於400, 換行, 選目小於200,同一行, 200~400,分兩行,大於400各一行 )
  $fig_array=array("q","a","b","c","d");
@@ -219,7 +237,7 @@ function show_item($sn,$update_answer="") {
   if ($xx_q > 400) {
     $HTML_q="
      <tr>
-       <td>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'><img src='./images/del.png' class='edit_paper_delete' id='item-".$row['sn']."'>》</td>
+       <td>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
      </tr>
      <tr>
        <td><img src=\"img_show.php?sn=".$row['fig_q']."\"></td>
@@ -227,12 +245,12 @@ function show_item($sn,$update_answer="") {
   } elseif ($xx_q==0) {
     $HTML_q="
      <tr>
-       <td>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'><img src='./images/del.png' class='edit_paper_delete' id='item-".$row['sn']."'>》</td>
+       <td>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
      </tr>";
   } else {
      $HTML_q="
      <tr>
-       <td valign='top'>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'><img src='./images/del.png' class='edit_paper_delete' id='item-".$row['sn']."'>》</td>
+       <td valign='top'>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
        <td valign='top' align='right'><img src=\"img_show.php?sn=".$row['fig_q']."\"></td>
      </tr>";   
   } // end if 題幹
@@ -242,51 +260,53 @@ function show_item($sn,$update_answer="") {
     //1列
     $HTML_choice="
     <tr>
-      <td valign='top'>(A)".$row['cha']."</td><td valign='top'>(B)".$row['chb']."</td><td valign='top'>(C)".$row['chc']."</td><td valign='top'>(D)".$row['chd']."</td>
+      <td valign='top' bgcolor='$bg_A'>(A)".$row['cha']."</td><td valign='top' bgcolor='$bg_B'>(B)".$row['chb']."</td><td valign='top' bgcolor='$bg_C'>(C)".$row['chc']."</td><td valign='top' bgcolor='$bg_D'>(D)".$row['chd']."</td>
     </tr>
     ";
   } elseif($xx_a+$xx_b+$xx_c+$xx_d<800) {
     //1列
     $HTML_choice="
     <tr>
-      <td width='25%' valign='top'>(A)".$row['cha'].(($row['fig_a']>0)?"<br><img src='img_show.php?sn=".$row['fig_a']."'>":"")."</td>
-      <td width='25%' valign='top'>(B)".$row['chb'].(($row['fig_b']>0)?"<br><img src='img_show.php?sn=".$row['fig_b']."'>":"")."</td>
-      <td width='25%' valign='top'>(C)".$row['chc'].(($row['fig_c']>0)?"<br><img src='img_show.php?sn=".$row['fig_c']."'>":"")."</td>
-      <td width='25%' valign='top'>(D)".$row['chd'].(($row['fig_d']>0)?"<br><img src='img_show.php?sn=".$row['fig_d']."'>":"")."</td>
+      <td width='25%' valign='top' bgcolor='$bg_A'>(A)".$row['cha'].(($row['fig_a']>0)?"<br><img src='img_show.php?sn=".$row['fig_a']."'>":"")."</td>
+      <td width='25%' valign='top' bgcolor='$bg_B'>(B)".$row['chb'].(($row['fig_b']>0)?"<br><img src='img_show.php?sn=".$row['fig_b']."'>":"")."</td>
+      <td width='25%' valign='top' bgcolor='$bg_C'>(C)".$row['chc'].(($row['fig_c']>0)?"<br><img src='img_show.php?sn=".$row['fig_c']."'>":"")."</td>
+      <td width='25%' valign='top' bgcolor='$bg_D'>(D)".$row['chd'].(($row['fig_d']>0)?"<br><img src='img_show.php?sn=".$row['fig_d']."'>":"")."</td>
     </tr>
     ";
   } elseif($xx_a>200 and $xx_a<400) {
     //2列
     $HTML_choice="
     <tr>
-      <td width='50%' valign='top'>(A)".$row['cha'].(($row['fig_a']>0)?"<br><img src='img_show.php?sn=".$row['fig_a']."'>":"")."</td>
-      <td width='50%' valign='top'>(B)".$row['chb'].(($row['fig_b']>0)?"<br><img src='img_show.php?sn=".$row['fig_b']."'>":"")."</td>
+      <td width='50%' valign='top' bgcolor='$bg_A'>(A)".$row['cha'].(($row['fig_a']>0)?"<br><img src='img_show.php?sn=".$row['fig_a']."'>":"")."</td>
+      <td width='50%' valign='top' bgcolor='$bg_B'>(B)".$row['chb'].(($row['fig_b']>0)?"<br><img src='img_show.php?sn=".$row['fig_b']."'>":"")."</td>
 		</tr>
 		<tr>
-      <td width='50%' valign='top'>(C)".$row['chc'].(($row['fig_c']>0)?"<br><img src='img_show.php?sn=".$row['fig_c']."'>":"")."</td>
-      <td width='50%' valign='top'>(D)".$row['chd'].(($row['fig_d']>0)?"<br><img src='img_show.php?sn=".$row['fig_d']."'>":"")."</td>
+      <td width='50%' valign='top' bgcolor='$bg_C'>(C)".$row['chc'].(($row['fig_c']>0)?"<br><img src='img_show.php?sn=".$row['fig_c']."'>":"")."</td>
+      <td width='50%' valign='top' bgcolor='$bg_D'>(D)".$row['chd'].(($row['fig_d']>0)?"<br><img src='img_show.php?sn=".$row['fig_d']."'>":"")."</td>
     </tr>
     ";
   } else {
     //4列
     $HTML_choice="
     <tr>
-      <td>(A)".$row['cha'].(($row['fig_a']>0)?"<br><img src='img_show.php?sn=".$row['fig_a']."'>":"")."</td>
+      <td valign='top' bgcolor='$bg_A'>(A)".$row['cha'].(($row['fig_a']>0)?"<br><img src='img_show.php?sn=".$row['fig_a']."'>":"")."</td>
      </tr>
      <tr>
-      <td>(B)".$row['chb'].(($row['fig_b']>0)?"<br><img src='img_show.php?sn=".$row['fig_b']."'>":"")."</td>
+      <td valign='top' bgcolor='$bg_B'>(B)".$row['chb'].(($row['fig_b']>0)?"<br><img src='img_show.php?sn=".$row['fig_b']."'>":"")."</td>
      </tr>
      <tr>
-      <td>(C)".$row['chc'].(($row['fig_c']>0)?"<br><img src='img_show.php?sn=".$row['fig_c']."'>":"")."</td>
+      <td valign='top' bgcolor='$bg_C'>(C)".$row['chc'].(($row['fig_c']>0)?"<br><img src='img_show.php?sn=".$row['fig_c']."'>":"")."</td>
      </tr>
      <tr>
-      <td>(D)".$row['chd'].(($row['fig_d']>0)?"<br><img src='img_show.php?sn=".$row['fig_d']."'>":"")."</td>
+      <td valign='top' bgcolor='$bg_D'>(D)".$row['chd'].(($row['fig_d']>0)?"<br><img src='img_show.php?sn=".$row['fig_d']."'>":"")."</td>
     </tr>
     ";
   } // end if 選目版型
   
   //整合題幹和選目
-  if ($update_answer=='') {
+  
+  switch($update_answer){
+  	case 0:
   $main="
   <table border='0' width='800' cellspacing='0' cellpadding='0'>
    <tr>
@@ -306,7 +326,9 @@ function show_item($sn,$update_answer="") {
     </tr>
   </table> 
   ";
-  } else {
+  	break;
+  	
+  	case 1:
   	$ans_select="
   	 <select size='1' name='answer[".$row['sn']."]'>
   	   <option value='' style='color:#FF0000'>-</option>
@@ -335,6 +357,43 @@ function show_item($sn,$update_answer="") {
     </tr>
   </table> 
   ";  
+  	break;
+	//比對學生作答  	
+  	case 2:
+			if ($row['answer']==$stud_ans) { 
+			 $check_ans="<font color=blue>○</font>";
+			} else {
+			 $check_ans="<font color=red>╳</font>";
+			}
+  $main="
+  <table border='0' width='800' cellspacing='0' cellpadding='0'>
+   <tr>
+   <td valign='top' width='30' align='center'>( <font color=green>".$stud_ans."</font> ).</td>
+   <td>
+    <table border='0' width='100%'>    
+    $HTML_q
+    </table>
+   </td>
+   </tr>
+   <tr>
+    <td valign='top' width='30' align='center'>$check_ans</td>
+    <td>
+     <table border='0' width='100%'>
+     $HTML_choice
+     </table>
+    </td>
+    </tr>
+  </table> 
+  ";  
+
+  	break;
+
+  
+  
+  } 
+  
+  if ($update_answer=='') {
+  } else {
   
   }
   

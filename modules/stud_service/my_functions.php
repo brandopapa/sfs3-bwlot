@@ -111,10 +111,10 @@ function student_select($c_curr_class) {
 	//傳進 c_curr_class  100_2_07_01 學年度_學期_年級_班
 	$seme_year_seme=substr($c_curr_class,0,3).substr($c_curr_class,4,1);
 	$seme_class=sprintf("%d",substr($c_curr_class,6,2).substr($c_curr_class,9,2));
-	$query="select a.seme_num,a.student_sn,b.stud_name from stud_seme a,stud_base b where a.seme_year_seme='$seme_year_seme' and a.seme_class='$seme_class' and a.student_sn=b.student_sn and (b.stud_study_cond=0 or b.stud_study_cond=5) order by a.seme_num";
+	//$query="select a.seme_num,a.student_sn,b.stud_name from stud_seme a,stud_base b where a.seme_year_seme='$seme_year_seme' and a.seme_class='$seme_class' and a.student_sn=b.student_sn and (b.stud_study_cond=0 or b.stud_study_cond=5) order by a.seme_num";
+	$query="select a.seme_num,a.student_sn,b.stud_name from stud_seme a,stud_base b where a.seme_year_seme='$seme_year_seme' and a.seme_class='$seme_class' and b.student_sn=a.student_sn and (b.stud_study_cond=0 or b.stud_study_cond=5 or b.stud_study_cond=15) order by a.seme_num";
 	$result=mysql_query($query)
-	
-	
+		
 ?>
     <table border="1" bordercolor="#800000" style="border-collapse:collapse" width="800">
   <?php
@@ -246,7 +246,7 @@ function list_service_stud($sn) {
 		   $class_name=$class_base[5]; //班名稱 一年1班, 一年2班....
 		   echo "<tr><td width=80 valign='top'>".$class_base[5]."</td><td style='font-size:9pt' valign='top'>";
 		   //取出班級學生
-		   $query="select a.*,b.stud_name,c.seme_num,c.seme_class from stud_service_detail a,stud_base b,stud_seme c where a.item_sn='$sn' and a.student_sn=b.student_sn and a.student_sn=c.student_sn and c.seme_year_seme='$c_curr_seme' and c.seme_class='$classid' and (b.stud_study_cond=0 or b.stud_study_cond=5) order by c.seme_num";
+		   $query="select a.*,b.stud_name,c.seme_num,c.seme_class from stud_service_detail a,stud_base b,stud_seme c where a.item_sn='$sn' and a.student_sn=b.student_sn and b.student_sn=c.student_sn and c.seme_year_seme='$c_curr_seme' and c.seme_class='$classid' and (b.stud_study_cond=0 or b.stud_study_cond=5) order by c.seme_num";
        $res_class=mysql_query($query);
        ?>
        <table border="0" width="100%" cellspacing="0" cellpadding="0">
