@@ -39,6 +39,7 @@
 <td style="color: {{if $c1==1}}red{{else}}black{{/if}}; text-align: left;">
 <input type="text" name="nscore[{{$sn}}]" value="{{if $data_arr.$sn.has_score}}{{$data_arr.$sn.nscore}}{{/if}}" style="width: 40pt;">
 <input type="hidden" name="old_nscore[{{$sn}}]" value="{{if $data_arr.$sn.has_score}}{{$data_arr.$sn.nscore}}{{/if}}">
+{{if $data_arr.$sn.nscore>$data_arr.$sn.oscore}}<img src="./images/up.png" style="vertical-align: middle;">{{/if}}
 {{if $chg_arr.$sn}}<img src="./images/check.png" style="vertical-align: middle;">{{/if}}
 </td>
 </tr>
