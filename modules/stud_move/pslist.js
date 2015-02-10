@@ -745,6 +745,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "014793", "市立麗園國小", "");
         addOption(document.myform.selectschool, "014802", "市立麗林國小", "");
         addOption(document.myform.selectschool, "014816", "市立頭湖國小", "");
+        addOption(document.myform.selectschool, "010F01", "國立林口啟智學校", "");
     }
     if (document.myform.selectcity.value == '新北市' && document.myform.selectdistrict.value == '三重區') {
         addOption(document.myform.selectschool, "014754", "市立三重國小", "");
@@ -1812,6 +1813,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "583607", "市立苓雅區中正國小　", "");
         addOption(document.myform.selectschool, "583608", "市立福康國小", "");
         addOption(document.myform.selectschool, "580301", "國立高師大附中附設國小", "");
+        addOption(document.myform.selectschool, "583F01", "市立高雄啟智學校", "");
     }
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '前鎮區') {
         addOption(document.myform.selectschool, "593601", "市立前鎮國小　", "");
@@ -3576,6 +3578,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "154623", "縣立南華國小", "");
         addOption(document.myform.selectschool, "154624", "縣立化仁國小", "");
         addOption(document.myform.selectschool, "154625", "縣立太昌國小", "");
+        addOption(document.myform.selectschool, "150F01", "國立花蓮啟智學校", "");
     }
     if (document.myform.selectcity.value == '花蓮縣' && document.myform.selectdistrict.value == '壽豐鄉') {
         addOption(document.myform.selectschool, "154626", "縣立壽豐國小", "");
@@ -3845,6 +3848,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "203616", "市立世賢國小", "");
         addOption(document.myform.selectschool, "203617", "市立興嘉國小", "");
         addOption(document.myform.selectschool, "203618", "市立港坪國小", "");
+        addOption(document.myform.selectschool, "200F01", "國立嘉義啟智學校", "");
     }
     if (document.myform.selectcity.value == '金門縣' && document.myform.selectdistrict.value == '金湖鎮') {
         addOption(document.myform.selectschool, "714601", "縣立金湖國小", "");

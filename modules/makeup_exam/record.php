@@ -14,7 +14,7 @@ $year_seme_menu=year_seme_menu($sel_year,$sel_seme,"year_seme",$all_sm_arr);
 $_POST['class_year'] = intval($_POST['class_year']);
 $class_year_menu=class_year_menu($_POST['class_year']);
 
-//陣列資料
+//領域陣列資料
 $m_arr = array(
 	'lang'=>array('e'=>'language', 'c'=>'語文'),
 	'math'=>array('e'=>'math', 'c'=>'數學'),
@@ -27,21 +27,37 @@ $m_arr = array(
 if ($m_arr[$_POST['subj']]['e']=="") $_POST['subj']="";
 
 if ($_POST['class_year']>0) {
-	//取補評分科
-	$query="select * from makeup_exam_score where seme_year_seme='".$_POST['year_seme']."' and class_year='".$_POST['class_year']."'";
-	if ($_POST['subj']) $query .= " and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
-	$query .= " order by student_sn, scope_ename, ss_id";
-	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
-	$score_arr = array();
-	$all_sn = array();
-	$all_ss_id = array();
-	$col_arr = array();
-	while($rr=$res->FetchRow()) {
-		$score_arr[$rr['student_sn']][$rr['scope_ename']][$rr['ss_id']] = array('oscore'=>$rr['oscore'], 'nscore'=>$rr['nscore'], 'rate'=>$rr['rate']);
-		$all_sn[$rr['student_sn']] = $rr['student_sn'];
-		$all_ss_id[$rr['ss_id']] = $rr['ss_id'];
-		$col_arr[$rr['student_sn']]++;
+	//寫入學期成績
+	if (count($_POST['write'])>0) {
+		write_makeup($_POST['year_seme'], $m_arr[$_POST['subj']]['e'], $_POST['write'], "write");
 	}
+
+	//還原學期成績
+	if (count($_POST['undo'])>0) {
+		write_makeup($_POST['year_seme'], $m_arr[$_POST['subj']]['e'], $_POST['undo'], "undo");
+	}
+
+	//全部寫入或還原
+	if ($_POST['writeAll'] || $_POST['undoAll']) {
+		if ($_POST['writeAll']) $wact = "write";
+		else $wact = "undo";
+		$query="select * from makeup_exam_score where seme_year_seme='".$_POST['year_seme']."' and class_year='".$_POST['class_year']."'";
+		if ($_POST['subj']) $query .= " and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
+		$query .= " order by scope_ename, student_sn";
+		$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+		$temp_sn = array();
+		$old_scope_ename = "";
+		while($rr=$res->FetchRow()) {
+			if ($rr['scope_ename']<>$old_scope_ename && $old_scope_ename<>"") {
+				write_makeup($_POST['year_seme'], $old_scope_ename, $temp_sn, $wact);
+				$temp_sn = array();
+			}
+			$temp_sn[$rr['student_sn']] = $rr['student_sn'];
+			$old_scope_ename = $rr['scope_ename'];
+		}
+		if ($old_scope_ename<>"" && count($temp_sn)>0) write_makeup($_POST['year_seme'], $old_scope_ename, $temp_sn, $wact);
+	}
+	
 	//取補評領域
 	$query="select * from makeup_exam_scope where seme_year_seme='".$_POST['year_seme']."' and class_year='".$_POST['class_year']."'";
 	if ($_POST['subj']) $query .= " and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
@@ -49,7 +65,29 @@ if ($_POST['class_year']>0) {
 	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
 	$scope_arr = array();
 	while($rr=$res->FetchRow()) {
-		$scope_arr[$rr['student_sn']][$rr['scope_ename']] = array('oscore'=>$rr['oscore'], 'nscore'=>$rr['nscore']);
+		//如果選取只顯示擇優, 就只顯示補評分數高於原分數者
+		if ($_POST['simple']<>1 || $rr['nscore']>$rr['oscore']) {
+			$scope_arr[$rr['student_sn']][$rr['scope_ename']] = array('oscore'=>$rr['oscore'], 'nscore'=>$rr['nscore'], 'chg'=>'0');
+		}
+	}
+	//取補評分科
+	$query="select a.*,b.ss_score from makeup_exam_score a left join stud_seme_score b on a.seme_year_seme=b.seme_year_seme and a.student_sn=b.student_sn and a.ss_id=b.ss_id where a.seme_year_seme='".$_POST['year_seme']."' and a.class_year='".$_POST['class_year']."'";
+	if ($_POST['subj']) $query .= " and a.scope_ename='".$m_arr[$_POST['subj']]['e']."'";
+	$query .= " order by a.student_sn, a.scope_ename, a.ss_id";
+	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+	$score_arr = array();
+	$all_sn = array();
+	$all_ss_id = array();
+	$col_arr = array();
+	while($rr=$res->FetchRow()) {
+		//如果選取只顯示擇優, 就只顯示補評分數高於原分數者
+		if ($_POST['simple']<>1 || count($scope_arr[$rr['student_sn']])>0) {
+			$score_arr[$rr['student_sn']][$rr['scope_ename']][$rr['ss_id']] = array('oscore'=>$rr['oscore'], 'nscore'=>$rr['nscore'], 'rscore'=>$rr['ss_score'], 'rate'=>$rr['rate']);
+			if ($rr['chg']==1) $scope_arr[$rr['student_sn']][$rr['scope_ename']]['chg'] = 1;
+			$all_sn[$rr['student_sn']] = $rr['student_sn'];
+			$all_ss_id[$rr['ss_id']] = $rr['ss_id'];
+			$col_arr[$rr['student_sn']]++;
+		}
 	}
 	//取科目代碼
 	$ss_str = "'".implode("','",$all_ss_id)."'";

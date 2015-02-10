@@ -79,9 +79,22 @@ function cal_better_score($seme_year_seme="", $class_year="", $scope_ename="") {
 	$scope_ename_arr = get_scope_ename();
 	$link_check_arr = get_link_check();
 	if ($seme_year_seme && $class_year>0 && $scope_ename_arr[$scope_ename]) {
+		//先取出曾寫入學期成績表的學生流水號
+		$query="select * from makeup_exam_score where seme_year_seme='$seme_year_seme' and class_year='$class_year' and scope_ename='$scope_ename' and chg='1'";
+		$res=$CONN->Execute($query) or user_error("寫入失敗！<br>$query",256);
+		$w_arr=array();
+		while($rr=$res->FetchRow()) {
+			$w_arr[$rr['student_sn']] = $rr['student_sn'];
+		}
+		//刪除所選學期, 年級, 領域尚未寫入學期成績表的資料
+		$w_str = "'".implode("','",$w_arr)."'";
+		$query="delete from makeup_exam_score where seme_year_seme='$seme_year_seme' and class_year='$class_year' and scope_ename='$scope_ename' and student_sn not in ($w_str)";
+		$res=$CONN->Execute($query) or user_error("寫入失敗！<br>$query",256);
+		//取出領域成績
 		$query="select * from makeup_exam_scope where seme_year_seme='$seme_year_seme' and class_year='$class_year' and scope_ename='$scope_ename'";
 		$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
 		while($rr=$res->FetchRow()) {
+			//如果補行評量成績優於原成績, 進行擇優計算
 			if ($rr['nscore']>$rr['oscore']) {
 				$scope_score=$rr['nscore'];
 				if ($scope_score>60) $scope_score=60;
@@ -111,13 +124,80 @@ function cal_better_score($seme_year_seme="", $class_year="", $scope_ename="") {
 					}
 					$new_arr2[$ss_id] = array('score'=>$bscore, 'rate'=>$v['rate']);
 				}
+				$now=date("Y-m-d H:i:s");
+				$result = array();
 				foreach($new_arr2 as $ss_id=>$v) {
-					$now=date("Y-m-d H:i:s");
-					$query3="insert into makeup_exam_score (seme_year_seme, student_sn, scope_ename, ss_id, class_year, oscore, nscore, rate, test, update_time, teacher_sn) values ('$seme_year_seme', '".$rr['student_sn']."', '$scope_ename', '$ss_id', '$class_year', '".$new_arr[$ss_id]['score']."', '".$v['score']."', '".$v['rate']."', 1, '$now', '".$_SESSION['session_tea_sn']."')";
-					$CONN->Execute($query3) or user_error("讀取失敗！<br>$query3",256);
-					//echo $query3."<br>";
+					$query3="select * from makeup_exam_score where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='$ss_id'";
+					$res3=$CONN->Execute($query3) or user_error("讀取失敗！<br>$query3",256);
+					if ($res3->RecordCount()==0) {
+						$query3="insert into makeup_exam_score (seme_year_seme, student_sn, scope_ename, ss_id, class_year, oscore, nscore, rate, test, update_time, teacher_sn) values ('$seme_year_seme', '".$rr['student_sn']."', '$scope_ename', '$ss_id', '$class_year', '".$new_arr[$ss_id]['score']."', '".$v['score']."', '".$v['rate']."', 1, '$now', '".$_SESSION['session_tea_sn']."')";
+						$CONN->Execute($query3) or user_error("寫入失敗！<br>$query3",256);
+						$result['succ']++;
+					} else
+						$result['fail']++;
 				}
+				//修改makeup_exam_scope的act值
+				$query3="update makeup_exam_scope set act='1' where seme_year_seme='$seme_year_seme' and class_year='$class_year' and scope_ename='$scope_ename' and student_sn='".$rr['student_sn']."'";
+				$CONN->Execute($query3) or user_error("寫入失敗！<br>$query3",256);
 				//print_r($new_arr2); echo "<br><br>";
+			} else {
+			//如果原成績優於補行評量成績, 僅寫入原成績代表已進行過補行評量
+				$query2="select a.*,b.rate from stud_seme_score a left join score_ss b on a.ss_id=b.ss_id where a.seme_year_seme='$seme_year_seme' and a.student_sn='".$rr['student_sn']."' and b.enable='1' and b.link_ss like '".$link_check_arr[$scope_ename]."%'";
+				$res2=$CONN->Execute($query2) or user_error("讀取失敗！<br>$query2",256);
+				$now=date("Y-m-d H:i:s");
+				while($rr2=$res2->FetchRow()) {
+					$query3="insert into makeup_exam_score (seme_year_seme, student_sn, scope_ename, ss_id, class_year, oscore, nscore, rate, test, update_time, teacher_sn) values ('$seme_year_seme', '".$rr['student_sn']."', '$scope_ename', '".$rr2['ss_id']."', '$class_year', '".$rr2['ss_score']."', '".$rr2['ss_score']."', '".$rr2['rate']."', 1, '$now', '".$_SESSION['session_tea_sn']."')";
+					$CONN->Execute($query3) or user_error("讀取失敗！<br>$query3",256);
+				}
+			}
+		}
+	}
+	return $result;
+}
+
+function write_makeup($seme_year_seme="", $scope_ename="", $sn_arr=array(), $act="") {
+	global $CONN;
+
+	$a_arr = array('undo', 'write');
+	$s_arr = get_scope_ename();
+	if ($seme_year_seme && in_array($act,$a_arr) && count($sn_arr)>0) {
+		if ($s_arr[$scope_ename]<>"") $s_str = "and a.scope_ename='$scope_ename'";
+		else $s_str = "";
+		foreach($sn_arr as $k=>$v) $sn_arr[$k] = $k;
+		$sn_str = "'".implode("','", $sn_arr)."'";
+		$query="select a.*,b.ss_score from makeup_exam_score a left join stud_seme_score b on a.seme_year_seme=b.seme_year_seme and a.student_sn=b.student_sn and a.ss_id=b.ss_id where a.seme_year_seme='$seme_year_seme' $s_str and a.student_sn in ($sn_str)";
+		$res = $CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+		while($rr=$res->FetchRow()) {
+			if ($act=="write") {
+				//如果擇優後不相等, 表示成績應寫入學期表
+				if ($rr['oscore']<>$rr['nscore']) {
+					//如果與學期表不相等, 表示應進行寫入動作
+					if ($rr['nscore']<>$rr['ss_score']) {
+						$query2="update stud_seme_score set ss_score='".$rr['nscore']."' where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='".$rr['ss_id']."'";
+						$CONN->Execute($query2) or user_error("寫入失敗！<br>$query2",256);
+						$query3="update makeup_exam_score set test='1', chg='1' where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='".$rr['ss_id']."'";
+						$CONN->Execute($query3) or user_error("寫入失敗！<br>$query3",256);
+					}
+				} else {
+					//如果擇優後相等, 表示不必寫入學期表, 但要註記進行過補行評量
+					$query3="update makeup_exam_score set test='1', chg='0' where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='".$rr['ss_id']."'";
+					$CONN->Execute($query3) or user_error("寫入失敗！<br>$query3",256);
+				}
+			} elseif ($act=="undo") {
+				//如果擇優後不相等, 表示成績應還原
+				if ($rr['oscore']<>$rr['nscore']) {
+					//如果與學期表不相等, 表示應進行還原動作
+					if ($rr['nscore']==$rr['ss_score']) {
+						$query2="update stud_seme_score set ss_score='".$rr['oscore']."' where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='".$rr['ss_id']."'";
+						$CONN->Execute($query2) or user_error("寫入失敗！<br>$query2",256);
+						$query3="update makeup_exam_score set chg='0' where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='".$rr['ss_id']."'";
+						$CONN->Execute($query3) or user_error("寫入失敗！<br>$query3",256);
+					}
+				} else {
+					//如果擇優後相等, 表示不必寫入學期表
+					$query3="update makeup_exam_score set chg='0' where seme_year_seme='$seme_year_seme' and student_sn='".$rr['student_sn']."' and ss_id='".$rr['ss_id']."'";
+					$CONN->Execute($query3) or user_error("寫入失敗！<br>$query3",256);
+				}
 			}
 		}
 	}
