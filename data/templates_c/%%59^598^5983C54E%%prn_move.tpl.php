@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php /* Smarty version 2.6.26, created on 2015-02-13 12:09:26
+=======
+<?php /* Smarty version 2.6.26, created on 2015-02-13 14:56:51
+>>>>>>> 9cdead250d03f795fc56f86ee1e313822e9c9107
          compiled from prn_move.tpl */ ?>
 <?php echo '<TABLE width=100% valign="top"><TR><TD>日期</TD><TD>類別</TD><TD>核准機關</TD><TD>核准日期</TD><TD '; ?><?php if ($_POST['type'] == 1): ?><?php echo 'class="empty_right"'; ?><?php endif; ?><?php echo '>核准文號</TD></TR>'; ?><?php $_from = $this->_tpl_vars['move_data']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
     foreach ($_from as $this->_tpl_vars['move_data']):

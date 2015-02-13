@@ -125,7 +125,7 @@ function b_submit() {
 
   <font color="#FF0000">發送訊息</font>
 
-  <table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolorlight="#800000" bordercolordark="#FFFFFF" bordercolor="#FFFFFF">
+  <table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF" bordercolor="#800000">
 		<tr>
 			<td bgColor="#ffffcc" width="60" style="font-size: 10pt">訊息類別</td>
 			<td bgColor="#CCFFCC" style="font-size: 10pt">
@@ -168,7 +168,7 @@ function b_submit() {
 			</td>
 		</tr>
 
-		<tr id="Myprivate" style="display:block">
+		<tr id="Myprivate" style="display: table-row">
 			<td bgColor="#ffffcc" width="60" style="font-size: 10pt">接收對象</td>
 			<td bgColor="#CCFFCC" style="font-size: 10pt">
 			<input tabIndex="1" type="text" name="m_to" value="<?php echo $m_to;?>">
@@ -178,7 +178,7 @@ function b_submit() {
 			<img style="cursor:pointer" border="1" width="16" height="16" src="./images/online.jpg" onclick="window.location='main_online.php'" title="由上線列表選取">
 			</td>
 		</tr>
-		<tr id="Mypublic" style="display:block">
+		<tr id="Mypublic" style="display: table-row">
 			<td bgColor="#ffffcc" width="60" style="font-size: 10pt">
 			展示期限</td>
 			<td bgColor="#CCFFCC" style="font-size: 10pt">
@@ -206,7 +206,7 @@ function b_submit() {
 			
 		</tr>
 
-		<tr id="Myfile" style="display:block">
+		<tr id="Myfile" style="display: table-row">
 			<td style="font-size: 10pt" bgColor="#ffffcc">
 			附加檔案</td>
 		
@@ -225,7 +225,7 @@ function b_submit() {
 				1.此公開訊息會在【校園MSN】的「校內訊息交流」欄位中，以捲動畫面的方式呈現。<br>
 				2.凡是校內IP的電腦都能看見此訊息，但如果是校外的電腦，則必須登入才能看見這個訊息。<br>
 		</tr>
-  	<tr id="M_private" style="display:block">
+  	<tr id="M_private" style="display: table-row">
 			<td style="font-size: 10pt" bgColor="#ffffcc">說明</td>
 			<td bgColor="#ccffcc" style="font-size: 10pt;color:#0000FF">
 				1.您可以傳送私人訊息給校內的教職同仁，當同仁登入校園MSN即可接收到訊息。<br>
@@ -337,12 +337,12 @@ function OpenTeacherID() {
 
 //私人訊息
 function chkprivate() {
-  Myprivate.style.display="block";
+  Myprivate.style.display=" table-row";
   Myfolder.style.display="none";
-  Myfile.style.display="block";
+  Myfile.style.display=" table-row";
   Mypublic.style.display="none";
   M_public.style.display="none";
-  M_private.style.display="block";
+  M_private.style.display=" table-row";
   M_fileshare.style.display="none";
   M_email.style.display="none";
   
@@ -359,16 +359,16 @@ function chkprivate() {
 
 //E-mail
 function chkemail() {
-  Myprivate.style.display="block";
+  Myprivate.style.display=" table-row";
   Myfolder.style.display="none";
-  Myfile.style.display="block";
+  Myfile.style.display=" table-row";
   Mypublic.style.display="none";
   M_public.style.display="none";
   M_private.style.display="none";
   M_fileshare.style.display="none";
-  M_email.style.display="block";
+  M_email.style.display=" table-row";
   
-  email_subject.style.display="block";
+  email_subject.style.display=" table-row";
   
   M_pic_sttime.style.display="none";
   M_pic_endtime.style.display="none";
@@ -382,11 +382,11 @@ function chkemail() {
 
 //公開訊息
 function chkpublic() {
-  Mypublic.style.display="block";
+  Mypublic.style.display=" table-row";
   Myprivate.style.display="none";
   Myfolder.style.display="none";
   Myfile.style.display="none";
-  M_public.style.display="block";
+  M_public.style.display=" table-row";
   M_private.style.display="none";
   M_fileshare.style.display="none";
   email_subject.style.display="none";
@@ -403,13 +403,13 @@ function chkpublic() {
 
 //檔案分享
 function chkfileshare() {
-  Mypublic.style.display="block";
+  Mypublic.style.display=" table-row";
   Myprivate.style.display="none";
-  Myfolder.style.display="block";
-  Myfile.style.display="block";
+  Myfolder.style.display=" table-row";
+  Myfile.style.display=" table-row";
   M_public.style.display="none";
   M_private.style.display="none";
-  M_fileshare.style.display="block";
+  M_fileshare.style.display=" table-row";
   email_subject.style.display="none"; 
   
   M_pic_sttime.style.display="none";
@@ -432,11 +432,11 @@ function chkpic() {
   M_fileshare.style.display="none";
   email_subject.style.display="none";
   
-  M_pic_sttime.style.display="block";
-  M_pic_endtime.style.display="block";
-  M_pic_delay.style.display="block";
-  M_pic_file.style.display="block";
-  M_pic.style.display="block";  
+  M_pic_sttime.style.display=" table-row";
+  M_pic_endtime.style.display=" table-row";
+  M_pic_delay.style.display=" table-row";
+  M_pic_file.style.display=" table-row";
+  M_pic.style.display=" table-row";  
   M_email.style.display="none";
    document.form1.option1.value="3";
 }
@@ -482,7 +482,7 @@ if ($_GET['act']=='read') {
 	<input type="hidden" name="m_to" value="<?php echo $teach_id;?>">
 	<input type="hidden" name="relay" value="<?php echo $idnumber;?>">
 	<input type="hidden" name="data_kind" value="1">
-  <table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolorlight="#800000" bordercolordark="#FFFFFF" bordercolor="#FFFFFF">
+  <table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolorlight="#FFFFFF" bordercolordark="#FFFFFF" bordercolor="#800000">
     <tr>
       <td width="41" bgcolor="#FFFFCC">日期</td>
       <td  bgcolor="#CCFFCC"><?php echo $post_date ?></td>

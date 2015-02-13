@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php /* Smarty version 2.6.26, created on 2015-02-13 12:09:26
+=======
+<?php /* Smarty version 2.6.26, created on 2015-02-13 14:56:51
+>>>>>>> 9cdead250d03f795fc56f86ee1e313822e9c9107
          compiled from prn_nor_record.tpl */ ?>
 <!-- $Id: prn_nor_record.tpl 7690 2013-10-23 07:39:00Z smallduh $  -->
 
