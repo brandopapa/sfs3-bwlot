@@ -88,7 +88,7 @@ objform.submit();}
 <FORM METHOD=POST ACTION="{{$smarty.server.PHP_SELF}}" name=fx target=_blank>
 <input type="hidden" name="room_sign" value="0">
 <tr><td>
-<font color="#FF0000">■</font>或輸入學號(在學生)：<input type="text" name="list_stud_id" size="30" class=ipmei><font color="#FF0000">■</font>請選擇計算種類：{{$sel_group}}
+<font color="#FF0000">■</font>或輸入學號(在學生)：<input type="text" name="list_stud_id" size="30" class=ipmei>
 <INPUT type="reset" button  value='取消'  class=bur2>
 <INPUT TYPE=button  value='選好送出' onclick="if( window.confirm('確定了？')) {this.form.act.value='OK';this.form.submit();}" class=bur2>
 <INPUT type="hidden" name="act" value=''><br>
@@ -98,7 +98,7 @@ objform.submit();}
 <FORM METHOD=POST ACTION="{{$smarty.server.PHP_SELF}}" name=fx2 target=_blank>
 <input type="hidden" name="room_sign" value="0">
 <tr><td>
-<font color="#FF0000">■</font>或輸入學號(非在學生)：<input type="text" name="list_stud_id" size="30" class=ipmei><font color="#FF0000">■</font>請選擇計算種類：{{$sel_group}}
+<font color="#FF0000">■</font>或輸入學號(非在學生)：<input type="text" name="list_stud_id" size="30" class=ipmei>
 <INPUT type="reset" button  value='取消'  class=bur2>
 <INPUT TYPE=button  value='選好送出' onclick="if( window.confirm('確定了？')) {this.form.act.value='OK';this.form.submit();}" class=bur2>
 <INPUT type="hidden" name="act" value=''>

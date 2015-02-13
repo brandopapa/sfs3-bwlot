@@ -200,14 +200,14 @@ function get_group_select($group_id){
   $group_select="<select name='group_id'>";	
   if ($group_id == 'group_1'){
  	  $group_select.="<option value='group_1' selected>週一~五 1~7</option>";	
+ 	  $group_select.="<option value='group_2'>週一~日 1~8</option>";	
 	}
-	else{
-		$group_select.="<option value='group_1'>週一~五 1~7</option>";	
-	}
-  if ($group_id == 'group_2'){
+  elseif ($group_id == 'group_2'){
+  	$group_select.="<option value='group_1'>週一~五 1~7</option>";
  	  $group_select.="<option value='group_2' selected>週一~日 1~8</option>";	
 	}
 	else{
+		$group_select.="<option value='group_1' selected>週一~五 1~7</option>";
 		$group_select.="<option value='group_2'>週一~日 1~8</option>";	
 	}
   $group_select.="</select>";
