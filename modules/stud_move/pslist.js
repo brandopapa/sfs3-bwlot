@@ -568,6 +568,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "014799", "市立介壽國小", "");
         addOption(document.myform.selectschool, "014806", "市立中園國小", "");
         addOption(document.myform.selectschool, "014815", "市立龍埔國小", "");
+        addOption(document.myform.selectschool, "013601", "市立北大國小", "");
     }
     if (document.myform.selectcity.value == '新北市' && document.myform.selectdistrict.value == '中和區') {
         addOption(document.myform.selectschool, "014633", "市立中和國小", "");

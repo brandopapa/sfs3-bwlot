@@ -57,8 +57,11 @@ if ($_POST['edit']) {
 	$i=0;
 	$now=date("Y-m-d H:i:s");
 	foreach($_POST['nscore'] as $sn=>$d) {
-		if($d<>$_POST['old_nscore'][$sn] && floatval($d)>=0 && floatval($d)<=100 && $d<>"") {
-			$query="update makeup_exam_scope set nscore='$d', has_score='1', update_time='$now', teacher_sn='".$_SESSION['session_tea_sn']."' where seme_year_seme='".$_POST['act_year_seme']."' and student_sn='$sn' and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
+		if($d<>$_POST['old_nscore'][$sn] && floatval($d)>=0 && floatval($d)<=100) {
+			if ($d=="")
+				$query="update makeup_exam_scope set nscore='', has_score='0', update_time='$now', teacher_sn='".$_SESSION['session_tea_sn']."' where seme_year_seme='".$_POST['act_year_seme']."' and student_sn='$sn' and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
+			else
+				$query="update makeup_exam_scope set nscore='$d', has_score='1', update_time='$now', teacher_sn='".$_SESSION['session_tea_sn']."' where seme_year_seme='".$_POST['act_year_seme']."' and student_sn='$sn' and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
 			$res=$CONN->Execute($query) or user_error("§ó·s¥¢±Ñ¡I<br>$query",256);
 			$chg_arr[$sn]=1;
 			$i++;
