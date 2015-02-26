@@ -95,7 +95,7 @@ if ($_POST['class_year']>0 && $_POST['act_year_seme']) {
 	}
 
 	//取出課程設定
-	$query="select * from score_ss where year='$act_year' and semester='$act_seme' and class_year='".$_POST['class_year']."' and link_ss<>'' and enable='1'";
+	$query="select * from score_ss where year='$act_year' and semester='$act_seme' and class_year='".($_POST['class_year']-($sel_year-$act_year))."' and link_ss<>'' and enable='1'";
 	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
 	while($rr=$res->FetchRow()) {
 		if(mb_substr($rr['link_ss'],0,2,"big5")=="語文") $rr['link_ss'] = "語文";
