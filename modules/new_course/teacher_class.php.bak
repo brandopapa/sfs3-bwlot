@@ -102,8 +102,7 @@ function search_teacher_class_table($sel_year="",$sel_seme="",$view_tsn=""){
 	$main=teacher_all_class($sel_year,$sel_seme,$view_tsn)."<br>";
 
 	//取得教師授課的班級資料（陣列）
-	//$sql_select = "SELECT class_id FROM score_course WHERE year = $sel_year AND semester=$sel_seme AND (teacher_sn ='$view_tsn' OR cooperate_sn ='$view_tsn') group by class_id";
-	$sql_select = "SELECT class_id FROM score_course WHERE year = $sel_year AND semester=$sel_seme AND teacher_sn ='$view_tsn' group by class_id";
+	$sql_select = "SELECT class_id FROM score_course WHERE year = $sel_year AND semester=$sel_seme AND (teacher_sn ='$view_tsn' OR cooperate_sn ='$view_tsn') group by class_id";
 	$recordSet=$CONN->Execute($sql_select) or user_error("錯誤訊息：",$sql_select,256);
 	while(list($clas_id)= $recordSet->FetchRow()){
 		$clas_id_array[]=$clas_id;
@@ -128,8 +127,7 @@ function teacher_all_class($sel_year="",$sel_seme="",$tsn=""){
 	$dayn=sizeof($weekN)+1;
 
 	//找出教師該年度所有課程
-	//$sql_select = "select course_id,class_id,day,sector,ss_id,room,c_kind from score_course where year='$sel_year' and semester='$sel_seme' and (teacher_sn='$tsn' or cooperate_sn='$tsn') order by day,sector";
-	$sql_select = "select course_id,class_id,day,sector,ss_id,room,c_kind from score_course where year='$sel_year' and semester='$sel_seme' and teacher_sn='$tsn' order by day,sector";
+	$sql_select = "select course_id,class_id,day,sector,ss_id,room,c_kind from score_course where year='$sel_year' and semester='$sel_seme' and (teacher_sn='$tsn' or cooperate_sn='$tsn') order by day,sector";
 	$recordSet=$CONN->Execute($sql_select) or user_error("錯誤訊息：",$sql_select,256);
 	while (list($course_id,$class_id,$day,$sector,$ss_id,$room,$c_kind)= $recordSet->FetchRow()) {
 		$k=$day."_".$sector;
