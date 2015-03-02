@@ -77,7 +77,7 @@
 					  <select name="nor_val[{{$i}}]">{{$rowdata.nor.ss_val.$i}}</select>
 					</td>
 					 {{if $i == 1}}
-						 <td rowspan="4" style="text-align:center;"><textarea rows="7" cols="50" id="nor_memo0" name="nor_memo">{{$rowdata.nor.memo}}</textarea></td>
+						 <td rowspan="4" style="text-align:center;"><textarea rows="7" cols="50" maxlength="50" id="nor_memo0" name="nor_memo">{{$rowdata.nor.memo}}</textarea></td>
 					 {{/if}}
 					</tr>
 				{{/foreach}}
