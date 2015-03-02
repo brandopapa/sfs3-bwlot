@@ -1,6 +1,6 @@
 <?php
 
-// $Id: dis_stud.php 7184 2013-03-02 11:41:05Z brucelyc $
+// $Id: dis_stud.php 8328 2015-02-25 06:44:47Z brucelyc $
 
 // --系統設定檔
 include "select_data_config.php";
@@ -171,7 +171,7 @@ if ($year_name) {
 		}
 
 		//處理解除封存
-		if ($_POST['unlock'] && date("Y-m-d")<"2013-03-02") {
+		if ($_POST['unlock']) {
 			$query="update stud_seme_dis set cal='1' where seme_year_seme='$seme_year_seme' and cal='2'";
 			$res=$CONN->Execute($query);
 		}

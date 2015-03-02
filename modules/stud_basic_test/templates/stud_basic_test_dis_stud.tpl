@@ -1,4 +1,4 @@
-{{* $Id: stud_basic_test_dis_stud.tpl 7140 2013-02-23 16:11:18Z brucelyc $ *}}
+{{* $Id: stud_basic_test_dis_stud.tpl 8328 2015-02-25 06:44:47Z brucelyc $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -97,7 +97,7 @@ function selCheck() {
 </table>
 <input type="button" value="確定" OnClick="selCheck();"> <input type="reset" value="清除"> <input type="hidden" name="sel" value="{{$smarty.post.sel}}">
 {{else}}
-<input type="submit" name="sync" value="學生資料同步化"> <input type="submit" name="lock" value="學生資料封存" {{if $isLock}}disabled{{/if}}> <input type="submit" name="unlock" value="學生資料解除封存" {{if $today>"2013-02-28" || !$isLock}}disabled{{/if}}> <br>匯出：<input type="submit" name="ct_out" value="免試中投區高中職">
+<input type="submit" name="sync" value="學生資料同步化"> <input type="submit" name="lock" value="學生資料封存" {{if $isLock}}disabled{{/if}}> <input type="submit" name="unlock" value="學生資料解除封存" {{if !$isLock}}disabled{{/if}}> <br>匯出：<input type="submit" name="ct_out" value="免試中投區高中職">
 <br>{{$menu2}}
 <table style="border-width: 0;">
 <tr><td style="vertical-align: top;">
