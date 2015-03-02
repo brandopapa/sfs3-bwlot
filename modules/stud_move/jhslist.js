@@ -728,6 +728,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "403506", "市立明湖國中", "");
         addOption(document.myform.selectschool, "401302", "私立方濟中學附設國中", "");
         addOption(document.myform.selectschool, "401303", "私立達人女中附設國中", "");
+        addOption(document.myform.selectschool, "400144", "國立台灣戲曲學院", "");
     }
     if (document.myform.selectcity.value == '臺北市' && document.myform.selectdistrict.value == '士林區') {
         addOption(document.myform.selectschool, "413501", "市立士林國中", "");
