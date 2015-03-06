@@ -1,5 +1,5 @@
-<?
-// $Id: all_year.php 5310 2009-01-10 07:57:56Z hami $
+<?php
+// $Id: all_year.php 8337 2015-03-04 02:07:15Z brucelyc $
 
 include "stud_query_config.php";
 //include_once "../../include/sfs_case_PLlib.php";

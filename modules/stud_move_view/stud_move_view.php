@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_move_view.php 7712 2013-10-23 13:31:11Z smallduh $
+// $Id: stud_move_view.php 8336 2015-03-04 02:04:08Z smallduh $
 
 // 載入設定檔
 include "stud_move_config.php";
@@ -36,7 +36,7 @@ if (!$end_date) {
 
 if ($Submit=='匯出轉入學生資料') {
 	 $filename = "newstud.xls";
-	 header("Content-disposition: filename=$filename");
+	 header("Content-disposition: attachment; filename=$filename");
 	 header("Content-type: application/octetstream");
 	 //header("Pragma: no-cache");
 				//配合 SSL連線時，IE 6,7,8下載有問題，進行修改 

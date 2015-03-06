@@ -157,8 +157,7 @@ while(!$res->EOF){
 }
 
 //½Òªí
-//$query = "select class_year,class_name,ss_id,teacher_sn,cooperate_sn from score_course where year=$year and semester=$semester and  day='$_GET[curr_day]' and sector=$_GET[sections] order by class_year desc,class_name";
-$query = "select class_year,class_name,ss_id,teacher_sn from score_course where year=$year and semester=$semester and  day='$_GET[curr_day]' and sector=$_GET[sections] order by class_year desc,class_name";
+$query = "select class_year,class_name,ss_id,teacher_sn,cooperate_sn from score_course where year=$year and semester=$semester and  day='$_GET[curr_day]' and sector=$_GET[sections] order by class_year desc,class_name";
 //echo $query;
 
 $res = $CONN->Execute($query) or trigger_error("SQL ¿ù»~",E_USER_ERROR);
@@ -166,13 +165,13 @@ while(!$res->EOF){
 	$year_seme = sprintf("%d%02d", $res->fields[class_year],$res->fields[class_name]);
 	$ss_id = $res->fields[ss_id];
 	$teacher_sn = $res->fields[teacher_sn];
-	//$cooperate_sn= $res->fields[cooperate_sn];
-	//$cooperater= $cooperate_sn?'¡B'.$teacher_arr[$cooperate_sn]:'';
+	$cooperate_sn= $res->fields[cooperate_sn];
+	$cooperater= $cooperate_sn?'¡B'.$teacher_arr[$cooperate_sn]:'';
 	$table_str .= "
 	<tr >
         <td align=center>$class_base_arr[$year_seme]</td>
         <td align=center>$res_arr[$ss_id]</td>
-        <td align=center>$teacher_arr[$teacher_sn]</td>
+        <td align=center>$teacher_arr[$teacher_sn]$cooperater</td>
 	$temp_str
 	<td>&nbsp;</td>
 	</tr>";

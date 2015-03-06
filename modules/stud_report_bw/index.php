@@ -533,9 +533,19 @@ switch($do_key) {
 					$item="class_title_".$i."_".$j;
 					$item1="club_title_".$i."_".$j;						
 					$item2="association_name_".$i."_".$j;											
+					
+					$item3="service_date_".$i."_".$j;
+					$item4="item_memo_".$i."_".$j;
+					$item5="hours_".$i."_".$j;
+					$item6="sponsor_".$i."_".$j;
+					
 					$data_arr[$stud_id][$item]='';
 					$data_arr[$stud_id][$item1]='';
 					$data_arr[$stud_id][$item2]='';
+					$data_arr[$stud_id][$item3]='';
+					$data_arr[$stud_id][$item4]='';
+					$data_arr[$stud_id][$item5]='';
+					$data_arr[$stud_id][$item6]='';
 				}
 			}
 		}		
@@ -636,7 +646,46 @@ switch($do_key) {
 			$data_arr[$stud_id]["avg_score"]=$fin_score[$student_sn][avg][score];
 			$data_arr[$stud_id]["avg_grade"]=$fin_score[$student_sn][avg][score]?rep_score2str($fin_score[$student_sn][avg][score],$score_rule_arr[$target_semester][$max]):'';
 		}
-				
+		
+		$fin_score_non_area=cal_fin_score_non_area($student_sn_list_arr,$all_semesters_arr,"","");
+		$link_ss=array("basic"=>"基礎課程","recite"=>"經典背誦","calligraphy"=>"書法硬筆字","lifelesson"=>"生命課程","filialpiety"=>"德討/孝經","concept"=>"理念學習","lifespec"=>"生活規範","healthylv"=>"健康生活","lifeskills"=>"生活技能","gpactive"=>"群己活動","svlr"=>"服務學習");
+		foreach($sel_stud as $stud_id){
+			$student_sn=array_search($stud_id,$student_sn_arr); 
+			foreach($link_ss as $key=>$value){
+				for($i=$min;$i<=$max;$i++){
+					for($j=1;$j<=2;$j++){
+						$k=$i.'_'.$j;
+						$target_semester=$stud_grade_semester[$stud_id][$k];
+						if(!$target_semester) $target_semester='empty';
+							//非領域成績
+														
+							$item_score=$key."_".$i."_".$j."_score";
+							$item_rate=$key."_".$i."_".$j."_rate";
+							$item_grade=$key."_".$i."_".$j."_grade";
+							
+							$data_arr[$stud_id][$item_score]=$fin_score_non_area[$student_sn][$key][$target_semester][score];
+							$data_arr[$stud_id][$item_rate]=$fin_score_non_area[$student_sn][$key][$target_semester][rate];
+							$data_arr[$stud_id][$item_grade]=$data_arr[$stud_id][$item_score]?rep_score2str($data_arr[$stud_id][$item_score],$score_rule_arr[$target_semester][$i]):'';
+
+							//學期成績
+							$semester_score=$i."_".$j."_na_score";
+							$semester_rate=$i."_".$j."_na_rate";
+							$semester_grade=$i."_".$j."_na_grade";
+							$data_arr[$stud_id][$semester_score]=$fin_score_non_area[$student_sn][$target_semester][avg][score];
+							$data_arr[$stud_id][$semester_rate]=$fin_score_non_area[$student_sn][$target_semester][total][rate];
+							$data_arr[$stud_id][$semester_grade]=$data_arr[$stud_id][$semester_score]?rep_score2str($data_arr[$stud_id][$semester_score],$score_rule_arr[$target_semester][$i]):'';
+						
+							//echo $data_arr[$stud_id][$item_score]."---".$score_rule_arr[$target_semester][$i]."<BR>";
+					}
+				}
+				$data_arr[$stud_id][($key."_avg_score")]=$fin_score_non_area[$student_sn][$key][avg][score];
+				$data_arr[$stud_id][($key."_avg_rate")]=$fin_score_non_area[$student_sn][$key][avg][rate];
+				$data_arr[$stud_id][($key."_avg_grade")]=$fin_score_non_area[$student_sn][$key][avg][score]?rep_score2str($fin_score_non_area[$student_sn][$key][avg][score],$score_rule_arr[$target_semester][$max]):'';
+			}
+			$data_arr[$stud_id]["avg_na_score"]=$fin_score_non_area[$student_sn][avg][score];
+			$data_arr[$stud_id]["avg_na_grade"]=$fin_score_non_area[$student_sn][avg][score]?rep_score2str($fin_score[$student_sn][avg][score],$score_rule_arr[$target_semester][$max]):'';
+		}		
+
 //print_r($score_rule_arr[$target_semester][$max]);
 /*	
 echo "<PRE>";

@@ -1,8 +1,22 @@
 <font color=blue><b>¤å³¹¤ÀÃþ</b></font>¡G<select name="bk_id" size="1">
 <?php
-	$query = "select bk_id,board_name,position from jboard_kind order by bk_order,bk_id ";
+	$query = "select bk_id,bk_order,board_name,position from jboard_kind order by bk_order,bk_id ";
 	$result= $CONN->Execute($query) or die ($query);
 	while( $row = $result->fetchRow()){
+		$P=($row['position']>0)?"".str_repeat("|--",$row['position']):"";
+		if (board_checkid($row["bk_id"]) or checkid($_SERVER[SCRIPT_FILENAME],1)) {
+			if ($row["bk_id"] == $bk_id  ){
+			echo sprintf(" <option style='color:%s;font-weight:bold;font-size:13pt' value=\"%s\" selected>[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+		  } else {
+		  	if ($row['position']==0) {
+					echo sprintf(" <option style='color:%s;font-weight:bold;font-size:13pt' value=\"%s\">[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+	  		} else {
+					echo sprintf(" <option style='color:%s' value=\"%s\">[%05d] %s%s(%s)</option>",$position_color[$row['position']],$row["bk_id"],$row['bk_order'],$P,$row["board_name"],$row["bk_id"]);
+		  	}
+			}
+		}	
+		
+		/*
 		$P=($row['position']>0)?str_repeat("--",$row['position']):"";
 		if (board_checkid($row["bk_id"]) or checkid($_SERVER[SCRIPT_FILENAME],1)) {
 			if ($row["bk_id"] == $bk_id  ){
@@ -11,7 +25,8 @@
 				echo sprintf(" <option style='color:%s' value='%s' >%s%s</option>",$position_color[$row['position']],$row["bk_id"],$P,$row["board_name"]);
 	  	}
 		}
-	}
+		*/
+	} // end while
 	echo "</select>";
 	
 ?>

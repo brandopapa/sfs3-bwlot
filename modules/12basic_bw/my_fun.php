@@ -54,26 +54,6 @@ function get_semester_graduate_select($select_name,$work_year_seme,$graduate_yea
 	return $class_list;
 }
 
-function get_absent_group_select($absent_group_id)
-{
-  $absent_group_select="<select name='absent_group_id'>";	
-  if ($absent_group_id == 'absent_group_1'){
- 	  $absent_group_select.="<option value='absent_group_1' selected>週一~五 1~7</option>";	
-	}
-	else{
-		$absent_group_select.="<option value='absent_group_1'>週一~五 1~7</option>";	
-	}
-  if ($absent_group_id == 'absent_group_2'){
- 	  $absent_group_select.="<option value='absent_group_2' selected>週一~日 1~8</option>";	
-	}
-	else{
-		$absent_group_select.="<option value='absent_group_2'>週一~日 1~8</option>";	
-	}
-  $absent_group_select.="</select>";
-  
-  return $absent_group_select;
-}
-
 function get_csv_reference($method=0)
 {
 	global $UPLOAD_PATH;
@@ -156,7 +136,7 @@ function get_student_kind_free($academic_year)
 {
 	global $CONN;
 	//取得前已開列學生資料
-	$sql_select="select student_sn,card_no,kind_id,free_id from 12basic_ylc where academic_year=$academic_year";
+	$sql_select="select student_sn,card_no,kind_id,disability_id,free_id from 12basic_ylc where academic_year=$academic_year";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
 	$kind_free=array();
 	while(!$recordSet->EOF)
@@ -164,6 +144,7 @@ function get_student_kind_free($academic_year)
 		$student_sn=$recordSet->fields['student_sn'];
 		$kind_free[$student_sn]['card_no']=$recordSet->fields['card_no'];
 		$kind_free[$student_sn]['kind_id']=$recordSet->fields['kind_id'];
+	  $kind_free[$student_sn]['disability_id']=$recordSet->fields['disability_id'];
 		$kind_free[$student_sn]['free_id']=$recordSet->fields['free_id'];
 		$recordSet->MoveNext();
 	}
@@ -359,8 +340,8 @@ function get_student_reward_list($student_sn,$absent_group_id='absent_group_1')
 		$reward[$i]['reward_kind']=$res->fields['reward_kind'];		//獎懲類別
 		$reward[$i]['reward_year_seme']=$res->fields['reward_year_seme'];		//學期別
 		$f = explode(",",$reward_semester);
-		//if($res->fields['reward_year_seme']==substr($f[0],1,-1)) $reward[$i]['reward_grade']="7-1"; elseif($res->fields['reward_year_seme']==substr($f[1],1,-1)) $reward[$i]['reward_grade']="7-2"; elseif($res->fields['reward_year_seme']==substr($f[2],1,-1)) $reward[$i]['reward_grade']="8-1"; elseif($res->fields['reward_year_seme']==substr($f[3],1,-1)) $reward[$i]['reward_grade']="8-2"; elseif($res->fields['reward_year_seme']==substr($f[4],1,-1)) $reward[$i]['reward_grade']="9-1"; else $reward[$i]['reward_grade']="";		//年級
-		if($res->fields['reward_year_seme']==substr($f[0],1,-1)) $reward[$i]['reward_grade']="7-1"; elseif($res->fields['reward_year_seme']==substr($f[1],1,-1)) $reward[$i]['reward_grade']="7-2"; elseif($res->fields['reward_year_seme']==substr($f[2],1,-1)) $reward[$i]['reward_grade']="8-1"; elseif($res->fields['reward_year_seme']==substr($f[3],1,-1)) $reward[$i]['reward_grade']="8-2"; elseif($res->fields['reward_year_seme']==substr($f[4],1,-1)) $reward[$i]['reward_grade']="9-1"; elseif($res->fields['reward_year_seme']==substr($f[5],1,-1)) $reward[$i]['reward_grade']="9-2"; else $reward[$i]['reward_grade']="";		//年級
+		//if($res->fields['reward_year_seme']==substr($f[0],1,-1)) $reward[$i]['reward_grade']="7-1"; elseif($res->fields['reward_year_seme']==substr($f[1],1,-1)) $reward[$i]['reward_grade']="7-2"; elseif($res->fields['reward_year_seme']==substr($f[2],1,-1)) $reward[$i]['reward_grade']="8-1"; elseif($res->fields['reward_year_seme']==substr($f[3],1,-1)) $reward[$i]['reward_grade']="8-2"; elseif($res->fields['reward_year_seme']==substr($f[4],1,-1)) $reward[$i]['reward_grade']="9-1"; elseif($res->fields['reward_year_seme']==substr($f[5],1,-1)) $reward[$i]['reward_grade']="9-2"; else $reward[$i]['reward_grade']="";		//年級
+		if($res->fields['reward_year_seme']==substr($f[0],1,-1)) $reward[$i]['reward_grade']="7-1"; elseif($res->fields['reward_year_seme']==substr($f[1],1,-1)) $reward[$i]['reward_grade']="7-2"; elseif($res->fields['reward_year_seme']==substr($f[2],1,-1)) $reward[$i]['reward_grade']="8-1"; elseif($res->fields['reward_year_seme']==substr($f[3],1,-1)) $reward[$i]['reward_grade']="8-2"; elseif($res->fields['reward_year_seme']==substr($f[4],1,-1)) $reward[$i]['reward_grade']="9-1"; else $reward[$i]['reward_grade']="";		//年級
 		$reward[$i]['reward_date']=$res->fields['reward_date'];		//獎懲日期
 		$reward[$i]['reward_reason']=$res->fields['reward_reason'];		//獎懲事由
 		$reward[$i]['reward_base']=$res->fields['reward_base'];		//獎懲依據
@@ -465,15 +446,15 @@ function count_student_seme_abs($stud_id,$absent_group_id='absent_group_1')
 	$absence=array();
 	//$sql="SELECT seme_year_seme,abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 AND seme_year_seme IN ($absence_semester) ORDER BY seme_year_seme";
 	if ($absent_group_id == 'absent_group_1'){
-	  $sql="SELECT seme_year_seme,abs_days_5day_7section as my_abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
+	  $sql="SELECT seme_year_seme,abs_days_5day_7section as abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
   }
   else{
-  	$sql="SELECT seme_year_seme,abs_days as my_abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
+  	$sql="SELECT seme_year_seme,abs_days FROM stud_seme_abs WHERE stud_id={$stud_id} AND abs_kind=3 ORDER BY seme_year_seme";
   }
 	$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 	while(!$res->EOF) {
 		$seme_year_seme=$res->fields['seme_year_seme'];
-		$abs_days=$res->fields['my_abs_days'];
+		$abs_days=$res->fields['abs_days'];
 		$absence[$seme_year_seme]=$abs_days;
 		$res->MoveNext();
 	}
@@ -528,7 +509,7 @@ function count_student_score_balance($sn)
 	{
 		foreach($balance_area as $key=>$value)
 		{
-			$score_balance[$student_sn][$value]=($score_data[$value]['avg']>=60)?$balance_score:0;
+			$score_balance[$student_sn][$value]=($score_data[$value]['avg']['score']>=60)?$balance_score:0;
 		}
 	}	
 	return $score_balance;	
@@ -540,7 +521,7 @@ function get_student_score_competetion($student_sn)
 	global $CONN,$work_year_seme,$race_score;
 	$competetion=array();
 	//$sql="SELECT level,squad,name,rank,certificate_date,sponsor,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=3";
-	$sql="SELECT level,squad,name,rank,certificate_date,sponsor,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=5";
+	$sql="SELECT level,squad,name,rank,certificate_date,sponsor,word,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=3";
 	$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 	$i=1;
 	while(!$res->EOF) {
@@ -549,6 +530,8 @@ function get_student_score_competetion($student_sn)
 		$competetion[$i]['name']=$res->fields['name'];		//競賽名稱
 		$competetion[$i]['rank']=$res->fields['rank'];		//名次
 		$competetion[$i]['certificate_date']=$res->fields['certificate_date'];		//證書日期
+		$competetion[$i]['sponsor']=$res->fields['sponsor'];		//主辦單位
+		$competetion[$i]['word']=$res->fields['word'];		//證書字號		
 		$competetion[$i]['weight']=$res->fields['weight'];		//權重
 		//依競賽性質及權重計分
 		if($res->fields['squad']==1) {		//個人賽
@@ -583,7 +566,7 @@ function count_student_score_competetion()
 	$score_competetion=array();
 	
 	//$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=3";
-	$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=5";
+	$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=4";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗，有可能是未安裝生涯輔導相關模組！<br>$sql_select",256);
 	while(!$recordSet->EOF)
 	{
@@ -645,11 +628,10 @@ function get_student_score_fitness($student_sn)
 			$medal="gold";
 		} elseif($s==4) {
 			$fitness[$res->fields['c_curr_seme']]['medal']="silver";
-			if($medal!="gold") $medal="silver";
+			if ($meadl!="gold") $medal = "silver";
 		} elseif($c==4) {
 			$fitness[$res->fields['c_curr_seme']]['medal']="copper";
-			if($medal!="gold") $medal="copper";
-			if($medal!="silver") $medal="copper";
+      if (($medal!="gold")&&($medal!="silver")) $medal = "copper";			
 		} else {
 			$fitness[$res->fields['c_curr_seme']]['medal']="no";
 		}
@@ -670,6 +652,7 @@ function count_student_score_fitness($sn_array)
 		$sql_select="SELECT prec1,prec2,prec3,prec4,c_curr_seme FROM fitness_data WHERE student_sn=$student_sn AND c_curr_seme IN ($fitness_semester) ORDER BY c_curr_seme";
 		$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗，有可能是未安裝體適能(fitness)模組！<br>$sql_select",256);
 		$passed=0;		//通過項目次數
+		$arr_passed=array(0,0,0,0);		//各項目通過25%紀錄		
 		$medal='';		//獎章
 		while(!$recordSet->EOF) {
 			$g=0;		//金
@@ -680,7 +663,8 @@ function count_student_score_fitness($sn_array)
 				if($my_pre>=85) $g++;
 				if($my_pre>=75) $s++;
 				if($my_pre>=50) $c++;
-				if($my_pre>=25) $passed++;  //通過門檻標準  程式現設為25%以上
+				if($my_pre>=25) $arr_passed[$i]=1;		//通過門檻標準  程式現設為25%以上
+				
 			}
 			//判定獎章
 			if($g==4) $medal="gold"; elseif(($s==4)&&($medal!="gold")) $medal="silver"; elseif(($c==4)&&($medal!="gold")&&($medal!="silver")) $medal="copper";
@@ -688,8 +672,11 @@ function count_student_score_fitness($sn_array)
 			$recordSet->MoveNext();
 		}
 		//判定級分
+		for($i=0;$i<=3;$i++) {
+			if($arr_passed[$i]==1) $passed++;
+		}
 		$score_fitness[$student_sn]=min($fitness_score_one_max,$fitness_score_one*$passed);
-		$score_fitness[$student_sn]+=$fitness_addon[$medal];	
+		$score_fitness[$student_sn]+=$fitness_addon[$medal];			
 	}
 	return $score_fitness;
 }
@@ -896,4 +883,23 @@ function AlertBox($msg) {
   	return $data;
 }
 
+function get_absent_group_select($absent_group_id)
+{
+  $absent_group_select="<select name='absent_group_id'>";	
+  if ($absent_group_id == 'absent_group_1'){
+ 	  $absent_group_select.="<option value='absent_group_1' selected>週一~五 1~7</option>";	
+	}
+	else{
+		$absent_group_select.="<option value='absent_group_1'>週一~五 1~7</option>";	
+	}
+  if ($absent_group_id == 'absent_group_2'){
+ 	  $absent_group_select.="<option value='absent_group_2' selected>週一~日 1~8</option>";	
+	}
+	else{
+		$absent_group_select.="<option value='absent_group_2'>週一~日 1~8</option>";	
+	}
+  $absent_group_select.="</select>";
+  
+  return $absent_group_select;
+}
 ?>

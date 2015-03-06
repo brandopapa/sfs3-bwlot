@@ -13,15 +13,19 @@ echo print_menu($MENU_P,$linkstr);
 
 $help_doc="<p class='MsoNormal' style='text-indent: -17.85pt; line-height: 20.0pt; margin-left: 35.7pt'>
 <span lang='EN-US' style='font-size: 10.0pt; font-family: Symbol'>·<span style='font:7.0pt &quot;Times New Roman&quot;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size: 14.0pt; font-family: 標楷體'>教育部十二年國民基本教育資訊網：<span lang='EN-US'><a style='color: blue; text-decoration: underline; text-underline: single' href='http://12basic.edu.tw/'><span style='color: #0000CC; text-decoration: none'>http://12basic.edu.tw/</span></a></span></span><span lang='EN-US' style='font-size: 14.0pt; font-family: 新細明體,serif'>
+</span></span><span style='font-size: 14.0pt; font-family: 標楷體'>教育部十二年國民基本教育資訊網：<span lang='EN-US'><a style='color: blue; text-decoration: underline; text-underline: single' target='_BLANK' href='http://12basic.edu.tw/'><span style='color: #0000CC; text-decoration: none'>http://12basic.edu.tw/</span></a></span></span><span lang='EN-US' style='font-size: 14.0pt; font-family: 新細明體,serif'>
 </span></p>
 <p class='MsoNormal' style='text-indent: -17.85pt; line-height: 20.0pt; margin-left: 35.7pt'>
 <span lang='EN-US' style='font-size: 10.0pt; font-family: Symbol'>·<span style='font:7.0pt &quot;Times New Roman&quot;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-size: 14.0pt; font-family: 標楷體'>雲林區高中職免試入學作業要點：<span lang='EN-US'><a style='color: blue; text-decoration: underline; text-underline: single' target='_BLANK' href='https://sites.google.com/site/tnbe12/no11/no11a'><span style='color: #0000CC; text-decoration: none'>https://sites.google.com/site/tnbe12/no11/no11a</span></a></span></span><span lang='EN-US' style='font-size: 14.0pt; font-family: 新細明體,serif'>
+</span></span><span style='font-size: 14.0pt; font-family: 標楷體'>雲林區高中職免試入學作業要點：<span lang='EN-US'><a style='color: blue; text-decoration: underline; text-underline: single' target='_BLANK' href='https://sites.google.com/site/tnbe12/no3'><span style='color: #0000CC; text-decoration: none'>https://sites.google.com/site/tnbe12/no3</span></a></span></span><span lang='EN-US' style='font-size: 14.0pt; font-family: 新細明體,serif'>
 </span></p>
 <p class='MsoNormal' style='text-indent: -17.85pt; line-height: 20.0pt; margin-left: 35.7pt'>
 <span lang='EN-US' style='font-size: 10.0pt; font-family: Symbol'>·<span style='font:7.0pt &quot;Times New Roman&quot;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span><span style='font-size: 14.0pt; font-family: 標楷體'>雲林區免試入學及其相關應用模組操作說明：<span lang='EN-US'><a style='color: blue; text-decoration: underline; text-underline: single' target='_BLANK' href='https://docs.google.com/document/d/13W2yDbyK92Md_1a8VZlh-gB9l-VP5MDMoVqQniwKOSE/edit?pli=1'><span style='color: #0000CC; text-decoration: none'>https://sites.google.com/site/tnbe12/no11/no11a</span></a></span></span><span lang='EN-US' style='font-size: 14.0pt; font-family: 新細明體,serif'>
+</span></p>
+<p class='MsoNormal' style='text-indent: -17.85pt; line-height: 20.0pt; margin-left: 35.7pt'>
+<span lang='EN-US' style='font-size: 10.0pt; font-family: Symbol'>·<span style='font:7.0pt &quot;Times New Roman&quot;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size: 14.0pt; font-family: 標楷體'>103學年度雲林區高級中等學校免試入學報名平臺：<span lang='EN-US'><a style='color: blue; text-decoration: underline; text-underline: single' target='_BLANK' href='http://210.71.254.151/NoExamImitate_Yl/News.aspx'><span style='color: #0000CC; text-decoration: none'>http://210.71.254.151/NoExamImitate_Yl/News.aspx</span></a></span></span><span lang='EN-US' style='font-size: 14.0pt; font-family: 新細明體,serif'>
 </span></p>";
 $help_doc .= "<div>
 				說明：<br>

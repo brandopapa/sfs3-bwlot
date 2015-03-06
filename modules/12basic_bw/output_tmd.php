@@ -66,6 +66,7 @@ if($_POST['act']){
 		$student_sn=$recordSet->fields['student_sn'];
 		$stud_id=$recordSet->fields['stud_id'];
 		$seme_class=$recordSet->fields['seme_class'];
+		$seme_class=substr($seme_class, -2);
 		$seme_class_name=$recordSet->fields['seme_class_name'];
 		$seme_num=sprintf('%02d',$recordSet->fields['seme_num']);
 
@@ -156,13 +157,13 @@ if($_POST['act']){
 				$x->items[]=array($area_code,$school_id,$no,$stud_id,$seme_class,$seme_num,$stud_name,$stud_person_id,$stud_sex,$birth_year,$birth_month,$birth_day,$school_id,$work_year,$graduate,$kind_id,$disability_id,'',$free_1,$free_2,$free_3,$authorize,$guardian_name,$guardian_phone,$guardian_hand_phone,$addr_zip,$stud_addr_2);
 				break;
 			case 'HTML':
-				$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>$authorize</td><td>$guardian_name</td><td>$guardian_phone</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$stud_addr_2</tr>";
+				$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>$authorize</td><td>$guardian_name</td><td>$guardian_phone</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$stud_addr_2</td></tr>";
 				break;
 			case 'EXCEL_SCORE':
 				$x->items[]=array($stud_name,$stud_person_id,$birth_year,$birth_month,$birth_day,$score_disadvantage,$score_remote,$school_nature,$score_reward,$score_absence,$score_fault,$score_balance,$score_competetion,$score_fitness);
 				break;
 			case 'HTML_SCORE':
-				$main.="<tr align='center'><td>$stud_name</td><td>$stud_person_id</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$score_disadvantage</td><td>$score_remote</td><td>$school_nature</td><td>$score_reward</td><td>$score_absence</td><td>$score_fault</td><td>$score_balance</td><td>$score_competetion</td><td>$score_fitness</td>";
+				$main.="<tr align='center'><td>$stud_name</td><td>$stud_person_id</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$score_disadvantage</td><td>$score_remote</td><td>$school_nature</td><td>$score_reward</td><td>$score_absence</td><td>$score_fault</td><td>$score_balance</td><td>$score_competetion</td><td>$score_fitness</td></tr>";
 				break;
 		}
 		$recordSet->MoveNext();

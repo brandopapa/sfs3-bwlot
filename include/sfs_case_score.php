@@ -1,5 +1,5 @@
 <?php
-// $Id: sfs_case_score.php 7851 2014-01-13 05:50:12Z infodaes $
+// $Id: sfs_case_score.php 8335 2015-03-03 08:08:08Z smallduh $
 
 //給student_sn和ss_id算出該生此科的學期總成績
 function seme_score($student_sn,$ss_id,$sel_year="",$sel_seme=""){
@@ -1861,7 +1861,9 @@ function count_nor($student_sn=array(),$seme=array(),$mode="") {
 			$all_id="'".implode("','",$stud_id)."'";
 			$data_arr=array();
 			if ($mode==0) {
-				$query="select * from stud_seme_abs where seme_year_seme in ($all_seme) and stud_id in ($all_id) and abs_kind in ('1','2','3') order by stud_id";
+				//$query="select * from stud_seme_abs where seme_year_seme in ($all_seme) and stud_id in ($all_id) and abs_kind in ('1','2','3') order by stud_id";
+				//2015.03.03 by smallduh ,依據教育部最新規定 病假不列入修畢業條件計算 array("事假"=>"1","病假"=>"2","曠課"=>"3","集會"=>"4","公假"=>"5","其他"=>"6","喪假"=>"6");
+				$query="select * from stud_seme_abs where seme_year_seme in ($all_seme) and stud_id in ($all_id) and abs_kind in ('1','3') order by stud_id";
 				$res=$CONN->Execute($query);
 				$dis=0;
 				$sday=intval($_POST['semeday']);

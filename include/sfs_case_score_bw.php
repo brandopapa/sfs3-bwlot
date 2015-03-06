@@ -30,7 +30,10 @@ function cal_fin_score_bw($student_sn=array(),$seme=array(),$succ="",$strs="",$p
 			//取得領域加權總分
 			$subj_score[$res->fields[student_sn]][$res->fields[link_ss]][$res->fields[seme_year_seme]]+=$res->fields[ss_score]*$res->fields[rate];
 			//領域總加權數
-			$rate[$res->fields[student_sn]][$res->fields[link_ss]][$res->fields[seme_year_seme]]+=$res->fields[rate];
+			$rate[$res->fields[student_sn]][$res->fields[link_ss]][$res->fields[seme_year_seme]]+=$res->fields[rate];			
+      
+      $my_subj_score[$res->fields[student_sn]][$res->fields[link_ss]][$res->fields[seme_year_seme]][$res->fields[ss_id]]=$res->fields[ss_score]*$res->fields[rate];			
+      
 			$res->MoveNext();
 		}
 
@@ -133,7 +136,6 @@ function cal_fin_score_bw($student_sn=array(),$seme=array(),$succ="",$strs="",$p
 						$fin_score[$sn][language][total][rate]+=$fin_score[$sn][language][$seme_year_seme][rate];
 
 
-
 						$fin_score[$sn][$seme_year_seme][total][score]+=$fin_score[$sn][language][$seme_year_seme][score]*$fin_score[$sn][language][$seme_year_seme][rate];
 						$r+=$fin_score[$sn][language][$seme_year_seme][rate];
 		//echo $sn."---".$r."---".$fin_score[$sn][language][$seme_year_seme][rate]."---".$fin_score[$sn][language][avg][score]."<BR>";
@@ -207,13 +209,12 @@ function cal_fin_score_non_area($student_sn=array(),$seme=array(),$succ="",$strs
         $RES=$CONN->Execute($SQL);
         $FIN_SCORE_RATE_MODE=INTVAL($RES->fields['pm_value']);
 
-	$sslk=array("基礎課程"=>"basic","經典背誦"=>"recite","書法硬筆字"=>"calligraphy","生命課程"=>"lifelesson","德討孝經"=>"filialpiety","理念學習"=>"concept","生活規範"=>"lifespec","健康生活"=>"healthylv","生活技能"=>"lifeskills","群己活動"=>"gpactive","服務學習"=>"svlr");
+	$sslk=array("基礎課程"=>"basic","經典背誦"=>"recite","書法硬筆字"=>"calligraphy","生命課程"=>"lifelesson","德討/孝經"=>"filialpiety","理念學習"=>"concept","生活規範"=>"lifespec","健康生活"=>"healthylv","生活技能"=>"lifeskills","群己活動"=>"gpactive","服務學習"=>"svlr");
 	if (count($student_sn)>0 && count($seme)>0) {
 		$all_sn="'".implode("','",$student_sn)."'";
 		$all_seme="'".implode("','",$seme)."'";
 		//取得科目成績
-		$query="select a.*,c.subject_name as link_ss,b.rate from stud_seme_score a left join score_ss b on a.ss_id=b.ss_id left join score_subject c on c.subject_id = b.subject_id where a.student_sn in ($all_sn) and a.seme_year_seme in ($all_seme) and b.ss_id in ( select ss_id from score_ss where scope_id in ( select subject_id from score_subject where subject_name in ( '基礎主軸', '生命主軸', '生活主軸') ) )";
-    echo $query;
+		$query="select a.*,c.subject_name as link_ss,b.rate from stud_seme_score a left join score_ss b on a.ss_id=b.ss_id left join score_subject c on c.subject_id = b.subject_id where a.student_sn in ($all_sn) and a.seme_year_seme in ($all_seme) and b.enable='1' and b.need_exam='1' and b.ss_id in ( select ss_id from score_ss where subject_id in ( select subject_id from score_subject where subject_name in ( '基礎課程', '經典背誦', '書法硬筆字','生命課程','德討/孝經','理念學習','生活規範','健康生活','生活技能','群己活動','服務學習') ) )";
 		$res=$CONN->Execute($query) or die("sql error, ".$query);
 		//取得各學期領域學科成績.加權數並加總
 		while(!$res->EOF) {
@@ -239,9 +240,9 @@ function cal_fin_score_non_area($student_sn=array(),$seme=array(),$succ="",$strs
 
 						//$FIN_SCORE_RATE_MODE=1為加權平均  0為算數平均   假設畢業總平均加權數來自原始科目加權數   須注意各學期加權是否合理  比如  前一學期以100 200  500 設定   但次一學期以節數 2  3 6  設定  如此會造成單一學期的該領域成績比重失衡問題
 						if($FIN_SCORE_RATE_MODE=='1') {
-							//領域畢業總成績
+							//非領域畢業總成績
 							$fin_score[$sn][$ls][total][score]+=$fin_score[$sn][$ls][$seme_year_seme][score]*$rate[$sn][$link_ss][$seme_year_seme];
-							//領域畢業總平均
+							//非領域畢業總平均
 							$fin_score[$sn][$ls][total][rate]+=$rate[$sn][$link_ss][$seme_year_seme];
 						} else {
 							$fin_score[$sn][$ls][total][score]+=$fin_score[$sn][$ls][$seme_year_seme][score];
@@ -266,9 +267,10 @@ function cal_fin_score_non_area($student_sn=array(),$seme=array(),$succ="",$strs
 								$fin_score[$sn][$seme_year_seme][total][rate]+=1;
 							}
 						//}
-					}
+						$fin_score[$sn][$seme_year_seme][avg][score]=number_format($fin_score[$sn][$seme_year_seme][total][score]/$fin_score[$sn][$seme_year_seme][total][rate],$precision);
+					}					
 				}
-				$fin_score[$sn][$ls][avg][score]=number_format($fin_score[$sn][$ls][total][score]/$fin_score[$sn][$ls][total][rate],$precision);
+				$fin_score[$sn][$ls][avg][score]=number_format($fin_score[$sn][$ls][total][score]/$fin_score[$sn][$ls][total][rate],$precision);				
 			}
 			if ($succ) {
 				if ($fin_score[$sn][succ] < $succ) $show_score[$sn]=$fin_score[$sn];
@@ -282,9 +284,7 @@ function cal_fin_score_non_area($student_sn=array(),$seme=array(),$succ="",$strs
 				$rank+=1;
 				$fin_score[$key]['total']['rank']=$rank;
 			}
-
 		}
-
 
 		if ($succ)
 			return $show_score;
