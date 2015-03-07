@@ -87,7 +87,7 @@ print_r($diversification_array);
 echo '</pre>';
 */
 	//取得stud_base中班級學生列表並據以與前sql對照後顯示
-	$stud_select="SELECT a.student_sn,a.seme_num,b.stud_name,b.stud_sex,b.stud_id,b.stud_study_year FROM stud_seme a inner join stud_base b on a.student_sn=b.student_sn WHERE a.seme_year_seme='$work_year_seme' AND a.seme_class='$stud_class' AND b.stud_study_cond in (0,5) ORDER BY a.seme_num";
+	$stud_select="SELECT a.student_sn,a.seme_num,b.stud_name,b.stud_sex,b.stud_id,b.stud_study_year FROM stud_seme a inner join stud_base b on a.student_sn=b.student_sn WHERE a.seme_year_seme='$work_year_seme' AND a.seme_class='$stud_class' AND b.stud_study_cond in (0,5,15) ORDER BY a.seme_num";
 	$recordSet=$CONN->Execute($stud_select) or user_error("讀取失敗！<br>$stud_select",256);
 	$studentdata="<tr align='center' bgcolor='#ff8888'><td width=80 rowspan=2>學號</td><td width=50 rowspan=2>座號</td><td width=120 rowspan=2>姓名</td><td colspan=3>均衡學習</td><td rowspan=2>競賽成績</td><td rowspan=2>體適能</td><td rowspan=2>級分統計</td><td rowspan=2>備註</td>";
 	$studentdata.="<tr align='center' bgcolor='#ff8888'><td width=50>健體</td><td width=50>藝文</td><td width=50>綜合</td>";

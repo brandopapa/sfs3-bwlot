@@ -176,7 +176,7 @@ if($stud_class)
 	//取得stud_base中班級學生列表並據以與前sql對照後顯示
 	$data.="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1' width='100%'>";
 	//$sql="SELECT a.student_sn,b.stud_id,b.stud_name,b.stud_sex,c.seme_num FROM 12basic_ylc AS a ,stud_base AS b, stud_seme AS c WHERE a.student_sn=b.student_sn AND a.student_sn=c.student_sn AND a.academic_year='{$academic_year}' AND c.seme_year_seme='{$work_year_seme}' AND c.seme_class='{$stud_class}' ORDER BY c.seme_num";
-	$stud_select="SELECT a.student_sn,a.seme_num,b.stud_name,b.stud_sex,b.stud_id,b.stud_study_year FROM stud_seme a inner join stud_base b on a.student_sn=b.student_sn WHERE a.seme_year_seme='$work_year_seme' AND a.seme_class='$stud_class' AND b.stud_study_cond in (0,5) ORDER BY a.seme_num";
+	$stud_select="SELECT a.student_sn,a.seme_num,b.stud_name,b.stud_sex,b.stud_id,b.stud_study_year FROM stud_seme a inner join stud_base b on a.student_sn=b.student_sn WHERE a.seme_year_seme='$work_year_seme' AND a.seme_class='$stud_class' AND b.stud_study_cond in (0,5,15) ORDER BY a.seme_num";
 	$recordSet=$CONN->Execute($stud_select) or user_error("讀取失敗！<br>$stud_select",256);
 	$col=7; //設定每一列顯示幾人
 	while(list($student_sn,$seme_num,$stud_name,$stud_sex,$stud_id,$stud_study_year)=$recordSet->FetchRow()) {
