@@ -15,7 +15,7 @@ if ($_POST[do_key]==$postBtn){
 	$new_school_str=($_POST[curr_grade_school])?"and g.new_school= '$_POST[curr_grade_school]'":"";
 	$str ="畢業學年度,年級,班級名稱,國籍,身分證字號,學生姓名,性別,出生年,出生月,出生日,入學年,畢業字號,監護人,聯絡電話,戶籍地址,升入國中,附記說明\r\n";
 	//先抓取畢業生資料表
-	$sql = "SELECT a.*,b.curr_class_num,b.stud_country,b.stud_person_id,b.stud_name,b.stud_sex,b.stud_birthday,b.stud_study_year,b.stud_addr_1,b.stud_tel_1,c.guardian_name FROM grad_stud a INNER JOIN stud_base b ON a.student_sn=b.student_sn INNER JOIN stud_domicile c ON a.student_sn=c.student_sn WHERE stud_grad_year='$curr_year' ORDER BY grad_num";
+	$sql = "SELECT a.*,b.curr_class_num,b.stud_country,b.stud_person_id,b.stud_name,b.stud_sex,year(b.stud_birthday) as birth_year,month(b.stud_birthday) as birth_month,day(b.stud_birthday) as birth_day,b.stud_study_year,b.stud_addr_1,b.stud_tel_1,b.stud_addr_2,c.guardian_name FROM grad_stud a INNER JOIN stud_base b ON a.student_sn=b.student_sn INNER JOIN stud_domicile c ON a.student_sn=c.student_sn WHERE stud_grad_year='$curr_year' ORDER BY grad_num";
 	$result =$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256) ;    	
 	
 	while(!$result->EOF){
@@ -28,15 +28,15 @@ if ($_POST[do_key]==$postBtn){
 		$str.="\"".$result->fields['stud_person_id']."\",";
 		$str.="\"".$result->fields['stud_name']."\",";
 		$str.="\"".($result->fields['stud_sex']=='1'?'男':'女')."\",";
-		$str.="\"".date('Y',$result->fields['stud_birthday'])."\",";
-		$str.="\"".date('m',$result->fields['stud_birthday'])."\",";
-		$str.="\"".date('d',$result->fields['stud_birthday'])."\",";
+		$str.="\"".$result->fields['birth_year']."\",";
+		$str.="\"".$result->fields['birth_month']."\",";
+		$str.="\"".$result->fields['birth_day']."\",";
 		$str.="\"".$result->fields['stud_study_year']."\",";
 		$str.="\"".$result->fields['grad_word'].'第'.$result->fields['grad_num']."號\",";
 		$str.="\"".$result->fields['guardian_name']."\",";
-		$str.="\"".$result->fields['stud_tel_1']."\",";
+		$str.="\"".($result->fields['stud_tel_2']?$result->fields['stud_tel_2']:$result->fields['stud_tel_1'])."\",";
 		$str.="\"".$result->fields['stud_addr_1']."\",";
-		$str.="\"".$result->fields['new_school']."\",";		
+		$str.="\"".$result->fields['new_school']."\",";	
 		$str.="\"\"\r\n";
 		
 
