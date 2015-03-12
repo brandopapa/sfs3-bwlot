@@ -67,14 +67,8 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$grade81=substr($f[2],1,-1);
 		$grade82=substr($f[3],1,-1);
 		$grade91=substr($f[4],1,-1);
-		if($absence_data[$grade71]=='') $absence_data[$grade71]=0;
-		if($absence_data[$grade72]=='') $absence_data[$grade72]=0;
-		if($absence_data[$grade81]=='') $absence_data[$grade81]=0;
-		if($absence_data[$grade82]=='') $absence_data[$grade82]=0;
-		if($absence_data[$grade91]=='') $absence_data[$grade91]=0;
-		
 		$data.="<div style='margin:20px 0;'>";
-		$data.="<span style='font-size:18pt;'>二、品德服務：</span><br><span style='font-size:15pt;'>1.獎勵紀錄：大功\4.5分、小功\1.5分、嘉獎0.5分，最高12分。<br>2.出缺席紀錄：每學期無曠課者得1分。<br>3.無記過紀錄：無警告以上紀錄者(含銷過後)5分、銷過後無累積至小過(含)以上者1分。</span>";
+		$data.="<span style='font-size:18pt;'>二、品德服務：</span><br><span style='font-size:15pt;'>1.獎勵紀錄：大功\3分、小功\1分、嘉獎0.3分，最高10分。<br>2.出缺席紀錄：無曠課者5分、曠課1至5節者3分、曠課6至10節者1分。<br>3.無記過紀錄：無警告以上紀錄者(含銷過後)5分、銷過後無累積至小過(含)以上者1分。</span>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th rowspan='2'>年級</th><th rowspan='2'>學期</th><th colspan='3'>獎勵紀錄</th><th>出缺席</th><th colspan='3'>懲處紀錄</th></tr>";
 		$data.="<tr align='center'><th>大功\</th><th>小功\</th><th>嘉獎</th><th>節數</th><th>警告</th><th>小過</th><th>大過</th></tr>";
@@ -86,12 +80,13 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$data.="<tr align='center'><td>8-2</td><td>{$grade82}</td><td>{$reward_data[$grade82][9]}</td><td>{$reward_data[$grade82][3]}</td><td>{$reward_data[$grade82][1]}</td><td>{$absence_data[$grade82]}</td><td>{$reward_data[$grade82][-1]}</td><td>{$reward_data[$grade82][-3]}</td><td>{$reward_data[$grade82][-9]}</td></tr>";
 		$data.="<tr align='center'><td>9-1</td><td>{$grade91}</td><td>{$reward_data[$grade91][9]}</td><td>{$reward_data[$grade91][3]}</td><td>{$reward_data[$grade91][1]}</td><td>{$absence_data[$grade91]}</td><td>{$reward_data[$grade91][-1]}</td><td>{$reward_data[$grade91][-3]}</td><td>{$reward_data[$grade91][-9]}</td></tr>";
 		$data.="<tr align='center'><th colspan='2'>改過銷過紀錄</th><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td>{$reward_data['fault_cancel'][-1]}</td><td>{$reward_data['fault_cancel'][-3]}</td><td>{$reward_data['fault_cancel'][-9]}</td></tr>";
+		//$data.="<tr align='center'><th colspan='2'>合計</th><td>".($reward_data[$grade71][9]+$reward_data[$grade72][9]+$reward_data[$grade81][9]+$reward_data[$grade82][9]+$reward_data[$grade91][9])."</td><td>".($reward_data[$grade71][3]+$reward_data[$grade72][3]+$reward_data[$grade81][3]+$reward_data[$grade82][3]+$reward_data[$grade91][3])."</td><td>".($reward_data[$grade71][1]+$reward_data[$grade72][1]+$reward_data[$grade81][1]+$reward_data[$grade82][1]+$reward_data[$grade91][1])."</td><td>".($absence_data[$grade81]+$absence_data[$grade82]+$absence_data[$grade91])."</td><td>".($reward_data[$grade81][-1]+$reward_data[$grade82][-1]+$reward_data[$grade91][-1]-$reward_data['fault_cancel'][-1])."</td><td>".($reward_data[$grade81][-3]+$reward_data[$grade82][-3]+$reward_data[$grade91][-3]-$reward_data['fault_cancel'][-3])."</td><td>".($reward_data[$grade81][-9]+$reward_data[$grade82][-9]+$reward_data[$grade91][-9]-$reward_data['fault_cancel'][-9])."</td></tr>";
   	$data.="<tr align='center'><th colspan='2'>合計</th><td>".($reward_data[$grade71][9]+$reward_data[$grade72][9]+$reward_data[$grade81][9]+$reward_data[$grade82][9]+$reward_data[$grade91][9])."</td><td>".($reward_data[$grade71][3]+$reward_data[$grade72][3]+$reward_data[$grade81][3]+$reward_data[$grade82][3]+$reward_data[$grade91][3])."</td><td>".($reward_data[$grade71][1]+$reward_data[$grade72][1]+$reward_data[$grade81][1]+$reward_data[$grade82][1]+$reward_data[$grade91][1])."</td><td>".($absence_data[$grade71]+$absence_data[$grade72]+$absence_data[$grade81]+$absence_data[$grade82]+$absence_data[$grade91])."</td><td>".($reward_data[$grade71][-1]+$reward_data[$grade72][-1]+$reward_data[$grade81][-1]+$reward_data[$grade82][-1]+$reward_data[$grade91][-1]-$reward_data['fault_cancel'][-1])."</td><td>".($reward_data[$grade71][-3]+$reward_data[$grade72][-3]+$reward_data[$grade81][-3]+$reward_data[$grade82][-3]+$reward_data[$grade91][-3]-$reward_data['fault_cancel'][-3])."</td><td>".($reward_data[$grade71][-9]+$reward_data[$grade72][-9]+$reward_data[$grade81][-9]+$reward_data[$grade82][-9]+$reward_data[$grade91][-9]-$reward_data['fault_cancel'][-9])."</td></tr>";
 		$data.="<tr align='center'><th colspan='2'>得分</th><td colspan='3'>{$final_data[$student_sn]['score_reward']}</td><td>{$final_data[$student_sn]['score_absence']}</td><td colspan='3'>{$final_data[$student_sn]['score_fault']}</td></tr>";
 		$data.="</table></div>";
 		//表三：多元學習
 		$data.="<div style='margin:20px 0;'>";
-		$data.="<span style='font-size:18pt;'>三、多元學習：</span><br><span style='font-size:15pt;'>1.圴衡學習：藝術與人文、健康與體育、綜合活動學期總平均成績及格者，每一領域給3分。<br>2.體適能：任一項成績達門檻標準者得3分，最高得6分。<br>3.競賽表現：最高7分。</span>";
+		$data.="<span style='font-size:18pt;'>三、多元學習：</span><br><span style='font-size:15pt;'>1.圴衡學習：藝術與人文、健康與體育、綜合活動學期總平均成績及格者，每一領域給3分。<br>2.體適能：金質章7分、銀質章6分、銅質章5分、2-4項達25%給4分、1項達25%給2分。<br>3.競賽表現：最高7分。(需檢附獎狀影印本或參賽證明)</span>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th rowspan='2'>年級</th><th rowspan='2'>學期</th><th colspan='3'>均衡學習</th><th colspan='5'>體適能</th></tr>";
 		$data.="<tr align='center'><th>藝術與人文</th><th>健康與體育</th><th>綜合活動</th><th>坐姿前彎<br>(cm)[%]</th><th>立定跳遠<br>(cm)[%]</th><th>仰臥起坐<br>(次)[%]</th><th>心肺適能<br>(秒)[%]</th><th>獎章</th></tr>";

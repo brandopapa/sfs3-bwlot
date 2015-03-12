@@ -885,6 +885,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "193504", "市立崇倫國中", "");
         addOption(document.myform.selectschool, "193512", "市立四育國中", "");
         addOption(document.myform.selectschool, "191308", "私立宜寧高中附設國中", "");
+        addOption(document.myform.selectschool, "191309", "私立明德女中附設國中", "");
     }
     if (document.myform.selectcity.value == '臺中市' && document.myform.selectdistrict.value == '北屯區') {
         addOption(document.myform.selectschool, "193505", "市立大德國中", "");

@@ -7,6 +7,10 @@ require_once "../../include/sfs_case_excel.php";
 
 //驗證是否登入
 sfs_check(); 
+
+$s=get_school_base();
+$school_name=$s['sch_cname']; //學校名稱
+
 //製作選單 ( $school_menu_p陣列設定於 module-cfg.php )
 $tool_bar=&make_menu($school_menu_p);
 
@@ -127,15 +131,20 @@ if ($_POST['act']=='output_resit_name') {
 	$scope=$_POST['opt1'];
 	
   $seme_year_seme=$SETUP['now_year_seme'];
-  
+  $year=substr($seme_year_seme,0,3);
+  $semester=substr($seme_year_seme,3,1);
  //抓取班級設定裡的班級名稱
 	$class_base= class_base($curr_year_seme);
 	$stud_sn=array();
+	
+	//抓取本學期所有課程設定(領域－分科)
+	$scope_main=get_year_seme_scope($year,$semester,$Cyear);
 
   //以本年度學生資料去抓 student_sn , 以免抓不到後來才轉入的學生 student_sn	
 	$Now_Cyear=$Cyear+$now_cy;
 	$query="select a.student_sn,a.stud_id,a.stud_name,a.curr_class_num,a.stud_addr_2,a.stud_tel_2,a.stud_tel_3,a.addr_zip,c.guardian_name from stud_base a,stud_seme b,stud_domicile c where a.student_sn=b.student_sn and b.student_sn=c.student_sn and b.seme_year_seme='$curr_year_seme' and a.curr_class_num like '".$Now_Cyear."%' and stud_study_cond in ('0','15') order by curr_class_num";
   $res=$CONN->Execute($query) or die ("讀取學生基本資料發生錯誤! SQL=".$query);	
+	
 	
 	//學生總人數
 	$student_all=$res->recordcount(); 
@@ -170,25 +179,61 @@ if ($_POST['act']=='output_resit_name') {
 
  //全部領域
  if ($scope=="ALL") {
-	$x=new sfs_xls();
-	$x->setUTF8();
-	$x->filename=substr($seme_year_seme,0,3)."學年度第".substr($seme_year_seme,-1).'學期應補考學生名單.xls';
-	$x->setBorderStyle(1);
-	$x->addSheet("應補考名單");
-	$x->items[0]=array('學號','目前班級','目前座號','姓名','語文','數學','自然','社會','健體','藝文','綜合','應補考領域','已補考領域','家長姓名','市內電話','行動電話','郵遞區號','通訊地址');
-
+  
+  //匯出
+  if ($_POST['opt2']=='') {
+   $x=new sfs_xls();
+	 $x->setUTF8();
+	 $x->filename=substr($seme_year_seme,0,3)."學年度第".substr($seme_year_seme,-1).'學期應補考學生名單.xls';
+	 $x->setBorderStyle(1);
+	 $x->addSheet("應補考名單");
+	 $x->items[0]=array('學號','目前班級','目前座號','姓名','語文','數學','自然','社會','健體','藝文','綜合','應補考領域','已補考領域','家長姓名','市內電話','行動電話','郵遞區號','通訊地址');
+  }
+  
 	foreach ($stud_sn as $student_sn) {
+
+ 	  //讀取學生所有分科成績
+ 	  $ss_score=array();
+  	  $sql_ss_score="select ss_id,ss_score from stud_seme_score where seme_year_seme='$seme_year_seme' and student_sn='$student_sn'";
+			$res_ss_score=$CONN->Execute($sql_ss_score) or die($sql_ss_score);
+			
+			while ($row_ss_score=$res_ss_score->fetchRow()) {
+			  $ss_id=$row_ss_score['ss_id'];
+			  $ss_score[$ss_id]=$row_ss_score['ss_score'];
+			}
+	   
     //檢查是否有任一科不及格
     $language=$math=$nature=$social=$health=$art=$complex="";
     $resit_scope=$resit_tested="";
 	  $put_it=0;
+	  $memo=array();
 	  foreach ($ss_link as $v=>$S) {
 	  	${$S}=$fin_score[$student_sn][$S][$seme_year_seme]['score'];
 	   if ($fin_score[$student_sn][$S][$seme_year_seme]['score']<60) {
 	     $put_it=1;
-	     $resit_scope.="【".$v."】";
+	     $resit_scope.="【".$v;
+	     
+	     //讀取分科
+	     $resit_subject="";
+	     if (count($scope_main[$S])>1) {
+	      foreach ($scope_main[$S] as $V) {
+    
+	     	  $now_subject_ss_id=$V['ss_id'];
+					if ($ss_score[$now_subject_ss_id]<60) {
+					  $resit_subject.=$V['subject'].",";  //分科中文名
+					}
+	      }  // end foreach
+	      $memo[$S]="<font size=1>".substr($resit_subject,0,strlen($resit_subject)-1)."</font>";
+				$resit_subject="(".substr($resit_subject,0,strlen($resit_subject)-1).")";
+	     } else {
+	       $memo[$S]="<font size=1>".$v."</font>";
+	     }
+	     $resit_scope.=$resit_subject."】";
+	   } else {
+	    $memo[$S]="及格";
 	   }
-	   	$sql="select a.score from resit_exam_score a,resit_paper_setup b where a.paper_sn=b.sn and a.student_sn='$student_sn' and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$S'";
+	   //已補考
+	   	$sql="select a.score from resit_exam_score a,resit_paper_setup b where a.paper_sn=b.sn and a.student_sn='$student_sn' and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$S' and a.complete='1'";
 			$res=$CONN->Execute($sql) or die($sql);
 			if ($res->recordcount()) {
 	      $resit_tested.="【".$v."】";
@@ -196,18 +241,121 @@ if ($_POST['act']=='output_resit_name') {
 	  }
 	  
 	  if ($put_it==1) {
-    	//是否有補考成績
-			//$sql="select a.* from resit_exam_score a,resit_paper_setup b where a.paper_sn=b.sn and a.student_sn='$student_sn' and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope'";
-			//$res=$CONN->Execute($sql) or die($sql);
-			//if ($res->recordcount()==0) {
-			//  $resit_score="";
-			//} else {
-		  //  $resit_score=$res->fields['score'];
-		  //}
-			$x->items[]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name'],$language,$math,$nature,$social,$health,$art,$complex,$resit_scope,$resit_tested,$student_data[$student_sn]['guardian_name'],$student_data[$student_sn]['stud_tel_2'],$student_data[$student_sn]['stud_tel_3'],$student_data[$student_sn]['addr_zip'],$student_data[$student_sn]['stud_addr_2']);
+			if ($_POST['opt2']=='') {
+			 $x->items[]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name'],$language,$math,$nature,$social,$health,$art,$complex,$resit_scope,$resit_tested,$student_data[$student_sn]['guardian_name'],$student_data[$student_sn]['stud_tel_2'],$student_data[$student_sn]['stud_tel_3'],$student_data[$student_sn]['addr_zip'],$student_data[$student_sn]['stud_addr_2']);
+  		} elseif ($_POST['opt2']=='print') {
+  			
+  			$main='  			
+  			<TABLE style="border-collapse: collapse; margin: auto; page-break-after: always;" cellSpacing="0" cellPadding="0" width="640" border="0">
+  <TBODY>
+  <TR>
+    <TD style="PADDING-RIGHT: 1pt; PADDING-LEFT: 1pt; PADDING-BOTTOM: 0cm; PADDING-TOP: 0cm;" width="640">
+      <TABLE style="BORDER-COLLAPSE: collapse; text-align: center; vertical-align: middle; font: 16pt 標楷體;" cellSpacing="0" cellPadding="2" width="640" border="0">
+        <TBODY>
+        <TR style="height: 20pt;">
+          <TD colSpan="9" style="font: 20pt 標楷體; font-weight: bold;">'.$school_name.'</TD>
+		</TR>
+        <TR style="height: 20pt;">
+          <TD colSpan="9" style="font: 20pt 標楷體; font-weight: bold;"><span style="font-family: Times New Roman; font-weight: bold;">'.curr_year().'學年度第<span style="font-family: Times New Roman; font-weight: bold;">'.curr_seme().'學期「補行評量」通知書</TD>
+		</TR>
+        <TR style="height: 20pt; font-size: 12pt;">
+          <TD colSpan="9" style="font: 14pt 標楷體; text-align: left;"><BR>
+		  壹、依據「國民小學及國民中學學生成績評量準則」及「臺中市國民中學學生<BR>
+		  　　成績評量補充規定」辦理。<BR><BR>
+		  貳、注意事項：<BR>
+		  　一、評量範圍以該學期教學內容為原則。<BR>
+		  　二、除有不可抗力因素外，<B>逾期未參加者，視同放棄補行評量之機會</B>。<BR>
+		  　三、本次補行評量對象為<U><B>學習領域學期成績未達丙等（六十分）</B></U>之學生。<BR>
+		  　四、依規定<B>補行評量及格者，該學習領域成績以六十分計</B>。<BR>
+		  　五、補行評量時程與地點，另行公告之。<BR><BR>
+		  參、檢視 貴子弟入學以來各學期七大學習領域成績平均， <B>貴子弟有部份領<BR>
+		  　　域未達及格標準</B>，特予此通知書通知家長及 貴子弟，敬請家長共同協助<BR>
+		  　　督導學生課業學習，以期 貴子弟補行評量順利，達到成績及格標準。<BR><BR>
+		  肆、本次補行評量之學期範圍為：'.substr($seme_year_seme,0,3).'學年度 第'.substr($seme_year_seme,-1).'學期。<BR><BR>
+		  伍、貴子弟該學期學習領域成績明細<BR><BR>
+		  <span style="font-size: 18pt;">
+		  '.$student_data[$student_sn]['class_name'].'</B></span><span style="font-size: 18pt;"><B> '.$student_data[$student_sn]['seme_num'].'</B></span> 號 <span style="font-size: 18pt;"><B>'.$student_data[$student_sn]['stud_name'].'</B></span>
+		   <BR>
+		  </TD>
+		</TR>
+        <TR style="height: 27pt;font-size: 12pt; background-color: #EEEEEE;">
+          <TD style="border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid; border-left: windowtext 1.5pt solid; text-align: center;" colspan="2">學習領域</TD>
+          <TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid;">語文</TD>
+          <TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid;">數學</TD>
+          <TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid;">自然與<br>生活科技</TD>
+          <TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid;">社會</TD>
+          <TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid;">健康與<br>體育</TD>
+          <TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 1.5pt solid;">藝術與<br>人文</TD>
+          <TD style="width:11%; border-right: windowtext 1.5pt solid; border-top: windowtext 1.5pt solid;" >綜合</TD>
+		</TR>
+    <TR style="height: 28pt;font-size: 16pt;">
+			<TD style="border-right: windowtext 0.75pt solid; border-left: windowtext 1.5pt solid; border-top: windowtext 0.75pt solid; font-size: 12pt;" colSpan="2">成績</TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['language'][$seme_year_seme]['score'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['math'][$seme_year_seme]['score'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['nature'][$seme_year_seme]['score'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['social'][$seme_year_seme]['score'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['health'][$seme_year_seme]['score'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['art'][$seme_year_seme]['score'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 1.5pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$fin_score[$student_sn]['complex'][$seme_year_seme]['score'].'</span></TD>
+		</TR>
+    <TR style="height: 28pt;font-size: 16pt;">
+			<TD style="border-right: windowtext 0.75pt solid; border-left: windowtext 1.5pt solid; border-top: windowtext 0.75pt solid; font-size: 12pt;" colSpan="2">備註</TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['language'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['math'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['nature'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['social'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['health'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 0.75pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['art'].'</span></TD>
+			<TD style="width:11%; border-right: windowtext 1.5pt solid; border-top: windowtext 0.75pt solid;"><span style="font-family: Times New Roman;">'.$memo['complex'].'</span></TD>
+		</TR>
+        <TR style="height: 0pt;">
+          <TD style="border-top: windowtext 1.5pt solid;" colSpan="9"></TD>
+		</TR>
+        <TR style="height: 20pt; font-size: 12pt;">
+          <TD colSpan="9" style="font: 14pt 標楷體; text-align: right;">教務處　　敬上<BR>中華民國 '.(date('Y')-1911).' 年 '.date('m').' 月 '.date('d').' 日</TD>
+		</TR>		
+		<TR>
+		  <TD colSpan="9" style="height: 20pt; text-align: left;"></TD>
+		</TR>
+    <TR style="height: 20pt;">
+       <TD colSpan="9" style="font: 18pt 標楷體; font-weight: bold; border-top: windowtext 0.75pt dashed;">
+		  <BR><span style="font-family: Times New Roman; font-weight: bold;">'.curr_year().'</span>學年度第<span style="font-family: Times New Roman; font-weight: bold;">'.curr_seme().'</span>學期「補行評量」通知書家長回執聯
+		  </TD>
+		</TR>
+        <TR style="height: 15pt; font-size: 12pt;">
+          <TD colSpan="9" style="font: 14pt 標楷體; text-align: left;"><BR>
+		  本人為 <span style="font-size: 18pt;"><B>'.$student_data[$student_sn]['class_name'].'</B></span><span style="font-size: 18pt;"><B> '.$student_data[$student_sn]['seme_num'].'</B></span> 號 <span style="font-size: 18pt;"><B>'.$student_data[$student_sn]['stud_name'].'</B></span> 學生家長，接獲教務處的「補行評量通知書」，已詳細閱讀並了解學生學習狀況。<BR>
+		  </TD>
+		</TR>
+        <TR style="height: 20pt; font-size: 12pt;">
+          <TD colSpan="9" style="font: 14pt 標楷體; text-align: right;"><BR>
+		  家長簽章：<U>　　　　　　　　　</U>（簽名時請簽全名）<BR>
+		  </TD>
+		</TR>
+        <TR>
+          <TD>&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+          <TD width="11%">&nbsp;</TD>
+		</TR>
+		</TBODY>
+	  </TABLE>
+	</TD>
+  </TR>
+  </TBODY>
+</TABLE>';
+  		 echo $main;
+  		
+  		}
   	} // end if
-  } // end foreach 
- 
+   } // end foreach 
+   
+  
  
  //單一領域
  } else {
@@ -222,7 +370,7 @@ if ($_POST['act']=='output_resit_name') {
 		if ($fin_score[$student_sn][$scope][$seme_year_seme]['score']<60) {
 			
     	//是否有補考成績
-			$sql="select a.* from resit_exam_score a,resit_paper_setup b where a.paper_sn=b.sn and a.student_sn='$student_sn' and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope'";
+			$sql="select a.* from resit_exam_score a,resit_paper_setup b where a.paper_sn=b.sn and a.student_sn='$student_sn' and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.complete='1'";
 			$res=$CONN->Execute($sql) or die($sql);
 			if ($res->recordcount()==0) {
 			  $resit_score="";
@@ -234,9 +382,11 @@ if ($_POST['act']=='output_resit_name') {
   } // end foreach
  } // end if $scope=='ALL'
  
+  if ($_POST['opt2']=='') {
 		$x->writeSheet();
 		$x->process();
-
+  }
+  
   exit();
 
 }  // end if 匯出不及格名單
@@ -331,6 +481,7 @@ echo $tool_bar;
  		<tr>
  				<td colspan="5" align="center">
  					<input type="button" value="匯出所有領域名單" id="output_resit_name_all">
+ 					<input type="button" value="列印通知單" id="print_resit_name_all">
  				</td>
  		</tr>
  	  </table>
@@ -360,7 +511,7 @@ foot();
 
 <Script>
 
-//匯出不及格名單
+//匯出不及格名單 , 依領域
 $(".output_resit_name").click(function(){
 	var scope=$(this).attr("id");
 	document.myform.act.value="output_resit_name";
@@ -374,6 +525,17 @@ $("#output_resit_name_all").click(function(){
 	var scope=$(this).attr("id");
 	document.myform.act.value="output_resit_name";
 	document.myform.opt1.value="ALL";
+	document.myform.submit();
+	document.myform.act.value="";
+})
+
+//列印通知單
+$("#print_resit_name_all").click(function(){
+	var scope=$(this).attr("id");
+	document.myform.act.value="output_resit_name";
+	document.myform.opt1.value="ALL";
+	document.myform.opt2.value="print";
+	document.myform.target="_blank";
 	document.myform.submit();
 	document.myform.act.value="";
 })

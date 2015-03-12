@@ -1,4 +1,52 @@
 <?php
+
+//取得各領域要計分的分科 , 傳回三維陣列  
+// $data[scope][sn][subject]=分科名稱
+// $data[scope][sn][link_ss]=領域
+// $data[scope][sn][rate]=加權
+function get_year_seme_scope($year,$semester,$class_year) {
+	 	
+	 	global $CONN;
+	 	
+	 	//定義七大領域
+	 	if($class_year>2){
+			$ss_link=array("語文-本國語文"=>"language","語文-鄉土語文"=>"language","語文-英語"=>"language","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
+			//$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
+		} else {
+			$ss_link=array("語文-本國語文"=>"language","語文-鄉土語文"=>"language","語文-英語"=>"language","數學"=>"math","健康與體育"=>"health","生活"=>"life","綜合活動"=>"complex");
+			//$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","health"=>"健康與體育","life"=>"生活","complex"=>"綜合活動");
+		} 	
+
+		//讀取各分科的名稱
+		$sql="select * from score_subject ";
+		$res=$CONN->Execute($sql);
+		while ($row=$res->fetchRow()) {
+ 			$subject[$row['subject_id']]=$row['subject_name'];
+		}
+	
+		//讀取學期課程設定
+ 		$query="select * from score_ss where year='$year' and semester='$semester' and class_year='$class_year' and enable='1' and need_exam='1' order by link_ss,sort";
+		$res=$CONN->Execute($query) or die("讀取課程設定發生錯誤, SQL=".$query);
+		while ($row=$res->fetchRow()) {
+			$link_ss=$row['link_ss'];   //領域中文名
+			$SCOPE=$ss_link[$link_ss];	//轉換成英文
+			
+			//$scope_id=$row['scope_id']; //領域id
+					
+			$subject_id=($row['subject_id']>0)?$row['subject_id']:$row['scope_id']; //分科名稱的id，若為0，以領域id顯示
+			
+			//開始記錄
+			$scope_main[$SCOPE][$subject_id]['subject']=$subject[$subject_id];
+			$scope_main[$SCOPE][$subject_id]['link_ss']=$SCOPE;
+			$scope_main[$SCOPE][$subject_id]['rate']=$row['rate'];
+			$scope_main[$SCOPE][$subject_id]['ss_id']=$row['ss_id'];
+		} // end while
+		
+		return $scope_main;
+		
+} // end function
+
+
 //計算學期各領域不及格人數, 並寫入補考資料庫中
 function count_scope_fail($Cyear,$seme_year_seme,$ss_link,$link_ss) {
 	global $CONN,$now_cy,$curr_year_seme;

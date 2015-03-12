@@ -1,5 +1,5 @@
 <?php
-//$Id: class_grade2.php 7296 2013-05-30 05:51:48Z infodaes $
+//$Id: class_grade2.php 8343 2015-03-10 00:53:23Z smallduh $
 //載入設定檔
 require("config.php") ;
 
@@ -133,7 +133,7 @@ if (!$s_year && !$sel_year)
 
 	</table>
 </td>
-    <td valign="top">勾選的學生就讀國中:<br>
+    <td valign="top">勾選的學生就讀學校：<br>
                 <select name="sel_school">
                     <option value=''>---</option>
                     <?php

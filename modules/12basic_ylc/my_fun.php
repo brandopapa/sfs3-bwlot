@@ -503,7 +503,7 @@ function get_student_score_competetion($student_sn)
 {
 	global $CONN,$work_year_seme,$race_score;
 	$competetion=array();
-	$sql="SELECT level,squad,name,rank,certificate_date,sponsor,word,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=3";
+	$sql="SELECT level,squad,name,rank,certificate_date,sponsor,word,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=4";
 	$res=$CONN->Execute($sql) or user_error("Åª¨ú¥¢±Ñ¡I<br>$sql",256);
 	$i=1;
 	while(!$res->EOF) {
