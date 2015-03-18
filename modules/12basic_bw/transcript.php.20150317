@@ -104,12 +104,12 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$data.="<tr align='center'><th colspan='2'>得分</th><td>{$final_data[$student_sn]['score_balance_art']}</td><td>{$final_data[$student_sn]['score_balance_health']}</td><td>{$final_data[$student_sn]['score_balance_complex']}</td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td>{$final_data[$student_sn]['score_fitness']}</td></tr>";
 		$data.="</table><br>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
-		$data.="<tr align='center'><th>NO</th><th>範圍</th><th>性質</th><th>競賽名稱</th><th>證書日期</th><th>主辦單位</th><th>證書字號</th><th>名次</th><th>得分</th><th>採記</th></tr>";
+		$data.="<tr align='center'><th>NO</th><th>範圍</th><th>性質</th><th>競賽名稱</th><th>證書日期</th><th>名次</th><th>得分</th><th>採記</th></tr>";
 		for($i=1; $i<=count($competetion); $i++) {
 			if($competetion[$i]['squad']==2 && $competetion[$i]['mark']=='V') $team="(".$squad_team[$competetion[$i]['weight']].")"; else $team="";
-			$data.="<tr align='center'><td>{$i}</td><td>{$level_array[$competetion[$i]['level']]}</td><td>{$squad_array[$competetion[$i]['squad']]}{$team}</td><td>{$competetion[$i]['name']}</td><td>{$competetion[$i]['certificate_date']}</td><td>{$competetion[$i]['sponsor']}</td><td>{$competetion[$i]['word']}</td><td>{$competetion[$i]['rank']}</td><td>{$competetion[$i]['score']}</td><td>{$competetion[$i]['mark']}</td></tr>";
-		}		
-		$data.="<tr align='center'><th colspan='8'>合計</th><td>{$final_data[$student_sn]['score_competetion']}</td><td bgcolor='#D6D3D6'></td></tr>";
+			$data.="<tr align='center'><td>{$i}</td><td>{$level_array[$competetion[$i]['level']]}</td><td>{$squad_array[$competetion[$i]['squad']]}{$team}</td><td>{$competetion[$i]['name']}</td><td>{$competetion[$i]['certificate_date']}</td><td>{$competetion[$i]['rank']}</td><td>{$competetion[$i]['score']}</td><td>{$competetion[$i]['mark']}</td></tr>";
+		}
+		$data.="<tr align='center'><th colspan='6'>合計</th><td>{$final_data[$student_sn]['score_competetion']}</td><td bgcolor='#D6D3D6'></td></tr>";
 		$data.="</table>";
 		$data.="</div>";
 		//四：簽名、核章

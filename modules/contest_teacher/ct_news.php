@@ -135,8 +135,15 @@ if ($_POST['act']=='del_file') {
 <table border="0" width="100%">
  <tr>
   <td>
+  	<?php
+  	//有管理權者才能看所有公告
+  	if ($MANAGER) {
+  		?>
+  		
   	<input type="button" value="所有消息" onclick="document.myform.act.value='all';document.myform.submit()">
+		
 <?php
+	  } // end if 
 if ($MANAGER and ($_POST['act']=='' or $_POST['act']=='all')) {
 
 //檢驗上傳目錄是否存在, 未存在自動建立
@@ -234,7 +241,7 @@ if ($_POST['act']=='' or $_POST['act']=='all') {
 <div style="width:100%" align="center">
  <table border="0" width="100%" cellpadding="5">
    	<?php
-   	 $query=($_POST['act']=='')?"select * from contest_news where sttime<='$Now' and endtime>'$Now' order by updatetime desc":"select * from contest_news order by updatetime desc";;
+   	 $query=($_POST['act']=='')?"select * from contest_news where sttime<='$Now' and endtime>'$Now' order by updatetime desc":"select * from contest_news order by updatetime desc";
    	 $result=mysql_query($query);
    	 if (mysql_num_rows($result)) {
    	  while ($NEW=mysql_fetch_array($result)) {

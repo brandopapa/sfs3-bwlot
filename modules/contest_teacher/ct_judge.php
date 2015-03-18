@@ -453,6 +453,7 @@ if ($_POST['act']=='score_search') {
         <td bgcolor="#FFCCCC" align="center" style="font-size:10pt" width="160">參考答案</td>
         <td bgcolor="#FFCCCC" align="center" style="font-size:10pt" width="160">學生作答</td>
         <td bgcolor="#FFCCCC" align="center" style="font-size:8pt" width="50">超連結</td>
+        <td bgcolor="#FFCCCC" align="center" style="font-size:8pt" width="80">作答時間</td>
         <td bgcolor="#FFCCCC" align="center" style="font-size:10pt" width="80">答對?</td>
       </tr>
       <?php
@@ -461,6 +462,7 @@ if ($_POST['act']=='score_search') {
       $result=mysql_query($query);
       while ($ITEM=mysql_fetch_array($result,1)) {
       	$I++;
+      	if ($ITEM['ans']=='' or $ITEM['lurl']=='') $ITEM['chk']=-1;
       	?>
       <tr>
       	<td style="font-size:10pt" width="30" align="center" ><?php echo $I;?></td>
@@ -468,6 +470,7 @@ if ($_POST['act']=='score_search') {
         <td style="font-size:10pt" width="180"><?php echo $ITEM['ans'];?></td>
         <td style="font-size:10pt" width="180"><?php echo $ITEM['myans'];?></td>
         <td style="font-size:10pt" width="50" align="center" ><?php if ($ITEM['lurl']!="") { ?><a href="<?php echo $ITEM['lurl'];?>" target="_blank">網頁</a><?php } ?></td>
+        <td style="font-size:9pt" width="80" align="center" ><?php echo $ITEM['anstime']; ?></td>
         <td style="font-size:10pt" width="80">
         	<input type="radio" name="chk[<?php echo $ITEM['ibsn'];?>]" value="1" <?php if ($ITEM['chk']==1) { echo "checked"; } ?>>對
         	<input type="radio" name="chk[<?php echo $ITEM['ibsn'];?>]" value="-1" <?php if ($ITEM['chk']==-1) { echo " checked"; } ?>>錯
@@ -548,7 +551,7 @@ if ($_POST['act']=='prize') {
     	 $P=$REC[2]; //未評分者不能指定得獎
     	 $WORKS['score']=$REC[3];
        $N=0;   //非作品類, 所以歸零, 避免競賽作品欄出現超連結 連結作品
-       
+       $WORKS['prize_memo']=$REC[4];  //最後作答時間
     	//作品類===============================================
     	}else{
     		/***
@@ -662,6 +665,7 @@ function table_title_1($tsn) {
 } // end function table_title_1
 
 function table_title_2() {
+	global $TEST;
 	?>
    	<tr bgcolor="#FFFFCC">
    		<td style="font-size:10pt;color:#800000" width="40" align="center">序號</td>
@@ -672,7 +676,17 @@ function table_title_2() {
    		<td style="font-size:10pt;color:#800000" width="130" align="center">評分成績</td>
    		<td style="font-size:10pt;color:#800000" width="60" align="center">得獎序號</td>
    		<td style="font-size:10pt;color:#800000" width="100" align="center">得獎名目</td>
-   	  <td style="font-size:10pt;color:#800000" width="200" align="center">評語</td>
+   		<?php 
+   		 if ($TEST['active']==1) {
+   		?>   		
+   	    <td style="font-size:8pt;color:#800000" width="200" align="center">最後作答時間</td>
+   	    <?php
+   	  } else {
+   	   ?>
+   	   <td style="font-size:10pt;color:#800000" width="200" align="center">評語</td>
+   	   <?php
+   	  }
+   	    ?>
    	</tr>	
 <?php
 } // end function table_title_2

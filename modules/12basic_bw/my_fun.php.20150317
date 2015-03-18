@@ -520,7 +520,8 @@ function get_student_score_competetion($student_sn)
 {
 	global $CONN,$work_year_seme,$race_score;
 	$competetion=array();
-	$sql="SELECT level,squad,name,rank,certificate_date,sponsor,word,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=4";
+	//$sql="SELECT level,squad,name,rank,certificate_date,sponsor,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=3";
+	$sql="SELECT level,squad,name,rank,certificate_date,sponsor,word,weight FROM career_race WHERE student_sn='{$student_sn}' AND level<=3";
 	$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 	$i=1;
 	while(!$res->EOF) {
@@ -530,7 +531,7 @@ function get_student_score_competetion($student_sn)
 		$competetion[$i]['rank']=$res->fields['rank'];		//名次
 		$competetion[$i]['certificate_date']=$res->fields['certificate_date'];		//證書日期
 		$competetion[$i]['sponsor']=$res->fields['sponsor'];		//主辦單位
-		$competetion[$i]['word']=$res->fields['word'];		//證書字號
+		$competetion[$i]['word']=$res->fields['word'];		//證書字號		
 		$competetion[$i]['weight']=$res->fields['weight'];		//權重
 		//依競賽性質及權重計分
 		if($res->fields['squad']==1) {		//個人賽
@@ -564,6 +565,7 @@ function count_student_score_competetion()
 	global $CONN,$work_year_seme,$race_score;
 	$score_competetion=array();
 	
+	//$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=3";
 	$sql_select="select student_sn,level,squad,rank,weight from career_race where level<=4";
 	$recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗，有可能是未安裝生涯輔導相關模組！<br>$sql_select",256);
 	while(!$recordSet->EOF)
@@ -596,7 +598,7 @@ function count_student_score_competetion()
 		$recordSet->MoveNext();
 	}
 	
-	return $score_competetion;
+	return $score_competetion;	
 }
 
 //學生歷年學期體適能紀錄

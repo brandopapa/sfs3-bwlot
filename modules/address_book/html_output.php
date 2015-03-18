@@ -27,6 +27,7 @@ if($_POST['act'])
 	$csv_header="";
 	foreach($columns_array as $key=>$value)
 	{
+		$value=trim($value);
 		if($value)
 		{
 			//如果是 非模組管理員檢查禁列項目 則將 欄位名稱加註*XXXX*
@@ -84,6 +85,9 @@ if($_POST['act'])
 								if(substr($field_name,-8)=='birthday') $field_data=(date('Y',strtotime($field_data))-1911).date('年m月d日',strtotime($field_data)); else
 								if($field_name=='guardian_relation') $field_data=$guardian_relation[$field_data];
 								
+								if($field_name=='obtain') $field_data=$obtain_arr[$field_data];
+								if($field_name=='safeguard') $field_data=$safeguard_arr[$field_data];
+								
 								//假使是地址 就不設定置中對齊
 								if(strpos($field_name,'add')) $align=''; else $align="align='center'";
 								$data.="<td $align>$field_data</td>";
@@ -109,6 +113,10 @@ if($_POST['act'])
 								if($field_name=='stud_sex') $field_data=$sex_arr[$field_data]; else
 								if(substr($field_name,-8)=='birthday') $field_data=(date('Y',strtotime($field_data))-1911).date('年m月d日',strtotime($field_data)); else
 								if($field_name=='guardian_relation') $field_data=$guardian_relation[$field_data];
+								
+								if($field_name=='obtain') $field_data=$obtain_arr[$field_data];
+								if($field_name=='safeguard') $field_data=$safeguard_arr[$field_data];
+								
 								$data.="$field_data,";
 							}
 							$data.="\r\n";

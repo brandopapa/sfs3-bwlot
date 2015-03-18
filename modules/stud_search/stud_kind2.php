@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_kind2.php 7712 2013-10-23 13:31:11Z smallduh $
+// $Id: stud_kind2.php 8347 2015-03-12 01:54:07Z smallduh $
 
 
 //載入設定檔
@@ -86,7 +86,7 @@ function show_data($view=1 ) {
     }
 
 
-    $sqlstr = "select b.* , d.*  from stud_base b ,stud_domicile d  where b.stud_study_cond = 0  and b.stud_kind <> '0' and (b.stud_kind <> ',0,') and b.stud_kind <> ''  and b.stud_id =d.stud_id order by  b.curr_class_num " ;
+    $sqlstr = "select b.* , d.*  from stud_base b ,stud_domicile d  where b.stud_study_cond = 0  and b.stud_kind <> '0' and (b.stud_kind <> ',0,') and b.stud_kind <> ''  and b.stud_id =d.stud_id and b.student_sn=d.student_sn order by  b.curr_class_num " ;
     $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
     //echo $sqlstr ;
     

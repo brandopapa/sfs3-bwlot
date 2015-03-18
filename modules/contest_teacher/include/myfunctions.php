@@ -420,6 +420,7 @@ function get_stud_record1_info($TEST,$student_sn) {
     	 $RR[1]="已作答 ".$N." 題";
     	 $RR[0]=($N==0)?0:1;   //1表有作答，0表無作答
     	 
+    	 
      	 //學生已評分記錄
  	 		 $chk_right=mysql_num_rows(mysql_query("select * from contest_record1 where tsn='".$TEST['tsn']."' and student_sn='".$student_sn."' and chk=1"));
      	 $chk_none=mysql_num_rows(mysql_query("select * from contest_record1 where tsn='".$TEST['tsn']."' and student_sn='".$student_sn."' and chk=0"));
@@ -433,6 +434,14 @@ function get_stud_record1_info($TEST,$student_sn) {
     	  $RR[3]="答對 ".$chk_right." 題，答錯 ".$chk_wrong." 題";	
     	 }
 
+       //取得最後作答時間
+       if ($RR['0']==1) {
+        $query="select anstime from contest_record1 where tsn='".$TEST['tsn']."' and student_sn='".$student_sn."' order by anstime desc limit 0,1";
+        list($t)=mysql_fetch_row(mysql_query($query));
+        $RR[4]=$t;
+       } else {
+         $RR[4]="無作答";
+       }
     	 return $RR;
 }
 

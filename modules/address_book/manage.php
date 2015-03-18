@@ -23,6 +23,7 @@ if($_POST['go']=='新增')
 	$_POST['new_format_name']=str_replace('drop','',$_POST['new_format_name']);
 	$_POST['new_format_name']=str_replace('DROP','',$_POST['new_format_name']);
 	
+	$_POST['columns']=trim($_POST['columns']);
 	$sql="INSERT INTO address_book SET nature='{$_POST['nature']}',room='{$_POST['room']}',title='{$_POST['new_format_name']}',fields='{$_POST['field_selected']}',header='{$_POST['header']}',footer='{$_POST['footer']}',columns='{$_POST['columns']}',creater='$my_name',update_time=now();";
 	$rs=$CONN->Execute($sql) or die("無法新增新的格式<br>$sql");
 }

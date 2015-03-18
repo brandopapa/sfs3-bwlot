@@ -16,6 +16,9 @@ $class_name_arr = class_base() ;
 $guardian_relation=guardian_relation();
 $is_live=is_live();
 $blood_arr=blood();
+$obtain_arr=stud_obtain_kind();
+$safeguard_arr=stud_safeguard_kind();
+
 
 //取得教師所處處室
 $my_sn=$_SESSION['session_tea_sn'];
@@ -46,7 +49,7 @@ foreach($nature_array as $key=>$value)
 //定義可用欄位
 switch ($nature) {
     case 'student':
-        $fields_array=array('a.class_id'=>'班級代號','a.class_name'=>'班級名稱','a.grade'=>'年級','a.curr_class_num'=>'座號','a.stud_id'=>'學號','a.stud_name'=>'學生姓名','a.stud_name_eng'=>'學生英文姓名','a.stud_sex'=>'性別','a.stud_person_id'=>'身份證字號','a.stud_blood_type'=>'血型','a.stud_country'=>'國籍','a.addr_zip'=>'郵遞區號','a.stud_addr_1'=>'戶籍地址','a.stud_addr_2'=>'聯絡地址','a.stud_birthday'=>'出生年月日','a.year'=>'出生年','a.month'=>'出生月','a.day'=>'出生日','a.stud_tel_1'=>'戶籍電話','a.stud_tel_2'=>'聯絡電話','a.stud_tel_3'=>'行動電話','a.stud_study_year'=>'入學年','a.stud_preschool_name'=>'入學前幼稚園','a.stud_mschool_name'=>'入學前國小','a.addr_move_in'=>'戶籍遷入日期','a.enroll_school'=>'入學學校','a.stud_birth_place'=>'出生地','b.fath_name'=>'父親姓名','b.fath_alive'=>'父親存歿\','b.fath_birthyear'=>'父_年次','b.fath_occupation'=>'父_職業','b.fath_unit'=>'父_服務單位','b.fath_work_name'=>'父_職稱','b.fath_hand_phone'=>'父_行動電話','b.moth_name'=>'母親姓名','b.moth_alive'=>'母親存歿\','b.moth_birthyear'=>'母_年次','b.moth_occupation'=>'母_職業','b.moth_unit'=>'母_服務單位','b.moth_work_name'=>'母_職稱','b.moth_hand_phone'=>'母_行動電話','b.guardian_name'=>'監護人姓名','b.guardian_relation'=>'與監護人關係','b.guardian_email'=>'監護人_電子郵件','b.guardian_unit'=>'監護人_服務單位','b.guardian_work_name'=>'監護人_職稱','b.guardian_hand_phone'=>'監護人_行動電話','b.grandfath_name'=>'祖父姓名','b.grandfath_alive'=>'祖父存歿\','b.grandmoth_name'=>'祖母姓名','b.grandmoth_alive'=>'祖母存歿\');
+        $fields_array=array('a.class_id'=>'班級代號','a.class_name'=>'班級名稱','a.grade'=>'年級','a.curr_class_num'=>'座號','a.stud_id'=>'學號','a.stud_name'=>'學生姓名','a.stud_name_eng'=>'學生英文姓名','a.stud_sex'=>'性別','a.stud_person_id'=>'身份證字號','a.stud_blood_type'=>'血型','a.stud_country'=>'國籍','a.addr_zip'=>'郵遞區號','a.stud_addr_1'=>'戶籍地址','a.stud_addr_2'=>'聯絡地址','a.stud_birthday'=>'出生年月日','a.year'=>'出生年','a.month'=>'出生月','a.day'=>'出生日','a.stud_tel_1'=>'戶籍電話','a.stud_tel_2'=>'聯絡電話','a.stud_tel_3'=>'行動電話','a.stud_study_year'=>'入學年','a.stud_preschool_name'=>'入學前幼稚園','a.stud_mschool_name'=>'入學前國小','a.addr_move_in'=>'戶籍遷入日期','a.enroll_school'=>'入學學校','a.stud_birth_place'=>'出生地','a.obtain'=>'學籍取得原因','a.safeguard'=>'個案保護類別','b.fath_name'=>'父親姓名','b.fath_alive'=>'父親存歿\','b.fath_birthyear'=>'父_年次','b.fath_occupation'=>'父_職業','b.fath_unit'=>'父_服務單位','b.fath_work_name'=>'父_職稱','b.fath_hand_phone'=>'父_行動電話','b.moth_name'=>'母親姓名','b.moth_alive'=>'母親存歿\','b.moth_birthyear'=>'母_年次','b.moth_occupation'=>'母_職業','b.moth_unit'=>'母_服務單位','b.moth_work_name'=>'母_職稱','b.moth_hand_phone'=>'母_行動電話','b.guardian_name'=>'監護人姓名','b.guardian_relation'=>'與監護人關係','b.guardian_email'=>'監護人_電子郵件','b.guardian_unit'=>'監護人_服務單位','b.guardian_work_name'=>'監護人_職稱','b.guardian_hand_phone'=>'監護人_行動電話','b.grandfath_name'=>'祖父姓名','b.grandfath_alive'=>'祖父存歿\','b.grandmoth_name'=>'祖母姓名','b.grandmoth_alive'=>'祖母存歿\');
         break;
     case 'teacher':
         $fields_array=array('a.teacher_sn'=>'系統編號','a.teach_id'=>'代號','a.teach_person_id'=>'身份證字號','a.name'=>'姓名','a.sex'=>'性別','a.birthday'=>'出生年月日','a.birth_place'=>'出生地','a.address'=>'地址','a.home_phone'=>'家庭電話','a.cell_phone'=>'行動電話','b.email'=>'電子郵件');
