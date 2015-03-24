@@ -31,6 +31,42 @@ if (!is_file($up_file_name)){
 }
 */
 
+$up_file_name =$upgrade_str."2015-03-10.txt";
+if (!is_file($up_file_name)){
+	$query = array();
+	//在 resit_paper_setup 裡增加一個出題模式欄位 0表亂數出題 , 1表依不及格分科
+	$query[0] = "ALTER TABLE `resit_paper_setup` ADD `item_mode` tinyint(1) not NULL" ; 
+	//在 resit_exam_items 裡增加一個欄位記錄試題屬於那一個分科 
+	$query[1] = "ALTER TABLE `resit_exam_items` ADD `subject` varchar(30) not NULL" ; 
+	//在 resit_exam_score 裡增加一個欄位記錄學生不及格分科 
+	$query[2] = "ALTER TABLE `resit_exam_score` ADD `subjects` varchar(50) not NULL" ; 
+
+	//新增資料表 resit_scope_subject 每學期某年級某領域包含的分科題數
+	$query[3] = "
+	CREATE TABLE IF NOT EXISTS `resit_scope_subject` (
+   `sn` int(10) unsigned NOT NULL auto_increment,
+   `seme_year_seme` varchar(4) NOT NULL,
+   `cyear` tinyint(1) not null,
+   `scope` varchar(30) not null,
+   `subject_id` int(3) not null,
+	 `subject` varchar(50) not null,
+	 `items` int(3) not null,
+   PRIMARY KEY  (`sn`)
+	) ENGINE=MyISAM;	 
+	";
+	
+	$temp_str = '';
+	for($i=0;$i<count($query);$i++) {	
+		if ($CONN->Execute($query[$i]))
+			$temp_str .= "$query[$i]\n 更新成功 ! \n";
+		else
+			$temp_str .= "$query[$i]\n 更新失敗 ! \n";
+	}
+	$temp_query = "增加各領域依分科命題成卷功能 -- by smallduh (2015-03-10)\n\n$temp_str";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fd);
+}
 
 
 ?>

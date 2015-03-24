@@ -63,11 +63,13 @@ $answers=unserialize($row['answers']);
  	  	<table border='0'>
  	  	
 		<?php
+		$i=0;
     foreach ($items as $k=>$v) {
+    	$i++;
 				?>
 				<tr><td><hr></td></tr>
 				<tr>
-					<td><?php echo show_item($v,2,$answers[$k]);?></td>
+					<td><?php echo show_item($v,2,$answers[$k],$i);?></td>
 				</tr>
 				<?php 			  
     

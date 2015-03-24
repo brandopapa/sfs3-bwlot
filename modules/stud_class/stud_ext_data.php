@@ -146,7 +146,7 @@ function setfocus(element) {
      
     <td width="100%" valign=top bgcolor="#CCCCCC">
     
-<?
+<?php
 
 
         //要修改的項目，或最後一項

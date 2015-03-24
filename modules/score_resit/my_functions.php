@@ -1,9 +1,12 @@
 <?php
 
 //取得各領域要計分的分科 , 傳回三維陣列  
-// $data[scope][sn][subject]=分科名稱
-// $data[scope][sn][link_ss]=領域
-// $data[scope][sn][rate]=加權
+// $data[scope][subject_id][subject]=分科名稱
+// $data[scope][subject_id][link_ss]=領域
+// $data[scope][subject_id][rate]=加權
+// $data[scope][subject_id][ss_id]=課程代碼
+// $data[scope][subject_id][items]=已命題數
+
 function get_year_seme_scope($year,$semester,$class_year) {
 	 	
 	 	global $CONN;
@@ -25,7 +28,7 @@ function get_year_seme_scope($year,$semester,$class_year) {
 		}
 	
 		//讀取學期課程設定
- 		$query="select * from score_ss where year='$year' and semester='$semester' and class_year='$class_year' and enable='1' and need_exam='1' order by link_ss,sort";
+ 		$query="select * from score_ss where year='$year' and semester='$semester' and class_year='$class_year' and enable='1' and need_exam='1' order by link_ss,sort,sub_sort";
 		$res=$CONN->Execute($query) or die("讀取課程設定發生錯誤, SQL=".$query);
 		while ($row=$res->fetchRow()) {
 			$link_ss=$row['link_ss'];   //領域中文名
@@ -40,11 +43,42 @@ function get_year_seme_scope($year,$semester,$class_year) {
 			$scope_main[$SCOPE][$subject_id]['link_ss']=$SCOPE;
 			$scope_main[$SCOPE][$subject_id]['rate']=$row['rate'];
 			$scope_main[$SCOPE][$subject_id]['ss_id']=$row['ss_id'];
+			
 		} // end while
+		
+			//讀取分科題數
+			$seme_year_seme=$year.$semester;
+			foreach ($ss_link as $scope) {
+				$paper_setup=get_paper_sn($seme_year_seme,$class_year,$scope);
+				if ($paper_setup['sn']>0) {
+				foreach ($scope_main[$scope] as $k=>$v) {
+			  	$sql="select count(*) as num from resit_exam_items where paper_sn='".$paper_setup['sn']."' and subject='".$v['subject']."'";
+			    $res=$CONN->Execute($sql) or user_error("讀取錯誤! $sql",256);
+			    $num=$res->fields['num'];
+			    $scope_main[$scope][$k]['items']=$num;
+				} // end foreach
+			  } // end if
+			} // end foreach
 		
 		return $scope_main;
 		
 } // end function
+
+//讀取某學期,年級,領域各分科題數設定
+function get_scope_subject_items($seme_year_seme,$Cyear,$scope) {
+	global $CONN;
+	$subject=array();
+	$sql="select * from resit_scope_subject where seme_year_seme='$seme_year_seme' and cyear='$Cyear' and scope='$scope'";
+	$res=$CONN->Execute($sql) or die ('讀取分科題數設定錯誤 SQL='.$sql);
+	while ($row=$res->fetchrow()) {
+		$id=$row['subject_id'];
+		$items=$row['items'];
+	  $subject[$id]=$items;
+	}
+	
+	return $subject;
+	
+}
 
 
 //計算學期各領域不及格人數, 並寫入補考資料庫中
@@ -91,11 +125,13 @@ function count_scope_fail($Cyear,$seme_year_seme,$ss_link,$link_ss) {
 	$sel_seme=substr($seme_year_seme,-1);
 	//$fin_score=cal_fin_score($stud_sn,$semes,"",array($sel_year,$sel_seme,$Cyear),$percision);
 	$fin_score=cal_fin_score($stud_sn,$semes,"",$strs,1);
+  //讀取課程設定
+  $scope_subject=get_year_seme_scope($sel_year,$sel_seme,$Cyear);
 
   //統計各領域不級格人數 , 依領域跑迴圈  
   foreach ($link_ss as $scope=>$v) {
-  	//讀取本領域試卷設定
-  	$paper_setup=get_paper_sn($seme_year_seme,$Cyear,$scope); 	
+  	//讀取本領域試卷設定，沒有的話自動建立，以便名單能對應試卷
+  	$paper_setup=get_paper_sn($seme_year_seme,$Cyear,$scope,1); 	
   //依學生 student_sn 跑迴圈，依次檢查領域成績
    foreach ($stud_sn as $student_sn) {
     //不及格, 人數加1
@@ -105,7 +141,18 @@ function count_scope_fail($Cyear,$seme_year_seme,$ss_link,$link_ss) {
 			$res=$CONN->Execute($sql) or die($sql);
 			 //補考資料庫中沒此人
 			if ($res->recordcount()==0) {
-				$sql="insert into resit_exam_score (student_sn,paper_sn,org_score) values ('$student_sn','".$paper_setup['sn']."','".$fin_score[$student_sn][$scope][$seme_year_seme]['score']."')";
+				//取得此生不及格的分科
+				$subjects="";
+				foreach ($scope_subject[$scope] as $subject_id=>$v) {
+				  //讀出成績
+				  $ss_id=$v['ss_id'];
+				  $ss_score_sql="select ss_score from stud_seme_score where seme_year_seme='$seme_year_seme' and student_sn='$student_sn' and ss_id='$ss_id'";
+					$ss_score_res=$CONN->Execute($ss_score_sql) or die('讀取學期成績發生錯誤!');
+          $ss_score=$ss_score_res->fields['ss_score'];
+          if ($ss_score<60) $subjects.=$v['subject'].",";
+				} // end foreach
+				if ($subjects!="") $subjects=substr($subjects,0,strlen($subjects)-1);
+				$sql="insert into resit_exam_score (student_sn,paper_sn,org_score,subjects) values ('$student_sn','".$paper_setup['sn']."','".$fin_score[$student_sn][$scope][$seme_year_seme]['score']."','$subjects')";
 				$res=$CONN->Execute($sql) or die($sql);
 			} else {
 			 //有此人，更正原始分數
@@ -121,16 +168,26 @@ function count_scope_fail($Cyear,$seme_year_seme,$ss_link,$link_ss) {
 }
 
 //取得試卷的設定值
-function get_paper_sn($seme_year_seme,$class_year,$scope) {
+function get_paper_sn($seme_year_seme,$class_year,$scope,$auto_insert=0) {
 	global $CONN;
  	$sql="select * from resit_paper_setup where seme_year_seme='$seme_year_seme' and class_year='$class_year' and scope='$scope'";	
 	$res=$CONN->Execute($sql) or die($sql);
-	if ($res->RecordCount()==0) {
-		$sql="insert into resit_paper_setup (seme_year_seme,class_year,scope) values ('$seme_year_seme','$class_year','$scope')";
+	
+	if ($res->RecordCount()==0 and $auto_insert==1) {
+	 //預設值
+	 $start_time=date('Y-m-d H:i:00');
+   $end_time=date('Y-m-d H:i:00');
+   $timer_mode=0;
+   $timer=45;
+   $relay_answer=0;
+   $items=0;
+   $double_papers=0;
+		$sql="insert into resit_paper_setup (seme_year_seme,class_year,scope,start_time,end_time,timer_mode,timer,relay_answer,items,double_papers) values ('$seme_year_seme','$class_year','$scope','$start_time','$end_time','$timer_mode','$timer','$relay_answer','$items','$double_papers')";
 	  $res=$CONN->Execute($sql) or die ('Error! Query='.$sql);
  		$sql="select * from resit_paper_setup where seme_year_seme='$seme_year_seme' and class_year='$class_year' and scope='$scope'";	
 		$res=$CONN->Execute($sql) or die($sql);
 	}
+	
 	$row=$res->fetchRow();
   return $row;
 }
@@ -138,6 +195,13 @@ function get_paper_sn($seme_year_seme,$class_year,$scope) {
 
 //試題表單 $item=array()
 function form_item($item) {
+ global $scope_subject,$item_scope;
+ //echo "<pre>";
+ //echo $item_scope;
+ //print_r($scope_subject);
+ //echo "</pre>";
+ //exit();
+ 
  ?>
  <table border="1" cellpadding="2" cellspacing="0" bordercolor="#800000" bgcolor="#FFFFFF" style="border-collapse: collapse">
    <tr>
@@ -224,6 +288,21 @@ function form_item($item) {
 				<input type="radio" name="answer" value="D"<?php if ($item['answer']=="D") echo " checked";?>>(D)
       </td>
     </tr>
+    <tr id="subject">
+      <td width="70" bgcolor="#A2FFA2"><font color="#0000FF">分科別</font></td>
+      <td bgcolor="#CCFFCC">
+				<select size="1" name="subject">
+				  <option value="">無設定</option>
+				  <?php
+				   foreach ($scope_subject[$item_scope] as $scope=>$v) {
+				   ?>
+				   	<option value="<?php echo $v['subject'];?>"<?php if ($item['subject']==$v['subject']) echo " selected";?>><?php echo $v['subject'];?></option>
+				   <?php
+				   }
+				  ?>
+				</select>
+      </td>
+    </tr>
   </table>
  <?php
 } // end function
@@ -241,12 +320,13 @@ function get_item($sn) {
 //$update_answer 0 呈現答案
 //							 1 調整試題，以下拉式選單呈現
 //							 2 呈現 $stud_ans的答案，並比對，出現○或╳
-function show_item($sn,$update_answer=0,$stud_ans="") {
+//							 3 調整分科
+function show_item($sn,$update_answer=0,$stud_ans="",$site_num="") {
 	
 //	echo "顯示試題".$sn;
 //	exit();
 	
- global $CONN;
+ global $CONN,$item_scope,$scope_subject;
  $sql="select * from resit_exam_items where sn='$sn'";
  $res=$CONN->Execute($sql) or die($sql);
  $row=$res->fetchRow();
@@ -281,11 +361,27 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
     }
   } // end foreach
   
+  //顯示本題分科, 或調整分科 
+  if ($update_answer==3) { 
+   $subject="
+    <select size='1' name='ch_subject[".$row['sn']."]'>
+      <option value=''>無設定</option>";
+    foreach ($scope_subject[$item_scope] as $v) {
+      $subject.="<option value='".$v['subject']."'".(($v['subject']==$row['subject'])?" selected":"").">".$v['subject']."</option>";
+    }   
+    $subject.="</select>";
+    
+    $update_answer=0;
+  } else {
+   $subject=$row['subject'];
+  } // end if else update_answer==3
+  
+  
   //題幹版型
   if ($xx_q > 400) {
     $HTML_q="
      <tr>
-       <td>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
+       <td>".$row['question']."《<font size='2'>".$row['sn'].", ".$subject.", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
      </tr>
      <tr>
        <td><img src=\"img_show.php?sn=".$row['fig_q']."\"></td>
@@ -293,12 +389,12 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
   } elseif ($xx_q==0) {
     $HTML_q="
      <tr>
-       <td>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
+       <td>".$row['question']."《<font size='2'>".$row['sn'].", ".$subject.", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
      </tr>";
   } else {
      $HTML_q="
      <tr>
-       <td valign='top'>".$row['question']."《<font size='2'>".$row['sn'].", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
+       <td valign='top'>".$row['question']."《<font size='2'>".$row['sn'].", ".$subject.", </font><img src='./images/edit.png' class='edit_paper_update' id='item-".$row['sn']."'> $del_url 》</td>
        <td valign='top' align='right'><img src=\"img_show.php?sn=".$row['fig_q']."\"></td>
      </tr>";   
   } // end if 題幹
@@ -354,11 +450,12 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
   //整合題幹和選目
   
   switch($update_answer){
+  	//正常檢視
   	case 0:
   $main="
   <table border='0' width='800' cellspacing='0' cellpadding='0'>
    <tr>
-   <td rowspan='2' valign='top' width='30' align='center'>( <font color=red>".$row['answer']."</font> ).</td>
+   <td rowspan='2' valign='top' width='60' align='center'>( <font color=red>".$row['answer']."</font> )".$site_num.".</td>
    <td>
     <table border='0' width='100%'>    
     $HTML_q
@@ -375,7 +472,7 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
   </table> 
   ";
   	break;
-  	
+  	//調整解答
   	case 1:
   	$ans_select="
   	 <select size='1' name='answer[".$row['sn']."]'>
@@ -389,7 +486,7 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
   $main="
   <table border='0' width='800' cellspacing='0' cellpadding='0'>
    <tr>
-   <td rowspan='2' valign='top' width='30' align='center'>$ans_select</td>
+   <td rowspan='2' valign='top' width='60' align='center'>$ans_select".$site_num.".</td>
    <td>
     <table border='0' width='100%'>    
     $HTML_q
@@ -406,17 +503,18 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
   </table> 
   ";  
   	break;
+  	
 	//比對學生作答  	
   	case 2:
 			if ($row['answer']==$stud_ans) { 
-			 $check_ans="<font color=blue>○</font>";
+			 $check_ans="<img src='./images/right.jpg'>";
 			} else {
-			 $check_ans="<font color=red>╳</font>";
+			 $check_ans="<img src='./images/wrong.png'>";
 			}
   $main="
   <table border='0' width='800' cellspacing='0' cellpadding='0'>
    <tr>
-   <td valign='top' width='30' align='center'>( <font color=green>".$stud_ans."</font> ).</td>
+   <td valign='top' width='60' align='center'>( <font color=green>".$stud_ans."</font> )".$site_num.".</td>
    <td>
     <table border='0' width='100%'>    
     $HTML_q
@@ -424,7 +522,7 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
    </td>
    </tr>
    <tr>
-    <td valign='top' width='30' align='center'>$check_ans</td>
+    <td valign='top' width='60' align='center'>$check_ans</td>
     <td>
      <table border='0' width='100%'>
      $HTML_choice
@@ -440,11 +538,7 @@ function show_item($sn,$update_answer=0,$stud_ans="") {
   
   } 
   
-  if ($update_answer=='') {
-  } else {
-  
-  }
-  
+ 
   return $main; 
    
 }
@@ -479,7 +573,7 @@ function make_item_style($num,$row=array()) {
   if ($xx_q > 400) {
     $HTML_q="
      <tr>
-       <td>".$row['question']."</td>
+       <td>".$row['question']." <font size=2>【".$row['subject']."】</font></td>
      </tr>
      <tr>
        <td><img src=\"img_show.php?sn=".$row['fig_q']."\"></td>
@@ -487,12 +581,12 @@ function make_item_style($num,$row=array()) {
   } elseif ($xx_q==0) {
     $HTML_q="
      <tr>
-       <td>".$row['question']."</td>
+       <td>".$row['question']." <font size=2>【".$row['subject']."】</font></td>
      </tr>";
   } else {
      $HTML_q="
      <tr>
-       <td valign='top'>".$row['question']."</td>
+       <td valign='top'>".$row['question']." <font size=2>【".$row['subject']."】</font></td>
        <td valign='top' align='right'><img src=\"img_show.php?sn=".$row['fig_q']."\"></td>
      </tr>";   
   } // end if 題幹
@@ -571,18 +665,18 @@ function make_item_style($num,$row=array()) {
   
   //整合題幹和選目
   $main="
-  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+  <table border='0'  width='100%' cellspacing='0' cellpadding='0'>
    <tr id=\"tr".$num."\" class=\"bg_0\" onMouseOver=\"OverLine('tr".$num."',$num)\" onMouseOut=\"OutLine('tr".$num."',$num)\" onClick=\"ClickLine('tr".$num."',$num)\">
    <td rowspan='2' valign='top' width='30' align='center'>$num.</td>
    <td>
-    <table border='0' width='100%'>    
+    <table border='0' width='100%' class='test_item' style='font-size:12pt'>    
     $HTML_q
     </table>
    </td>
    </tr>
    <tr>
     <td>
-     <table border='0' width='100%'>
+     <table border='0' width='100%' class='test_item' style='font-size:12pt'>
      $HTML_choice
      </table>
     </td>
@@ -692,5 +786,6 @@ function getResizePercent($source_w, $source_h, $inside_w, $inside_h)
 
     return ($w_percent > $h_percent) ? $h_percent : $w_percent;
 }
+ 
 
 ?>

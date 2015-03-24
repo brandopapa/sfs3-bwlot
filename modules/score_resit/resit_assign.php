@@ -21,6 +21,10 @@ $sel_seme = substr($SETUP['now_year_seme'],-1);
 //已選定的年級
 $Cyear=$_POST['Cyear'];
 
+//抓取本學期所有課程設定(領域－分科) 3維陣列 $scope_subject[scope][][]
+$scope_subject=get_year_seme_scope($sel_year,$sel_seme,$Cyear);
+
+
 //確認可補考的年級
 //例如: 以國中而言, 現今學年 103 , 若啟用 102學年, 只能考該年的一年級和二年級, 因為三年級已畢業
 // 國中或國小判定 $IS_JHORES=6 (國中) , $IS_JHORES=0 (國小)
@@ -35,7 +39,7 @@ $sy_circle=$sel_year-$SY;
 $now_cy=3-$sy_circle;
 
 $class_year_list="
-  <select size='1' name='Cyear' onchange='this.form.submit()'>
+  <select size=\"1\" name=\"Cyear\" onchange=\"this.form.opt1.value='';this.form.opt2.value='';this.form.act.value='';this.form.submit()\">
    <option value=''>請選擇年級</option>";
    for ($i=1;$i<=$sy_circle;$i++) {
     $CY=$i+$IS_JHORES;
@@ -68,6 +72,7 @@ if ($_POST['act']=='setup_paper') {
    $relay_answer=$res->fields['relay_answer'];
    $items=$res->fields['items'];
    $double_papers=$res->fields['double_papers'];
+   $item_mode=$res->fields['item_mode'];
   } else {
    $start_time=date('Y-m-d H:i:00');
    $end_time=date('Y-m-d H:i:00');
@@ -77,6 +82,19 @@ if ($_POST['act']=='setup_paper') {
    $items=0;
    $double_papers=0;
   }	
+   //製作各分科出題數表單
+   //讀取分析出題數設定
+   $subject_items=get_scope_subject_items($SETUP['now_year_seme'],$Cyear,$scope);
+   $subject_items_input="
+    <table border='0' >    
+   ";
+   foreach ($scope_subject[$scope] as $k=>$v) {
+   	$subject_items[$k]=($subject_items[$k]=="" or $subject_items[$k]<0)?(20):$subject_items[$k];
+   	$subject_items_input.="<tr><td width='20'>&nbsp;</td><td>".$v['subject']." </td><td><input type='text' name='subject_".$k."' size='5' value='".$subject_items[$k]."'>題 <font size=2>(加權:".$v['rate'].", 已命".$v['items']."題)</font></td></tr>";
+   }
+   $subject_items_input.="</table>";
+   
+   
    $main="
    <input type='hidden' name='scope' value='$scope'>
    <table border='0' cellpadding='3'>
@@ -84,38 +102,53 @@ if ($_POST['act']=='setup_paper') {
    	  <td colspan='2' style='color:#800000'><b>".$link_ss[$scope]."領域</b>試卷設定</td>
    	</tr>
    	<tr>
-   		<td>考試開始時間</td>
-   		<td><input type='text' size='20' name='start_time' value='$start_time'></td>
+   		<td valign='top' align='right'>考試開始時間</td>
+   		<td valign='top'><input type='text' size='20' name='start_time' value='$start_time'></td>
    	</tr>
    	<tr>
-   		<td>考試結束時間</td>
-   		<td><input type='text' size='20' name='end_time' value='$end_time'></td>
+   		<td valign='top' align='right'>領卷結束時間</td>
+   		<td valign='top'><input type='text' size='20' name='end_time' value='$end_time'></td>
    	</tr>
    	<tr>
-   		<td>計時模式</td>
-   		<td>
+   		<td valign='top' align='right'>計時模式</td>
+   		<td valign='top'>
    		    <input type='radio' name='timer_mode' value='0'".(($timer_mode==0)?" checked":"").">個別計時
    		    <input type='radio' name='timer_mode' value='1'".(($timer_mode==1)?" checked":"").">同時計時
    		</td>
    	</tr>
    	<tr>
-   		<td>計時時間</td>
-   		<td><input type='text' size='5' name='timer' value='$timer'>分鐘</td>
+   		<td valign='top' align='right'>計時時間</td>
+   		<td valign='top'><input type='text' size='5' name='timer' value='$timer'>分鐘</td>
    	</tr>
    	<tr>
-   		<td>出題模式</td>
-   		<td>隨機取<input type='text' size='5' name='items' value='$items'>題成卷(輸入0表示全部)</td>
-   	</tr>
-   	<tr>
-   		<td>交卷後立即提供解答</td>
-   		<td>
-   		    <input type='radio' name='relay_answer' value='0'".(($relay_answer==0)?" checked":"").">否
-   		    <input type='radio' name='relay_answer' value='1'".(($relay_answer==1)?" checked":"").">是
+   		<td valign='top' align='right'>出題模式</td>
+   		<td valign='top'>
+   		<table border='1' style='border-collapse:collapse' bordercolor='#000000'>
+   			<tr>
+   				<td>
+   		      <input type='radio' name='item_mode' value='0'".(($item_mode==0)?" checked":"").">隨機取<input type='text' size='5' name='items' value='$items'>題成卷(輸入0表示全部)
+   		    </td>
+   		   </tr>
+   		   <tr>
+   		   	<td>
+   		   	  <input type='radio' name='item_mode' value='1'".(($item_mode==1)?" checked":"").">依所含分科出題<br>
+						$subject_items_input						
+					</td>
+   				</tr>
+   			</table>
    		</td>
    	</tr>
    	<tr>
-   		<td>斷線後是否可再領卷</td>
-   		<td>
+   		<td valign='top' align='right'>開放學生查詢作答</td>
+   		<td valign='top'>
+   		    <input type='radio' name='relay_answer' value='0'".(($relay_answer==0)?" checked":"").">否
+   		    <input type='radio' name='relay_answer' value='1'".(($relay_answer==1)?" checked":"").">是
+   		    <br><font size=2>(若要開放，建議考試完畢後再開啟)</font>
+   		</td>
+   	</tr>
+   	<tr>
+   		<td valign='top' align='right'>斷線後是否可再領卷</td>
+   		<td valign='top'>
    		    <input type='radio' name='double_papers' value='0'".(($double_papers==0)?" checked":"").">否
    		    <input type='radio' name='double_papers' value='1'".(($double_papers==1)?" checked":"").">是
    		    <br><font size=2>(預設「否」，可避免異地登入同帳號重覆領卷)</font>
@@ -142,18 +175,46 @@ if ($_POST['act']=='setup_paper_submit') {
 	$timer_mode=$_POST['timer_mode'];
 	$timer=$_POST['timer'];
 	$items=$_POST['items'];
+	$item_mode=$_POST['item_mode'];
 	$relay_answer=$_POST['relay_answer'];
 	$double_papers=$_POST['double_papers'];
-	
+	//echo "<pre>";
+	//print_r($_POST);
+	//exit();
 	if ($res->recordcount()) {
-	  $sql="update resit_paper_setup set start_time='$start_time',end_time='$end_time',timer_mode='$timer_mode',timer='$timer',items='$items',relay_answer='$relay_answer',double_papers='$double_papers' where seme_year_seme='".$SETUP['now_year_seme']."' and class_year='$Cyear' and scope='$scope'";
+	  $sql="update resit_paper_setup set start_time='$start_time',end_time='$end_time',timer_mode='$timer_mode',timer='$timer',items='$items',relay_answer='$relay_answer',double_papers='$double_papers',item_mode='$item_mode' where seme_year_seme='".$SETUP['now_year_seme']."' and class_year='$Cyear' and scope='$scope'";
     $res=$CONN->Execute($sql) or die ('Error! Query='.$sql);
 	} else {
-	  $sql="insert into resit_paper_setup (seme_year_seme,class_year,scope,start_time,end_time,timer_mode,timer,items,relay_answer,double_papers) values ('".$SETUP['now_year_seme']."','$Cyear','$scope','$start_time','$end_time','$timer_mode','$timer','$items','$relay_answer','$double_papers')";
+	  $sql="insert into resit_paper_setup (seme_year_seme,class_year,scope,start_time,end_time,timer_mode,timer,items,relay_answer,double_papers,item_mode) values ('".$SETUP['now_year_seme']."','$Cyear','$scope','$start_time','$end_time','$timer_mode','$timer','$items','$relay_answer','$double_papers','$item_mode')";
 	  $res=$CONN->Execute($sql) or die ('Error! Query='.$sql);
 	}
+
+	//儲存分科設定
+	if ($item_mode=='1') {
+		$subject=$_POST['subject'];		
+		$SS=explode(";",$subject);
+				
+		foreach ($SS as $v) {
+			$V=explode(",",$v);
+			//檢查是否已存在
+		   $sql="select sn from resit_scope_subject where seme_year_seme='".$SETUP['now_year_seme']."' and cyear='$Cyear' and scope='$scope' and subject_id='".$V[0]."'";
+		   $res=$CONN->Execute($sql) or user_error("讀取分科設定錯誤! $sql",256);
+		   if ($res->RecordCount()==1) {
+		     $sn=$res->fields['sn'];		     
+		     $sql="update resit_scope_subject set items='".$V[1]."' where sn='$sn'";
+		     $res=$CONN->Execute($sql) or user_error("儲存分科設定錯誤! $sql",256);
+		   } else {
+		   	 $seme_year_seme=$SETUP['now_year_seme'];
+		   	 $subject_id=$V[0];
+		   	 $subject=$scope_subject[$scope][$subject_id]['subject'];
+		   	 $items=$V[1];
+		   	 $sql="insert into resit_scope_subject (seme_year_seme,cyear,scope,subject_id,subject,items) values ('$seme_year_seme','$Cyear','$scope','$subject_id','$subject','$items')";
+		     $res=$CONN->Execute($sql) or user_error("儲存分科設定錯誤! $sql",256);
+		   } // end if $res->RecoreCount()  
+		} // end foreach   	
+	} // end if ($item_mode==1)
 	
-	echo $link_ss[$scope]."領域試卷設定儲存完畢!";
+	echo "<font color=red>".$link_ss[$scope]."</font>領域試卷設定儲存完畢!";
 	
   exit();
 }
@@ -172,6 +233,7 @@ if ($_POST['act']=='edit_paper_submit') {
   $chc=trim($_POST['chc']);
   $chd=trim($_POST['chd']);
   $answer=$_POST['answer'];
+  $subject=$_POST['subject'];
 
 	//處理圖片 取得 $fig_q,$fig_a,$fig_b,$fig_c,$fig_d 五個值
 	$fig_array=array("q","a","b","c","d");
@@ -206,7 +268,7 @@ if ($_POST['act']=='edit_paper_submit') {
 
   if ($item_sn=='') {
 	 //新增試題
-	 $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer')";
+	 $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer,subject) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer','$subject/)";
 	 $res=$CONN->Execute($sql) or die ("Error! SQL=".$sql);
 	 //取得最後的 sn , 以顯示最後編輯的試題	
 	 list($Last_item_sn)=mysql_fetch_row(mysql_query("SELECT LAST_INSERT_ID()"));
@@ -225,7 +287,7 @@ if ($_POST['act']=='edit_paper_submit') {
 		 }
 		} // end foreach
 		
-		$sql="update resit_exam_items set question='$question',cha='$cha',chb='$chb',chc='$chc',chd='$chd',fig_q='$fig_q',fig_a='$fig_a',fig_b='$fig_b',fig_c='$fig_c',fig_d='$fig_d',answer='$answer' where sn='$item_sn'";
+		$sql="update resit_exam_items set question='$question',cha='$cha',chb='$chb',chc='$chc',chd='$chd',fig_q='$fig_q',fig_a='$fig_a',fig_b='$fig_b',fig_c='$fig_c',fig_d='$fig_d',answer='$answer',subject='$subject' where sn='$item_sn'";
 		$res=$CONN->Execute($sql) or die ("修改試題失敗! SQL=".$sql);
 	
    //編輯試題        
@@ -303,6 +365,17 @@ if ($_POST['act']=='list_paper_answer_save') {
   $_POST['act']='list_paper';  
 } // end if list_paper_answer_save
 
+//設定試題分科 - 儲存
+if ($_POST['act']=='list_paper_subject_save') {		 
+	$item_scope=$_POST['item_scope'];  
+  foreach ($_POST['ch_subject'] as $sn=>$v) {
+    $sql="update resit_exam_items set subject='$v' where sn='$sn'";
+    $res=$CONN->Execute($sql) or die('儲存試題分科設定失敗！SQL='.$sql);
+  } // end foreach ($_POST[field] as $I=>$P)
+  //切換為列出試題
+  $_POST['act']='list_paper';  
+} // end if list_paper_answer_save
+
 
 //匯出試題 
  if ($_POST['act']=='download_paper') {
@@ -338,6 +411,7 @@ if ($_POST['act']=='list_paper_answer_save') {
        } // end foreach
 
        $main.=$K['answer']."\r\n";
+       $main.=$K['subject']."\r\n";
  			}
 
 		$filename=$SETUP['now_year_seme']."_".$Cyear."年級_".$link_ss[$scope]."考題檔.wit";
@@ -388,6 +462,7 @@ if ($_POST['act']=='upload_paper_submit') {
    $fig_d_filetype=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
    $fig_d_content=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
    $answer=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
+   $subject=preg_replace("/\\r\\n/","",fgets($aFile,2048000));
    if ($question=='') continue;
 
    //先存入圖片
@@ -413,7 +488,7 @@ if ($_POST['act']=='upload_paper_submit') {
     } // end foreach
    
    //存入試題
-	  $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer')";
+	  $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer,subject) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer','$subject')";
     $res=$CONN->Execute($sql) or die("儲存發生錯誤了! SQL=".$sql);
   } // end while (!feof($aFile))
 	$_POST['act']='list_paper';
@@ -426,7 +501,7 @@ head();
 //列出選單
 echo $tool_bar;
 ?>
-<form name="myform" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
+<form name="myform" id="myform" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
 	<input type="hidden" name="act" value="">
 	<input type="hidden" name="opt1" value="">
 	<input type="hidden" name="opt2" value="<?php echo $opt2;?>">
@@ -594,7 +669,7 @@ echo $tool_bar;
  	  <span id="show_buttom">
  	  <font color=red>◎快貼多題文字試題</font><br>
  	  <textarea name="items" cols="78" rows="5"></textarea><br>
- 	  請確認斷行分析字文符號：<br>
+ 	  <font color=blue>請確認斷行分析文字符號：</font><br>
  	  第1斷行符號：<input type='text' name='cut[]' value='.' size='10'><br>
  	  第2斷行符號：<input type='text' name='cut[]' value='(A)' size='10'><br>
  	  第3斷行符號：<input type='text' name='cut[]' value='(B)' size='10'><br>
@@ -617,7 +692,8 @@ echo $tool_bar;
       <img src='./images/filefind.png'>快貼試題說明:<br>
       1.採用快貼方式，可同時建立多題文字型試題。<br>
       2.關於附圖部分，必須儲存完畢後再採修改試題方式逐題上傳。<br>
-      3.貼上的文字必須為一題一行的格式。      
+      3.貼上的文字必須為一題一行的格式。<br>
+      4.快貼完畢，可利用【檢視】的功能，進行解答的調整或設定每一題的分科。     
       </font>
       </div>
   	</td>
@@ -726,18 +802,21 @@ if ($_POST['act']=='paste_paper_submit') {
  	  <span id="show_buttom">
  	  	<input type="button" id="list_paper_end" value="結束檢視">
  	  	<input type="button" id="list_paper_answer" value="調整解答">
+ 	  	<input type="button" id="list_paper_subject" value="設定試題分科">
  	  	<table border='0'>
  	  	
 		<?php
+		$i=0;
  			$sql="select a.sn from resit_exam_items a, resit_paper_setup b where a.paper_sn=b.sn and b.seme_year_seme='".$SETUP['now_year_seme']."' and b.class_year='$Cyear' and b.scope='$item_scope'";
  			$res=$CONN->Execute($sql);
  			$row=$res->GetRows();
  			foreach ($row as $K) {
  			  $sn=$K['sn'];
+ 			  $i++;
 				?>
 				<tr><td><hr></td></tr>
 				<tr>
-					<td><?php echo show_item($sn);?></td>
+					<td><?php echo show_item($sn,0,'',$i);?></td>
 				</tr>
 				<?php 			  
  			}
@@ -764,15 +843,17 @@ if ($_POST['act']=='paste_paper_submit') {
  	  	<input type="button" style="color:#FF0000" id="list_paper_answer_save" value="儲存解答">
  	  	<table border='0'> 	  	
 		<?php
+		$i=0;
  			$sql="select a.sn from resit_exam_items a, resit_paper_setup b where a.paper_sn=b.sn and b.seme_year_seme='".$SETUP['now_year_seme']."' and b.class_year='$Cyear' and b.scope='$item_scope'";
  			$res=$CONN->Execute($sql);
  			$row=$res->GetRows();
  			foreach ($row as $K) {
+ 				$i++;
  			  $sn=$K['sn'];
 				?>
 				<tr><td><hr></td></tr>
 				<tr>
-					<td><?php echo show_item($sn,1);?></td>
+					<td><?php echo show_item($sn,1,'',$i);?></td>
 				</tr>
 				<?php 			  
  			}
@@ -784,6 +865,45 @@ if ($_POST['act']=='paste_paper_submit') {
  </table> 	
  	<?php  
   } // end if $_POST['act']=='list_paper_answer' 
+
+ //檢視試題 - 設定試題分科
+ if ($_POST['act']=='list_paper_subject') {
+ ?>
+ <input type="hidden" name="item_scope" value="<?php echo $item_scope;?>">
+ <input type="hidden" name="item_sn" value="<?php echo $item['sn'];?>">
+ <table border="0">
+ 	<tr>
+ 	  <td>
+ 	  <span id="show_buttom">
+ 	  	<input type="button" id="list_paper_end" value="結束檢視">
+ 	  	<input type="button" style="color:#FF0000" id="list_paper_subject_save" value="儲存分科設定">
+ 	  	<table border='0'> 	  	
+		<?php
+		$i=0;
+ 			$sql="select a.sn from resit_exam_items a, resit_paper_setup b where a.paper_sn=b.sn and b.seme_year_seme='".$SETUP['now_year_seme']."' and b.class_year='$Cyear' and b.scope='$item_scope'";
+ 			$res=$CONN->Execute($sql) or die($sql);
+ 			$row=$res->GetRows();
+ 			foreach ($row as $K) {
+ 				$i++;
+ 			  $sn=$K['sn'];
+				?>
+				<tr><td><hr></td></tr>
+				<tr>
+					<td><?php echo show_item($sn,3,'',$i);?></td>
+				</tr>
+				<?php 			  
+ 			}
+		?>
+		</table>
+ 	  </span>
+ 	  </td>
+ 	</tr>
+ </table> 	
+ 	<?php  
+  } // end if $_POST['act']=='list_paper_subject' 
+
+
+
  
  } //end if $Cyear 
 ?>
@@ -857,6 +977,7 @@ $(".setup_paper").click(function(){
 
 //儲存試卷設定
 $("#setup_paper_submit").click(function(){
+	var paper_mode=<?php echo $SETUP['paper_mode'];?>;
 	var act='setup_paper_submit';
 	var scope=document.myform.scope.value;
 	var start_time=document.myform.start_time.value;
@@ -886,21 +1007,58 @@ $("#setup_paper_submit").click(function(){
       var double_papers = myform.double_papers[i].value;
    }
   }	
+  //取得 item_mode
+	for (var i=0; i<myform.item_mode.length; i++) {
+   if (myform.item_mode[i].checked)
+   {
+      var item_mode = myform.item_mode[i].value;
+   }
+  }	  
+  //取得分科題數設定
+  var i =0;
+  var strSubject='';
+  while (i < document.myform.elements.length)  {
+    if (document.myform.elements[i].name.substr(0,8)=='subject_') {
+      var kk=document.myform.elements[i].name;
+      var vv=document.myform.elements[i].value;
+      var SubjectArray=kk.split("_");
+      strSubject=strSubject+SubjectArray[1]+','+vv+';';
+    }
+    i++;
+  }
+  
+  var s=strSubject.length-1;
+  strSubject=strSubject.substr(0,s);
 
    	//考試時間比較
+   if (paper_mode==0) {
    	starttime=start_time.replace(/-/g, "/"); 
    	starttime=(Date.parse(starttime)).valueOf() ; // 直接轉換成Date型別所代表的值
    	endtime=end_time.replace(/-/g, "/"); 
    	endtime=(Date.parse(endtime)).valueOf() ; // 直接轉換成Date型別所代表的值
     if (starttime>=endtime) {
-     alert ("考試結束時間不得早於或等於開始時間!");
+     alert ("領卷結束時間不得早於或等於開始時間!");
      return false;
     }	
-	
-  $.ajax({
+    
+    //同時計時，考試結束時間為開始加計時，領卷結束時間不能大於或等於考試結束時間
+    //個別計時無此限制
+    if (timer_mode=='1') {
+    	var test_end_time=starttime+timer*60*1000;
+    	if (test_end_time<=endtime) {
+    	  alert ("領卷結束時間超過或等於考試結束時間(開始時間+計時時間，不合理!!");
+    	  return false;
+    	}
+    }
+   } else {
+   	 alert("注意！\n\n由於學期補考中的設定選擇「依設定時段內開放所有試卷」\n因此此處不檢查考試開始時間及領卷結束時間的合理性\n此外，考試中一律採「個別計時」。\n\n每位學生的考試計時時間為"+timer+"分鐘");
+   } // end if paper_mode==0
+
+	$.ajax({
    	type: "post",
     url: 'resit_assign.php',
-    data: { act:act,scope:scope,Cyear:Cyear,start_time:start_time,end_time:end_time,timer:timer,items:items,timer_mode:timer_mode,relay_answer:relay_answer,double_papers:double_papers },
+    data: { act:act,scope:scope,Cyear:Cyear,start_time:start_time,end_time:end_time,timer:timer,items:items,timer_mode:timer_mode,relay_answer:relay_answer,double_papers:double_papers,item_mode:item_mode,subject:strSubject },
+    //data : postData,
     dataType: "text",
     error: function(xhr) {
       alert('ajax request 發生錯誤!');
@@ -919,6 +1077,8 @@ $("#setup_paper_submit").click(function(){
           var btnID="btn-"+ss+"-edit";
           document.getElementById(btnID).disabled = false;         
           var btnID="btn-"+ss+"-list";
+          document.getElementById(btnID).disabled = false;         
+          var btnID="btn-"+ss+"-upload";
           document.getElementById(btnID).disabled = false;         
         }         
 			}
@@ -1099,6 +1259,25 @@ $("#list_paper_answer_save").click(function(){
 
 })
 
+//檢視試題 - 設定試題分科
+$("#list_paper_subject").click(function(){
+  
+  document.myform.act.value='list_paper_subject';
+  document.myform.opt1.value=document.myform.item_scope.value;
+  
+  document.myform.submit();
+
+})
+
+//檢視試題 - 設定試題分科儲存
+$("#list_paper_subject_save").click(function(){
+  
+  document.myform.act.value='list_paper_subject_save';
+  document.myform.opt1.value=document.myform.item_scope.value;
+  
+  document.myform.submit();
+
+})
 
 //匯入試題
 $(".paste_paper").click(function(){

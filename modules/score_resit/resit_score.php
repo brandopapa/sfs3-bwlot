@@ -64,13 +64,13 @@ if ($_POST['act']=='html_resit_list') {
 	//讀取已補考名單
 	switch ($opt1) {
 	  case 'ready':
-			$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and entrance='0' and complete='0' order by curr_class_num";
+			$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num,c.email_pass from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and entrance='0' and complete='0' order by curr_class_num";
 	  break;
 	  case 'go':
-			$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and entrance='1' and complete='0' order by curr_class_num";	  
+			$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num,c.email_pass from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and entrance='1' and complete='0' order by curr_class_num";	  
 	  break;
 	  case 'tested':
-			$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and complete='1' order by curr_class_num";
+			$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num,c.email_pass from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and complete='1' order by curr_class_num";
 	  break;
 
 	}
@@ -87,10 +87,24 @@ if ($_POST['act']=='html_resit_list') {
 	     <td style='font-size:10pt' align='center'>".$seme_num."</td>
 	     <td style='font-size:10pt' align='center'>".$row['stud_name']."</td>
 	     <td style='font-size:10pt' align='center'>".$row['org_score']."</td>
-	     <td style='font-size:10pt' align='center'>".$row['score']."</td>
+	     ";
+	     
+	   if ($opt1=="ready") {
+			$main.="
+			<td style='font-size:9pt'>".$row['subjects']."</td>	   
+			<td style='font-size:9pt'>".$row['stud_id']."</td>	
+			<td style='font-size:9pt'>".$row['email_pass'];	  
+	   } elseif ($opt1=="go") {
+	  	$main.="   
+			 <td style='font-size:9pt'>".$row['subjects']."</td>	   
+	     <td style='font-size:9pt'>".$row['entrance_time'];		
+	   } else {
+	  	$main.="   
 	     <td style='font-size:9pt'>".$row['entrance_time']."</td>		
+	  	 <td style='font-size:10pt' align='center'>".$row['score']."</td>
 	     <td style='font-size:9pt'>".$row['complete_time'];
-		
+		 }
+
 		if ($row['complete']==1) {
 		 $main.="<a href='resit_list_paper.php?seme_year_seme=$seme_year_seme&Cyear=$Cyear&scope=$scope&sn=".$row['sn']."' target='_blank' title='瀏覽《".$row['stud_name']."》的作答'><img src='images/filefind.png'></a></td>
 			</tr>";
@@ -101,7 +115,7 @@ if ($_POST['act']=='html_resit_list') {
 		
 
 	}
-	  $main="	  
+	  $title="	  
 	 <table border=\"0\" width=\"100%\" cellspacing=\"3\" cellpadding=\"2\">
   	<tr>
    	  <td colspan='5' style='color:#800000'><b>".$link_ss[$scope]."領域</b> - [<font color=blue>".$S[$opt1]."</font>]名單</td>
@@ -110,13 +124,29 @@ if ($_POST['act']=='html_resit_list') {
 	     <td style='font-size:10pt'>班級</td>
 	     <td style='font-size:10pt'>座號</td>
 	     <td style='font-size:10pt'>姓名</td>
-	     <td style='font-size:10pt'>原成績</td>
-	     <td style='font-size:10pt'>補考成績</td>
+	     <td style='font-size:10pt'>原成績</td>";
+	  if ($opt1=="ready") {
+	  	$title.="
+	  	<td style='font-size:10pt'>不及格分科</td>
+	  	<td style='font-size:10pt'>學號</td>
+	  	<td style='font-size:10pt'>登入密碼</td>
+	  	";
+	  } elseif ($opt1=="go") {
+	  	$title.="	 
+	  	 <td style='font-size:10pt'>不及格分科</td>    
 	     <td style='font-size:10pt'>領卷時間</td>
+	     ";
+	  }else {
+	  	$title.="	     
+	  	 <td style='font-size:10pt'>領卷時間</td>
 	     <td style='font-size:10pt'>完成時間</td>
-	   </tr>
-	 ".$main."
-	 </table>"; 
+	     <td style='font-size:10pt'>補考成績</td>
+			";  
+	  }	
+	     
+     $title.="</tr>";
+	   
+	 $main=$title.$main."</table>"; 
 	  
  
   echo $main;
@@ -138,7 +168,7 @@ if ($_POST['act']=='output_resit_name') {
 	$stud_sn=array();
 	
 	//抓取本學期所有課程設定(領域－分科)
-	$scope_main=get_year_seme_scope($year,$semester,$Cyear);
+	$scope_subject=get_year_seme_scope($year,$semester,$Cyear);
 
   //以本年度學生資料去抓 student_sn , 以免抓不到後來才轉入的學生 student_sn	
 	$Now_Cyear=$Cyear+$now_cy;
@@ -191,7 +221,18 @@ if ($_POST['act']=='output_resit_name') {
   }
   
 	foreach ($stud_sn as $student_sn) {
-
+    
+    /* $seme_class 用於搜尋分科任課教師
+    //取得學生當學期的班級座號
+    $sql_class_num="select seme_class from stud_seme where student_sn='".$student_sn."' and seme_year_seme='".$seme_year_seme."'";
+ 	  $res_class_num=$CONN->Execute($sql_class_num);
+ 	  if ($res_class_num->RecordCount()==1) {
+ 	    $seme_class=$res_class_num->fields['seme_class'];
+ 	  } else {
+ 	    $seme_class="";
+ 	  }
+ 	  */
+ 	  
  	  //讀取學生所有分科成績
  	  $ss_score=array();
   	  $sql_ss_score="select ss_id,ss_score from stud_seme_score where seme_year_seme='$seme_year_seme' and student_sn='$student_sn'";
@@ -215,12 +256,26 @@ if ($_POST['act']=='output_resit_name') {
 	     
 	     //讀取分科
 	     $resit_subject="";
-	     if (count($scope_main[$S])>1) {
-	      foreach ($scope_main[$S] as $V) {
+	     if (count($scope_subject[$S])>1) {
+	      foreach ($scope_subject[$S] as $V) {
     
 	     	  $now_subject_ss_id=$V['ss_id'];
 					if ($ss_score[$now_subject_ss_id]<60) {
 					  $resit_subject.=$V['subject'].",";  //分科中文名
+						/* 2015.03.22 因為欄位編排問題，把分科任課老師做到單一領域名單輸入
+					  //讀取老師任課老師
+		        if ($seme_class) {
+		        	$class_year=substr($seme_class,0,1);
+		        	$class_num=substr($seme_class,1,2);			  
+					    $class_id=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,$class_year,$class_num);
+					    $sql_subject_teacher="select teacher_sn from score_course where class_id='$class_id' and ss_id='$now_subject_ss_id'";
+							$res_subject_teacher=$CONN->Execute($sql_subject_teacher);
+							$teacher_sn=$res_subject_teacher->fields['teacher_sn'];
+							$subject_teacher=get_teacher_name($teacher_sn);
+					  } else {
+					    $subject_teacher="轉入";   //轉學生，無科任老師
+					  }
+					  */
 					}
 	      }  // end foreach
 	      $memo[$S]="<font size=1>".substr($resit_subject,0,strlen($resit_subject)-1)."</font>";
@@ -263,11 +318,7 @@ if ($_POST['act']=='output_resit_name') {
 		  壹、依據「國民小學及國民中學學生成績評量準則」及「臺中市國民中學學生<BR>
 		  　　成績評量補充規定」辦理。<BR><BR>
 		  貳、注意事項：<BR>
-		  　一、評量範圍以該學期教學內容為原則。<BR>
-		  　二、除有不可抗力因素外，<B>逾期未參加者，視同放棄補行評量之機會</B>。<BR>
-		  　三、本次補行評量對象為<U><B>學習領域學期成績未達丙等（六十分）</B></U>之學生。<BR>
-		  　四、依規定<B>補行評量及格者，該學習領域成績以六十分計</B>。<BR>
-		  　五、補行評量時程與地點，另行公告之。<BR><BR>
+			'.$_POST['note_list'].'
 		  參、檢視 貴子弟入學以來各學期七大學習領域成績平均， <B>貴子弟有部份領<BR>
 		  　　域未達及格標準</B>，特予此通知書通知家長及 貴子弟，敬請家長共同協助<BR>
 		  　　督導學生課業學習，以期 貴子弟補行評量順利，達到成績及格標準。<BR><BR>
@@ -364,10 +415,71 @@ if ($_POST['act']=='output_resit_name') {
 	$x->filename=$seme_year_seme.$link_ss[$scope].'不及格學生名單.xls';
 	$x->setBorderStyle(1);
 	$x->addSheet($link_ss[$scope]."不及格");
-	$x->items[0]=array('學號','目前班級','目前座號','姓名','學期分數','補考分數','家長姓名','市內電話','行動電話','郵遞區號','通訊地址');
+	$x->items[0]=array('學號','目前班級','目前座號','姓名');
+	//讀取分科
+	$data_length=3;
+	foreach ($scope_subject[$scope] as $V) {
+	 $data_length++;
+	 $x->items[0][$data_length]=$V['subject'];
+ 	 $data_length++;
+	 $x->items[0][$data_length]="任課教師";
+	}
+	$add_array=array('學期分數','補考分數','家長姓名','市內電話','行動電話','郵遞區號','通訊地址');
+	foreach ($add_array as $v) {
+ 	 $data_length++;
+	 $x->items[0][$data_length]=$v;
+	}
 
+  $add_data_id=0;
 	foreach ($stud_sn as $student_sn) {
 		if ($fin_score[$student_sn][$scope][$seme_year_seme]['score']<60) {
+			
+		//取得學生當學期的班級座號
+    $sql_class_num="select seme_class from stud_seme where student_sn='".$student_sn."' and seme_year_seme='".$seme_year_seme."'";
+ 	  $res_class_num=$CONN->Execute($sql_class_num);
+ 	  if ($res_class_num->RecordCount()==1) {
+ 	    $seme_class=$res_class_num->fields['seme_class'];
+ 	  } else {
+ 	    $seme_class="";
+ 	  }
+			
+			//讀取學生所有分科成績
+ 	    $ss_score=array();
+  	  $sql_ss_score="select ss_id,ss_score from stud_seme_score where seme_year_seme='$seme_year_seme' and student_sn='$student_sn'";
+			$res_ss_score=$CONN->Execute($sql_ss_score) or die($sql_ss_score);
+			
+			while ($row_ss_score=$res_ss_score->fetchRow()) {
+			  $ss_id=$row_ss_score['ss_id'];
+			  $ss_score[$ss_id]=$row_ss_score['ss_score'];
+			}
+			
+			$add_data_id++;  //excel 長度計數　
+			//先存入前4欄
+			$x->items[$add_data_id]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name']);
+			$data_length=3;
+			//放入分科成績
+			foreach ($scope_subject[$scope] as $V) {    
+	     	  $now_subject_ss_id=$V['ss_id'];
+					$score=$ss_score[$now_subject_ss_id];  //分科分數
+					  //讀取老師任課老師
+		        if ($seme_class) {
+		        	$class_year=substr($seme_class,0,1);
+		        	$class_num=substr($seme_class,1,2);			  
+					    $class_id=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,$class_year,$class_num);
+					    $sql_subject_teacher="select teacher_sn from score_course where class_id='$class_id' and ss_id='$now_subject_ss_id'";
+							$res_subject_teacher=$CONN->Execute($sql_subject_teacher);
+							$teacher_sn=$res_subject_teacher->fields['teacher_sn'];
+							$subject_teacher=get_teacher_name($teacher_sn);
+					  } else {
+					    $subject_teacher="轉入生";   //轉學生，無科任老師
+					  }
+	 			$data_length++;
+	 			$x->items[$add_data_id][$data_length]=$score;
+ 	 			$data_length++;
+	 			$x->items[$add_data_id][$data_length]=$subject_teacher;
+					
+	    }  // end foreach
+	
 			
     	//是否有補考成績
 			$sql="select a.* from resit_exam_score a,resit_paper_setup b where a.paper_sn=b.sn and a.student_sn='$student_sn' and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.complete='1'";
@@ -375,11 +487,17 @@ if ($_POST['act']=='output_resit_name') {
 			if ($res->recordcount()==0) {
 			  $resit_score="";
 			} else {
-		    $resit_score=$res->fields['score'];
+		    $resit_score=$res->fields['score'];		  
 		  }
-			$x->items[]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name'],$fin_score[$student_sn][$scope][$seme_year_seme]['score'],$resit_score,$student_data[$student_sn]['guardian_name'],$student_data[$student_sn]['stud_tel_2'],$student_data[$student_sn]['stud_tel_3'],$student_data[$student_sn]['addr_zip'],$student_data[$student_sn]['stud_addr_2']);
+			//補上最後的資料		  
+			$add_array=array($fin_score[$student_sn][$scope][$seme_year_seme]['score'],$resit_score,$student_data[$student_sn]['guardian_name'],$student_data[$student_sn]['stud_tel_2'],$student_data[$student_sn]['stud_tel_3'],$student_data[$student_sn]['addr_zip'],$student_data[$student_sn]['stud_addr_2']);
+			foreach ($add_array as $v) {
+ 	 			$data_length++;
+	 			$x->items[$add_data_id][$data_length]=$v;
+			} // end foreach
+
   	} // end if
-  } // end foreach
+  } // end foreach //下一位學生
  } // end if $scope=='ALL'
  
   if ($_POST['opt2']=='') {
@@ -393,7 +511,7 @@ if ($_POST['act']=='output_resit_name') {
 
 
 $class_year_list="
-  <select size='1' name='Cyear' onchange='this.form.submit()'>
+  <select size=\"1\" name=\"Cyear\" onchange=\"this.form.opt1.value='';this.form.opt2.value='';this.form.act.value='';this.form.submit()\">
    <option value=''>請選擇年級</option>";
    for ($i=1;$i<=$sy_circle;$i++) {
     $CY=$i+$IS_JHORES;
@@ -480,20 +598,47 @@ echo $tool_bar;
  		?>
  		<tr>
  				<td colspan="5" align="center">
+ 					<input type="button" value="更新補考名單" class="get_all_resit_name">
  					<input type="button" value="匯出所有領域名單" id="output_resit_name_all">
  					<input type="button" value="列印通知單" id="print_resit_name_all">
  				</td>
  		</tr>
  	  </table>
+     <?php 
+     if ($INFO) {
+     echo "<br><font color=red>$INFO</font>";
+     }
+     ?>
+   	 <div id="waiting" style="display:none">
+   	 	<br><font color='red'>資料處理中，請稍候.....</font><br>
+     </div> 
+     <table border="0" width="520">
+ 	    <tr>
+ 	     <td style='font-size:10pt;color:#800000'>※列印通知單之注意事項（請依需要自行修訂）</td>
+ 	    </tr>
+ 	    <tr>
+ 	     <td>
+ 	     <?php
+ 	      $input_data="
+一、評量範圍以該學期教學內容為原則。<BR>
+二、除有不可抗力因素外，<B>逾期未參加者，視同放棄補行評量之機會</B>。<BR>
+三、本次補行評量對象為<U><B>學習領域學期成績未達丙等（六十分）</B></U>之學生。<BR>
+四、依規定<B>補行評量及格者，該學習領域成績以六十分計</B>。<BR>
+五、補行評量時程與地點，另行公告之。<BR><BR>";
+ 	     ?>
+ 	     <textarea style="width:100%;font-size:10pt" rows="6" name="note_list"><?php echo $input_data;?></textarea>
+ 	     </td>
+ 	    </tr>
+ 	  </table>
+ 	  	
  		<font size='2' color='#0000cc'>
       <img src='./images/filefind.png'>說明:<br>
    1.匯出資料皆採用 Excel 格式，以供套印各類通知單。<br>
-   2.本統計表若有錯誤或第一次啟用本學期補考，請按<input type="button" value="更新補考名單" id="get_all_resit_name">重新計算並取得補考名單。
+   2.本統計表若有錯誤或第一次啟用本學期補考，請按<input type="button" value="更新補考名單" class="get_all_resit_name">重取名單。<br>
+	 3.如果需要各分科的成績及任課教師名單，請由各領域「匯出名單」。<br>
+	 <font color=red>4.注意！本表應在補考進行前匯出，如果已利用 makeup_exam 模組進行補考成績擇優，<br>則匯出的領域成績及分科成績為擇優後的成績。</font>
    </font>
-   <?php echo "<br><br><font color=red>$INFO</font>";?>
-   	 <div id="waiting" style="display:none">
-   	 	<br>資料處理中，請稍候......
-     </div>
+
     </td>
   	<!--右畫面 -->
     <td valign="top">
@@ -541,7 +686,7 @@ $("#print_resit_name_all").click(function(){
 })
 
 //重新計算取得補考名單
-$("#get_all_resit_name").click(function(){
+$(".get_all_resit_name").click(function(){
 	document.myform.act.value="get_all_resit_name";
 	waiting.style.display="block";
 	document.myform.submit();

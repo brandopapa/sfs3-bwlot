@@ -1,5 +1,5 @@
 <?php
-//$Id: chi_edit2.php 6986 2012-10-31 06:39:15Z infodaes $
+//$Id: chi_edit2.php 8352 2015-03-17 08:13:51Z smallduh $
 /*引入學務系統設定檔*/
 // include "../../include/config.php";
 include "stud_reg_config.php";
@@ -86,7 +86,7 @@ objform.submit();}
 }
 //-->
 </SCRIPT>
-<?
+<?php
 
 ###############  擷取資料  ##########################
 	$SQL1="	select right((a.stud_birthday - INTERVAL 1911 YEAR),8) as bir,b.stud_id, b.seme_num, a.stud_name, a.stud_sex, a.stud_name_eng,  a.stud_person_id, a.stud_tel_1, a.stud_tel_2, a.stud_tel_3, a.stud_addr_1, a.stud_addr_2 ,a.student_sn,a.addr_move_in,a.enroll_school from  stud_base a , stud_seme b where  a.student_sn= b.student_sn  and b.seme_year_seme='$c_curr_seme' and b.seme_class='$Sclass'  and a.stud_study_cond=0  order by  b.seme_num ";
@@ -222,7 +222,7 @@ body{background-color:#f9f9f9;font-size:12pt}
 .bur2{border-style: groove;border-width:1px: groove;background-color:#FFCCCC;font-size:12px;Padding-left:0 px;Padding-right:0 px;}
 A:visited {text-decoration:none;color:blue; }
 </style>
-<?
+<?php
 }
 
 ##################取資料函式###########################
