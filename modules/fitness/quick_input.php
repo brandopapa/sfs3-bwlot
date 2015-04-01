@@ -1,5 +1,5 @@
 <?php
-// $Id: quick_input.php 7816 2013-12-17 14:10:29Z infodaes $
+// $Id: quick_input.php 8368 2015-03-26 02:29:31Z smallduh $
 include "config.php";
 
 //顯示欄數
@@ -43,6 +43,7 @@ if($_POST[edit]<>'') {
 							$temp_sn=$temp_arr[0]*60+$temp_arr[1];			
 						}	
 					}
+					if($t!=6) $temp_sn=floor($temp_sn);   //無條件捨去取整數, 以免多進一個百分比
 					$query = "update fitness_data set $file[$t]='$temp_sn' ,teacher_sn='$session_tea_sn',up_date='$up_date' where student_sn='$sn' and c_curr_seme='$c_curr_seme'";
 				}
 			}	

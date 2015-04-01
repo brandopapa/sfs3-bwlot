@@ -1,5 +1,5 @@
 <?php
-//$Id: grad_list_print_v.php 8068 2014-06-18 05:07:01Z infodaes $
+//$Id: grad_list_print_v.php 8364 2015-03-23 07:28:21Z chiming $
 
 //載入設定檔
 require("config.php") ;
@@ -38,7 +38,7 @@ if  ( $key)  {
              and s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";  */
   $sqlstr = "select s.stud_id , s.stud_name ,s.curr_class_num ,s.stud_birthday ,s.stud_sex , 
              g.grad_sn , g.grad_word , grad_num   from stud_base as s , grad_stud as g where  s.student_sn=g.student_sn 
-             and s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num "; 
+             and s.stud_study_cond in ('0','15')  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num "; 
              //搜尋條件將s.stud_id=g.stud_id修改成 s.student_sn=g.student_sn，避免畢業生十年學號重複問題  modify by kai,103.4.30
              
 

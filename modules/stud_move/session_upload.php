@@ -25,6 +25,10 @@ curl_setopt_array($ch, $options);
 $real_ip = curl_exec($ch);
 curl_close($ch);
 
+if (!$real_ip){
+    $real_ip=file_get_contents('http://phihag.de/ip/');
+}
+
 $para = array(
 	'curr_seme'     => $curr_seme,
 	'session_id'    => $session_id,

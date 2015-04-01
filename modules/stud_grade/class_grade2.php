@@ -1,5 +1,5 @@
 <?php
-//$Id: class_grade2.php 8343 2015-03-10 00:53:23Z smallduh $
+//$Id: class_grade2.php 8364 2015-03-23 07:28:21Z chiming $
 //載入設定檔
 require("config.php") ;
 
@@ -109,7 +109,7 @@ if (!$s_year && !$sel_year)
    	  //學號、姓名、升學
           $sqlstr = "select s.stud_id , s.stud_name ,s.curr_class_num ,
              g.grad_sn , g.new_school  from stud_base as s ,grad_stud as g where g.stud_grad_year=".curr_year()." and s.stud_id=g.stud_id
-             and s.stud_study_cond = '0'  and s.curr_class_num like '$sel_year%' order by s.curr_class_num ";
+             and s.stud_study_cond in ('0','15') and s.curr_class_num like '$sel_year%' order by s.curr_class_num ";
           $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;    	
 
 	  while ($row = $result->FetchRow() ) {

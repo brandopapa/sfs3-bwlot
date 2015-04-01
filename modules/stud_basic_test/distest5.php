@@ -1,6 +1,6 @@
 <?php
 
-// $Id: distest5.php 7206 2013-03-10 08:20:56Z brucelyc $
+// $Id: distest5.php 8373 2015-03-30 06:44:32Z chiming $
 
 include "select_data_config.php";
 include "../../include/sfs_case_score.php";
@@ -618,11 +618,12 @@ if ($_POST['out']) {
 }
 
 $smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE); 
-$smarty->assign("module_name","102學年度免試入學報表"); 
+$smarty->assign("module_name","免試入學報表"); 
 $smarty->assign("SFS_MENU",$menu_p); 
 $smarty->assign("year_seme_menu",year_seme_menu($sel_year,$sel_seme)); 
 $smarty->assign("class_year_menu",class_year_menu($sel_year,$sel_seme,$_POST[year_name]));
 $smarty->assign("seme_year_seme",$seme_year_seme);
+$smarty->assign("curr_year",curr_year());//加入學年度
 $smarty->assign("semes",$semes);
 $smarty->assign("student_sn",$show_sn);
 $smarty->assign("stud_data",$stud_data);

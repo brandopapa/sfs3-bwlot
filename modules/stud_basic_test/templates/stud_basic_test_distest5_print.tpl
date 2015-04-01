@@ -1,6 +1,6 @@
-{{* $Id: stud_basic_test_distest5_print.tpl 7177 2013-03-01 04:02:27Z chiming $ *}}
+{{* $Id: stud_basic_test_distest5_print.tpl 8373 2015-03-30 06:44:32Z chiming $ *}}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML><HEAD><TITLE>102學年度國民中學在校學習領域成績證明單</TITLE>
+<HTML><HEAD><TITLE>{{$curr_year}}學年度國民中學在校學習領域成績證明單</TITLE>
 <META http-equiv=Content-Type content="text/html; charset=big5">
 </HEAD>
 <BODY>
@@ -17,7 +17,7 @@
 		  <TD colSpan="7"></TD>
 		</TR>
         <TR style="height: 40pt;">
-          <TD colSpan="9" style="font: 18pt 標楷體; font-weight: bold;"><span style="font-family: Times New Roman; font-weight: bold;">102</span>學年度國民中學在校學習領域成績證明單</TD>
+          <TD colSpan="9" style="font: 18pt 標楷體; font-weight: bold;"><span style="font-family: Times New Roman; font-weight: bold;">{{$curr_year}}</span>學年度國民中學在校學習領域成績證明單</TD>
 		</TR>
         <TR style="height: 30pt; font-size: 12pt;">
           <TD style="text-align: left;" colSpan="5">就讀國中： <span style="font-size: 16pt; letter-spacing: -0.1em;">{{$sch_arr.sch_cname}}</span></TD>

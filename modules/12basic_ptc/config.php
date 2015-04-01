@@ -4,8 +4,9 @@
 include_once "../../include/config.php";
 require_once "./module-cfg.php";
 require_once "./module-upgrade.php";
-include "my_fun.php";
-include "../../include/sfs_case_score.php";
+include_once "my_fun.php";
+include_once "../../include/sfs_case_score.php";
+include_once "../../include/sfs_case_dataarray.php";
 
 //教育會考地區代碼
 $area_code='12';

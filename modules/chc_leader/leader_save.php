@@ -36,16 +36,14 @@ if($INFO!=''){
 function save_record($stu, $year_seme,$year_name) {
 	global $CONN;
 
-	$mycount=0;
+	list($my_year, $my_seme)=explode("_", $year_seme);  //分解傳入的學年度與學期
+	$seme_key=$year_name.'-'.$my_seme;
+
 	foreach ($stu as $student_sn=>$val) {
 		$seme_num=$val['seme_num'];
 		$stud_name=$val['stud_name'];
 		$class_num=$val['seme_class'];
 		$c_curr_seme=$val['seme_year_seme'];
-		$select_seme=get_class_seme_select($class_num);  													//array [1001]="100學年第1學期"
-
-		$select_seme_key=get_class_seme_key_select($select_seme,$class_num);			//array 如: [1001]="7-1"; [1012]="8-2";
-		$seme_key=$select_seme_key[$c_curr_seme];
 
 		/***
  		陣列資料說明:
@@ -66,6 +64,8 @@ function save_record($stu, $year_seme,$year_name) {
 			//$ponder_array[$seme_key][2][2]=$data_arr[5];
 			//備註
 			$ponder_array[$seme_key]['memo']=$val['memo'];
+			//debug_msg("第".__LINE__."行 seme_key ", $seme_key);
+			//debug_msg("第".__LINE__."行 ponder_array ", $ponder_array);
 			$content=serialize($ponder_array);
 			$query="update career_self_ponder set id='3-2',content='$content' where sn=$sn";
 		}else{
@@ -78,11 +78,15 @@ function save_record($stu, $year_seme,$year_name) {
 			//備註
 			$ponder_array[$seme_key]['memo']=$val['memo'];
 			$ponder_array[$seme_key][data]="";
+			//debug_msg("第".__LINE__."行 seme_key ", $seme_key);
+			//debug_msg("第".__LINE__."行 ponder_array ", $ponder_array);
 			$content=serialize($ponder_array);
 			$query="insert into career_self_ponder set student_sn=$student_sn,id='3-2',content='$content'";
+
 		} // end if else
 		$res=$CONN->Execute($query) or die("SQL錯誤:$query");
 		$mycount++;
+
 	} // end foreach
 	//$INFO="己於".date("Y-m-d H:i:s")."儲存 $mycount 筆資料成功!";
 	$INFO="儲存 $mycount 筆資料成功!";
@@ -188,4 +192,8 @@ echo '<table  width="100%"  border="1" align="center" cellpadding="1" cellspacin
 
 }
 
-
+function debug_msg($title, $showarry){
+	echo "<pre>";
+	echo "<br>$title<br>";
+	print_r($showarry);
+}
