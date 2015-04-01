@@ -24,6 +24,37 @@
 <strong>{{$this->stu.stud_name}}</strong>
 學號:<strong>{{$this->stu.stud_id}}</strong>
 </td><td>身分證統一編號：<strong>{{$this->stu.stud_person_id}}</strong></td></tr>
+
+<tr><td colspan=2>
+{{assign var="move_data" value=$this->get_move($this->Sn)}}
+<table cellPadding='0' border=1 cellSpacing='0' style='border-collapse:collapse;font-size:12pt;text-align: left; width: 100%;' >
+<tr><td  align="center" valign="middle">異動<br>情形</td>
+<td>
+<TABLE width=100% valign="top"  cellPadding='0' border=1 cellSpacing='0'  style='border-collapse:collapse;font-size:12pt;text-align: left; width: 100%;'>
+<TR align=center>
+<TD>日期</TD>
+<TD>類別</TD>
+<TD>核准機關</TD>
+<TD>核准日期</TD>
+<TD {{if $smarty.post.type==1}}class="empty_right"{{/if}}>核准文號</TD>
+</TR>
+{{if $move_data!="查無資料"}}
+{{foreach from=$move_data  item=move_data}}
+<TR><TD>{{$move_data.move_date}}</TD>
+<TD>{{if $move_data.c_move_kind=="畢業"}}{{if $graduate_kind=="2"}}修業{{else}}畢業{{/if}}{{else}}{{$move_data.c_move_kind}}{{/if}}</TD>
+<TD>{{$move_data.move_c_unit}}</TD>
+<TD>{{$move_data.move_c_date}}</TD>
+<TD {{if $smarty.post.type==1}}class="empty_right"{{/if}}>{{$move_data.move_c_word}}字{{if $smarty.post.type==1}}<br>{{else}} {{/if}}第{{$move_data.move_c_num}}號
+</TD></TR>
+{{/foreach}}
+{{/if}}
+</td></tr>
+</TABLE>
+
+</td></tr>
+
+
+
 <tr><td colspan=2>
 <table cellPadding='0' border=1 cellSpacing='0' style='border-collapse:collapse;font-size:12pt;text-align: left; width: 100%;' >
 <tr align=center>

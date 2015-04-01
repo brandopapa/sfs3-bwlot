@@ -34,7 +34,7 @@ if  ( $key)  {
   //           where s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";   
   $sqlstr = "select s.stud_id  , s.stud_person_id, s.stud_name ,s.curr_class_num ,s.stud_birthday ,s.stud_sex , 
              g.grad_sn , g.grad_word , grad_num   from stud_base as s , grad_stud as g where s.student_sn=g.student_sn 
-             and s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";  
+             and s.stud_study_cond in ('0','15')  and s.curr_class_num like '$curr_class_name%' order by s.curr_class_num ";  
 
   //echo  $sqlstr ;         
   $result =$CONN->Execute($sqlstr) or user_error("Åª¨ú¥¢±Ñ¡I<br>$sqlstr",256) ; 

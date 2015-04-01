@@ -87,8 +87,8 @@ $curr_year=curr_year();
  ?>
  <table border="0" width="800">
  	<tr>
- 		<td style="color:#FF0000;font-size:10pt">※請直接點選學生觀看該生社團活動明細。</td>
- 		<td align="right"><input type="button" value="友善列印勾選學生明細" onclick="print_kind()"></td>
+ 		<td style="color:#FF0000;font-size:10pt"><img src="images/filefind.png"> 1.本處將列出學生歷年所有社團記錄。<br><img src="images/filefind.png"> 2.僅需單一學期資料，請利用「日常成績管理/<a href="../score_nor/club_serv.php">列印學期通知單</a>」功能。</td>
+ 		<td align="right" valign="top"><input type="button" value="友善列印勾選學生明細" onclick="print_kind()"></td>
  	</tr>
  </table>
  <table border="0" width="800">

@@ -1,5 +1,5 @@
 <?php
-//$Id: grad_print_v.php 8009 2014-04-30 22:11:23Z yjtzeng $
+//$Id: grad_print_v.php 8364 2015-03-23 07:28:21Z chiming $
 //載入設定檔
 require("config.php") ;
 include_once "../../include/sfs_oo_zip2.php";
@@ -130,7 +130,7 @@ function hs_print($curr_grade_school, $curr_class_name='all') {
              LEFT JOIN stud_domicile as d ON s.student_sn=d.student_sn
              LEFT JOIN grad_stud as g ON s.student_sn=g.student_sn 
               
-             where s.stud_study_cond = '0'  and s.curr_class_num like '$curr_class_name%' and g.new_school = '$curr_grade_school' 
+             where s.stud_study_cond in ('0','15')  and s.curr_class_num like '$curr_class_name%' and g.new_school = '$curr_grade_school' 
              order by s.curr_class_num ";
              //將s.stud_id=d.stud_id修改成 s.student_sn=d.student_sn，s.stud_id=g.stud_id修改成s.student_sn=g.student_sn避免畢業生十年學號重複問題  modify by kai,103.4.30   
       

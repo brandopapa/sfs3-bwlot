@@ -64,7 +64,7 @@ if (($Submit=="設定學校") and $curr_grade_school) {
    //$sqlstr = "select s.stud_id ,s.curr_class_num , g.grad_sn  from stud_base as s ,grad_stud as g 
    //         where  s.stud_id=g.stud_id and  s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' ";
    $sqlstr = "select s.stud_id ,s.curr_class_num , g.grad_sn  from stud_base as s ,grad_stud as g 
-            where  s.student_sn=g.student_sn and  s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' ";
+            where  s.student_sn=g.student_sn and  s.stud_study_cond in ('0','15') and s.curr_class_num like '$UP_YEAR%' ";
    //搜尋條件將s.stud_id=g.stud_id修改成 s.student_sn=g.student_sn，避免畢業生十年學號重複問題  modify by kai,103.4.30 
                 
    $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
@@ -214,8 +214,11 @@ if (count($grade_school)>0){
 	}
 }
 
+//$sqlstr .= "from stud_base as s  LEFT JOIN grad_stud as g ON s.student_sn=g.student_sn 
+//            where g.stud_grad_year=".curr_year()." and s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' group by classn ";
 $sqlstr .= "from stud_base as s  LEFT JOIN grad_stud as g ON s.student_sn=g.student_sn 
-            where g.stud_grad_year=".curr_year()." and s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' group by classn ";
+            where g.stud_grad_year=".curr_year()." and s.stud_study_cond in ('0','15') and s.curr_class_num like '$UP_YEAR%' group by classn ";
+//修改搜尋條件s.stud_study_cond = '0'為s.stud_study_cond in ('0','15')，修正同步化後在家教育學生未顯現的錯誤
 //echo $sqlstr ;
 
 $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 

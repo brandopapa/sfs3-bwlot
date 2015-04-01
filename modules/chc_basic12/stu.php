@@ -260,5 +260,18 @@ function tol20($max,$a) {
 	if ($a>$max) return $max;
 	return $a;
 }
-
+//取異動記錄
+function  get_move($SN){
+	$stud_coud=study_cond();//學籍資料代碼
+	$SQL = "select * from stud_move where student_sn='$SN' order by move_date";
+	$rs=$this->CONN->Execute($SQL) or die("無法查詢，語法:".$SQL);
+	if ($rs->RecordCount()==0) return "查無資料";
+	$stu=$rs->GetArray();
+	for ($i=0;$i<$rs->RecordCount();$i++){
+		$stu[$i]['c_move_kind']=$stud_coud[$stu[$i]['move_kind']];
+	}
+	return $stu;
 }
+
+
+}//end class
