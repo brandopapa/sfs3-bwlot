@@ -50,7 +50,22 @@ if ($_POST['act']=="save") {
 		//備註
 		$ponder_array[$seme_key][memo]=$v[$seme_key][memo];
 		
-		$content=serialize($ponder_array);			
+		//重建新陣列
+    $new_ponder_array=array();
+		foreach ($ponder_array as $K=>$V) {
+		  if ($K!="") {
+			//幹部
+			$new_ponder_array[$K][1][1]=$ponder_array[$K][1][1];
+			$new_ponder_array[$K][1][2]=$ponder_array[$K][1][2];
+			//小老師
+			$new_ponder_array[$K][2][1]=$ponder_array[$K][2][1];
+			$new_ponder_array[$K][2][2]=$ponder_array[$K][2][2];
+			//備註
+			$new_ponder_array[$K][memo]=$ponder_array[$K][memo];
+		  }
+		}		
+		
+		$content=serialize($new_ponder_array);			
 		$query="update career_self_ponder set id='3-2',content='$content' where sn=$sn";
 		$res=$CONN->Execute($query) or die("SQL錯誤:$query");
 	} else {

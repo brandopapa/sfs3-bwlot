@@ -1,0 +1,45 @@
+
+<style type="text/css">
+
+.red{color:red;}
+.blue{color:blue;}
+</style>
+
+<TABLE width='95%'  border='0' align='center'>
+
+<TR><TD>{{$this->select(0)}}{{$this->select_tea()}}::教師本學期課程資料數 <b>{{$this->tol}}</b> 筆 
+{{if $this->Tsn!=''}}
+<input type="button"  value="清除該教師這學期所有課表" onclick="if(window.confirm('真的全部刪除嗎？')){location.href='{{$smarty.server.PHP_SELF}}?YS={{$this->year_seme}}&Tsn={{$this->Tsn}}&act=delall';}">{{/if}}
+</TD></TR>
+</TABLE>
+<table  width='95%'  border='0' align='center' cellpadding='1' cellspacing='1' bgcolor='#DEE3E7' style='table-layout: fixed;word-wrap:break-word;font-size:10pt' align=center>
+<tr align=center  style='font-size:13pt'  bgcolor=#9EBCDD>
+<td width=10%>班級</td>
+<td width=8%>年級</td>
+<td width=8%>班級</td>
+<td width=8%>星期</td>
+<td width=8%>節次</td>
+<td width=25%>課程</td>
+<td width=8%>編修</td>
+</tr>
+
+{{foreach from=$this->all item=arr}}
+<tr align=center  style='font-size:12pt' bgcolor='#FFFFFF'>
+<td style='font-size:10pt'>{{$arr.class_id}}</td>
+<td>{{$arr.class_year}}</td>
+<td>{{$arr.class_name}}</td>
+<td>{{$arr.day}}</td>
+<td>{{$arr.sector}}</td>
+<td style='font-size:10pt'>{{$this->SsidToName[$arr.ss_id]}}</td>
+<td>
+<a href='{{$smarty.server.PHP_SELF}}?YS={{$this->year_seme}}&Tsn={{$this->Tsn}}&act=del&id={{$arr.course_id}}' onclick="return window.confirm('真的刪除嗎？');">刪除</a></td>
+</tr>
+{{/foreach}}
+
+
+
+
+</table>
+
+
+

@@ -98,7 +98,7 @@ class basic_chc{
 		$Scope=$this->S;
 		$SQL2="and c.scope='$Scope'";
 		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL='';
-		$query="select a.stud_id,a.stud_name,a.stud_sex,b.seme_class,b.seme_num,b.seme_year_seme,c.*
+		/*$query="select a.stud_id,a.stud_name,a.stud_sex,b.seme_class,b.seme_num,b.seme_year_seme,c.*
 		from stud_base a,stud_seme b,chc_mend c
 		where a.student_sn=c.student_sn
 		and c.student_sn=b.student_sn
@@ -108,6 +108,17 @@ class basic_chc{
 		$ADD_SQL
 		order by b.seme_class,b.seme_num
 		";
+		*/
+		$query="select a.stud_id,a.stud_name,a.stud_sex,
+		b.seme_class,b.seme_num,b.seme_year_seme,c.* 
+		from stud_base a,chc_mend c left join stud_seme b 
+		on (c.student_sn=b.student_sn  
+		and b.seme_year_seme='$seme_year_seme'  
+		and b.seme_class like '$seme_class' )
+		where a.student_sn=c.student_sn 
+		and c.seme='$this->Y' 
+		$ADD_SQL
+		order by b.seme_class,b.seme_num ";
 		$res=$this->CONN->Execute($query);
 		$ALL=$res->GetArray();
 		if ($Scope=="8") {
