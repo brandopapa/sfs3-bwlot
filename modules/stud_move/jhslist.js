@@ -15,6 +15,10 @@ function fillCity() {
     document.myform.city.value = '';
     document.myform.school.value = '';
     document.myform.school_id.value = '';
+    addOption(document.myform.selectcity, "其他", "其他", "");
+    addOption(document.myform.selectcity, "外籍生", "外籍生", "");
+    addOption(document.myform.selectcity, "港澳大陸生", "港澳大陸生", "");
+    addOption(document.myform.selectcity, "出國", "出國", "");
     addOption(document.myform.selectcity, "新北市", "新北市", "");
     addOption(document.myform.selectcity, "臺北市", "臺北市", "");
     addOption(document.myform.selectcity, "臺中市", "臺中市", "");
@@ -37,14 +41,14 @@ function fillCity() {
     addOption(document.myform.selectcity, "嘉義市", "嘉義市", "");
     addOption(document.myform.selectcity, "金門縣", "金門縣", "");
     addOption(document.myform.selectcity, "連江縣", "連江縣", "");
-    addOption(document.myform.selectcity, "外籍生", "外籍生", "");
-    addOption(document.myform.selectcity, "港澳大陸生", "港澳大陸生", "");
-    addOption(document.myform.selectcity, "出國", "出國", "");
 }
 
 function SelectCity() {
     removeAllOptions(document.myform.selectdistrict);
     addOption(document.myform.selectdistrict, "", "請選擇區域", "");
+    if (document.myform.selectcity.value == '其他') {
+        addOption(document.myform.selectdistrict, "其他", "其他", "");
+    }
     if (document.myform.selectcity.value == '外籍生'){
         addOption(document.myform.selectdistrict, "外籍生", "外籍生", "");
     }
@@ -475,6 +479,9 @@ function SelectDistrict() {
 
     removeAllOptions(document.myform.selectschool);
     addOption(document.myform.selectschool, "", "請選擇學校", "");
+    if (document.myform.selectcity.value == '其他' && document.myform.selectdistrict.value == '其他') {
+        addOption(document.myform.selectschool, "??????", "其他", "");
+    }
     if (document.myform.selectcity.value == '外籍生' && document.myform.selectdistrict.value == '外籍生') {
         addOption(document.myform.selectschool, "??????", "外籍生", "");
     }

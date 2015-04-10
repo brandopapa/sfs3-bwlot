@@ -268,7 +268,7 @@ if ($_POST['act']=='edit_paper_submit') {
 
   if ($item_sn=='') {
 	 //新增試題
-	 $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer,subject) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer','$subject/)";
+	 $sql="insert into resit_exam_items (paper_sn,question,cha,chb,chc,chd,fig_q,fig_a,fig_b,fig_c,fig_d,answer,subject) values ('".$paper_setup['sn']."','$question','$cha','$chb','$chc','$chd','$fig_q','$fig_a','$fig_b','$fig_c','$fig_d','$answer','$subject')";
 	 $res=$CONN->Execute($sql) or die ("Error! SQL=".$sql);
 	 //取得最後的 sn , 以顯示最後編輯的試題	
 	 list($Last_item_sn)=mysql_fetch_row(mysql_query("SELECT LAST_INSERT_ID()"));

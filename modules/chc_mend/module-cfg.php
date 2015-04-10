@@ -66,9 +66,10 @@ $school_menu_p = array(
 'index.php'=>'說明',
 'select_stu.php'=>'補考學生篩選',
 'score_input.php'=>'補考成績輸入',
+'score_notification.php'=>'補考通知單',
 'score_list.php'=>'補考成績列表',
 'score_identify.php'=>'補考成績證明',
-'ungraduate_stu.php'=>'四領域不及格篩選',
+'ungraduate_stu.php'=>'四領域不及格篩選'
 );
 
 

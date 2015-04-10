@@ -15,6 +15,10 @@ function fillCity() {
     document.myform.city.value = '';
     document.myform.school.value = '';
     document.myform.school_id.value = '';
+    addOption(document.myform.selectcity, "其他", "其他", "");
+    addOption(document.myform.selectcity, "外籍生", "外籍生", "");
+    addOption(document.myform.selectcity, "港澳大陸生", "港澳大陸生", "");
+    addOption(document.myform.selectcity, "出國", "出國", "");
     addOption(document.myform.selectcity, "新北市", "新北市", "");
     addOption(document.myform.selectcity, "臺北市", "臺北市", "");
     addOption(document.myform.selectcity, "臺中市", "臺中市", "");
@@ -37,15 +41,15 @@ function fillCity() {
     addOption(document.myform.selectcity, "嘉義市", "嘉義市", "");
     addOption(document.myform.selectcity, "金門縣", "金門縣", "");
     addOption(document.myform.selectcity, "連江縣", "連江縣", "");
-    addOption(document.myform.selectcity, "外籍生", "外籍生", "");
-    addOption(document.myform.selectcity, "港澳大陸生", "港澳大陸生", "");
-    addOption(document.myform.selectcity, "出國", "出國", "");
 }
 
 function SelectCity() {
     removeAllOptions(document.myform.selectdistrict);
     addOption(document.myform.selectdistrict, "", "請選擇區域", "");
     // this function is used to fill the category list on load
+    if (document.myform.selectcity.value == '其他') {
+        addOption(document.myform.selectdistrict, "其他", "其他", "");
+    }
     if (document.myform.selectcity.value == '外籍生') {
         addOption(document.myform.selectdistrict, "外籍生", "外籍生", "");
     }
@@ -473,6 +477,9 @@ function SelectCity() {
 function SelectDistrict() {
     removeAllOptions(document.myform.selectschool);
     addOption(document.myform.selectschool, "", "請選擇學校", "");
+    if (document.myform.selectcity.value == '其他' && document.myform.selectdistrict.value == '其他') {
+        addOption(document.myform.selectschool, "??????", "其他", "");
+    }
     if (document.myform.selectcity.value == '外籍生' && document.myform.selectdistrict.value == '外籍生') {
         addOption(document.myform.selectschool, "??????", "外籍生", "");
     }
@@ -1549,7 +1556,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "124762", "市立鳳翔國小", "");
         addOption(document.myform.selectschool, "124739", "市立鎮北國小", "");
     }
-  
+
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '林園區') {
         addOption(document.myform.selectschool, "124613", "市立林園國小", "");
         addOption(document.myform.selectschool, "124614", "市立中芸國小", "");
@@ -1777,23 +1784,22 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "543609", "市立油廠國小", "");
     }
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '三民區') {
-        addOption(document.myform.selectschool, "553601", "市立三民國小　", "");
-        addOption(document.myform.selectschool, "553602", "市立鼎金國小　", "");
-        addOption(document.myform.selectschool, "553603", "市立愛國國小　", "");
-        addOption(document.myform.selectschool, "553604", "市立十全國小　", "");
-        addOption(document.myform.selectschool, "553605", "市立正興國小　", "");
-        addOption(document.myform.selectschool, "553606", "市立博愛國小　", "");
-        addOption(document.myform.selectschool, "553607", "市立獅湖國小　", "");
+        addOption(document.myform.selectschool, "553601", "市立三民國小", "");
+        addOption(document.myform.selectschool, "553602", "市立鼎金國小", "");
+        addOption(document.myform.selectschool, "553603", "市立愛國國小", "");
+        addOption(document.myform.selectschool, "553604", "市立十全國小", "");
+        addOption(document.myform.selectschool, "553605", "市立正興國小", "");
+        addOption(document.myform.selectschool, "553606", "市立博愛國小", "");
+        addOption(document.myform.selectschool, "553607", "市立獅湖國小", "");
         addOption(document.myform.selectschool, "553608", "市立三民區民族國小", "");
         addOption(document.myform.selectschool, "553609", "市立莊敬國小", "");
         addOption(document.myform.selectschool, "553610", "市立光武國小", "");
         addOption(document.myform.selectschool, "553611", "市立東光國小", "");
+        addOption(document.myform.selectschool, "553612", "市立河濱國小", "");
         addOption(document.myform.selectschool, "553613", "市立陽明國小", "");
         addOption(document.myform.selectschool, "553614", "市立河堤國小", "");
     }
-    if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '三民區市') {
-        addOption(document.myform.selectschool, "553612", "市立河濱國小　", "");
-    }
+    
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '新興區') {
         addOption(document.myform.selectschool, "563601", "市立新興區新興國小　", "");
         addOption(document.myform.selectschool, "563602", "市立大同國小　", "");
