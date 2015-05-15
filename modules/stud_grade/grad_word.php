@@ -1,5 +1,5 @@
 <?php
-//$Id: grad_word.php 7973 2014-04-10 03:04:40Z smallduh $
+//$Id: grad_word.php 8399 2015-04-22 07:14:09Z chiming $
 include "config.php";
 include "../../include/sfs_case_score.php";
 
@@ -93,5 +93,8 @@ $smarty->assign("grad_kind",$grad_kind);
 $smarty->assign("grad_score",$grad_score); 
 $smarty->assign("grad_kind_arr",array(""=>"列出所有學生","1"=>"只列畢業學生","2"=>"只列修業學生")); 
 $smarty->assign("class_base",class_base($seme_year_seme));
+//20150422修正固定4碼問題彰化和東王麒富
+$smarty->assign("grade_num_len","%0".$grade_num_len."d");
+
 $smarty->display("stud_grad_grad_word.tpl");
 ?>

@@ -57,7 +57,7 @@ echo $tool_bar;
 	</select>
 	
 	<select size="1" name="the_report" onchange="document.myform.submit()">
-		<option>--請選擇成績單--</option>
+		<option value="">--請選擇成績單--</option>
 		<?php
 		foreach ($select_report as $k=>$v) {
 		?>
@@ -78,6 +78,8 @@ echo $tool_bar;
   
   }
   ?>	
+   	
+   	<font color=red size=2>※注意! 單一成績的加權值愈高，該成績所佔總平均比例愈高。</font>
 
 
 

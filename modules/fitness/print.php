@@ -1,5 +1,5 @@
 <?php
-// $Id: print.php 8272 2015-01-09 04:56:23Z smallduh $
+// $Id: print.php 8404 2015-05-01 08:56:27Z smallduh $
 // 取得設定檔
 include "config.php";
 
@@ -67,6 +67,7 @@ if ($class_num) {
 		$query="select a.student_sn,a.stud_id,a.stud_name,a.stud_sex,a.stud_birthday,a.stud_person_id,b.seme_class,b.seme_num from stud_base a,stud_seme b where a.student_sn=b.student_sn and b.seme_year_seme='$seme_year_seme' and b.seme_class='$class_num' and a.stud_study_cond in ($in_study) order by curr_class_num";
 		$file_name="$seme_year_seme 學生體適能匯出資料_$class_num.csv";
 	}
+	
 	$res=$CONN->Execute($query) or die("SQL無法執行：$query");
 	$r=$res->GetRows();
 	$stud_arr=array();
@@ -94,6 +95,7 @@ if ($class_num) {
 
 	//計算年齡
 	if ($_POST[cal_age]) {
+		
 		//echo "<pre>";
 		//print_r($_POST);
 		//print_r($seme_year_seme);
@@ -101,8 +103,11 @@ if ($class_num) {
 		reset($r);
 		while(list($k,$v)=each($r)) {
 			$sn=$v[student_sn];
+			
 			//2015.01.09 by smallduh 改成 坐姿前彎,仰臥起坐,立定跳遠,心肺適能 有資料再寫入
-			if (chk_fitness_data($sn,$seme_year_seme)) {
+			//2015.05.01 by smallduh 改成以勾選方式,廢除之前有資料再寫入年齡
+			if ($_POST['check_years_old'][$sn]) {   //是否有勾選此生
+			
 			$d=array();
 			$d=explode("-",$v[stud_birthday]);
 			/*
@@ -110,8 +115,11 @@ if ($class_num) {
 			$t_m=($_POST[test_m])?$_POST[test_m]:$fd[$sn][test_m];
 			*/
 			//改為以匯入的測驗年月為年齡計算基準
-			$t_y=$fd[$sn][test_y]?$fd[$sn][test_y]:$_POST[test_y];
-			$t_m=$fd[$sn][test_m]?$fd[$sn][test_m]:$_POST[test_m];
+			//2015.05.01 由於已能選擇是否重新計算那些學生，所以允許重填日期
+			//$t_y=$fd[$sn][test_y]?$fd[$sn][test_y]:$_POST[test_y];
+			//$t_m=$fd[$sn][test_m]?$fd[$sn][test_m]:$_POST[test_m];
+			$t_y=$_POST[test_y];
+			$t_m=$_POST[test_m];
 			
 			//$age=round((($t_y-$d[0])*12+$t_m-$d[1])/12);
 			$a=(($t_y-$d[0])*12+$t_m-$d[1])/12;

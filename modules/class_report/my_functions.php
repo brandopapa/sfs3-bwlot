@@ -230,12 +230,18 @@ function form_class_score($REP_SETUP,$TEST_SETUP,$SCORE) {
 	  		<td align="center" bgcolor="#CCFFCC"><input type="text" id="SS_1" onfocus="set_ower(this,1)" onBlur="unset_ower(this)" Name="subject" size="10" onkeydown="moveit2(this,event);" value="<?php echo $TEST_SETUP['subject'];?>"></td>
 	  	</tr>	
 	  	<tr>
-	  		<td align="center" bgcolor="#FFCCFF">座號</td>
+	  		<td align="center" bgcolor="#FFCCFF">-</td>
 	  		<td align="center" bgcolor="#CCFFCC">範圍</td>
 	  		<td align="center" bgcolor="#CCFFCC"><input type="text" id="SS_2" onfocus="set_ower(this,2)" onBlur="unset_ower(this)" name="memo" size="10" onkeydown="moveit2(this,event);" value="<?php echo $TEST_SETUP['memo'];?>"></td>
 	  	</tr>	
+	  	<tr>
+	  		<td align="center" bgcolor="#FFCCFF">座號</td>
+	  		<td align="center" bgcolor="#CCFFCC">加權</td>
+	  		<td align="left" bgcolor="#CCFFCC"><input type="text" id="SS_3" onfocus="set_ower(this,3)" onBlur="unset_ower(this)" name="rate" size="5" onkeydown="moveit2(this,event);" value="<?php echo $TEST_SETUP['rate'];?>"></td>
+	  	</tr>	
+
 			<?php
-			$i=2;
+			$i=3;
 			foreach ($STUD as $V) {
 				$i++;
 			?>
@@ -368,9 +374,9 @@ function list_class_score($REP_SETUP,$CON,$SUM="",$AVG="",$RANK="",$REAL_SUM=0,$
 	  		 <?php 
 	  		} // end foreach
 	  		//選擇性欄位
-				if ($SUM) { echo "<td rowspan=\"3\" bgcolor=\"#FFCCCC\" align=center>總分</td>";	}
-				if ($AVG) { echo "<td rowspan=\"3\" bgcolor=\"#FFCCCC\" align=center>平均</td>";	}
-				if ($RANK) { echo "<td rowspan=\"3\" bgcolor=\"#FFCCCC\" align=center>名次</td>";	}
+				if ($SUM) { echo "<td rowspan=\"4\" bgcolor=\"#FFCCCC\" align=center>總分</td>";	}
+				if ($AVG) { echo "<td rowspan=\"4\" bgcolor=\"#FFCCCC\" align=center>平均</td>";	}
+				if ($RANK) { echo "<td rowspan=\"4\" bgcolor=\"#FFCCCC\" align=center>名次</td>";	}
 	  		?>
 			</tr>
 	  		<td align="center" bgcolor="#FFCCFF">-</td>
@@ -384,15 +390,29 @@ function list_class_score($REP_SETUP,$CON,$SUM="",$AVG="",$RANK="",$REAL_SUM=0,$
 	  		?>
 	  	</tr>	
 	  	<tr>
-	  		<td align="center" bgcolor="#FFCCFF">座號</td>
+	  		<td align="center" bgcolor="#FFCCFF">-</td>
 	  		<td align="center" bgcolor="#CCFFCC">範圍</td>
 	  		<?php
 				foreach ($TESTS as $test_setup) {
   		 ?>
  	 	  		<td align="center" bgcolor="#CCFFCC" style="color:<?php echo $W_COLOR[$test_setup['sn']];?>"><?php echo $test_setup['memo'];?></td>
 	  		 <?php 
-	  		}
-	  		?>			<?php
+	  		} // end foreach
+	  		?>
+			</tr>
+	  	<tr>
+	  		<td align="center" bgcolor="#FFCCFF">座號</td>
+	  		<td align="center" bgcolor="#CCFFCC">加權</td>
+	  		<?php
+				foreach ($TESTS as $test_setup) {
+  		 ?>
+ 	 	  		<td align="center" bgcolor="#CCFFCC" style="color:<?php echo $W_COLOR[$test_setup['sn']];?>"><?php echo $test_setup['rate'];?></td>
+	  		 <?php 
+	  		} // end foreach
+	  		?>
+			</tr>
+
+				<?php
 			foreach ($STUD as $V) {
 			?>
 	  	<tr>
@@ -510,7 +530,10 @@ function get_report_score_all($report_sn,$REAL_SUM=0) {
   $TESTS=get_report_test_all($report_sn);
   //依每次考試, 依序取出所有 student_sn 的成績
   foreach ($TESTS as $test_setup) {
+  	//本次測試是否列入計分
   	$real_sum[$test_setup['sn']]=$test_setup['real_sum'];
+  	//本次測驗所佔加權
+  	$rate[$test_setup['sn']]=$test_setup['rate'];
    	//取得該次考試成績, 傳回 $S['student_sn']=score
    	$S=get_report_score($test_setup['sn']);
    		foreach ($S as $student_sn=>$score) {
@@ -522,21 +545,27 @@ function get_report_score_all($report_sn,$REAL_SUM=0) {
 	$RANK=array();
 	foreach ($SCORE as $student_sn=>$SS) {
 	  $sum=0;
+	  $rate_sum=0;
 	  $all_tests=0;
 	  foreach ($SS as $test_sn=>$v) {
-	  	if ($REAL_SUM==1) {
+	  	if ($REAL_SUM==1) {   //只統計有勾選的成績
 	  		if ($real_sum[$test_sn]==1) {
-	  			$all_tests++;
-	  		  $sum+=$v;
+	  			//$all_tests++;
+	  		  $sum+=$v;  //實際總分
+	  		  //加權計算
+	  		  $all_tests+=$rate[$test_sn];    //總加權額
+	  		  $rate_sum+=$v*$rate[$test_sn];  //分數乘上加權
 				}  	
 	  	}else{
-	  		$all_tests++;
-	  		$sum+=$v;
+	  		  $sum+=$v;  //實際總分
+	  		  //加權計算
+	  		  $all_tests+=$rate[$test_sn];    //總加權額
+	  		  $rate_sum+=$v*$rate[$test_sn];  //分數乘上加權
 	  	}	   
 	  }
 		$SCORE[$student_sn]['sum']=$sum;
-		$SCORE[$student_sn]['avg']=round($sum/$all_tests,2);
-		$RANK[$student_sn]=$sum/$all_tests; //把平均值記在 RANK array  中
+		$SCORE[$student_sn]['avg']=round($rate_sum/$all_tests,2);
+		$RANK[$student_sn]=$rate_sum/$all_tests; //把平均值記在 RANK array  中
 		
 	}
 	//求排名

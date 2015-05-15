@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_input.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_input.php 8400 2015-04-22 07:21:18Z chiming $
 include "config.php";
 //ป{รา
 sfs_check();
@@ -234,7 +234,7 @@ for ($a=1;$a<=$all_col ;$a++){
 //	($arr[$i][sportkind]==1 ) ? $dd=" onchange='C1(this.value);'":$dd=" onchange='C2(this.value);'";
 	if ( $arr[$i][sportorder] > $LimtA && $arr[$i][sportorder] < $LimtB ) {
 		if ($item_arr[sportkind]==5) $Str_1="-".$arr[$i][kgp];
-		$tmp_str.="<FONT COLOR='#808080'>(".$arr[$i][sportorder]."_".$arr[$i][sportnum].")</FONT>".$arr[$i][cname]."$Str_1<INPUT TYPE='text' NAME='stu[".$arr[$i][id]."_".$item."]' size=8 value='".$E_results."' $dd onfocus=\"this.select();return false ;\" onkeydown=\"moveit2(this,event);\" class=ipr2>\n";
+		$tmp_str.="<FONT COLOR='#808080'>(".$arr[$i][sportorder]."_".$arr[$i][sportnum].")</FONT>".$arr[$i][cname]."$Str_1<INPUT TYPE='text' NAME='stu[".$arr[$i][id]."_".$item."]' size=5 value='".$E_results."' $dd onfocus=\"this.select();return false ;\" onkeydown=\"moveit2(this,event);\" class=ipr2>\n";
 		($y%3==2 && $y!=0 ) ? $tmp_str.="<BR>": $tmp_str;
 		$y++;
 		}//end if

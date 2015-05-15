@@ -1,6 +1,6 @@
 <?php
 
-// $Id: index.php 7844 2014-01-07 05:57:49Z infodaes $
+// $Id: index.php 8387 2015-04-09 08:49:09Z smallduh $
 
 include "report_config.php";
 include "../../include/sfs_case_score.php";
@@ -91,11 +91,11 @@ $class_name=$class_arr[$class_id];
 // 某些資料表沒有 student_sn 這個欄位, 但有 seme_year_seme 等學年資料欄位, 故取入學年間的資料
 if ($class_id>700) {
  $STUD_STUDY_YEAR=sprintf("%d",substr($year_seme,0,3))-(sprintf("%d",substr($class_id,0,1))-7);
- $min_year_seme=sprintf("%03d",$STUD_STUDY_YEAR)."1";
+ $min_year_seme=sprintf("%03d",$STUD_STUDY_YEAR-3)."1";
  $max_year_seme=sprintf("%03d",$STUD_STUDY_YEAR+5)."2"; //國中
 } else {
  $STUD_STUDY_YEAR=sprintf("%d",substr($year_seme,0,3))-(sprintf("%d",substr($class_id,0,1))-1);
- $min_year_seme=sprintf("%03d",$STUD_STUDY_YEAR)."1";
+ $min_year_seme=sprintf("%03d",$STUD_STUDY_YEAR-3)."1";
  $max_year_seme=sprintf("%03d",$STUD_STUDY_YEAR+8)."2"; //國小
 }
 //============================================================================
@@ -138,8 +138,8 @@ switch($do_key) {
 		$data_arr=array();
 		
 		//取得stud_base基本資料
-		$sql="select student_sn,stud_id,stud_name,stud_sex,stud_study_year,stud_person_id,stud_birth_place,stud_addr_1,stud_addr_2,stud_birthday,stud_tel_1,stud_tel_2,stud_kind,enroll_school from stud_base where stud_id in ($stud_id_list) and stud_study_year='$STUD_STUDY_YEAR' order by curr_class_num";
-
+		$sql="select student_sn,stud_id,stud_name,stud_sex,stud_study_year,stud_person_id,stud_birth_place,stud_addr_1,stud_addr_2,stud_birthday,stud_tel_1,stud_tel_2,stud_kind,enroll_school from stud_base where stud_id in ($stud_id_list) and ( stud_study_year>=".substr($min_year_seme,0,3)." and stud_study_year<=".substr($max_year_seme,0,3).") order by curr_class_num";
+    
 		$res=$CONN->Execute($sql) or user_error("讀取stud_base資料失敗！<br>$sql",256);
 		$student_sn_arr=array();
 		$student_sn_list_arr=array();

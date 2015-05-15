@@ -526,7 +526,7 @@ echo $tool_bar;
  		foreach ($ss_link as $k=>$v) {
  			
  			if ($_POST['opt1']!="") {
- 			  $display=($_POST['opt1']==$v)?"bloak":"none";
+ 			  $display=($_POST['opt1']==$v)?"table-row":"none";
  			  //目前操作領域別改由 $item_scope 記錄
  			  $item_scope=$_POST['opt1'];
  			} else { 				
@@ -593,7 +593,7 @@ echo $tool_bar;
  	</tr>
  	<tr>
   	<td>
-  		<div id="edit_paper_readme" style="display:block">
+  		<div id="edit_paper_readme" style="display:table-row">
   			<input type="button" id="edit_paper_submit" value="儲存試題">
   			<input type="button" id="edit_paper_end" value="結束命題">
   			<br>
@@ -640,7 +640,7 @@ echo $tool_bar;
  	</tr>
  	<tr>
   	<td>
-  		<div id="edit_paper_readme" style="display:block">
+  		<div id="edit_paper_readme" style="display:table-row">
   			<input type="button" id="upload_paper_submit" value="上傳檔案">
   			<input type="button" id="edit_paper_end" value="離開">
   			<br>
@@ -684,7 +684,7 @@ echo $tool_bar;
  	</tr>
  	<tr>
   	<td>
-  		<div id="edit_paper_readme" style="display:block">
+  		<div id="edit_paper_readme" style="display:table-row">
   			<input type="button" id="paste_paper_submit" value="分析試題">
   			<input type="button" id="edit_paper_end" value="離開">
   			<br>
@@ -1201,7 +1201,7 @@ $("#edit_paper_end").click(function(){
 	 
 	for (index = 0; index < AllScope.length; ++index) {
     var ss=AllScope[index];        
-  	document.getElementById(ss).style.display = 'block';         
+  	document.getElementById(ss).style.display = 'table-row';         
   }
   //清除命題區html , 避免誤送
 	$('#show_buttom').html("");
@@ -1218,7 +1218,7 @@ $("#list_paper_end").click(function(){
 	 
 	for (index = 0; index < AllScope.length; ++index) {
     var ss=AllScope[index];        
-  	document.getElementById(ss).style.display = 'block';         
+  	document.getElementById(ss).style.display = 'table-row';         
   }
   //清除命題區html , 避免誤送
 	$('#show_buttom').html("");

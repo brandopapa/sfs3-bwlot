@@ -41,7 +41,9 @@ if($_POST['act']){
 			$x->setUTF8();
 			$x->filename=$SCHOOL_BASE['sch_id'].'_'.$school_long_name.'_招生系統學生資料檔.xls';
 			$x->setBorderStyle(1);
-			$x->addSheet($school_id);
+			//$x->addSheet($school_id);
+			//2015.05.08標籤改為 student
+			$x->addSheet('student');
 			$x->items[0]=array('考區代碼','集報單位代碼','序號','學號','班級','座號','學生姓名','身分證統一編號','性別','出生年(民國年)','出生月','出生日','畢業學校代碼','畢業年(民國年)','畢肄業','學生身分','身心障礙','就學區','低收入戶','中低收入戶','失業勞工子女','資料授權','家長姓名','市內電話','行動電話','郵遞區號','通訊地址','原住民是否含母語認證','非中華民國身分證號','特殊生加分百分比','就近入學','偏遠地區','健康與體育','藝術與人文','綜合活動','記過紀錄','大功支數','小功支數','嘉獎支數','服務學習得分','社團得分');  //'扶助弱勢','均衡學習','德行表現','無記過紀錄','獎勵紀錄'
 			break;
 		case 'HTML':
@@ -77,6 +79,7 @@ if($_POST['act']){
 			
 			//學生聯絡資料處理
 			$addr_zip=$student_data[$student_sn]['addr_zip'];
+			$guardian_name=$domicile_data[$student_sn]['guardian_name'];
 			if($data_source) { 
 				$guardian_phone=$student_data[$student_sn][$tel_family];
 				$guardian_hand_phone=$student_data[$student_sn][$tel_mobile];
@@ -85,7 +88,6 @@ if($_POST['act']){
 				$stud_tel_2=$student_data[$student_sn]['stud_tel_2']?$student_data[$student_sn]['stud_tel_2']:$student_data[$student_sn]['stud_tel_1'];
 				$stud_addr_2=$student_data[$student_sn]['stud_addr_2']?$student_data[$student_sn]['stud_addr_2']:$student_data[$student_sn]['stud_addr_1'];
 				
-				$guardian_name=$domicile_data[$student_sn]['guardian_name'];
 				$guardian_phone=$domicile_data[$student_sn]['guardian_phone'];
 				$guardian_hand_phone=$domicile_data[$student_sn]['guardian_hand_phone']?$domicile_data[$student_sn]['guardian_hand_phone']:$student_data[$student_sn]['stud_tel_3'];
 

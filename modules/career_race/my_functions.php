@@ -6,7 +6,7 @@ function form_race_record($race_record) {
 ?>
 <table border="1" width="750" style="border-collapse:collapse" cellpadding="3" cellspacing="3" bordercolor="#c0c0c0" bgcolor="#FFFFCC">
 	<tr>
-	 <td bgcolor="#CCFFCC">*年度</td>
+	 <td bgcolor="#CCFFCC">*學年度</td>
 	  <td bgcolor="#DCFFDC" colspan="3">
 	 	 <input type="text" name="year" value="<?php echo $race_record['year'];?>" size="3">
 	 	</td>

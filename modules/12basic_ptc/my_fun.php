@@ -284,23 +284,27 @@ function count_student_score_fitness($sn_array)
         global $CONN,$fitness_score_one,$fitness_score_one_max,$fitness_addon,$fitness_date_limit,$fitness_keyword,$work_year,$fitness_score_disability,$fitness_score_test_all;
         $score_fitness=array();
         foreach($sn_array as $student_sn){
-				$sql_select="SELECT prec1,prec2,prec3,prec4,c_curr_seme FROM fitness_data WHERE student_sn=$student_sn AND up_date<='$fitness_date_limit' AND organization like '%$fitness_keyword%' ORDER BY c_curr_seme";  //AND c_curr_seme IN ($fitness_semester)  改為以日期限定
+				$sql_select="SELECT prec1,prec2,prec3,prec4,c_curr_seme,test_y,test_m FROM fitness_data WHERE student_sn=$student_sn AND organization like '%$fitness_keyword%' ORDER BY c_curr_seme";  //AND c_curr_seme IN ($fitness_semester)  改為以日期限定  // AND up_date<='$fitness_date_limit'
                 $recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗，有可能是未安裝體適能(fitness)模組！<br>$sql_select",256);
                 while(!$recordSet->EOF) {
-                        $passed=0;  //通過項目次數
-						$tested=0;	//完成檢測項目數
-                        for($i=0;$i<=3;$i++) {
-                                $my_pre=$recordSet->fields[$i];
-								if($my_pre) $tested++;
-                                if($my_pre>=25) $passed++;  //通過門檻標準  程式現設為25%以上
-                        }
-                        //判定積分
-                        $myscore=$fitness_score_one*$passed;
-                        if($tested>=4)	$myscore+=$fitness_score_test_all;
+                        $ym=sprintf("%03d-%02d",$recordSet->fields['test_y'],$recordSet->fields['test_m']);
+						if($ym <= $fitness_date_limit) {
+							$passed=0;  //通過項目次數
+							$tested=0;	//完成檢測項目數
+							for($i=0;$i<=3;$i++) {
+									$my_pre=$recordSet->fields[$i];
+									if($my_pre) $tested++;
+									if($my_pre>=25) $passed++;  //通過門檻標準  程式現設為25%以上
+							}
+							//判定積分
+							$myscore=$fitness_score_one*$passed;
+							if($tested<4) $myscore=0; else $myscore+=$fitness_score_test_all;
 
-                        $score_fitness[$student_sn]=max($myscore,$score_fitness[$student_sn]);
+							$score_fitness[$student_sn]=max($myscore,$score_fitness[$student_sn]);
+						}
                         $recordSet->MoveNext();
                 }
+				
 				
 				//身心障礙給8分($fitness_score_disability) 如果體適能記錄高於8分 取其高值
 				$sql="SELECT disability_id FROM 12basic_ptc WHERE academic_year=$work_year AND student_sn=$student_sn";

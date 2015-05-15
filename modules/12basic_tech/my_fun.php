@@ -727,7 +727,7 @@ function get_exam_data($work_year)
 	global $CONN,$ADODB_FETCH_MODE,$exam_level_bonus;
 	$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 	$exam_data=array();
-	$sql="SELECT student_sn,score_exam_w,score_exam_c,score_exam_m,score_exam_e,score_exam_s,score_exam_n,exam_memo FROM 12basic_tech WHERE academic_year='$work_year'";
+	$sql="SELECT student_sn,score_exam_w,score_exam_c,score_exam_m,score_exam_e,score_exam_s,score_exam_n,exam_memo,acad_exam_reg_num FROM 12basic_tech WHERE academic_year='$work_year'";
 	$rs=$CONN->Execute($sql) or user_error("Åª¨ú¥¢±Ñ¡I<br>$sql",256);
 	$fields=$rs->fields;
 	while(!$rs->EOF)

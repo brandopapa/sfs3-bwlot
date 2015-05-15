@@ -14,6 +14,32 @@ $year_seme_menu=year_seme_menu($sel_year,$sel_seme,"year_seme",$all_sm_arr);
 $_POST['class_year'] = intval($_POST['class_year']);
 $class_year_menu=class_year_menu($_POST['class_year']);
 
+if ($_POST['class_year']>0) {
+	$query="select student_sn from stud_seme where seme_year_seme='".$_POST['year_seme']."' and seme_class like '".$_POST['class_year']."%' limit 0,10";
+	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+	$sn_arr = array();
+	while($rr=$res->FetchRow()) {
+		$sn_arr[] = $rr['student_sn'];
+	}
+	$sn_str = "'".implode("','", $sn_arr)."'";
+	$query="select distinct seme_year_seme from stud_seme where student_sn in ($sn_str) order by seme_year_seme desc";
+	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+	$sm_arr = array();
+	while($rr=$res->FetchRow()) {
+		if ($all_sm_arr[$rr['seme_year_seme']]) {
+			$sm_arr[$rr['seme_year_seme']] = $all_sm_arr[$rr['seme_year_seme']];
+		}
+	}
+	if ($_POST['act_year_seme']) {
+		$act_year=intval(substr($_POST['act_year_seme'],0,-1));
+		$act_seme=intval(substr($_POST['act_year_seme'],-1,1));
+		$_POST['act_year_seme']=sprintf("%03d",$act_year).$act_seme;
+		if ($_POST['act_year_seme']>$_POST['year_seme']) $_POST['act_year_seme']="";
+	}
+	$year_seme_menu2=year_seme_menu($act_year,$act_seme,"act_year_seme",$sm_arr);
+	$smarty->assign("sel_class_year",$_POST['class_year']);
+}
+
 //領域陣列資料
 $m_arr = array(
 	'lang'=>array('e'=>'language', 'c'=>'語文'),
@@ -29,19 +55,19 @@ if ($m_arr[$_POST['subj']]['e']=="") $_POST['subj']="";
 if ($_POST['class_year']>0) {
 	//寫入學期成績
 	if (count($_POST['write'])>0) {
-		write_makeup($_POST['year_seme'], $m_arr[$_POST['subj']]['e'], $_POST['write'], "write");
+		write_makeup($_POST['act_year_seme'], $m_arr[$_POST['subj']]['e'], $_POST['write'], "write");
 	}
 
 	//還原學期成績
 	if (count($_POST['undo'])>0) {
-		write_makeup($_POST['year_seme'], $m_arr[$_POST['subj']]['e'], $_POST['undo'], "undo");
+		write_makeup($_POST['act_year_seme'], $m_arr[$_POST['subj']]['e'], $_POST['undo'], "undo");
 	}
 
 	//全部寫入或還原
 	if ($_POST['writeAll'] || $_POST['undoAll']) {
 		if ($_POST['writeAll']) $wact = "write";
 		else $wact = "undo";
-		$query="select * from makeup_exam_score where seme_year_seme='".$_POST['year_seme']."' and class_year='".$_POST['class_year']."'";
+		$query="select * from makeup_exam_score where seme_year_seme='".$_POST['act_year_seme']."' and class_year='".($_POST['class_year']-($sel_year-$act_year))."'";
 		if ($_POST['subj']) $query .= " and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
 		$query .= " order by scope_ename, student_sn";
 		$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
@@ -49,17 +75,17 @@ if ($_POST['class_year']>0) {
 		$old_scope_ename = "";
 		while($rr=$res->FetchRow()) {
 			if ($rr['scope_ename']<>$old_scope_ename && $old_scope_ename<>"") {
-				write_makeup($_POST['year_seme'], $old_scope_ename, $temp_sn, $wact);
+				write_makeup($_POST['act_year_seme'], $old_scope_ename, $temp_sn, $wact);
 				$temp_sn = array();
 			}
 			$temp_sn[$rr['student_sn']] = $rr['student_sn'];
 			$old_scope_ename = $rr['scope_ename'];
 		}
-		if ($old_scope_ename<>"" && count($temp_sn)>0) write_makeup($_POST['year_seme'], $old_scope_ename, $temp_sn, $wact);
+		if ($old_scope_ename<>"" && count($temp_sn)>0) write_makeup($_POST['act_year_seme'], $old_scope_ename, $temp_sn, $wact);
 	}
 	
 	//取補評領域
-	$query="select * from makeup_exam_scope where seme_year_seme='".$_POST['year_seme']."' and class_year='".$_POST['class_year']."'";
+	$query="select * from makeup_exam_scope where seme_year_seme='".$_POST['act_year_seme']."' and class_year='".($_POST['class_year']-($sel_year-$act_year))."'";
 	if ($_POST['subj']) $query .= " and scope_ename='".$m_arr[$_POST['subj']]['e']."'";
 	$query .= " order by student_sn, scope_ename";
 	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
@@ -71,7 +97,7 @@ if ($_POST['class_year']>0) {
 		}
 	}
 	//取補評分科
-	$query="select a.*,b.ss_score from makeup_exam_score a left join stud_seme_score b on a.seme_year_seme=b.seme_year_seme and a.student_sn=b.student_sn and a.ss_id=b.ss_id where a.seme_year_seme='".$_POST['year_seme']."' and a.class_year='".$_POST['class_year']."'";
+	$query="select a.*,b.ss_score from makeup_exam_score a left join stud_seme_score b on a.seme_year_seme=b.seme_year_seme and a.student_sn=b.student_sn and a.ss_id=b.ss_id where a.seme_year_seme='".$_POST['act_year_seme']."' and a.class_year='".($_POST['class_year']-($sel_year-$act_year))."'";
 	if ($_POST['subj']) $query .= " and a.scope_ename='".$m_arr[$_POST['subj']]['e']."'";
 	$query .= " order by a.student_sn, a.scope_ename, a.ss_id";
 	$res=$CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
@@ -185,6 +211,7 @@ $smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE);
 $smarty->assign("module_name","補行評量成績擇優記錄");
 $smarty->assign("SFS_MENU",$school_menu_p);
 $smarty->assign("year_seme_menu",$year_seme_menu);
+$smarty->assign("year_seme_menu2",$year_seme_menu2);
 $smarty->assign("class_year_menu",$class_year_menu);
 $smarty->display("record.html");
 ?>

@@ -42,13 +42,16 @@ $move_year_seme = intval(substr($work_year_seme,0,-1)).substr($work_year_seme,-1
 //增加一個社團記錄
 if ($_POST['act']=='club_add') {
  $year_seme=sprintf("%03d",substr($_POST['year_seme'],0,strlen($_POST['year_seme'])-1)).substr($_POST['year_seme'],-1);
- $query="insert into association (student_sn,seme_year_seme,association_name,score,description,update_sn,update_time) values ('".$selected_student."','$year_seme','".$_POST['association_name']."','".$_POST['score']."','".$_POST['description']."','".$_SESSION['session_tea_sn']."',NOW())";
+ $query="insert into association (student_sn,seme_year_seme,association_name,score,stud_post,description,update_sn,update_time) values ('".$selected_student."','$year_seme','".$_POST['association_name']."','".$_POST['score']."','".$_POST['stud_post']."','".$_POST['description']."','".$_SESSION['session_tea_sn']."',NOW())";
  mysql_query($query);
+ $_POST['act']='';
 }
 //刪除一個社團記錄
 if ($_POST['act']=='club_delete') {
  $query="delete from association where sn='".$_POST['option1']."'";
  mysql_query($query);
+ $_POST['act']='';
+ $_POST['option1']='';
 }
 
 ?>
@@ -114,6 +117,7 @@ if ($work_year_seme!='') {
 		     <td align='center'>學期</td>
 		     <td align='center'>社團名稱</td>
 		     <td align='center'>成績(0-100分)</td>
+		     <td align='center'>職務</td>
 		     <td align='center'>指導老師評語</td>
 		     <td align='center'>&nbsp;</td>
 			  </tr>
@@ -126,6 +130,7 @@ if ($work_year_seme!='') {
 		     <td align='center'><?php echo $row['seme_year_seme'];?></td>
 		     <td align='center'><?php echo $row['association_name'];?></td>
 		     <td align='center'><?php echo $row['score'];?></td>
+				 <td align='center'><?php echo $row['stud_post'];?></td>
 		     <td><?php echo $row['description'];?></td>
 		     <td align='center'>
 		     	<?php
@@ -148,8 +153,9 @@ if ($work_year_seme!='') {
 		     <td align='center'><input type=;text' name='year_seme' size='5'></td>
 		     <td align='center'><input type='text' name='association_name' size='20'></td>
 		     <td align='center'><input type='text' name='score' size='5'></td>
+		     <td align='center'><input type='text' name='stud_post' size='8'></td>
 		     <td><input type='text' name='description' size='50'></td>
-		     <td><input type="button" value="新增社團資料" onclick="if( document.myform.association_name.value!='') { document.myform.act.value='club_add';document.myform.submit(); } ">
+		     <td><input type="button" value="新增社團資料" onclick="check_input()">
 			  </tr>
 		  </table>
       ※說明:<br>
@@ -172,3 +178,21 @@ if ($work_year_seme!='') {
 <?php
 foot();
 ?>
+
+<script>
+ function check_input() {
+   if (document.myform.year_seme.value=='') {
+   	alert('未輸入學年學期');
+    return false;
+   }
+   if (document.myform.association_name.value=='') {
+   	alert('未輸入社團名稱');
+    return false;
+   }
+ 
+  document.myform.act.value='club_add';
+  document.myform.submit();
+
+ }
+
+</script>

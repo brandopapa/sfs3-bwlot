@@ -1,5 +1,5 @@
 <?php
-// $Id: module-upgrade.php 8063 2014-06-12 08:28:34Z smallduh $
+// $Id: module-upgrade.php 8403 2015-04-30 14:29:08Z infodaes $
 if(!$CONN){
         echo "go away !!";
         exit;
@@ -155,8 +155,15 @@ CREATE TABLE `fitness_data_swim` (
 }
 
 
-
-
-
-
+$up_file_name =$upgrade_str."2015-04-30.txt";
+if (!is_file($up_file_name)){
+	$query = "ALTER TABLE `fitness_data` CHANGE `up_date` `up_date` DATE NOT NULL DEFAULT '0000-00-00';";
+	if ($CONN->Execute($query)) {
+		$temp_str = "更改up_date欄位型態為日期成功!\n";
+	} else	$temp_str = "更改up_date欄位型態為日期失敗 ! \n";
+	$temp_query = "更改up_date欄位型態為日期 -- by infodaes (2015-04-30)\n\n$temp_str";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fp);
+}
 ?>
