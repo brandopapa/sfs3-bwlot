@@ -1,5 +1,5 @@
 <?php
-// $Id: quick_input_m.php 6827 2012-06-25 01:10:45Z infodaes $
+// $Id: quick_input_m.php 8418 2015-05-12 02:10:21Z smallduh $
 /*引入學務系統設定檔*/
 include "config.php";
 include_once "../../include/sfs_case_subjectscore.php";
@@ -65,6 +65,9 @@ if(empty($sel_year))$sel_year = curr_year(); //目前學年
 if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 $score_semester="score_semester_".$sel_year."_".$sel_seme;
 
+//取得排除名單
+$student_out=get_manage_out($sel_year,$sel_seme);
+
 //顯示成績輸入頁面
 $seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 if(strstr($teacher_course,'g')){
@@ -84,7 +87,11 @@ $ii =0;
 while (!$rs->EOF){
 	$sn = $rs->fields[student_sn];
 	$sit_num = (strstr($teacher_course,'g'))?intval(substr($rs->fields[curr_class_num],-4,2))."-".intval(substr($rs->fields[curr_class_num],-2)):substr($rs->fields[curr_class_num],-2);
+	$student_sn = $rs->fields[student_sn];
 	$stud_name = $rs->fields[stud_name];
+	//排除名單加註*
+  $stud_name.=($student_out[$student_sn])?"<font color=red>*</font>":"";
+
 	$stud_id=$rs->fields[stud_id];
 	$stud_study_year=$rs->fields[stud_study_year];
 	

@@ -7,9 +7,10 @@
 <tr>
 <td style="background-color:white;">
 <table class="small"><tr><td>
-{{$year_seme_menu}}{{$class_year_menu}}
+選擇學生：{{$year_seme_menu}}{{$class_year_menu}}<span style="color: red;">(注意：僅處理所選學期之在籍學生)</span>
+<br>{{if $smarty.post.class_year}}處理學期：{{$year_seme_menu2}}{{/if}}
 </td></tr></table><br>
-{{if $smarty.post.class_year}}
+{{if $smarty.post.act_year_seme}}
 <span class="small">選擇領域：
 <input type="radio" name="subj" value="" OnCLick="this.form.submit();" {{if $smarty.post.subj==''}}checked{{/if}}>全部
 <input type="radio" name="subj" value="lang" OnCLick="this.form.submit();" {{if $smarty.post.subj=='lang'}}checked{{/if}}>語文 

@@ -101,7 +101,7 @@ if($_POST['go']=='確定輸出'){
 	//echo '</pre>';
 
 	$smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE); 
-	$smarty->assign("report_title","103學年度五專入學專用免試入學超額比序項目積分證明單");
+	$smarty->assign("report_title","104學年度五專入學專用免試入學超額比序項目積分證明單");
 	
 	$smarty->assign("school_long_name",$school_long_name); 
 	$smarty->assign("sch_id",$SCHOOL_BASE[sch_id]); 

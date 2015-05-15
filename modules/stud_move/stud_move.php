@@ -39,8 +39,8 @@ $sel_class_name = $stud_class_array[3]; //選擇班級
 $seme_year_seme = sprintf("%04d", $curr_seme);
 $temp_class_no_num = $sel_class_year . $sel_class_name;
 
-$upload_script = "<script>var answer=confirm('學生異動資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/\\n請勿上傳測試資料，以免造成資料錯亂。');if (answer){var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_upload.php?curr_seme=" . $curr_seme . "');window.open(targeturi);}</script>";
-
+$do_upload_script = "var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_upload.php?curr_seme=" . $curr_seme . "');window.open(targeturi);";
+$upload_script = "<script>alert('請記得將學生異動資料上傳\\n至臺中市就學管控系統哦！')</script>";
 //echo $upload_script;
 //判斷是否是台中市學校
 $isTaichung = substr($SCHOOL_BASE['sch_id'], 0, 2);
@@ -257,6 +257,14 @@ head();
 print_menu($student_menu_p);
 ?>
 <script language="JavaScript">
+
+    function doUploadScript() {
+<?php
+echo $do_upload_script;
+?>
+
+    }
+
     function checkok()
     {
         var OK = true;
@@ -382,13 +390,12 @@ print_menu($student_menu_p);
 
                                     //$query = "select max(stud_id) as mm,length(max(stud_id)) as max_length from stud_seme where seme_class like '$temp_year%' and seme_year_seme='$temp_seme' $stud_id_list";
                                     //修正國小部份99年和100年學生在異動時比較學號大小會出錯問題
-		                                //$query = "select max(cast(stud_id as unsigned)) as mm,length(max(cast(stud_id as unsigned))) as max_length from stud_seme where seme_class like '$temp_year%' and seme_year_seme= '$temp_seme' $stud_id_list";
-
-																		//2015.03.03 by smallduh 改為以入學年的所有學號作為判斷新學號的依據
-																		//判斷本學期本年級的入學年
-																		$curr_year=substr($temp_seme,0,3);
-																		$stud_study_year=($IS_JHORES==6)?($curr_year-($temp_year-7)):($curr_year-($temp_year-1));
-																		$query = "select max(cast(stud_id as unsigned)) as mm,length(max(cast(stud_id as unsigned))) as max_length from stud_base where stud_study_year='$stud_study_year' $stud_id_list";
+                                    //$query = "select max(cast(stud_id as unsigned)) as mm,length(max(cast(stud_id as unsigned))) as max_length from stud_seme where seme_class like '$temp_year%' and seme_year_seme= '$temp_seme' $stud_id_list";
+                                    //2015.03.03 by smallduh 改為以入學年的所有學號作為判斷新學號的依據
+                                    //判斷本學期本年級的入學年
+                                    $curr_year = substr($temp_seme, 0, 3);
+                                    $stud_study_year = ($IS_JHORES == 6) ? ($curr_year - ($temp_year - 7)) : ($curr_year - ($temp_year - 1));
+                                    $query = "select max(cast(stud_id as unsigned)) as mm,length(max(cast(stud_id as unsigned))) as max_length from stud_base where stud_study_year='$stud_study_year' $stud_id_list";
 
                                     $result = $CONN->Execute($query) or die($query);
 
@@ -513,6 +520,9 @@ print_menu($student_menu_p);
             $result = $CONN->Execute($query) or die($query);
             if (!$result->EOF) {
                 echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"2\" bordercolorlight=\"#333354\" bordercolordark=\"#FFFFFF\" width=\"100%\" class=main_body >";
+                if ($isTaichung == '06' || $isTaichung == '19') {
+                    echo "<tr><td colspan=11 class=title_top1 align=center ><button onclick=\"doUploadScript()\">按我上傳本學期學生異動資料至臺中市就學管控系統</button></td></tr>";
+                }
                 echo "<tr><td colspan=11 class=title_top1 align=center >本學期轉入學生</td></tr>";
                 echo "
 			<TR class=title_mbody >

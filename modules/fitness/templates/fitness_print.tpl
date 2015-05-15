@@ -1,10 +1,26 @@
-{{* $Id: fitness_print.tpl 8254 2014-12-23 03:25:58Z smallduh $ *}}
+{{* $Id: fitness_print.tpl 8404 2015-05-01 08:56:27Z smallduh $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
 <script language="JavaScript">
 function openwindow(sn){
 	window.open ("fitpass.php?student_sn="+sn,"個人護照","toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=no,copyhistory=no,width=600,height=420");
+}
+
+function check_years_click() {
+  var i =0;
+  if (document.myform.check_years_check.checked) {
+   var k=true;
+  } else {
+   var k=false;
+  }
+  while (i < document.myform.elements.length)  {
+    if (document.myform.elements[i].name.substr(0,15)=="check_years_old") {
+      document.myform.elements[i].checked=k;
+    }
+    i++;
+  }
+
 }
 </script>
 
@@ -14,7 +30,7 @@ function openwindow(sn){
 <input type="hidden" name="cal_age" value="">
 <tr>
 <td bgcolor="#FFFFFF" valign="top">
-{{$seme_menu}} {{$class_menu}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="button" value="計算年齡" onclick="check_years()"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>
+{{$seme_menu}} {{$class_menu}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="button" value="計算年齡" title="注意！僅計算有勾選的學生!! (全班若尚未輸入無任何資料，將無法計算年齡！)" onclick="check_years()"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>
 <font color="gold">■</font>85％以上 <font color="silver">■</font>75％以上 <font color="bronze">■</font>50％以上 <font color="red">■</font>24％以下
 <table bgcolor="#9ebcdd" cellspacing="1" cellpadding="4" width="100%">
 <tr bgcolor="#c4d9ff">
@@ -28,7 +44,7 @@ function openwindow(sn){
 <td align="center">立定跳遠<br>(cm)[％]</td>
 <td align="center">仰臥起坐<br>(次)[％]</td>
 <td align="center">心肺適能<br>(秒)[％]</td>
-<td align="center">年齡</td>
+<td align="center">年齡<input type="checkbox" name="check_years_check" onclick="check_years_click()"></td>
 <td align="center">測驗年月</td>
 <td align="center">獎章</td>
 </tr>
@@ -45,7 +61,7 @@ function openwindow(sn){
 <td style="text-align:right;">{{$fd.$sn.test3}}<font color="{{if $fd.$sn.prec3>=85}}gold{{elseif $fd.$sn.prec3>=75}}silver{{elseif $fd.$sn.prec3>=50}}bronze{{elseif $fd.$sn.prec3<25}}red{{else}}black{{/if}}">[{{$fd.$sn.prec3}}]</font></td>
 <td style="text-align:right;">{{$fd.$sn.test2}}<font color="{{if $fd.$sn.prec2>=85}}gold{{elseif $fd.$sn.prec2>=75}}silver{{elseif $fd.$sn.prec2>=50}}bronze{{elseif $fd.$sn.prec2<25}}red{{else}}black{{/if}}">[{{$fd.$sn.prec2}}]</font></td>
 <td style="text-align:right;">{{$fd.$sn.test4}}<font color="{{if $fd.$sn.prec4>=85}}gold{{elseif $fd.$sn.prec4>=75}}silver{{elseif $fd.$sn.prec4>=50}}bronze{{elseif $fd.$sn.prec4<25}}red{{else}}black{{/if}}">[{{$fd.$sn.prec4}}]</font></td>
-<td style="text-align:center;">{{$fd.$sn.age}}</td>
+<td style="text-align:center;">{{$fd.$sn.age}}<input type="checkbox" name="check_years_old[{{$sn}}]"></td>
 <td style="text-align:center;">{{$fd.$sn.test_y}}-{{$fd.$sn.test_m}}</td>
 <td style="text-align:center;">{{if $fd.$sn.reward}}{{$fd.$sn.reward}}{{else}}--{{/if}}</td>
 </tr>

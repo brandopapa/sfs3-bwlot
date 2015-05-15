@@ -25,7 +25,8 @@ if ($_POST['act']=='insert') {
 	$memo=$_POST['memo'];
 	$real_sum=1;
 	$update_sn=$_SESSION['session_tea_sn'];
-	$sql="insert into `class_report_test` set report_sn='$report_sn',subject='$subject',test_date='$test_date',real_sum='$real_sum',memo='$memo',update_sn='$update_sn'";
+	$rate=$_POST['rate'];
+	$sql="insert into `class_report_test` set report_sn='$report_sn',subject='$subject',test_date='$test_date',real_sum='$real_sum',memo='$memo',update_sn='$update_sn',rate='$rate'";
 	$res=$CONN->Execute($sql) or die("SQL錯誤:$sql");
 	
 	//取回自動新增的 sn  值, 以登錄個別學生分數的對應
@@ -60,8 +61,10 @@ if ($_POST['act']=='update') {
 	$test_date=$_POST['test_date'];
 	$memo=$_POST['memo'];
 	$real_sum=1;
+	$rate=$_POST['rate'];
 	$update_sn=$_SESSION['session_tea_sn'];
-	$sql="update `class_report_test` set report_sn='$report_sn',subject='$subject',test_date='$test_date',real_sum='$real_sum',memo='$memo',update_sn='$update_sn' where sn='{$_POST['option1']}'";
+	//教師才能更改 rate (加權)
+	$sql=($_SESSION['session_who']=='教師')?"update `class_report_test` set report_sn='$report_sn',subject='$subject',test_date='$test_date',real_sum='$real_sum',memo='$memo',update_sn='$update_sn',rate='$rate' where sn='{$_POST['option1']}'":"update `class_report_test` set report_sn='$report_sn',subject='$subject',test_date='$test_date',real_sum='$real_sum',memo='$memo',update_sn='$update_sn' where sn='{$_POST['option1']}'";
 	$res=$CONN->Execute($sql) or die("SQL錯誤:$sql");
 	
 	//存入所有登錄的成績 $_POST['score'];
@@ -173,7 +176,7 @@ moveit2("myform");
 	<input type="hidden" name="option1" value="<?php echo $_POST['option1'];?>">
 	要輸入的成績單
 	<select size="1" name="the_report" onchange="document.myform.option1.value='';document.myform.submit()">
-		<option>--請選擇成績單--</option>
+		<option value="">--請選擇成績單--</option>
 		<?php
 		foreach ($select_report as $k=>$v) {
 		?>
@@ -184,7 +187,7 @@ moveit2("myform");
 	</select>	
 	<?php
 	//若有選定成績單, 列出名單
-	if ($_POST['the_report']) {
+	if ($_POST['the_report']!="") {
 	  $REP_SETUP=get_report_setup($_POST['the_report']);
    //列出成績
    if ($_POST['act']=='') {
@@ -202,12 +205,15 @@ moveit2("myform");
   	}
    	?>
    	<input type="button" value="新增一筆成績" onclick="document.myform.act.value='InsertOne';document.myform.submit()"<?php if ($REP_SETUP['locked']) echo " disabled";?>>
+   	<BR>
+   	<font color=red size=2>※注意! 單一成績的加權值愈高，該成績所佔總平均比例愈高。</font>
    	<?php
    }
    //新增成績
    if ($_POST['act']=='InsertOne') {
    	//傳入成績單設定,科目設定,學生成績
    	$TEST_SETUP['test_date']=date("Y-m-d");
+   	$TEST_SETUP['rate']=1;
    	form_class_score($REP_SETUP,$TEST_SETUP,$SCORE); 
    	?>
    		  <input type="button" value="儲存資料" onclick="check_save('insert')">

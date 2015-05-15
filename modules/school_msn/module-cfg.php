@@ -117,5 +117,6 @@ $SFS_MODULE_SETUP[] = array('var'=>"SMPTPort", 'msg'=>"SMPT伺服器Port", 'value'=
 $SFS_MODULE_SETUP[] = array('var'=>"SMPTusername", 'msg'=>"SMPT的使用者帳號", 'value'=>'username@smpt_url.com');
 $SFS_MODULE_SETUP[] = array('var'=>"SMPTpassword", 'msg'=>"SMPT的使用者帳號", 'value'=>'yourpassword');
 
+$SFS_MODULE_SETUP[] = array('var'=>"portfolio", 'msg'=>"教師網頁連結列表", 'value'=>array(0=>"不啟用",1=>"啟用"));
 
 ?>

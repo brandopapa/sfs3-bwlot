@@ -37,7 +37,6 @@ $test_ratio1=$_POST['test_ratio1'];
 $score2=$_POST['score2'];
 $Submit5=($_GET['Submit5'])?$_GET['Submit5']:$_POST['Submit5'];
 $Submit6=($_GET['Submit6'])?$_GET['Submit6']:$_POST['Submit6'];
-$Submit7=($_GET['Submit7'])?$_GET['Submit7']:$_POST['Submit7'];
 //$Submit6=$_POST['Submit6'];
 $score=$_POST['score'];
 //$Submit5=$_POST['Submit5'];
@@ -131,7 +130,8 @@ echo "<table border=0 cellspacing=1 cellpadding=2 width=100% bgcolor=#cccccc><tr
             <input type='hidden' name='year_name' value='$year_name'>
             <input type='hidden' name='me' value='$me'>
         </form>";
-    }    
+    }
+
     //階段成績選單
     if($year_seme && ($year_name)&&($me)&&($scope_subject)){
 		$year_seme_A=explode("_",$year_seme);
@@ -151,38 +151,11 @@ echo "<table border=0 cellspacing=1 cellpadding=2 width=100% bgcolor=#cccccc><tr
             <input type='hidden' name='all_student' value=''>
             <input type='hidden' name='scope_subject' value='$scope_subject'>
         </form>";
-    }    
-    //複製階段選單
-    $stage_str="";
-    if($year_seme && ($year_name)&&($me)&&($scope_subject)&&($stage_score)&&($stage_score!="all")){
-        $stage_str.="<td><form name='form7' method='post' action='{$_SERVER['PHP_SELF']}?year_name=$year_name&me=$me&scope_subject=$scope_subject&stage_score=$stage_score'>";
-        if( preg_match("3",$select_stage_score) ) {
-        	if ($stage_score == '1'){
-						$stage_str = "<input type='checkbox' name='stage_list[]' value='2'>第2階段<input type='checkbox' name='stage_list[]' value='3'>第3階段";        	
-        	}
-        	elseif ($stage_score == '1'){
-						$stage_str = "<input type='checkbox' name='stage_list[]' value='1'>第1階段<input type='checkbox' name='stage_list[]' value='3'>第3階段";        		
-        	}
-        	else {
-        		$stage_str = "<input type='checkbox' name='stage_list[]' value='1'>第1階段<input type='checkbox' name='stage_list[]' value='2'>第2階段";	
-        	}          
-        }  
-        else{
-        	if ($stage_score == '1'){
-        	  $stage_str = "<input type='checkbox' name='stage_list[]' value='2'>第2階段";
-          }
-          else{
-            $stage_str = "<input type='checkbox' name='stage_list[]' value='1' >第1階段";
-          }
-        }
-        $stage_str.="  <input type='submit' name='Submit7' value='開始'>
-                     <input type='hidden' name='year_seme' value='$year_seme'></form></td>";
-    }	
-        
+    }
     $menu="
         <table cellspacing=0 cellpadding=0>
             <tr>
-                <td>$year_seme_menu</td><td>$class_year_menu</td><td>$class_year_name_menu</td><td>$scope_subject_menu</td><td>$stage_score_menu</td>$stage_str
+                <td>$year_seme_menu</td><td>$class_year_menu</td><td>$class_year_name_menu</td><td>$scope_subject_menu</td><td>$stage_score_menu</td>
             </tr>
         </table>";
     echo $menu;
@@ -491,9 +464,6 @@ echo "</table>";
 
 //程式檔尾
 foot();
-    if($Submit7=="開始"){
-    	echo "start!<br>";
-    }	
 ?>
 
 
@@ -532,16 +502,6 @@ function jumpMenu4(){
  if ((document.form4.year_name.value!="") & (document.form4.me.value!="") & (document.form4.scope_subject.value!="") & (document.form4.stage_score.options[document.form4.stage_score.selectedIndex].value!="")) {
 	location="<?php echo $_SERVER['PHP_SELF'] ?>?year_seme=" + document.form4.year_seme.value + "&year_name=" + document.form4.year_name.value + "&me=" +document.form4.me.value + "&scope_subject=" +document.form4.scope_subject.value + "&stage_score=" + document.form4.stage_score.options[document.form4.stage_score.selectedIndex].value;
 	}
-}
-
-function jumpMenu5(){
-	var str, classstr ;
-  if ((document.form5.year_name.value!="") & (document.form5.me.value!="") & (document.form5.scope_subject.value!="") & (document.form5.stage_score.options[document.form5.stage_score.selectedIndex].value!="") & (document.form5.stage_list.length >0)) {
-  	alert(document.form5.stage_list.length);
-	}
-	else{
-		alert("error");
-  }	
 }
 
 function openwindow(url_str){

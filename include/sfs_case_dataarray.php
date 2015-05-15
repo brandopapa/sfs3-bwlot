@@ -1,6 +1,6 @@
 <?php
 
-// $Id: sfs_case_dataarray.php 8252 2014-12-23 02:04:39Z smallduh $
+// $Id: sfs_case_dataarray.php 8397 2015-04-15 13:37:17Z infodaes $
 // 各種資料陣列
 // 取代原 data_array_function.php
 
@@ -498,12 +498,12 @@ function class_teacher() {
 
 //取得學籍原因
 function stud_obtain_kind(){
-	return array("1"=>"戶籍","2"=>"隨父就讀","3"=>"隨母就讀","4"=>"個案保護","5"=>"外籍");
+	return array("1"=>"戶籍","2"=>"隨父就讀","3"=>"隨母就讀","4"=>"個案保護","5"=>"外籍","6"=>"他校轉介","7"=>"區外入學","8"=>"鑑輔安置","9"=>"其他");
 }
 
 //個案保護類別
 function stud_safeguard_kind(){
-	return array("1"=>"避債","2"=>"家暴","3"=>"教養安置");
+	return array("1"=>"避債","2"=>"家暴","3"=>"教養安置","4"=>"寄養安置","9"=>"其他");
 }
 
 

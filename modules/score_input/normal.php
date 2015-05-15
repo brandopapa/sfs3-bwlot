@@ -1,5 +1,5 @@
 <?php
-// $Id: normal.php 8233 2014-12-10 12:23:42Z chiming $
+// $Id: normal.php 8418 2015-05-12 02:10:21Z smallduh $
 /*引入學務系統設定檔*/
 include "config.php";
 include "./module-upgrade.php";
@@ -22,6 +22,10 @@ $teacher_course = $_REQUEST[teacher_course];
 $curr_sort = $_REQUEST[curr_sort];
 if(empty($sel_year))$sel_year = curr_year(); //目前學年
 if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
+
+//取得排除名單
+$student_out=get_manage_out($sel_year,$sel_seme);
+
 
 //教師代號
 $teacher_sn = $_SESSION[session_tea_sn];
@@ -118,6 +122,10 @@ if ($err==0) {
 			$student_sn=$res->fields['student_sn'];
 			$stud_list[$student_sn][site_num]=(strstr($teacher_course,'g'))? substr($res->fields[curr_class_num],-4,2)."_".substr($res->fields[curr_class_num],-2,2):$res->fields[seme_num];
 			$stud_list[$student_sn][name]=$res->fields[stud_name];
+			
+				//排除名單加註*
+  	  $stud_list[$student_sn][name].=($student_out[$student_sn])?"<font color=red>*</font>":"";
+			
 			$stud_list[$student_sn][stud_id]=$res->fields[stud_id];
 			$stud_list[$student_sn][class_id]=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,substr($res->fields[curr_class_num],0,-4),substr($res->fields[curr_class_num],-4,2));
 			$stud_study_year=$res->fields[stud_study_year];

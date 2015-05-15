@@ -1,10 +1,11 @@
 <?php
 
-// $Id: write_memo.php 7841 2014-01-07 03:25:15Z hsiao $
+// $Id: write_memo.php 8418 2015-05-12 02:10:21Z smallduh $
 include "config.php";
 include_once "../../include/sfs_case_PLlib.php";
 include_once "../../include/sfs_case_score.php";
 include_once "../../include/sfs_case_subjectscore.php";
+
 sfs_check();
 ?>
 
@@ -37,6 +38,9 @@ if($_POST[act]=="存檔"){
 
 $sel_year = curr_year();
 $sel_seme = curr_seme();
+
+//取得排除名單
+$student_out=get_manage_out($sel_year,$sel_seme);
 
 //教師代號
 $teacher_sn = $_SESSION[session_tea_sn];
@@ -255,9 +259,12 @@ while(!$res->EOF) {
 	$stud_id = $res->fields[stud_id];
 	$ss_score_memo = $res->fields[ss_score_memo];
 	$ss_score= round($res->fields[ss_score],1);
-	$stud_name= $res->fields[stud_name];
-	$curr_class_num = $res->fields[curr_class_num];
 	$student_sn = $res->fields['student_sn'];
+	$stud_name= $res->fields[stud_name];
+	//排除名單加註*
+  $stud_name.=($student_out[$student_sn])?"<font color=red>*</font>":"";
+
+	$curr_class_num = $res->fields[curr_class_num];
 	$stud_study_year=$res->fields[stud_study_year];
 	$sit_num = substr($curr_class_num,-2);
 	if(strstr ($teacher_course, 'g')) {

@@ -1,5 +1,5 @@
 <?php
-// $Id: stud_move_out.php 8331 2015-03-02 16:54:23Z hsiao $
+// $Id: stud_move_out.php 8398 2015-04-22 06:23:49Z hsiao $
 // 載入設定檔
 include "stud_move_config.php";
 include_once "../../include/sfs_case_dataarray.php";
@@ -43,7 +43,8 @@ if (!$curr_seme) {
 }
 $seme_year_seme = sprintf("%04d", $curr_seme);
 
-$upload_script = "<script>var answer=confirm('學生異動資料已建立完成，\\n請按確定後將學生異動資料\\n上傳至臺中市就學管控系統。\\nhttps://sr.tc.edu.tw/\\n請勿上傳測試資料，以免造成資料錯亂。');if (answer){var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_upload.php?curr_seme=" . $curr_seme . "');window.open(targeturi);}</script>";
+$do_upload_script = "var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_upload.php?curr_seme=" . $curr_seme . "');window.open(targeturi);";
+$upload_script = "<script>alert('請記得將學生異動資料上傳\\n至臺中市就學管控系統哦！')</script>";
 
 //echo $upload_script;
 //判斷是否是台中市學校
@@ -125,12 +126,14 @@ switch ($key) {
             $stud_class = sprintf("%03d_%d_%02d_%02d", substr($seme_year_seme, 0, 3), substr($seme_year_seme, -1, 1), substr($seme_class, 0, 1), substr($seme_class, 1, 2));
         }
         $postOutBtn = $sure;
+        $edit = '1';
         break;
 
     case $sure :
         $update_ip = getip();
         $today = date("Y-m-d G:i:s", mktime(date("G"), date("i"), date("s"), date("m"), date("d"), date("Y")));
         $sql_update = "update stud_move set move_year_seme='$curr_seme',school_move_num='$school_move_num',move_kind='$move_kind',move_date='$move_date',move_c_unit='$move_c_unit',move_c_date='$move_c_date',move_c_word='$move_c_word',move_c_num='$move_c_num',city='$city',update_time='$today',update_id='" . $_SESSION['session_log_id'] . "',update_ip='$update_ip',school='$school',school_id='$school_id',reason='$reason',new_address='$new_address' where move_id='$move_id' and stud_id='$stud_id'";
+
         $CONN->Execute($sql_update) or die($sql_update);
         $postOutBtn = $sure;
         $edit = '1';
@@ -174,6 +177,15 @@ head();
 print_menu($student_menu_p);
 ?>
 <script type="text/javascript" language="JavaScript">
+
+
+    function doUploadScript() {
+<?php
+echo $do_upload_script;
+?>
+
+    }
+
 
 //var oform = document.forms["myform"];
     function getSN() {
@@ -426,6 +438,9 @@ print_menu($student_menu_p);
                 $result = $CONN->Execute($query) or die($query);
                 if (!$result->EOF) {
                     echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"2\" bordercolorlight=\"#333354\" bordercolordark=\"#FFFFFF\"  width=\"100%\" class=main_body >";
+                    if ($isTaichung == '06' || $isTaichung == '19') {
+                        echo "<tr><td colspan=13 class=title_top1 align=center ><button onclick=\"doUploadScript()\">按我上傳本學期學生異動資料至臺中市就學管控系統</button></td></tr>";
+                    }
                     echo "<tr><td colspan=13 class=title_top1 align=center >本學期調出學生</td></tr>";
                     echo "
 			<TR class=title_mbody >

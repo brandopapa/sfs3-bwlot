@@ -79,7 +79,8 @@ $fitness_score_one=2;
 //$fitness_semester="'1011','1012','1021','1022','1031','1032'";  改為用日期判定
 $fitness_score_disability=8;
 $fitness_score_max=10;
-$fitness_date_limit='2015-04-30';    //2014-11-23校對新增
+//$fitness_date_limit='2015-04-30';    //2014-11-23校對新增
+$fitness_date_limit='104-04';    //2015-5-5 修正
 
 //適性發展
 $my_aspiration=2;

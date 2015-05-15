@@ -1,5 +1,5 @@
 <?php
-// $Id: manage2.php 8307 2015-01-23 08:06:49Z smallduh $
+// $Id: manage2.php 8415 2015-05-11 08:19:02Z smallduh $
 
 
 /*引入學務系統設定檔*/
@@ -17,6 +17,10 @@ $sel_year = curr_year();
 $sel_seme = curr_seme();
 //學期資料表名稱
 $score_semester="score_semester_".$sel_year."_".$sel_seme;
+
+//取得排除名單
+$student_out=get_manage_out($sel_year,$sel_seme);
+
 //列印功能
 $is_print=$_GET['is_print'];
 //另開視窗
@@ -405,8 +409,10 @@ if(($teacher_course)&&($curr_sort)){
 		while(!$res->EOF){
 			if(strstr ($teacher_course, 'g')) $stud_num = intval(substr($res->fields[curr_class_num],-4,-2))."-".intval(substr($res->fields[curr_class_num],-2));
 			else $stud_num = intval(substr($res->fields[curr_class_num],-2));
-			$stud_name  = addslashes($res->fields[stud_name]);
 			$student_sn = $res->fields[student_sn];
+			$stud_name  = addslashes($res->fields[stud_name]);
+			//排除名單加註*
+      $stud_name.=($student_out[$student_sn])?"<font color=red>*</font>":"";
 			$stud_id  = addslashes($res->fields[stud_id]);
 			$stud_study_year=$res->fields[stud_study_year];
 			

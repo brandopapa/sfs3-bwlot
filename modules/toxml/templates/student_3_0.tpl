@@ -289,7 +289,6 @@
 {{/if}}
 {{/foreach}}
 						<武術_其他></武術_其他>
-						<樂器演奏_其他></樂器演奏_其他>
 					</特殊才能>
 					<興趣>
 {{foreach from=$data_arr[$arr_key].semester_eduh.$semester_key.sse_s4 item=sse_data key=sn}}

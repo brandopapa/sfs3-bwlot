@@ -1,6 +1,6 @@
 <?php
 
-// $Id: config.php 6616 2011-11-08 08:09:01Z infodaes $
+// $Id: config.php 8418 2015-05-12 02:10:21Z smallduh $
 include "../../include/config.php";
 include "../../include/sfs_oo_overlib.php";
 include "../../include/sfs_case_PLlib.php";
@@ -64,5 +64,18 @@ if(!$r2) $CONN->Execute($creat2) or trigger_error("µLªk¦Û°Ê«Ø¥ßelective_stu¸ê®Æª
 
 
 return 0;
+}
+
+//¨ú±o±Æ°£¦W³æ
+function get_manage_out($sel_year,$sel_seme) {
+ global $CONN;
+ $sql="select student_sn from score_manage_out where year='$sel_year' and semester='$sel_seme'";
+ $res=$CONN->Execute($sql) or trigger_error($sql,256);
+ $student_out=array();
+ while ($row=$res->fetchRow()) {
+  $student_sn=$row['student_sn'];
+  $student_out[$student_sn]=1;
+ }
+ return $student_out;
 }
 ?>

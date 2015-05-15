@@ -134,8 +134,15 @@ mysql_query("SET NAMES 'utf8'");
 <img style="cursor:pointer" border="1" src="./images/manage.jpg" onclick="msg_manage();" title="管理個人訊息" align="absmiddle">
 <img style="cursor:pointer" border="1" src="./images/online.jpg" onclick="msg_online();" title="查看誰在線上" align="absmiddle">
 <img style="cursor:pointer" border="1" src="./images/state.jpg"  onclick="state();" title="設定我的狀態" align="absmiddle">
-<img style="cursor:pointer" border="1" src="./images/logout.jpg" onclick="window.location='main_menu.php?act=logout'" title="登出" align="absmiddle">
+<?php
+if ($m_arr['portfolio']) {
+	?>
+ <img style="cursor:pointer" border="1" src="./images/myweb.jpg" onclick="web();" title="教師網頁" align="absmiddle">
  <?php	
+ }
+ ?>
+<img style="cursor:pointer" border="1" src="./images/logout.jpg" onclick="window.location='main_menu.php?act=logout'" title="登出" align="absmiddle">
+<?php
  echo "-".$MyName[1];
 } else {
 
@@ -204,6 +211,12 @@ function state()
  flagWindow=window.open('main_state.php','MessagePost','width=450,height=560,resizable=1,toolbar=no,scrollbars=auto');
 }
 
+//訊息管理
+function web()
+{
+ if(window.flagWindow) flagWindow.focus();	
+ flagWindow=window.open('main_teachers_web.php','MessageManage','width=800,height=560,resizable=1,toolbar=no,scrollbars=yes');
+}
 
 //登入驗證
 function checkdata() {

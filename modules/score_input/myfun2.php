@@ -1,6 +1,6 @@
 <?php
 
-//$Id: myfun2.php 8245 2014-12-16 05:09:34Z smallduh $
+//$Id: myfun2.php 8418 2015-05-12 02:10:21Z smallduh $
 
 //¦sÀÉ
 function save_semester_score($sel_year,$sel_seme) {
@@ -553,4 +553,6 @@ function student_sn_2_class_id($sel_year,$sel_seme,$student_sn){
 	$class_id=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,substr($seme_class,0,-2),substr($seme_class,-2,2));
 	return $class_id;
 }
+
+
 ?>

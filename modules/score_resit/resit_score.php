@@ -217,7 +217,7 @@ if ($_POST['act']=='output_resit_name') {
 	 $x->filename=substr($seme_year_seme,0,3)."學年度第".substr($seme_year_seme,-1).'學期應補考學生名單.xls';
 	 $x->setBorderStyle(1);
 	 $x->addSheet("應補考名單");
-	 $x->items[0]=array('學號','目前班級','目前座號','姓名','語文','數學','自然','社會','健體','藝文','綜合','應補考領域','已補考領域','家長姓名','市內電話','行動電話','郵遞區號','通訊地址');
+	 $x->items[0]=array('學號','目前班級','目前座號','姓名','語文','數學','自然','社會','健體','藝文','綜合','應補考領域','應補考領域數','已補考領域','家長姓名','市內電話','行動電話','郵遞區號','通訊地址');
   }
   
 	foreach ($stud_sn as $student_sn) {
@@ -247,11 +247,13 @@ if ($_POST['act']=='output_resit_name') {
     $language=$math=$nature=$social=$health=$art=$complex="";
     $resit_scope=$resit_tested="";
 	  $put_it=0;
+	  $resit_number=0;
 	  $memo=array();
 	  foreach ($ss_link as $v=>$S) {
 	  	${$S}=$fin_score[$student_sn][$S][$seme_year_seme]['score'];
 	   if ($fin_score[$student_sn][$S][$seme_year_seme]['score']<60) {
 	     $put_it=1;
+	     $resit_number++;
 	     $resit_scope.="【".$v;
 	     
 	     //讀取分科
@@ -297,7 +299,7 @@ if ($_POST['act']=='output_resit_name') {
 	  
 	  if ($put_it==1) {
 			if ($_POST['opt2']=='') {
-			 $x->items[]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name'],$language,$math,$nature,$social,$health,$art,$complex,$resit_scope,$resit_tested,$student_data[$student_sn]['guardian_name'],$student_data[$student_sn]['stud_tel_2'],$student_data[$student_sn]['stud_tel_3'],$student_data[$student_sn]['addr_zip'],$student_data[$student_sn]['stud_addr_2']);
+			 $x->items[]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name'],$language,$math,$nature,$social,$health,$art,$complex,$resit_scope,$resit_number,$resit_tested,$student_data[$student_sn]['guardian_name'],$student_data[$student_sn]['stud_tel_2'],$student_data[$student_sn]['stud_tel_3'],$student_data[$student_sn]['addr_zip'],$student_data[$student_sn]['stud_addr_2']);
   		} elseif ($_POST['opt2']=='print') {
   			
   			$main='  			
@@ -315,8 +317,7 @@ if ($_POST['act']=='output_resit_name') {
 		</TR>
         <TR style="height: 20pt; font-size: 12pt;">
           <TD colSpan="9" style="font: 14pt 標楷體; text-align: left;"><BR>
-		  壹、依據「國民小學及國民中學學生成績評量準則」及「臺中市國民中學學生<BR>
-		  　　成績評量補充規定」辦理。<BR><BR>
+		  壹、依據教育部「國民小學及國民中學學生成績評量準則」及相關規定辦理。<BR><BR>
 		  貳、注意事項：<BR>
 			'.$_POST['note_list'].'
 		  參、檢視 貴子弟入學以來各學期七大學習領域成績平均， <B>貴子弟有部份領<BR>
@@ -661,6 +662,7 @@ $(".output_resit_name").click(function(){
 	var scope=$(this).attr("id");
 	document.myform.act.value="output_resit_name";
 	document.myform.opt1.value=scope;
+	document.myform.target="";
 	document.myform.submit();
 	document.myform.act.value="";
 })
@@ -670,6 +672,7 @@ $("#output_resit_name_all").click(function(){
 	var scope=$(this).attr("id");
 	document.myform.act.value="output_resit_name";
 	document.myform.opt1.value="ALL";
+	document.myform.target="";
 	document.myform.submit();
 	document.myform.act.value="";
 })
@@ -683,6 +686,8 @@ $("#print_resit_name_all").click(function(){
 	document.myform.target="_blank";
 	document.myform.submit();
 	document.myform.act.value="";
+	document.myform.opt2.value="";
+	document.myform.target="";
 })
 
 //重新計算取得補考名單
