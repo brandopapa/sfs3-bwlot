@@ -17,42 +17,6 @@ if($IS_JHORES) {
 	$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","生活"=>"life","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
 	$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","life"=>"生活","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
 }
-
-//加入四大主軸的選單 add by david 20150515
-$score_area_id = $_POST[score_area];
-if ($score_area_id == '' || $score_area_id =='all'){
-	if($IS_JHORES) {
-		$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex","基礎主軸"=>"basic","生命主軸"=>"live","生活主軸"=>"mylife");
-		$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動","basic"=>"基礎主軸","live"=>"生命主軸","mylife"=>"生活主軸");
-	} else {
-		$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","生活"=>"life","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex","基礎主軸"=>"basic","生命主軸"=>"live","生活主軸"=>"mylife");
-		$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","life"=>"生活","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動","basic"=>"基礎主軸","live"=>"生命主軸","mylife"=>"生活主軸");
-	}
-}	
-else{
-	if ($score_area_id =='領域主軸'){		
-		if($IS_JHORES) {
-			$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
-			$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
-		} else {
-			$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","生活"=>"life","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
-			$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","life"=>"生活","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
-		}
-	}
-	elseif ($score_area_id =='基礎主軸'){
-		$ss_link=array("基礎主軸"=>"basic");
-		$link_ss=array("basic"=>"基礎主軸");		
-	}			
-	elseif ($score_area_id =='生命主軸'){
-		$ss_link=array("生命主軸"=>"live");
-		$link_ss=array("live"=>"生命主軸");				
-	}			
-	elseif ($score_area_id =='生活主軸'){
-		$ss_link=array("生活主軸"=>"mylife");
-		$link_ss=array("mylife"=>"生活主軸");				
-	}
-}		
-
 if (empty($_POST[year_seme])) {
 	$sel_year = curr_year(); //目前學年
 	$sel_seme = curr_seme(); //目前學期
@@ -93,9 +57,7 @@ if ($_POST[me]) {
 		array_pop($show_year);
 		array_pop($show_seme);
 	}
-	//$fin_score=cal_fin_score($sn,$semes,"",array($sel_year,$sel_seme,$_POST[year_name]));
-	$fin_score=my_cal_fin_score($ss_link,$sn,$semes,"",array($sel_year,$sel_seme,$_POST[year_name]));
-	
+	$fin_score=cal_fin_score($sn,$semes,"",array($sel_year,$sel_seme,$_POST[year_name]));
 	
 //echo "<PRE>";
 //print_r($fin_score);
@@ -128,10 +90,6 @@ $smarty->assign("SFS_MENU",$menu_p);
 $smarty->assign("year_seme_menu",year_seme_menu($sel_year,$sel_seme)); 
 $smarty->assign("class_year_menu",class_year_menu($sel_year,$sel_seme,$_POST[year_name])); 
 $smarty->assign("class_name_menu",class_name_menu($sel_year,$sel_seme,$_POST[year_name],$_POST[me])); 
-  //選擇四大主軸 add by david 20150515
-  if($_POST[me]) {  		
-  	$smarty->assign("score_area_menu",$score_area_menu=my_score_area_menu($_POST[score_area])); 
-  }
 $smarty->assign("show_year",$show_year);
 $smarty->assign("show_seme",$show_seme);
 $smarty->assign("semes",$semes);
@@ -143,13 +101,12 @@ $smarty->assign("fin_score",$fin_score);
 $smarty->assign("fin_nor_score",$fin_nor_score);
 $smarty->assign("ss_link",$ss_link);
 $smarty->assign("link_ss",$link_ss);
-$smarty->assign("ss_num",count($ss_link)); 
+$smarty->assign("ss_num",count($ss_link));
 $smarty->assign("rule",$rule_all);
 $smarty->assign("jos",$IS_JHORES);
 $smarty->assign("class_base",class_base($seme_year_seme));
 $smarty->assign("seme_class",$_POST[year_name].sprintf("%02d",$_POST[me]));
 $smarty->assign("show_rank",$show_rank);
-$smarty->assign("ss_link_len",count($ss_link));
 if ($_POST[friendly_print]) {
 	$smarty->display("stud_grad_grad_score_print.tpl");
 } else {

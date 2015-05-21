@@ -28,10 +28,10 @@ class basic_chc{
 	var $tol;//資料總筆數
 //	var $scope=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',
 //	5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動',8=>'全部領域');
-	var $scope=array(8=>'全部領域');
+//	var $scope=array(7=>'全部領域+CSV下載',8=>'全部領域+網頁顯示');
+    var $scope=array(8=>'全部領域');
 	var $scope2=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',
 	5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動');
-    
 	var $scopefailnum=array(1=>'一個領域以上不及格',2=>'二個領域以上不及格',3=>'三個領域以上不及格',4=>'四個領域以上不及格',
 	5=>'五個領域以上不及格',6=>'六個領域以上不及格',7=>'七個領域以上不及格',8=>'全部領域不及格'); 
 	var $Semesfailnum=array(1=>'一個學期成績列表',2=>'二個學期成績列表',3=>'三個學期成績列表',4=>'四個學期成績列表',5=>'五個學期成績列表',6=>'六個學期成績列表'); 
@@ -74,7 +74,7 @@ class basic_chc{
 	}
 	//顯示
 	function display(){
-//		$temp1 = dirname (__file__)."/templates/score_list04.htm";
+//		$temp1 = dirname (__file__)."/templates/ungraduate_stu_print.htm";
 		$temp2 = dirname (__file__)."/templates/ungraduate_stu.htm";
 //		($this->S == "8") ? $tpl=$temp2 : $tpl = $temp1;
         ($this->S == "8") ? $tpl = $temp2 : $tpl = $temp2;
@@ -84,6 +84,7 @@ class basic_chc{
 	//擷取資料
 	function all(){
 //		var $scope2=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動');
+         $student_sex = array("1"=>"男","2"=>"女");
 		 $cal_fin_score_ss = array("language"=>"1","math"=>"2","nature"=>"3","social"=>"4","health"=>"5","art"=>"6","complex"=>"7");
 		if ($this->Y=='') return;
 		if ($this->G=='') return;
@@ -183,12 +184,12 @@ class basic_chc{
 	      }
 		}
 		$this->all_seme_array_smarty=$all_seme_array;		
-
 		$seme_class=$this->G."%";
 		$Scope=$this->S;
 		$SQL2="and c.scope='$Scope'";
 		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL='';
-		
+//		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL=$SQL2;	
+/*
 		$query="SELECT a.stud_id, a.stud_name, a.stud_sex, b.seme_class, b.seme_num, b.seme_year_seme, c.* 
         FROM stud_base a, stud_seme b, chc_mend c
         WHERE a.student_sn = c.student_sn 
@@ -199,7 +200,28 @@ class basic_chc{
         $ADD_SQL
         ORDER BY b.seme_class,b.seme_num,b.seme_year_seme,c.student_sn,c.scope
         ";		
-      //echo $query;
+*/
+		//增加判斷是否為今年再籍學生，如此轉學生也會顯現
+		//本學年度-選擇學年+選擇年級=目前年級，才被選取。
+		//但是如此一來又會產生畢業生無法被選取的另一個問題
+		$curr_y=curr_year();
+		$sel_y=substr($this->Y,0,-2);
+		$sel_g=$this->G;
+		$opsql=$curr_y-$sel_y+$sel_g."%";
+		//echo $opsql;
+		$query="select a.stud_id,a.stud_name,a.stud_sex,
+		b.seme_class,b.seme_num,b.seme_year_seme,c.* 
+		from stud_base a,chc_mend c left join stud_seme b 
+		on (c.student_sn=b.student_sn  
+		and b.seme_year_seme='$seme_year_seme'  
+		and b.seme_class like '$seme_class' )
+		where a.student_sn=c.student_sn 
+		and c.seme='$this->Y' 
+		and a.stud_study_cond=0
+		and a.curr_class_num LIKE '$opsql' 
+		$ADD_SQL
+		order by b.seme_class,b.seme_num ";
+		//echo $query;        
 		$res=$this->CONN->Execute($query);
 		$ALL=$res->GetArray();
 		$i=0;
@@ -234,7 +256,8 @@ class basic_chc{
                  $New['A'][$sn][total_ss_Nopass]=$New['E'][$sn][$semes][total_ss_Nopass];
 			}			 			
 			//取得其他領域成績
-			$snlist_uniqe = array_unique($snlist);			
+			$snlist_uniqe_csv = array_unique($snlist);						
+			$snlist_uniqe = array_unique($snlist);						
 		    sort($snlist_uniqe);								
 			$cal_fin_score_array = $this->cal_fin_score($snlist_uniqe,$all_seme_array,"","",2);												
 			foreach ($snlist_uniqe as $value_sn){
@@ -257,16 +280,9 @@ class basic_chc{
 	              } 
 			   } 				
 			}
-			
-//			echo "<pre>";
-//			print_r($New['F']);
-//			echo "<br>";
-//			print_r($New['G']);
-//			echo "</pre>";
 			foreach ($snlist_uniqe as $value_sn){			   
 			   foreach ($cal_fin_score_ss as $index_ss => $value_ss){				
-				  foreach ($all_seme_array as $value_seme){
-					  
+				  foreach ($all_seme_array as $value_seme){ 
 					  $New['G'][$value_sn][$value_ss][total_score]=$New['G'][$value_sn][$value_ss][total_score]+$New['G'][$value_sn][$value_ss][$value_seme];
 					  if ($New['G'][$value_sn][$value_ss][$value_seme]!="") $New['G'][$value_sn][$value_ss][rate_score]++;
 					  $New['G'][$value_sn][$value_ss][avg_score]=$New['G'][$value_sn][$value_ss][total_score]/$New['G'][$value_sn][$value_ss][rate_score];
@@ -277,12 +293,30 @@ class basic_chc{
 				  $New['H'][$value_sn][total_ss_Nopass]=7-$New['H'][$value_sn][total_ss_pass];
 			   } 				
 			}
-				
-			//
-		//echo "<pre>";
-		//	print_r($New['G']);
-        //echo "</pre>";
 		$this->stu_data=$New;
+//		echo "<pre>";
+//		print_r($snlist_uniqe);
+//		echo "</pre>";
+		
+	    if ($_REQUEST['op']=="CSV") {
+	    $this->stu_data=$New;	 
+		//$CSV_data 為CSV輸出檔案
+		$CSV_data = "學號,班級,座號,姓名,性別,語文平均,數學平均,自然與生活科技平均,社會平均,健康與體育平均,藝術與人文平均,綜合活動平均,通過領域數,未通過領域數\r\n";
+		foreach ($snlist_uniqe_csv as $value_sn) {	
+		  if ($this->stu_data['H'][$value_sn]['total_ss_Nopass'] >= $this->Sfailnum) {		   
+		    if (substr($this->stu_data['A'][$value_sn][seme_class],0,1) == $this->G) {
+		      $CSV_data .="{$this->stu_data['A'][$value_sn]['stud_id']},{$this->stu_data['A'][$value_sn]['seme_class']},{$this->stu_data['A'][$value_sn]['seme_num']},{$this->stu_data['A'][$value_sn]['stud_name']},{$student_sex[$this->stu_data['A'][$value_sn]['stud_sex']]},{$this->stu_data['H'][$value_sn][1]},{$this->stu_data['H'][$value_sn][2]},{$this->stu_data['H'][$value_sn][3]},{$this->stu_data['H'][$value_sn][4]},{$this->stu_data['H'][$value_sn][5]},{$this->stu_data['H'][$value_sn][6]},{$this->stu_data['H'][$value_sn][7]},{$this->stu_data['H'][$value_sn]['total_ss_pass']},{$this->stu_data['H'][$value_sn]['total_ss_Nopass']}\r\n";
+		    }  
+		  }  
+		}	      	
+		$CSV_filename = $ys[0]."學年".$ys[1]."學期".$this->G."年級".$this->Semesnum."學期".$this->Sfailnum."個領域以上不及格.csv";
+		header("Content-disposition: attachment;filename=$CSV_filename");
+		header("Content-type: text/x-csv ; Charset=Big5");
+		header("Progma: no-cache");
+		header("Expires: 0");
+		echo $CSV_data;
+		die();
+	     }
 		}			
 	}	
 	

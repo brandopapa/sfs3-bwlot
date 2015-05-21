@@ -1,5 +1,5 @@
 <?php
-// $Id: print.php 8404 2015-05-01 08:56:27Z smallduh $
+// $Id: print.php 8425 2015-05-18 00:55:01Z smallduh $
 // 取得設定檔
 include "config.php";
 
@@ -116,10 +116,10 @@ if ($class_num) {
 			*/
 			//改為以匯入的測驗年月為年齡計算基準
 			//2015.05.01 由於已能選擇是否重新計算那些學生，所以允許重填日期
-			//$t_y=$fd[$sn][test_y]?$fd[$sn][test_y]:$_POST[test_y];
-			//$t_m=$fd[$sn][test_m]?$fd[$sn][test_m]:$_POST[test_m];
-			$t_y=$_POST[test_y];
-			$t_m=$_POST[test_m];
+			$t_y=$fd[$sn][test_y]?$fd[$sn][test_y]:$_POST[test_y];
+			$t_m=$fd[$sn][test_m]?$fd[$sn][test_m]:$_POST[test_m];
+			//$t_y=$_POST[test_y];
+			//$t_m=$_POST[test_m];
 			
 			//$age=round((($t_y-$d[0])*12+$t_m-$d[1])/12);
 			$a=(($t_y-$d[0])*12+$t_m-$d[1])/12;

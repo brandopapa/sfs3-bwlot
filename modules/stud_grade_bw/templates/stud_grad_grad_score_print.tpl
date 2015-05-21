@@ -26,9 +26,9 @@
 {{foreach from=$ss_link item=sl name=ss_link}}
 <tr align="center">
 {{if $smarty.foreach.ss_link.iteration == 1}}
-<td rowspan="{{$ss_num+1}}" style="border-style:solid; border-width:0pt 0.75pt 1.5pt 1.5pt;">{{$site_num}}</td>
-<td rowspan="{{$ss_num+1}}" style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;">{{$stud_id[$site_num]}}</td>
-<td rowspan="{{$ss_num+1}}" style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;">{{$stud_name[$site_num]}}</td>
+<td {{if $ss_num > 1}}rowspan="{{$ss_num+1}}"{{/if}} style="border-style:solid; border-width:0pt 0.75pt 1.5pt 1.5pt;">{{$site_num}}</td>
+<td {{if $ss_num > 1}}rowspan="{{$ss_num+1}}"{{/if}} style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;">{{$stud_id[$site_num]}}</td>
+<td {{if $ss_num > 1}}rowspan="{{$ss_num+1}}"{{/if}} style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;">{{$stud_name[$site_num]}}</td>
 {{/if}}
 <td align="left" style="border-style:solid; border-width:0pt 0.75pt 0.75pt 0pt;"><font size="1" style="font-size: 8pt">&nbsp;{{$link_ss[$sl]}}</font></td>
 {{foreach from=$semes item=si key=sj}}
@@ -37,17 +37,20 @@
 {{if $sl!="local" and $sl!="english"}}
 <td {{if $sl=="chinese"}}rowspan="3"{{/if}} style="border-style:solid; border-width:0pt 0.75pt 0.75pt 0.75pt;">{{if $sl=="chinese"}}{{$fin_score.$sn.language.avg.score}}{{else}}{{if $fin_score.$sn.$sl.avg.score == ""}}---{{else}}{{$fin_score.$sn.$sl.avg.score}}{{/if}}{{/if}}</td>
 {{/if}}
-{{if $sl=="chinese"}}<td rowspan="9" style="border-style:solid; border-width:0pt 1.5pt 0.75pt 0.75pt;">{{$fin_score.$sn.avg.score}}<br>({{$fin_score.$sn.avg.str}})</td>{{/if}}
+{{if $sl=="chinese"}}<td rowspan="{{$ss_num}}" style="border-style:solid; border-width:0pt 1.5pt 0.75pt 0.75pt;">{{$fin_score.$sn.avg.score}}<br>({{$fin_score.$sn.avg.str}})</td>{{/if}}
+{{if $ss_num==1 and ($sl=="basic" or $sl=="live" or $sl=="mylife")}}<td style="border-style:solid; border-width:0pt 1.5pt 0.75pt 0.75pt;">{{$fin_score.$sn.avg.score}}<br>({{$fin_score.$sn.avg.str}})</td>{{/if}}
 </tr>
 {{/foreach}}
+{{if $ss_num > 1}}
 <tr align="center">
-<td align="left" style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;"><font size="1" style="font-size: 8pt">&nbsp;日常生活表現</font></td>
+<td align="left" style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;"><font size="1" style="font-size: 8pt">&nbsp;平常生活表現</font></td>
 {{foreach from=$semes item=si key=sj}}
 <td style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0pt;">{{if $fin_nor_score.$sn.$si.score == ""}}---{{else}}{{$fin_nor_score.$sn.$si.score}}{{/if}}</td>
 {{/foreach}}
 <td style="border-style:solid; border-width:0pt 0.75pt 1.5pt 0.75pt;">{{if $fin_nor_score.$sn.avg.score == ""}}---{{else}}{{$fin_nor_score.$sn.avg.score}}{{/if}}</td>
 <td style="border-style:solid; border-width:0pt 1.5pt 1.5pt 0.75pt;">---</td>
 </tr>
+{{/if}}
 {{if $smarty.foreach.ss.iteration % 4 == 0 || $smarty.foreach.ss_link.iteration == $stud_num}}
 </table>
 {{/if}}
