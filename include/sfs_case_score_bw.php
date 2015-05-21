@@ -214,7 +214,7 @@ function cal_fin_score_non_area($student_sn=array(),$seme=array(),$succ="",$strs
 		$all_sn="'".implode("','",$student_sn)."'";
 		$all_seme="'".implode("','",$seme)."'";
 		//取得科目成績
-		$query="select a.*,c.subject_name as link_ss,b.rate from stud_seme_score a left join score_ss b on a.ss_id=b.ss_id left join score_subject c on c.subject_id = b.subject_id where a.student_sn in ($all_sn) and a.seme_year_seme in ($all_seme) and b.enable='1' and b.need_exam='1' and b.ss_id in ( select ss_id from score_ss where subject_id in ( select subject_id from score_subject where subject_name in ( '基礎課程', '經典背誦', '書法硬筆字','生命課程','德討/孝經','理念學習','生活規範','健康生活','生活技能','群己活動','服務學習') ) )";
+		$query="select a.*,c.subject_name as link_ss,b.rate from stud_seme_score a left join score_ss b on a.ss_id=b.ss_id left join score_subject c on c.subject_id = b.subject_id where a.student_sn in ($all_sn) and a.seme_year_seme in ($all_seme) and b.ss_id in ( select ss_id from score_ss where scope_id in ( select subject_id from score_subject where subject_name in ( '基礎主軸', '生命主軸', '生活主軸') ) )";
 		$res=$CONN->Execute($query) or die("sql error, ".$query);
 		//取得各學期領域學科成績.加權數並加總
 		while(!$res->EOF) {
@@ -267,10 +267,9 @@ function cal_fin_score_non_area($student_sn=array(),$seme=array(),$succ="",$strs
 								$fin_score[$sn][$seme_year_seme][total][rate]+=1;
 							}
 						//}
-						$fin_score[$sn][$seme_year_seme][avg][score]=number_format($fin_score[$sn][$seme_year_seme][total][score]/$fin_score[$sn][$seme_year_seme][total][rate],$precision);
-					}					
+					}
 				}
-				$fin_score[$sn][$ls][avg][score]=number_format($fin_score[$sn][$ls][total][score]/$fin_score[$sn][$ls][total][rate],$precision);				
+				$fin_score[$sn][$ls][avg][score]=number_format($fin_score[$sn][$ls][total][score]/$fin_score[$sn][$ls][total][rate],$precision);
 			}
 			if ($succ) {
 				if ($fin_score[$sn][succ] < $succ) $show_score[$sn]=$fin_score[$sn];

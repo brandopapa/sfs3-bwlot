@@ -55,7 +55,7 @@ if ($_POST['getkey'] == 'true') {
 //header("content-type:text/html; charset=utf-8");
     $curr_seme = $_POST['curr_seme'];
 
-    $sql = "select a.stud_person_id,a.stud_name,a.stud_study_cond,a.obtain,a.safeguard,b.move_kind,b.move_c_date,b.school_id,concat(b.city,b.school) as schoolname from stud_base as a, stud_move as b where a.student_sn = b.student_sn and b.move_year_seme=".$curr_seme;
+    $sql = "select a.stud_person_id,a.stud_name,a.stud_birthday,substring(a.curr_class_num,1,1) as stud_grade,a.stud_study_cond,a.obtain,a.safeguard,b.move_kind,b.move_c_date,b.school_id,concat(b.city,b.school) as schoolname from stud_base as a, stud_move as b where a.student_sn = b.student_sn and b.move_year_seme=" . $curr_seme;
 
     $rs = $CONN->Execute($sql) or trigger_error("建立上傳異動資料失敗 <br/>" . $sql, E_USER_ERROR);
 //print_r($rs);
@@ -65,22 +65,24 @@ if ($_POST['getkey'] == 'true') {
     $aryStudObtainKind = stud_obtain_kind();
     while (!$rs->EOF) {
         //echo '身分證字號:'.$rs->fields['stud_person_id'].';教育部代碼:'.$rs->fields['school_id'].';學生姓名:'.iconv("BIG5","UTF-8",$rs->fields['stud_name']).'<br/>';a
-	$guard = trim(iconv("BIG5","UTF-8",$aryStudSafeguardKind[$rs->fields['safeguard']]));
-	$obtain = trim(iconv("BIG5","UTF-8",$aryStudObtainKind[$rs->fields['obtain']]));
-	$status = trim(iconv("BIG5","UTF-8",$aryStudyCond[$rs->fields['stud_study_cond']]));
+        $guard = trim(iconv("BIG5", "UTF-8", $aryStudSafeguardKind[$rs->fields['safeguard']]));
+        $obtain = trim(iconv("BIG5", "UTF-8", $aryStudObtainKind[$rs->fields['obtain']]));
+        $status = trim(iconv("BIG5", "UTF-8", $aryStudyCond[$rs->fields['stud_study_cond']]));
         $results[] = array(
-	    'curr_seme'      => trim($curr_seme),
-	    'submit_ip'      => trim($_SERVER['REMOTE_ADDR']),
-            'upload_id'      => iconv("BIG5","UTF-8",$_SESSION['session_tea_name']),
+            'curr_seme' => trim($curr_seme),
+            'submit_ip' => trim($_SERVER['REMOTE_ADDR']),
+            'upload_id' => iconv("BIG5", "UTF-8", $_SESSION['session_tea_name']),
             'stud_person_id' => trim($rs->fields['stud_person_id']),
-            'stud_name'      => trim(iconv("BIG5", "UTF-8", $rs->fields['stud_name'])),
-            'obtain'         => $obtain ? $obtain : 'NA',
-            'safeguard'      => $guard ? $guard : 'NA',
-            'move_kind'      => trim(iconv("BIG5","UTF-8",$aryStudyCond[$rs->fields['move_kind']])),
-	    'status'         => $status ? $status : 'NA',
-            'move_c_date'    => trim($rs->fields['move_c_date']),
-            'school_id'      => $rs->fields['school_id'] ? trim($rs->fields['school_id']) : 'NA',
-            'schoolname'     => trim(iconv("BIG5", "UTF-8", $rs->fields['schoolname']))
+            'stud_name' => trim(iconv("BIG5", "UTF-8", $rs->fields['stud_name'])),
+            'stud_birthday' =>trim($rs->fields['stud_birthday']),
+            'stud_grade'=>trim($rs->fields['stud_grade']),
+            'obtain' => $obtain ? $obtain : 'NA',
+            'safeguard' => $guard ? $guard : 'NA',
+            'move_kind' => trim(iconv("BIG5", "UTF-8", $aryStudyCond[$rs->fields['move_kind']])),
+            'status' => $status ? $status : 'NA',
+            'move_c_date' => trim($rs->fields['move_c_date']),
+            'school_id' => $rs->fields['school_id'] ? trim($rs->fields['school_id']) : 'NA',
+            'schoolname' => trim(iconv("BIG5", "UTF-8", $rs->fields['schoolname']))
         );
         $rs->moveNext();
     }

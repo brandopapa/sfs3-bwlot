@@ -56,7 +56,7 @@ if($_POST['act']=='傳送准考證號碼'){
  	$seme_class="9".$data_arr[1];
  	$seme_num=$data_arr[2];
  	$seme_num=$seme_num*1;
- 	$acad_exam_reg_num=$data_arr[4];
+ 	$acad_exam_reg_num=trim($data_arr[4]);
  	
  	$sql="select student_sn from stud_seme where seme_year_seme='$curr_year_seme' and seme_class='$seme_class' and seme_num=$seme_num";
  	$res=$CONN->Execute($sql) or die("error! sql=".$sql);

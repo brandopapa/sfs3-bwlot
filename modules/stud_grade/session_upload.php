@@ -9,20 +9,23 @@ sfs_check();
 $session_id = session_id();
 $useragent = $_SERVER['HTTP_USER_AGENT'];
 $target_page = $SFS_PATH_HTML . 'modules/stud_grade/sr_tc_upload.php';
-$ch = curl_init();
-$options = array(
-    CURLOPT_URL => "https://oidc.tc.edu.tw/api/real-ip",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-    CURLOPT_USERPWD => "api:oidcuser"
-);
-curl_setopt_array($ch, $options);
-$real_ip = curl_exec($ch);
-curl_close($ch);
-
-if (!$real_ip) {
-    $real_ip = file_get_contents('http://phihag.de/ip/');
+if (function_exists('curl_ini')) {
+    $ch = curl_init();
+    $options = array(
+        CURLOPT_URL => "https://oidc.tc.edu.tw/api/real-ip",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+        CURLOPT_USERPWD => "api:oidcuser"
+    );
+    curl_setopt_array($ch, $options);
+    $real_ip = curl_exec($ch);
+    curl_close($ch);
+} else {
+    if (!$real_ip) {
+        $real_ip = file_get_contents('http://phihag.de/ip/');
+    }
 }
+
 
 if (!$curr_seme) {
     $sel_year = curr_year(); //選擇學年
@@ -35,7 +38,7 @@ if (!$curr_seme) {
 }
 
 $para = array(
-    'curr_seme'     => $curr_seme,
+    'curr_seme' => $curr_seme,
     'session_id' => $session_id,
     'useragent' => $useragent,
     'target_page' => $target_page,
@@ -45,9 +48,12 @@ $para = array(
     'edu_id' => trim($SCHOOL_BASE['sch_id'])
 );
 //echo json_encode($para);
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+    echo "<script type=\"text/javascript\" src=\"https://java.com/js/dtjava.js\"></script>";
+} else {
+    echo "<script type=\"text/javascript\" src=\"http://java.com/js/dtjava.js\"></script>";
+}
 ?>
-
-<script type="text/javascript" src="http://java.com/js/dtjava.js"></script>
 <script>
     function javafxEmbed() {
         dtjava.embed(
@@ -69,7 +75,7 @@ $para = array(
 <!-- Embed FX application into web page once page is loaded -->
     dtjava.addOnloadCallback(javafxEmbed);
 </script>
-    <fieldset>
-        <legend>畢業生資料自動上傳(臺中市就學管控系統)</legend>        
-<div id='javafx-app-placeholder'></div>
+<fieldset>
+    <legend>畢業生資料自動上傳(臺中市就學管控系統)</legend>        
+    <div id='javafx-app-placeholder'></div>
 </fieldset>
