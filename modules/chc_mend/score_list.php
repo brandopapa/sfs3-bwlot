@@ -109,6 +109,14 @@ class basic_chc{
 		order by b.seme_class,b.seme_num
 		";
 		*/
+		//增加判斷是否為今年再籍學生，如此轉學生也會顯現
+		//本學年度-選擇學年+選擇年級=目前年級，才被選取。
+		//但是如此一來又會產生畢業生無法被選取的另一個問題
+		$curr_y=curr_year();
+		$sel_y=substr($this->Y,0,-2);
+		$sel_g=$this->G;
+		$op=$curr_y-$sel_y+$sel_g."%";
+		
 		$query="select a.stud_id,a.stud_name,a.stud_sex,
 		b.seme_class,b.seme_num,b.seme_year_seme,c.* 
 		from stud_base a,chc_mend c left join stud_seme b 
@@ -117,8 +125,11 @@ class basic_chc{
 		and b.seme_class like '$seme_class' )
 		where a.student_sn=c.student_sn 
 		and c.seme='$this->Y' 
+		and a.stud_study_cond=0
+		and a.curr_class_num LIKE '$op' 
 		$ADD_SQL
 		order by b.seme_class,b.seme_num ";
+		//echo $query;
 		$res=$this->CONN->Execute($query);
 		$ALL=$res->GetArray();
 		if ($Scope=="8") {

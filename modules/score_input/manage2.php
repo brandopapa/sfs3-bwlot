@@ -1,5 +1,5 @@
 <?php
-// $Id: manage2.php 8415 2015-05-11 08:19:02Z smallduh $
+// $Id: manage2.php 8420 2015-05-13 07:32:22Z smallduh $
 
 
 /*引入學務系統設定檔*/
@@ -380,6 +380,7 @@ if(($teacher_course)&&($curr_sort)){
 		if ($curr_sort>1) {
 		 for ($PRE_SORT=1;$PRE_SORT<$curr_sort;$PRE_SORT++) {
 		  $query_pre = "select student_sn,test_kind,score from $score_semester where ss_id='$ss_id' and test_sort='$PRE_SORT' and student_sn in ($all_sn)";
+			//echo  $query_pre."<br>";
 			$res_pre = $CONN->Execute($query_pre) or trigger_error($query_pre,E_USER_ERROR);
 			while(!$res_pre->EOF){
 				$tt =1;
@@ -387,7 +388,7 @@ if(($teacher_course)&&($curr_sort)){
 				$tt = 0;
 				$student_sn=$res_pre->fields[student_sn];
 				$score_arr_pre[$PRE_SORT][$tt][$student_sn] = $res_pre->fields[score];
-				//echo $res_pre->fields[test_kind]."$student_sn=>".$score_arr_pre[$PRE_SORT][$tt][$res->fields[student_sn]]."<br>";
+				//echo $res_pre->fields[test_kind]."$student_sn ($PRE_SORT , $tt) =>".$score_arr_pre[$PRE_SORT][$tt][$student_sn]."<br>";
 				$res_pre->MoveNext();
 		  } //end while
 		 } // end for
@@ -475,10 +476,13 @@ if(($teacher_course)&&($curr_sort)){
 								$score_2 = $score_arr_pre[$PRE_SORT][1][$student_sn];
 
 							if ($score_1==-100 || $score_2==-100 || $score_1=="" || $score_2=="") {
-								if ($score_1>0)
-									$avg_pre_score= $score_1_s;
-								else
-									$avg_pre_score= $score_2_s;
+								if ($score_1>0) {
+									$avg_pre_score= $score_1;
+								}elseif ($score_2>0) {
+									$avg_pre_score= $score_2;
+								} else {
+									$avg_pre_score= "";
+							  }
 							} else {
 								$ratio_sum = $test_ratio[0]+$test_ratio[1];
 								$avg_pre_score = sprintf("%01.2f",($score_1*$test_ratio[0]+$score_2*$test_ratio[1])/$ratio_sum);

@@ -79,6 +79,8 @@ if ($_POST['class_year']>0 && $_POST['notin']) {
 		$smarty->assign("seme_arr",$all_sm_arr);
 		$smarty->assign("seme_str",$cstr);
 		$smarty->assign("school_data",get_school_name());
+		$sb = get_school_base();
+		$smarty->assign("school_sheng",$sb['sch_sheng']);
 		$smarty->display("noti.html");
 		exit;
 	} else

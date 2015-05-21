@@ -9,8 +9,6 @@ sfs_check();
 $year_seme=$_REQUEST['year_seme'];
 $year_name=$_REQUEST['year_name'];
 $me=$_REQUEST['me'];
-//選擇四大主軸 add by david 20150515
-$score_area_id = $_REQUEST['score_area'];
 $go=$_POST['go'];
 $friendly_print=$_GET['friendly_print'];
 $save_csv=$_GET['save_csv'];
@@ -53,16 +51,12 @@ if ($year_seme) {
 	if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 }
 $teacher_id=$_SESSION['session_log_id'];//取得登入老師的id
-
 $year_seme_menu=year_seme_menu($sel_year,$sel_seme);
 $class_year_menu=class_year_menu($sel_year,$sel_seme,$year_name);
 
 if($year_name)	$class_year_name_menu=class_name_menu($sel_year,$sel_seme,$year_name,$me);
 
-//選擇四大主軸 add by david 20150515
-if($me) $score_area_menu=my_score_area_menu($score_area_id);	
-//if($me) {
-if($score_area_id) {
+if($me) {
 	$percision_radio="<font size=2 color='red'> ◎成績顯示的精度：";
 	$percision_array=array('1'=>'整數','2'=>'小數1位','3'=>'小數2位');
 	foreach($percision_array as $key=>$value){
@@ -74,7 +68,7 @@ if($score_area_id) {
 $menu="<form name=\"myform\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 	<table>
 	<tr>
-	<td>$year_seme_menu</td><td>$class_year_menu</td><td>$class_year_name_menu</td><td>$score_area_menu$percision_radio</td>
+	<td>$year_seme_menu</td><td>$class_year_menu</td><td>$class_year_name_menu $percision_radio</td>
 	</tr>
 	</table></form>";
 if ($friendly_print != 1 && ! $save_csv) echo $menu;
@@ -95,28 +89,15 @@ if($year_name && $me && $percision){
 		$rs->MoveNext();
 	}
 	//092_2_01_01
-	//加入四大主軸的選單 add by david 20150515
-	if ($score_area_id == '' || $score_area_id =='all'){
-		$area_condition='';
-  }	
-	else{
-		if ($score_area_id =='領域主軸'){		
-			$area_condition= "and link_ss in ('語文-本國語文','語文-鄉土語文','語文-英語','數學','自然與生活科技','社會','健康與體育','藝術與人文','綜合活動')";	
-		}
-		else{
-			$area_condition= "and link_ss ='$score_area_id'";	
-		}			
-	}		
-	$sql="select * from score_ss where class_id='".sprintf("%03s_%s_%02s_%02s",$sel_year,$sel_seme,$year_name,$me)."' and enable='1' $area_condition";
+	$sql="select * from score_ss where class_id='".sprintf("%03s_%s_%02s_%02s",$sel_year,$sel_seme,$year_name,$me)."' and enable='1'";
 	$rs=$CONN->Execute($sql);
 	if ($rs->RecordCount() ==0){
-		$sql="select * from score_ss where year='$sel_year' and semester='$sel_seme' and class_year='$year_name' and enable='1' and need_exam='1' and class_id='' $area_condition order by sort,sub_sort";
+		$sql="select * from score_ss where year='$sel_year' and semester='$sel_seme' and class_year='$year_name' and enable='1' and need_exam='1' and class_id='' order by sort,sub_sort";
 		$rs=$CONN->Execute($sql);
 	}
 
 	$subject_list="";
 	$subject_kind="";
-	$subject_rate_list="";
 	while (!$rs->EOF) {
 		$id=$rs->fields['ss_id'];
 		$scope_id=$rs->fields['scope_id'];
@@ -127,14 +108,11 @@ if($year_name && $me && $percision){
 		if ($friendly_print==1) {
 			$subject_list.="<td width='40' align='center' colspan='2'><p align='left'><span style='font-size:10pt;'>".stripslashes($subject_name[$ss_id[$id]])."</span></p></td>";
 			$subject_kind.="<td width='20' alifn='center'><p align='center'><span style='font-size:8pt;'>分數</span></p></td><td width='20' alifn='center'><p align='center'><span style='font-size:8pt;'>努力程度</span></p></td>";
-			//$subject_rate_list.="<td width='40' align='center' colspan='2'><p align='left'><span style='font-size:10pt;'>".$s_rate[$id]."</span></p></td>";
 		} 
 		else if($save_csv ==1){
 			$subject_kind.=stripslashes($subject_name[$ss_id[$id]])."分數,".stripslashes($subject_name[$ss_id[$id]])."努力程度,";			
-			$subject_rate_list.=$s_rate[$id].",,";
 		}	else if($save_csv ==2){
 			$subject_kind.=stripslashes($subject_name[$ss_id[$id]]).",";			
-			$subject_rate_list.=$s_rate[$id].",";			
 		}	
 		else {
 			$subject_list.="<td width='40' align='center' colspan='2'><small>".stripslashes($subject_name[$ss_id[$id]])."</small></td>";
@@ -255,7 +233,6 @@ if($year_name && $me && $percision){
 		header("Pragma: no-cache");
 		header("Expires: 0");
 		echo $s[sch_cname].$sel_year."學年度第".$sel_seme."學期".$year_name."年".$me."班學期成績總表\n";
-		echo ",,,".$subject_rate_list.",\n";	
 		echo "學號,座號,姓名,".$subject_kind."加權平均,綜合表現\n";	
 		echo $student_and_score_list;
 
@@ -269,20 +246,15 @@ if($year_name && $me && $percision){
 		header("Pragma: no-cache");
 		header("Expires: 0");
 		echo $s[sch_cname].$sel_year."學年度第".$sel_seme."學期".$year_name."年級學期成績總表\n";
-		echo ",,,,".$subject_rate_list.",\n";	
 		echo "班級,學號,座號,姓名,".$subject_kind."加權平均\n";	
 		echo $student_and_score_list;
 
 		exit;
 	}
 	else {
-		//$print_msg="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&friendly_print=1&percision=$_REQUEST[percision]' target='new'><b><small>友善列印</small></b></a>&nbsp;&nbsp;&nbsp;"; 
-		//$print_msg.="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&save_csv=1&percision=$_REQUEST[percision]'><b><small>匯出本班的csv檔</small></b></a>&nbsp;&nbsp;&nbsp;";
-		//$print_msg.="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&save_csv=2&percision=$_REQUEST[percision]'><b><small>匯出全年級csv檔(不含努力程度)</small></b></a><br>";
-		$print_msg="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&friendly_print=1&percision=$_REQUEST[percision]&score_area=$_REQUEST[score_area]' target='new'><b><small>友善列印</small></b></a>&nbsp;&nbsp;&nbsp;"; 
-		$print_msg.="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&save_csv=1&percision=$_REQUEST[percision]&score_area=$_REQUEST[score_area]'><b><small>匯出本班的csv檔</small></b></a>&nbsp;&nbsp;&nbsp;";
-		$print_msg.="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&save_csv=2&percision=$_REQUEST[percision]&score_area=$_REQUEST[score_area]'><b><small>匯出全年級csv檔(不含努力程度)</small></b></a><br>";
-		
+		$print_msg="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&friendly_print=1&percision=$_REQUEST[percision]' target='new'><b><small>友善列印</small></b></a>&nbsp;&nbsp;&nbsp;"; 
+		$print_msg.="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&save_csv=1&percision=$_REQUEST[percision]'><b><small>匯出本班的csv檔</small></b></a>&nbsp;&nbsp;&nbsp;";
+		$print_msg.="<a href='{$_SERVER['PHP_SELF']}?year_seme=$year_seme&year_name=$year_name&me=$me&save_csv=2&percision=$_REQUEST[percision]'><b><small>匯出全年級csv檔(不含努力程度)</small></b></a><br>";
 		$main=" $print_msg
 			<table bgcolor='#9ebcdd' border=$border cellpadding='6' cellspacing='1'>
 			<tr bgcolor='#c4d9ff'>

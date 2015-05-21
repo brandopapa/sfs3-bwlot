@@ -116,7 +116,6 @@ if($year_name && $me && $percision){
 
 	$subject_list="";
 	$subject_kind="";
-	$subject_rate_list="";
 	while (!$rs->EOF) {
 		$id=$rs->fields['ss_id'];
 		$scope_id=$rs->fields['scope_id'];
@@ -127,14 +126,11 @@ if($year_name && $me && $percision){
 		if ($friendly_print==1) {
 			$subject_list.="<td width='40' align='center' colspan='2'><p align='left'><span style='font-size:10pt;'>".stripslashes($subject_name[$ss_id[$id]])."</span></p></td>";
 			$subject_kind.="<td width='20' alifn='center'><p align='center'><span style='font-size:8pt;'>分數</span></p></td><td width='20' alifn='center'><p align='center'><span style='font-size:8pt;'>努力程度</span></p></td>";
-			//$subject_rate_list.="<td width='40' align='center' colspan='2'><p align='left'><span style='font-size:10pt;'>".$s_rate[$id]."</span></p></td>";
 		} 
 		else if($save_csv ==1){
 			$subject_kind.=stripslashes($subject_name[$ss_id[$id]])."分數,".stripslashes($subject_name[$ss_id[$id]])."努力程度,";			
-			$subject_rate_list.=$s_rate[$id].",,";
 		}	else if($save_csv ==2){
 			$subject_kind.=stripslashes($subject_name[$ss_id[$id]]).",";			
-			$subject_rate_list.=$s_rate[$id].",";			
 		}	
 		else {
 			$subject_list.="<td width='40' align='center' colspan='2'><small>".stripslashes($subject_name[$ss_id[$id]])."</small></td>";
@@ -255,7 +251,6 @@ if($year_name && $me && $percision){
 		header("Pragma: no-cache");
 		header("Expires: 0");
 		echo $s[sch_cname].$sel_year."學年度第".$sel_seme."學期".$year_name."年".$me."班學期成績總表\n";
-		echo ",,,".$subject_rate_list.",\n";	
 		echo "學號,座號,姓名,".$subject_kind."加權平均,綜合表現\n";	
 		echo $student_and_score_list;
 
@@ -269,7 +264,6 @@ if($year_name && $me && $percision){
 		header("Pragma: no-cache");
 		header("Expires: 0");
 		echo $s[sch_cname].$sel_year."學年度第".$sel_seme."學期".$year_name."年級學期成績總表\n";
-		echo ",,,,".$subject_rate_list.",\n";	
 		echo "班級,學號,座號,姓名,".$subject_kind."加權平均\n";	
 		echo $student_and_score_list;
 
