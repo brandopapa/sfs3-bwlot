@@ -189,7 +189,6 @@ class basic_chc{
 		$SQL2="and c.scope='$Scope'";
 		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL='';
 //		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL=$SQL2;	
-/*
 		$query="SELECT a.stud_id, a.stud_name, a.stud_sex, b.seme_class, b.seme_num, b.seme_year_seme, c.* 
         FROM stud_base a, stud_seme b, chc_mend c
         WHERE a.student_sn = c.student_sn 
@@ -200,36 +199,14 @@ class basic_chc{
         $ADD_SQL
         ORDER BY b.seme_class,b.seme_num,b.seme_year_seme,c.student_sn,c.scope
         ";		
-*/
-		//增加判斷是否為今年再籍學生，如此轉學生也會顯現
-		//本學年度-選擇學年+選擇年級=目前年級，才被選取。
-		//但是如此一來又會產生畢業生無法被選取的另一個問題
-		$curr_y=curr_year();
-		$sel_y=substr($this->Y,0,-2);
-		$sel_g=$this->G;
-		$opsql=$curr_y-$sel_y+$sel_g."%";
-		//echo $opsql;
-		$query="select a.stud_id,a.stud_name,a.stud_sex,
-		b.seme_class,b.seme_num,b.seme_year_seme,c.* 
-		from stud_base a,chc_mend c left join stud_seme b 
-		on (c.student_sn=b.student_sn  
-		and b.seme_year_seme='$seme_year_seme'  
-		and b.seme_class like '$seme_class' )
-		where a.student_sn=c.student_sn 
-		and c.seme='$this->Y' 
-		and a.stud_study_cond=0
-		and a.curr_class_num LIKE '$opsql' 
-		$ADD_SQL
-		order by b.seme_class,b.seme_num ";
-		//echo $query;        
 		$res=$this->CONN->Execute($query);
 		$ALL=$res->GetArray();
 		$i=0;
 		if ($Scope=="8") {
 			$New=array();
 			foreach ($ALL as $ary){
-				$sn=$ary['student_sn'];//學號
-				$snlist[]=$ary['student_sn'];//學號列表
+				$sn=$ary['student_sn'];//系統編號
+				$snlist[]=$ary['student_sn'];//系統編號列表
 				$ss=$ary['scope'];//領域
 				$semes=$ary['seme_year_seme'];//學期
 				$score_end = $ary['score_end'];//補考完成績
@@ -256,8 +233,8 @@ class basic_chc{
                  $New['A'][$sn][total_ss_Nopass]=$New['E'][$sn][$semes][total_ss_Nopass];
 			}			 			
 			//取得其他領域成績
-			$snlist_uniqe_csv = array_unique($snlist);						
-			$snlist_uniqe = array_unique($snlist);						
+			$snlist_uniqe_csv = array_unique($snlist);//系統編號唯一列表用於CSV						
+			$snlist_uniqe = array_unique($snlist);//系統編號唯一列表						
 		    sort($snlist_uniqe);								
 			$cal_fin_score_array = $this->cal_fin_score($snlist_uniqe,$all_seme_array,"","",2);												
 			foreach ($snlist_uniqe as $value_sn){
@@ -294,9 +271,9 @@ class basic_chc{
 			   } 				
 			}
 		$this->stu_data=$New;
-//		echo "<pre>";
-//		print_r($snlist_uniqe);
-//		echo "</pre>";
+		//echo "<pre>";
+		//print_r($this->stu_data);
+		//		echo "</pre>";
 		
 	    if ($_REQUEST['op']=="CSV") {
 	    $this->stu_data=$New;	 

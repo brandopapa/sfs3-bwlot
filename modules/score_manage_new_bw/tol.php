@@ -145,8 +145,8 @@ if($year_name && $me && $percision){
 	
 	$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 	$seme_class=$year_name.sprintf("%02d",$me);
-	if($save_csv==2) $sql="select student_sn,stud_id,seme_class,seme_class_name,seme_num from stud_seme where seme_year_seme='$seme_year_seme' and seme_class like '".substr($seme_class,0,-2)."%' order by seme_class,seme_num,student_sn";
-		else $sql="select student_sn,stud_id,seme_class_name,seme_num from stud_seme where seme_year_seme='$seme_year_seme' and seme_class='$seme_class' order by seme_num,student_sn";
+	if($save_csv==2) $sql="select a.student_sn,a.stud_id,a.seme_class,a.seme_class_name,a.seme_num from stud_seme a left join stud_base b on a.student_sn=b.student_sn where a.seme_year_seme='$seme_year_seme' and a.seme_class like '".substr($seme_class,0,-2)."%' and b.stud_study_cond in ('0','15') order by seme_class,seme_num,student_sn";
+		else $sql="select a.student_sn,a.stud_id,a.seme_class_name,a.seme_num from stud_seme a left join stud_base b on a.student_sn=b.student_sn where a.seme_year_seme='$seme_year_seme' and a.seme_class='$seme_class' and b.stud_study_cond in ('0','15') order by seme_num,student_sn";
 	$rs=$CONN->Execute($sql);
 	$all_sn="";
 	$all_id="";
@@ -256,7 +256,7 @@ if($year_name && $me && $percision){
 		header("Expires: 0");
 		echo $s[sch_cname].$sel_year."學年度第".$sel_seme."學期".$year_name."年".$me."班學期成績總表\n";
 		echo ",,,".$subject_rate_list.",\n";	
-		echo "學號,座號,姓名,".$subject_kind."加權平均,綜合表現\n";	
+		echo "學號,座號,姓名,".$subject_kind."加權平均,綜合表現\n";
 		echo $student_and_score_list;
 
 		exit;
@@ -264,7 +264,7 @@ if($year_name && $me && $percision){
 	else if($save_csv==2){
    		$filename = $sel_year."學年度 第".$sel_seme."學期 ".$year_name."年級學期成績總表.csv";
 
-        header("Content-type: text/x-csv ; Charset=Big5");
+    header("Content-type: text/x-csv ; Charset=Big5");
 		header("Content-disposition: attachment ;filename=$filename");
 		header("Pragma: no-cache");
 		header("Expires: 0");

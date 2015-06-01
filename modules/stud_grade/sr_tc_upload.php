@@ -41,7 +41,7 @@ if ($_POST['getkey'] == 'true') {
     $curr_year = curr_year();
     //$str ="畢業學年度,年級,班級名稱,國籍,身分證字號,學生姓名,性別,出生年,出生月,出生日,入學年,畢業字號,監護人,聯絡電話,戶籍地址,升入國中,附記說明\r\n";
     //先抓取畢業生資料表
-    $sql = "SELECT a.*,b.curr_class_num,b.stud_country,b.stud_person_id,b.stud_name,b.stud_sex,b.stud_birthday,substring(b.curr_class_num,0,1) as class_year,b.stud_study_year,b.stud_addr_1,b.stud_tel_1,b.stud_addr_2,c.guardian_name FROM grad_stud a INNER JOIN stud_base b ON a.student_sn=b.student_sn INNER JOIN stud_domicile c ON a.student_sn=c.student_sn WHERE stud_grad_year='$curr_year' GROUP BY student_sn ORDER BY grad_num";
+    $sql = "SELECT a.*,b.curr_class_num,b.stud_country,b.stud_person_id,b.stud_name,b.stud_sex,b.stud_birthday,b.stud_study_year,b.stud_addr_1,b.stud_tel_1,b.stud_addr_2,c.guardian_name FROM grad_stud a INNER JOIN stud_base b ON a.student_sn=b.student_sn INNER JOIN stud_domicile c ON a.student_sn=c.student_sn WHERE stud_grad_year='$curr_year' GROUP BY student_sn ORDER BY grad_num";
     $rs = $CONN->Execute($sql) or user_error("讀取失敗！<br>$sql", 256);
 
 
@@ -60,7 +60,7 @@ if ($_POST['getkey'] == 'true') {
             'curr_seme' => $curr_seme,
             'graduate_year' => trim($curr_year),
             'grade' => trim($rs->fields['class_year']),
-            'cname' => iconv('BIG5', 'UTF-8//IGNORE', $class_name[substr(trim($rs->fields[curr_class_num]), 0, -2)]),
+            'cname' => iconv('BIG5', 'UTF-8//IGNORE', $class_name[substr(trim($rs->fields['curr_class_num']), 0, -2)]),
             'country' => iconv('BIG5', 'UTF-8//IGNORE', trim($rs->fields['stud_country'])),
             'stud_pid' => iconv('BIG5', 'UTF-8//IGNORE', trim($rs->fields['stud_person_id'])),
             'stud_name' => iconv('BIG5', 'UTF-8//IGNORE', trim($rs->fields['stud_name'])),

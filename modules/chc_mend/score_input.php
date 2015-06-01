@@ -102,7 +102,7 @@ class basic_chc{
 		     $SQL="UPDATE `chc_mend` SET `score_test` = '$sco_test',
 		     `score_end` = '$end_score' WHERE `student_sn` = '$SN' and scope='{$this->S}' and seme='{$this->Y}' LIMIT 1 ;";
 		     $rs=$this->CONN->Execute($SQL) or die($SQL);
-		   // echo $SQL."<br>";
+		    //echo $SQL."<br>";
 	      }
 		$URL=$_SERVER['SCRIPT_NAME']."?Y=".$this->Y.'&G='.$this->G.'&S='.$this->S;
 		Header("Location:$URL");
@@ -128,23 +128,30 @@ class basic_chc{
 		if ($this->G=='') return;
 		if ($this->S=='') return;
 		$ys=explode("_",$this->Y);
+		
+		$YS=sprintf("%03d",$ys[0]).$ys[1];
 		$sel_year=$ys[0];
 		$sel_seme=$ys[1];
 		$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 		$seme_class=$this->G."%";
 		$Scope=$this->S;
 				
+		$curr_y=curr_year();
+		$sel_y=substr($this->Y,0,-2);
+		$sel_g=$this->G;
+		$op=$curr_y-$sel_y+$sel_g."%";
 		$SQL="select a.stud_id,a.stud_name,a.stud_sex,b.seme_class,b.seme_num,b.seme_year_seme,c.*
-		from stud_base a,stud_seme b,chc_mend c
-		where a.student_sn=c.student_sn
-		and c.student_sn=b.student_sn
-		and c.seme='$this->Y'
-		and b.seme_year_seme='$seme_year_seme'
-		and b.seme_class like '$seme_class'
+		from stud_base a,chc_mend c
+		LEFT JOIN stud_seme b on (c.student_sn=b.student_sn  
+		and b.seme_year_seme='$seme_year_seme'  
+		and b.seme_class like '$seme_class')
+		where a.student_sn=c.student_sn		
+		and c.seme='$this->Y'		
+		and a.curr_class_num LIKE '$op'
 		and c.scope='$Scope'
-		order by b.seme_class,b.seme_num
+		and a.stud_study_cond=0
 		";
-
+//echo $SQL;
 		$rs=$this->CONN->Execute($SQL);
 		$this->stu=$rs->GetArray();
 

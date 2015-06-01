@@ -208,7 +208,7 @@ function sort_arr($arr=array()) {
 	$temp_arr = array();
 	for($i=count($arr); $i>0; $i--) {
 		$bk=0;
-		$bs=0;
+		$bs=-1;
 		reset($arr);
 		foreach($arr as $k=>$v) {
 			$score=intval($v['score']);
