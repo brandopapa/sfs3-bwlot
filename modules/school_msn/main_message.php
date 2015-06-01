@@ -337,9 +337,9 @@ function OpenTeacherID() {
 
 //私人訊息
 function chkprivate() {
-  Myprivate.style.display=" table-row";
+  Myprivate.style.display="table-row";
   Myfolder.style.display="none";
-  Myfile.style.display=" table-row";
+  Myfile.style.display="table-row";
   Mypublic.style.display="none";
   M_public.style.display="none";
   M_private.style.display=" table-row";
@@ -359,16 +359,16 @@ function chkprivate() {
 
 //E-mail
 function chkemail() {
-  Myprivate.style.display=" table-row";
+  Myprivate.style.display="table-row";
   Myfolder.style.display="none";
-  Myfile.style.display=" table-row";
+  Myfile.style.display="table-row";
   Mypublic.style.display="none";
   M_public.style.display="none";
   M_private.style.display="none";
   M_fileshare.style.display="none";
   M_email.style.display=" table-row";
   
-  email_subject.style.display=" table-row";
+  email_subject.style.display="table-row";
   
   M_pic_sttime.style.display="none";
   M_pic_endtime.style.display="none";
@@ -382,11 +382,11 @@ function chkemail() {
 
 //公開訊息
 function chkpublic() {
-  Mypublic.style.display=" table-row";
+  Mypublic.style.display="table-row";
   Myprivate.style.display="none";
   Myfolder.style.display="none";
   Myfile.style.display="none";
-  M_public.style.display=" table-row";
+  M_public.style.display="table-row";
   M_private.style.display="none";
   M_fileshare.style.display="none";
   email_subject.style.display="none";
@@ -403,13 +403,13 @@ function chkpublic() {
 
 //檔案分享
 function chkfileshare() {
-  Mypublic.style.display=" table-row";
+  Mypublic.style.display="table-row";
   Myprivate.style.display="none";
-  Myfolder.style.display=" table-row";
-  Myfile.style.display=" table-row";
+  Myfolder.style.display="table-row";
+  Myfile.style.display="table-row";
   M_public.style.display="none";
   M_private.style.display="none";
-  M_fileshare.style.display=" table-row";
+  M_fileshare.style.display="table-row";
   email_subject.style.display="none"; 
   
   M_pic_sttime.style.display="none";
@@ -432,11 +432,11 @@ function chkpic() {
   M_fileshare.style.display="none";
   email_subject.style.display="none";
   
-  M_pic_sttime.style.display=" table-row";
-  M_pic_endtime.style.display=" table-row";
-  M_pic_delay.style.display=" table-row";
-  M_pic_file.style.display=" table-row";
-  M_pic.style.display=" table-row";  
+  M_pic_sttime.style.display="table-row";
+  M_pic_endtime.style.display="table-row";
+  M_pic_delay.style.display="table-row";
+  M_pic_file.style.display="table-row";
+  M_pic.style.display="table-row";  
   M_email.style.display="none";
    document.form1.option1.value="3";
 }

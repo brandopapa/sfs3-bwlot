@@ -23,7 +23,7 @@ $Subject_KIND=array("語文_國文","語文_英文","數學","自然與生活科
 foreach ($Subject_KIND as $k=>$kind) {
  $i=0; //紀錄本類別人數
  $master_subjects=iconv("UTF-8", "big5",$kind);
- $query="select a.teach_id,a.name,b.selfweb from teacher_base a,teacher_connect b where a.master_subjects like '%".$master_subjects."%' and a.teacher_sn=b.teacher_sn and a.teach_condition=0 order by a.name";
+ $query="select teacher_sn,teach_id,name from teacher_base where master_subjects like '%".$master_subjects."%' and teach_condition=0 order by name";
  $result=$CONN->Execute($query);
  ?>
  <table border="0" width="700">
@@ -34,7 +34,13 @@ foreach ($Subject_KIND as $k=>$kind) {
  <table border="0">
  	<?php
   while ($row=$result->fetchRow()) {
-  	$selfweb=$row['selfweb'];
+  	$teacher_sn=$row['teacher_sn'];
+  	$selfweb="";
+  	$sql_web="select selfweb from teacher_connect where teacher_sn='$teacher_sn'";
+  	$res_web=$CONN->Execute($sql_web) or die ("Error! ".$sql_web);
+  	
+  	$selfweb=$res_web->fields['selfweb'];
+  	
   	if ($selfweb=="") {
   	  $D=big52utf8($row['name']);
   	} else {

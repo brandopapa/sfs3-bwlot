@@ -1,0 +1,4 @@
+新增取代課程代碼欄位 -- by brucelyc (2004-05-27)
+
+ALTER TABLE `elective_tea` ADD `course_id` mediumint(8) unsigned NOT NULL default '0';
+ 更新成功 ! 

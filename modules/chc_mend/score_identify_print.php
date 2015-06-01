@@ -18,6 +18,21 @@ switch($op){
 		}
 		$print_area = substr($print_area,0,-39);
 	break;
+	case "print_this_seme_all_school_csv":
+		 $stud_info=get_all_grade_score();
+		foreach($stud_info as $k=>$v){
+			$data .= "{$stud_info[$k]['class_name']},{$stud_info[$k]['num']},{$stud_info[$k]['stud_id']},{$stud_info[$k]['stud_name']},{$stud_info[$k]['scope'][1]},{$stud_info[$k]['scope'][2]},{$stud_info[$k]['scope'][3]},{$stud_info[$k]['scope'][4]},{$stud_info[$k]['scope'][5]},{$stud_info[$k]['scope'][6]},{$stud_info[$k]['scope'][7]}\r\n";
+		}
+		
+		$data = "班級,座號,學號,姓名,語文,數學,自然,社會,健體,藝文,綜合\r\n".$data;
+		$filename=$_REQUEST['Y']."學期".$school_sshort_name."補考成績.csv";
+		header("Content-disposition: attachment;filename=$filename");
+		header("Content-type: text/x-csv ; Charset=Big5");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		echo $data;
+		die();
+	break;
 	case "print_this_seme_this_grade":
 		$seme = $_REQUEST['Y'];
 		$students_sn =$_REQUEST['students_sn'];
@@ -28,6 +43,19 @@ switch($op){
 			}
 		}
 		$print_area = substr($print_area,0,-39);
+	break;
+	case "print_this_seme_this_grade_for_tea":
+		$stud_info=get_all_grade_score();
+		$print_area = "<table style='text-align: left;border-collapse:collapse' border='1' cellspacing='2' cellpadding='2'><tr bgcolor=#FFFFFF><td>班級</td><td>座號</td><td>學號</td><td>姓名</td><td>語文</td><td>數學</td><td>自然</td><td>社會</td><td>健體</td><td>藝文</td><td>綜合</td></tr>";
+		foreach($stud_info as $k=>$v){
+			if($i>0 and $stud_info[$k]['class_name']<>$last_one) $print_area .="</table><p style='page-break-after:always'></p><table style='text-align: left;border-collapse:collapse' border='1' cellspacing='2' cellpadding='2'><tr bgcolor=#FFFFFF><td>班級</td><td>座號</td><td>學號</td><td>姓名</td><td>語文</td><td>數學</td><td>自然</td><td>社會</td><td>健體</td><td>藝文</td><td>綜合</td></tr>";
+			$print_area .= "<tr bgcolor=#FFFFFF><td>{$stud_info[$k]['class_name']}</td><td>{$stud_info[$k]['num']}</td><td>{$stud_info[$k]['stud_id']}</td><td>{$stud_info[$k]['stud_name']}</td><td>{$stud_info[$k]['scope'][1]}</td><td>{$stud_info[$k]['scope'][2]}</td><td>{$stud_info[$k]['scope'][3]}</td><td>{$stud_info[$k]['scope'][4]}</td><td>{$stud_info[$k]['scope'][5]}</td><td>{$stud_info[$k]['scope'][6]}</td><td>{$stud_info[$k]['scope'][7]}</td></tr>";
+
+			//$data .= "{$stud_info[$k]['class_name']},{$stud_info[$k]['num']},{$stud_info[$k]['stud_id']},{$stud_info[$k]['stud_name']},{$stud_info[$k]['scope'][1]},{$stud_info[$k]['scope'][2]},{$stud_info[$k]['scope'][3]},{$stud_info[$k]['scope'][4]},{$stud_info[$k]['scope'][5]},{$stud_info[$k]['scope'][6]},{$stud_info[$k]['scope'][7]}\r\n";
+			$last_one = $stud_info[$k]['class_name'];
+			$i++;
+		}
+		$print_area .="</table>";
 	break;
 	/*
 	case "print_all_seme_this_class":
@@ -189,6 +217,31 @@ function get_mend_semes($student_sn){
 	}
 	return $semes;
 }
+//取某學期某學年的補考成績
+function get_all_grade_score(){
+	global $CONN;
+		$default_scope=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動');
+		$seme = $_REQUEST['Y'];
+		$ys=explode("_",$seme);
+		$sel_year=$ys[0];
+		$sel_seme=$ys[1];
+		$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
+
+		$sql_select = "select a.student_sn,c.seme_class,c.seme_num,b.stud_id,b.stud_name,a.scope,a.score_end from (chc_mend a left join stud_base b on a.student_sn=b.student_sn)left join stud_seme c on b.student_sn=c.student_sn and c.seme_year_seme='{$seme_year_seme}' where a.seme='{$seme}' order by c.seme_class,c.seme_num";
+
+		$recordSet=$CONN->Execute($sql_select) or user_error($sql_select, 256);
+		while(!$recordSet->EOF){
+			list($student_sn,$seme_class,$seme_num,$stud_id,$stud_name,$scope,$score_end)=$recordSet->FetchRow();
+			$class_id =sprintf("%03d",$sel_year)."_".$sel_seme."_".sprintf("%02d",substr($seme_class,0,1))."_".substr($seme_class,1,2);
+			$stud_info[$student_sn]['class_name']=class_id_to_full_class_name($class_id);
+			$stud_info[$student_sn]['num']=$seme_num;
+			$stud_info[$student_sn]['stud_id']=$stud_id;
+			$stud_info[$student_sn]['stud_name']=$stud_name;
+			$stud_info[$student_sn]['scope'][$scope]=round($score_end,2);
+		}
+		return $stud_info;
+}
+
 ?>
 
 <html>

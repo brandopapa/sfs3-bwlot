@@ -1,4 +1,12 @@
-
+<script type="text/javascript">
+function check_all_select(obj,cName)
+{
+    
+    var checkboxs = document.getElementsByName(cName);
+    for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
+    //alert(cName);
+}
+</script>
 <TABLE border=0 width=100% cellspacing='1' cellpadding=1>
 
 <TR bgcolor=#9EBCDD>
@@ -7,7 +15,7 @@
 <td width=100%  style="vertical-align: top;" colspan=2>
 <!-- 第1格內容 -->
 
-{{$this->sel_year}}{{$this->sel_grade}} ==> <FONT  COLOR="#FF0000">先選學期,再選年級,再選領域</FONT>
+{{$this->sel_year}}{{$this->sel_grade}} <FONT  COLOR="#FFFFFF"><B>課程設定列表</B></FONT>
 </td>
 </tr>
 <TR bgcolor=#9EBCDD>
@@ -19,10 +27,10 @@
 <TR bgcolor=white>
 {{foreach from=$this->scope item=ii key=KK}}
 {{if $smarty.get.S==$KK}}
-<td bgcolor="#9EBCDD"><label><input type="checkbox" value="{{$KK}}" onclick="location.href='{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}}&S={{$KK}}'"   checked="checked">{{$ii}}</label></td>
+<td bgcolor="#9EBCDD"><label><input type="checkbox" value="{{$KK}}" onclick="location.href='{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}}&S={{$KK}}'"   checked="checked">{{$KK}}.{{$ii}}</label></td>
 {{else}}  
 <td ><label><input type="checkbox" value="{{$KK}}" 
-onclick="location.href='{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}}&S={{$KK}}'" >{{$ii}}</label></td>
+onclick="location.href='{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}}&S={{$KK}}'" >{{$KK}}.{{$ii}}</label></td>
 {{/if}}
 {{/foreach}}
 </TR>
@@ -32,14 +40,14 @@ onclick="location.href='{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}
 <TABLE  border="0" cellspacing="1" cellpadding="4" width="100%" bgcolor="#cccccc" class="main_body" >
 
 <tr bgcolor="#E1ECFF" align="center">
-<td></td>
+<td>全選<input type="checkbox" name="all" onclick="check_all_select(this,'sel[]')"</td>
 <td>班級</td><td>座號</td><td>學號</td><td>姓名</td></td>{{foreach from=$this->link_ss item=sn key=ssn}}<td>{{$sn}}</td>{{/foreach}}<td>平均</td></tr>
 
 <form action={{$smarty.server.PHP_SELF}} method="post">
 
 {{foreach from=$this->all_ary item=sn key=ssn}}
 <TR bgcolor=white>
-<td><input type="checkbox" id="" name="sel[{{$sn.student_sn}}]" value="{{$sn.average}}" {{if $sn.average<60}}  checked="checked"{{/if}}></td>
+<td><input type="checkbox" id="" name="sel[]" value="{{$sn.student_sn}}_n_{{$sn.average}}" {{if $sn.average<60}}  checked="checked"{{/if}}></td>
 <td>{{$sn.seme_class}}</td>
 <td>{{$sn.seme_num}}</td>
 <td>{{$sn.stud_id}}</td>
@@ -58,6 +66,7 @@ onclick="location.href='{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}
 <TR bgcolor=white>
 <TD align=center>
 <INPUT TYPE="reset"  value='重設' class=bur2 >
+
 <INPUT TYPE=button  value='將鉤選者列入補考名冊' onclick="if( window.confirm('確定列入補考名冊？確定？')){this.form.form_act.value='saveData';this.form.submit()}" class=bur2>
 <INPUT TYPE='hidden' NAME='form_act'  value=''>
 <INPUT TYPE="hidden" name='S' value='{{$this->S}}'>
