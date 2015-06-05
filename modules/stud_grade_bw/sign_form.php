@@ -48,8 +48,10 @@ if ($Submit=="同步化") {
 	while ($row = $result->FetchRow() ) {
 		$stud_id = $row["stud_id"] ;
 		$student_sn = $row['student_sn'];
-		$y = substr($row["curr_class_num"],0,-2) ;
-		$c = substr($row["curr_class_num"],-2) ;
+		$y = substr($row["curr_class_num"],0,1) ;
+		$c = substr($row["curr_class_num"],1,2) ;		
+		//$y = substr($row["curr_class_num"],0,-2) ;
+		//$c = substr($row["curr_class_num"],-2) ;
 
 		$values.="('0','$curr_year','$y','$c','$stud_id','$student_sn',''),";		
 	}
@@ -62,7 +64,8 @@ if ($Submit=="同步化") {
 if (($Submit=="設定學校") and $curr_grade_school) {
    //預設全部學生  升學到特定學校  
    $sqlstr = "select s.stud_id ,s.curr_class_num , g.grad_sn  from stud_base as s ,grad_stud as g 
-            where  s.stud_id=g.stud_id and  s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' ";              
+             where  s.student_sn=g.student_sn and  s.stud_study_cond in ('0','15') and s.curr_class_num like '$UP_YEAR%' ";
+            //where  s.stud_id=g.stud_id and  s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' ";              
    $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
    while ($row = $result->FetchRow() ) {    
         $stud_id = $row["stud_id"] ;
@@ -94,7 +97,8 @@ if ($Submit=="依班級座號設定証書字號" or $Submit=="依學號設定証書字號") {
    //$sqlstr = "select s.stud_id ,s.curr_class_num , g.grad_sn  from stud_base as s  LEFT JOIN grad_stud as g ON s.stud_id=g.stud_id 
    //         where s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' order by s.curr_class_num  ";    
    $sqlstr = "select s.stud_id ,s.curr_class_num , g.grad_sn  from stud_base as s , grad_stud as g 
-            where s.stud_study_cond = '0' and  s.stud_id=g.stud_id  and s.curr_class_num like '$UP_YEAR%' $order";    
+             where s.stud_study_cond = '0' and  s.student_sn=g.student_sn  and s.curr_class_num like '$UP_YEAR%' $order";
+            //where s.stud_study_cond = '0' and  s.stud_id=g.stud_id  and s.curr_class_num like '$UP_YEAR%' $order";    
 
    $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
    while ($row = $result->FetchRow() ) {    
@@ -210,7 +214,8 @@ if (count($grade_school)>0){
 }
 
 $sqlstr .= "from stud_base as s  LEFT JOIN grad_stud as g ON s.student_sn=g.student_sn 
-            where g.stud_grad_year=".curr_year()." and s.stud_study_cond = '0'  and s.curr_class_num like '$UP_YEAR%' group by classn ";
+            where g.stud_grad_year=".curr_year()." and s.stud_study_cond in('0','15')  and s.curr_class_num like '$UP_YEAR%' group by classn ";
+            //修改搜尋條件s.stud_study_cond = '0'為s.stud_study_cond in ('0','15')，修正同步化後在家教育學生未顯現的錯誤
 //echo $sqlstr ;
 
 $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
