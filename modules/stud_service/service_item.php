@@ -72,6 +72,7 @@ class stud_service{
 	function init() {$this->page=($_GET[page]=='') ? 0:$_GET[page];}
 	//程序
 	function process() {
+		//if($_POST['form_act']=='Search') $this->SearchMemo();
 		if($_POST['form_act']=='add') $this->add();
 		if($_POST['form_act']=='update') $this->update();
 		if($_GET['form_act']=='del') $this->del();
@@ -88,14 +89,21 @@ class stud_service{
 	function all(){
 		//--- 203-10-01 檢查使用者是否擁有最高權限
 		$is_admin = false;
-
+		
 		$SQL2 = "select * from pro_check_new where (pro_kind_id = 1  and  id_sn = '{$_SESSION[session_tea_sn]}' )";
 		$rs2=$this->CONN->Execute($SQL2) or die($SQL2);
 		if ($rs2 and $ro2=$rs2->FetchNextObject() ) $is_admin = true;
-
-		$SQL="select sn from stud_service where input_sn='{$_SESSION[session_tea_sn]}'";
+		//搜尋內容字串
+		$Search_Str=$this->SearchMemo();
+		if ($Search_Str!='') {
+			$this->Search_Str=$Search_Str;
+			$addSQL1=" and memo like '%".$Search_Str."%' ";
+			$addSQL=" and a.memo like '%".$Search_Str."%' ";
+			$admSQL=" where  memo like '%".$Search_Str."%' ";
+			}
+		$SQL="select sn from stud_service where input_sn='{$_SESSION[session_tea_sn]}' $addSQL1 ";
 		if ($is_admin) {
-			$SQL="select sn from stud_service ";		
+			$SQL="select sn from stud_service $admSQL ";		
 		}
 		$rs=$this->CONN->Execute($SQL) or die($SQL);
 		$this->tol=$rs->RecordCount();
@@ -104,11 +112,11 @@ class stud_service{
 		where a.sn=b.item_sn group by  a.sn order by a.sn desc  limit ".($this->page*$this->size).", {$this->size}  ";
 		//--- 2013-10-01 修改成 依服務的時間反序排列
 		$SQL="select a.*,count(b.sn) as btol from stud_service a ,stud_service_detail b 
-		where (a.input_sn='{$_SESSION[session_tea_sn]}') and a.sn=b.item_sn group by  a.sn order by a.service_date desc  limit ".($this->page*$this->size).", {$this->size}  ";
+		where (a.input_sn='{$_SESSION[session_tea_sn]}') and a.sn=b.item_sn  $addSQL  group by  a.sn order by a.service_date desc  limit ".($this->page*$this->size).", {$this->size}  ";
 
 		if ($is_admin ) {
 			$SQL="select a.*,count(b.sn) as btol from stud_service a ,stud_service_detail b 
-			where a.sn=b.item_sn group by  a.sn order by a.service_date desc  limit ".($this->page*$this->size).", {$this->size}  ";
+			where a.sn=b.item_sn $addSQL group by  a.sn order by a.service_date desc  limit ".($this->page*$this->size).", {$this->size}  ";
 		}
 		//--- 2013-10-01 ----------------------------------------------------------------------------------------
 		$rs=$this->CONN->Execute($SQL) or die($SQL);
@@ -167,6 +175,16 @@ class stud_service{
 function backe($value= "BACK"){
 	echo  "<head><meta http-equiv='Content-Type' content='text/html; charset=big5'></head><br><br><br><br><CENTER><form><input type=button value='".$value."' onclick=\"history.back()\" style='font-size:16pt;color:red;'></form><BR></CENTER>";
 	exit;
+}
+function SearchMemo(){
+	if (isset($_POST['nSearch'])) {unset($_SESSION['Search_Str']);return ;}
+	if (isset($_POST['Search'])) {
+		$str=strip_tags(trim($_POST['Search']));
+		if (strlen($str)>=2 && strlen($str)<=30) {
+			$_SESSION['Search_Str']=$str;
+		}
+	}
+	return $_SESSION['Search_Str'];
 }
 
 }

@@ -21,6 +21,13 @@ i++;}
 <!-- 第1格內容 -->
 
 {{$this->sel_year}}{{$this->sel_grade}} ==> <FONT  COLOR="#FF0000">先選學期,再選年級,再選領域</FONT>
+{{if $smarty.get.Y!=''}}
+<form action='{{$smarty.server.PHP_SELF}}' method="post" name=f1>
+<INPUT TYPE=button  value='下載全校{{$smarty.get.Y}}補考名單CSV檔' onclick="{this.form.form_act.value='seme_csv';this.form.submit()}" class=bur2>
+<INPUT TYPE='hidden' NAME='form_act'  value=''>
+<INPUT TYPE="hidden" name='Y' value='{{$this->Y}}'>
+</form>
+{{/if}}
 </td>
 </tr>
 <TR bgcolor=#9EBCDD>

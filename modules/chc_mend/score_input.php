@@ -1,6 +1,7 @@
 <?php
 //$Id: PHP_tmp.html 5310 2009-01-10 07:57:56Z hami $
 include "config.php";
+include "../../include/sfs_case_studclass.php";
 //認證
 sfs_check();
 
@@ -75,7 +76,7 @@ class basic_chc{
 		//if ($_GET['act']=='update') $this->updateDate();
 		if ($_POST['form_act']=='saveData') $this->save();
 		if ($_POST['form_act']=='delData') $this->delData();
-		
+		if ($_POST['form_act']=='seme_csv') $this->seme_csv();
 		$this->all();
 	}
 
@@ -128,7 +129,6 @@ class basic_chc{
 		if ($this->G=='') return;
 		if ($this->S=='') return;
 		$ys=explode("_",$this->Y);
-		
 		$YS=sprintf("%03d",$ys[0]).$ys[1];
 		$sel_year=$ys[0];
 		$sel_seme=$ys[1];
@@ -150,6 +150,7 @@ class basic_chc{
 		and a.curr_class_num LIKE '$op'
 		and c.scope='$Scope'
 		and a.stud_study_cond=0
+		order by b.seme_class,b.seme_num
 		";
 //echo $SQL;
 		$rs=$this->CONN->Execute($SQL);
@@ -158,7 +159,52 @@ class basic_chc{
 		
 	}
 
+	function seme_csv(){
+		$ys=explode("_",$this->Y);
+		$YS=sprintf("%03d",$ys[0]).$ys[1];
+		$sel_year=$ys[0];
+		$sel_seme=$ys[1];
+		$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
+	   	$SQL="SELECT b.stud_name,a.scope ,a.score_src,b.stud_id,b.student_sn,c.seme_class,c.seme_class,c.seme_num
+	   	FROM chc_mend a, stud_base b 
+	   	left join stud_seme c on (c.student_sn=b.student_sn and c.seme_year_seme='$seme_year_seme')
+	   	where  a.student_sn=b.student_sn  
+	   	and a.seme='$this->Y'
+	   	and b.stud_study_cond=0
+	   	order by c.seme_class,c.seme_num";
+	   	//echo $SQL;
+	   	$rs=$this->CONN->Execute($SQL);
+		$stu=$rs->GetArray();
+		$data = "班級,座號,學號,姓名,語文,數學,自然,社會,健體,藝文,綜合\r\n";
+		foreach($stu as $a=>$b){		      
+		      $class_id =sprintf("%03d","101")."_"."1"."_".sprintf("%02d",substr($b[seme_class],0,1))."_".substr($b[seme_class],1,2);
+		      $stud_score[$b[student_sn]][0]=class_id_to_full_class_name($class_id);
+		      $stud_score[$b[student_sn]][1]=$b[seme_num];
+		      $stud_score[$b[student_sn]][2]=$b[stud_id];
+		      $stud_score[$b[student_sn]][3]=$b[stud_name];
+		      for($i=4;$i<=10;$i++){
+		      	if($b[scope] ==$i-3){
+			 $stud_score[$b[student_sn]][$i]="補考";//$b[score_src];
+			 }else if($stud_score[$b[student_sn]][$i]!=""){
+			  $stud_score[$b[student_sn]][$i]=$stud_score[$b[student_sn]][$i];
+			 }else{
+			   $stud_score[$b[student_sn]][$i]=""; 
+			 }
+	                    }
+		}
+		foreach($stud_score as $a=>$b){
+		       $data.=join(",",$b)."\r\n";
+	           }
+		$filename=$_REQUEST['Y']."學期補考成績.csv";
+		header("Content-disposition: attachment;filename=$filename");
+		header("Content-type: text/x-csv ; Charset=Big5");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		echo $data;
+		die();
 
+	   
+	}
 }
 
 

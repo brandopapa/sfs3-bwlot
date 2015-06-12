@@ -1,6 +1,18 @@
 <!-- //$Id: PHP_tmp.html 5310 2009-01-10 07:57:56Z hami $ -->
 
-<TABLE width='800'  border='0' align='left'><TR><TD align=right>{{$this->links->show_page()}}</TD></TR></TABLE><br>
+<TABLE width='800'  border='0' align='left'><TR><TD align=right>
+<FORM METHOD=POST ACTION='{{$smarty.server.PHP_SELF}}'  Name='e2'>
+<INPUT TYPE='hidden' Name='form_act'  value=''>
+{{if $this->Search_Str!=''}}
+<input type="text"  name="nSearch" value='{{$this->Search_Str}}' size=8>
+<INPUT TYPE='button' style='color:red' value='取消找尋' onclick="this.form.form_act.value='Search';this.form.submit();">
+{{else}}
+<input type="text"  name="Search" value='' size=8>
+<INPUT TYPE='button' style='color:blue;' value='搜尋服務內容' onclick="if( window.confirm('確定搜尋？')){this.form.form_act.value='Search';this.form.submit()}">
+
+{{/if}}
+</FORM>
+{{$this->links->show_page()}}</TD></TR></TABLE><br>
 <table  width='800'  border='0' align='left' cellpadding='1' cellspacing='1' bgcolor='#DEE3E7' style='table-layout: fixed;word-wrap:break-word;font-size:10pt'>
 <tr align=center  style='font-size:10pt' bgcolor='#E5E5E5'>
 <td width=6%>學期</td>

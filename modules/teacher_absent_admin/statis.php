@@ -49,7 +49,7 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 		$endTime = explode(':', $endDate[1]);
 		$tempArr[] = $endTime[0].$endTime[1];
 
-		$tempArr[] = ($row['day']?$row['day'].'日':'').($row['hour']?($row['hour']%8).'時':'');
+		$tempArr[] = ($row['day']?$row['day']:'0').($row['hour']?($row['hour']%8):'');
 
 		$tempArr[] = '';
 		$tempArr[] = $row['locale'];
@@ -58,7 +58,7 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 		// 申請國民旅遊補助, 無資料
 		$tempArr[] = '';
 
-		$arr[] = '"'.implode('","' ,$tempArr).'"';
+		$arr[] = implode(',' ,$tempArr);
 
 	}
 	$filename = '請假本文檔.csv';

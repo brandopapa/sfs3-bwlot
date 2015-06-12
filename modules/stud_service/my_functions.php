@@ -258,7 +258,7 @@ function list_service_stud($sn) {
 	   	 ?>
 	   	  <td width="141" style="font-size:10pt" valign="top">
 	   	  	<input type="checkbox" name="update_stud[<?php echo $row_class['student_sn'];?>]" value="<?php echo $row_class['seme_class'];?>" style="font-size:9pt">
-	   	  	<?php echo $row_class['seme_num'].$row_class['stud_name'];?>(<?php echo $row_class['minutes'];?>分)<img style="cursor:hand" onclick="del_stud(<?php echo $row_class['student_sn'];?>)" src="./images/del.png" title="直接刪除">
+	   	  	<?php echo $row_class['seme_num'].$row_class['stud_name'];?>(<?php echo $row_class['minutes'];?>分)<img style="cursor:hand" onclick="if(window.confirm('真的要刪除嗎？')){ del_stud(<?php echo $row_class['student_sn'];?>)}" src="./images/del.png" title="直接刪除">
 	   	  	<?php
 	   	  	  if ($row_class['studmemo']!="") {
 	   	  	 ?>

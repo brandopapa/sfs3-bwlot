@@ -72,7 +72,7 @@ if($_POST['kind_radio']){
 	foreach($stud_arr as $stud_id){
 		//抓取班級與姓名
 		$student_sn=$abs_arr[$stud_id]['student_sn'];
-		$sql="SELECT stud_name,stud_sex FROM stud_base WHERE student_sn=$student_sn";
+		$sql="SELECT stud_name,stud_sex FROM stud_base WHERE student_sn='$student_sn'";
 		$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 		$stud_name=$res->fields['stud_name'];
 		$bgcolor=($res->fields['stud_sex']==1)?'#ddffdd':'#ffdddd';
