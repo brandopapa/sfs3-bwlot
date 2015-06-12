@@ -25,6 +25,7 @@ if ($_POST[save]) {
 	$gd=$_POST[P_date];
 	$gw=$_POST[P_word];
 	$gn=$_POST[P_num];
+	reset($_POST[sure_grad]);
 	while(list($k,$v)=each($_POST[sure_grad])) {
 		$query="select * from grad_stud where stud_grad_year='$sel_year' and stud_id='$sd[$k]'";
 		$res=$CONN->Execute($query) or die("SQL執行錯誤： $query");
@@ -92,5 +93,8 @@ $smarty->assign("grad_kind",$grad_kind);
 $smarty->assign("grad_score",$grad_score); 
 $smarty->assign("grad_kind_arr",array(""=>"列出所有學生","1"=>"只列畢業學生","2"=>"只列修業學生")); 
 $smarty->assign("class_base",class_base($seme_year_seme));
+//20150422修正固定4碼問題彰化和東王麒富
+$smarty->assign("grade_num_len","%0".$grade_num_len."d");
+
 $smarty->display("stud_grad_grad_word.tpl");
 ?>

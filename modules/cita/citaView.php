@@ -1,6 +1,6 @@
 <?php
 
-// $Id: citaView.php 8139 2014-09-23 08:14:02Z smallduh $
+// $Id: citaView.php 8443 2015-06-02 05:21:55Z smallduh $
 
 include "config.php";
 include "make_ooo.php";
@@ -120,7 +120,7 @@ echo  "<font color=red >$doc</font><br>$helper";
         $did = $row["id"] ;	
         $item = $row["item"] ;
         $order_pos = $row["order_pos"]+1 ;
-        $stud_name = $row["stud_name"] ;
+        $stud_name = trim($row["stud_name"]) ;
 		$stud_id = $row["stud_id"] ;
 		$stud_num = $row["num"] ;
         $data_get = $row["data_get"] ;
@@ -141,8 +141,8 @@ echo  "<font color=red >$doc</font><br>$helper";
             <td >$stud_name</td>
 			<td >$guidance_name</td>
 	          <td >$up_date</td>
-            <td ><input id=c_$stud_id type=checkbox name=sel_stud[] value=$value></td>
-                   <td ><input id=d_$stud_id type=checkbox name=sel_del[] value=$did></td></tr>" ;
+            <td ><input id=\"c_$stud_id\" type=\"checkbox\" name=\"sel_stud[]\" value=\"$value\"></td>
+                   <td ><input id=\"d_$stud_id\" type=\"checkbox\" name=\"sel_del[]\" value=\"$did\"></td></tr>" ;
 
    }           
    echo "</table>" ;  

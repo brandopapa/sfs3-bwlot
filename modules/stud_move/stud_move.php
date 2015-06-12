@@ -31,6 +31,8 @@ if (!$curr_seme) {
     $curr_seme = curr_year() . curr_seme(); //現在學年學期
 } else {
     $sel_year = substr($curr_seme, 0, 3);
+    if (substr($sel_year, 0, 1) == "0")
+        $sel_year = substr($sel_year, 1, 2);
     $sel_seme = substr($curr_seme, 3, 1);
     $curr_seme = $sel_year . $sel_seme;
 }

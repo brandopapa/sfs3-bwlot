@@ -18,7 +18,7 @@
 {{/if}}
 {{if $this->print_this_class_this_seme==1}}
 <button onClick="javascript:window.open('score_identify_print.php?op=print_this_seme_this_grade&Y={{$this->Y}}{{$this->students_sn}}','_blank')">列印{{$this->G}}年級{{$this->Y}}學期補考證明書</button>
-<button onClick="javascript:window.open('score_identify_print.php?op=print_this_seme_this_grade_for_tea&Y={{$this->Y}}{{$this->students_sn}}','_blank')">列印{{$this->G}}年級各班{{$this->Y}}學期補考成績</button>
+<button onClick="javascript:window.open('score_identify_print.php?op=print_this_seme_this_grade_for_tea&Y={{$this->Y}}&G={{$this->G}}{{$this->students_sn}}','_blank')">列印{{$this->G}}年級各班{{$this->Y}}學期補考成績</button>
 {{/if}}
 </TD>
 </TR>

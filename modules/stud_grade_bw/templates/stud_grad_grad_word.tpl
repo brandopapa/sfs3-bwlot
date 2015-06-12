@@ -66,7 +66,7 @@ function fillall(name,value) {
 <td><input type="radio" name="sure_grad[{{$sn}}]" value="2"  {{if $smarty.post.sure_grad.$sn=="2" || $grad_kind.$sn==2}}checked{{/if}}>
 <td><input type="text" id="P_date" name="P_date[{{$sn}}]" size="10" maxlength="10" value="{{if $smarty.post.P_date[$sn]}}{{$smarty.post.P_date[$sn]}}{{elseif $P_date.$sn}}{{$P_date.$sn}}{{/if}}">
 <td><input type="text" id="P_word" name="P_word[{{$sn}}]" size="16" maxlength="40" value="{{if $smarty.post.P_word[$sn]}}{{$smarty.post.P_word[$sn]}}{{elseif $P_word.$sn}}{{$P_word.$sn}}{{/if}}">
-<td><input type="text" id="P_num" name="P_num[{{$sn}}]" size="16" maxlength="40" value="{{if $smarty.post.grad_num!=""}}{{$smarty.post.grad_num+$smarty.foreach.sn.iteration-1|string_format:"%04d"}}{{elseif $smarty.post.P_num.$sn!=""}}{{$smarty.post.P_num.$sn}}{{elseif $P_num.$sn}}{{$P_num.$sn}}{{/if}}"></td>
+<td><input type="text" id="P_num" name="P_num[{{$sn}}]" size="16" maxlength="40" value="{{if $smarty.post.grad_num!=""}}{{$smarty.post.grad_num+$smarty.foreach.sn.iteration-1|string_format:$grade_num_len}}{{elseif $smarty.post.P_num.$sn!=""}}{{$smarty.post.P_num.$sn}}{{elseif $P_num.$sn}}{{$P_num.$sn}}{{/if}}"></td>
 </tr>
 {{/foreach}}
 </table>

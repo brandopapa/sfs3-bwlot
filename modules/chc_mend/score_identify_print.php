@@ -47,15 +47,21 @@ switch($op){
 	case "print_this_seme_this_grade_for_tea":
 		$stud_info=get_all_grade_score();
 		$print_area = "<table style='text-align: left;border-collapse:collapse' border='1' cellspacing='2' cellpadding='2'><tr bgcolor=#FFFFFF><td>班級</td><td>座號</td><td>學號</td><td>姓名</td><td>語文</td><td>數學</td><td>自然</td><td>社會</td><td>健體</td><td>藝文</td><td>綜合</td></tr>";
+		$sel_Y_G = substr($_REQUEST['Y'],0,3)-$_REQUEST['G'];//取指定學期指定年級學生的班級資料
 		foreach($stud_info as $k=>$v){
+			$query2="select seme_year_seme,seme_class from stud_seme where student_sn ='{$k}'";
+			$rec2=$CONN->Execute($query2);
+			list($seme_year_seme2,$seme_class2)=$rec2->FetchRow();
+			//取指定年級，從某一學年和該年級的關係看出
+			if(substr($seme_year_seme2,0,3)-substr($seme_class2,0,1)==$sel_Y_G){
 			if($i>0 and $stud_info[$k]['class_name']<>$last_one) $print_area .="</table><p style='page-break-after:always'></p><table style='text-align: left;border-collapse:collapse' border='1' cellspacing='2' cellpadding='2'><tr bgcolor=#FFFFFF><td>班級</td><td>座號</td><td>學號</td><td>姓名</td><td>語文</td><td>數學</td><td>自然</td><td>社會</td><td>健體</td><td>藝文</td><td>綜合</td></tr>";
 			$print_area .= "<tr bgcolor=#FFFFFF><td>{$stud_info[$k]['class_name']}</td><td>{$stud_info[$k]['num']}</td><td>{$stud_info[$k]['stud_id']}</td><td>{$stud_info[$k]['stud_name']}</td><td>{$stud_info[$k]['scope'][1]}</td><td>{$stud_info[$k]['scope'][2]}</td><td>{$stud_info[$k]['scope'][3]}</td><td>{$stud_info[$k]['scope'][4]}</td><td>{$stud_info[$k]['scope'][5]}</td><td>{$stud_info[$k]['scope'][6]}</td><td>{$stud_info[$k]['scope'][7]}</td></tr>";
-
-			//$data .= "{$stud_info[$k]['class_name']},{$stud_info[$k]['num']},{$stud_info[$k]['stud_id']},{$stud_info[$k]['stud_name']},{$stud_info[$k]['scope'][1]},{$stud_info[$k]['scope'][2]},{$stud_info[$k]['scope'][3]},{$stud_info[$k]['scope'][4]},{$stud_info[$k]['scope'][5]},{$stud_info[$k]['scope'][6]},{$stud_info[$k]['scope'][7]}\r\n";
 			$last_one = $stud_info[$k]['class_name'];
 			$i++;
+			}
 		}
 		$print_area .="</table>";
+
 	break;
 	/*
 	case "print_all_seme_this_class":
