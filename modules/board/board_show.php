@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board_show.php 7779 2013-11-20 16:09:00Z smallduh $
+// $Id: board_show.php 8453 2015-06-12 00:37:05Z smallduh $
 
 // --╰参砞﹚郎
 include	"board_config.php";
@@ -128,6 +128,12 @@ if (empty($_SESSION[session_tea_sn]) && $b_is_intranet == '1' && !$is_home_ip) {
 	redir_str("board_view.php","╆簆!! セ癟ずゅン度ㄑセ把σ",5);
 	exit;
 }
+
+if ($b_is_intranet == '1' && $_SESSION['session_who']!= "毙畍" && $insite_teacher_only=='1') {
+	redir_str("board_view.php","╆簆!! セ癟ずゅン度ㄑセ把σ",5);
+	exit;
+}
+
 
 
 

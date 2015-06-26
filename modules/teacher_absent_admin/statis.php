@@ -51,7 +51,8 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 
 		$tempArr[] = ($row['day']?$row['day']:'0').($row['hour']?($row['hour']%8):'');
 
-		$tempArr[] = '';
+        // 是否含假日
+		$tempArr[] = '0';
 		$tempArr[] = $row['locale'];
 		// 公假具公假性質，無資料
 		$tempArr[] = '';
