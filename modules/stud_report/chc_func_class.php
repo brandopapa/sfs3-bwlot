@@ -373,7 +373,7 @@ function get_base_data($student_sn) {
  }
 
  $sql = "SELECT move_c_word , move_c_num FROM stud_move WHERE student_sn='$student_sn' AND move_kind='5'";
- $sql = "Select  a.grad_word,grad_num from grad_stud a,stud_base b where a.stud_id=b.stud_id and b.student_sn='$student_sn' ";
+ $sql = "Select  a.grad_word,a.grad_num from grad_stud a,stud_base b where a.student_sn=b.student_sn and b.student_sn='$student_sn' ";
  $result = $CONN->Execute($sql) or die("Sql error");
  if ($result->RecordCount()==0) {
  	$data['grade_word_num'] = "";

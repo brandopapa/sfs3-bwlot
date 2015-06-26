@@ -130,7 +130,7 @@ function &room_setup_form($mode="",$cc_id,$c_d_kind){
 	//讀取資料
 	$sql_select = "select * from teacher_absent_course  where a_id='$id' and travel='1' order by start_date";
 	$result = $CONN->Execute ($sql_select) or die($sql_select) ;
-	$i=0;
+	$i=0; $outlay_Tol=0;//總金額變數
 	while (!$result->EOF) {
 
 		$c_id = $result->fields["c_id"];
@@ -150,6 +150,7 @@ function &room_setup_form($mode="",$cc_id,$c_d_kind){
 		$outlay8 = $result->fields["outlay8"];
 		$outlay_a = $result->fields["outlay_a"];
 		$outl_id = $result->fields["outl_id"];
+		$outlay_Tol=$outlay_Tol+$outlay_a;// 總金額累計
 
 		$coutlay1 = ztos($outlay1);
 		$coutlay2 = ztos($outlay2);
@@ -232,7 +233,7 @@ function &room_setup_form($mode="",$cc_id,$c_d_kind){
 	<td align='center' width='5%' rowspan='2'>住宿費</td>
 	<td align='center' width='5%' rowspan='2'>旅行業代收轉付</td>
 	<td align='center' width='5%' rowspan='2'>單據號數</td>
-	<td align='center' width='5%' rowspan='2'>膳什費</td>
+	<td align='center' width='5%' rowspan='2'>什費</td>
 	<td align='center' width='5%' rowspan='2'>合計</td>	
 	<td align='center' width='15%' rowspan='2'>$check5 </td>	
 
@@ -248,7 +249,16 @@ function &room_setup_form($mode="",$cc_id,$c_d_kind){
 	</table>
 	<input type='hidden' name='id' value= $id >
 	</form>
+<br>
+<table border='1' cellPadding='3' cellSpacing='0'　 width=90%>
+<tr><td colspan=5>請敘明交通工具種類：口客運　口捷運　口火車(復興)　口火車(莒光)　口火車(自強)</td></tr>
+<tr Height=50><td colspan=5>上列出差旅費合計新台幣 <ins><b> $outlay_Tol </b></ins> 元整，
+業經如數收訖。<b>具領人</b>　　　　　　　　　　　　　　　　　　　(簽名或蓋章)</td></tr>
+<tr align='center'><td>出差人</td><td>單位主管</td><td>人事單位</td><td>會計單位</td><td>機關首長</td></tr>
+<tr Height=60><td>&nbsp;<br><br></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
 	";
+
 
 	return $main;
 }

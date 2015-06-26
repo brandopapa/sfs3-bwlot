@@ -124,6 +124,8 @@ $SFS_MODULE_SETUP[] =
 $SFS_MODULE_SETUP[] =
 	array('var'=>"insite_ip", 'msg'=>"設定內部IP範圍,留空時使用系統預設值,例163.17.40 或 163.17.40.1-163.17.40.128 ", 'value'=>'');
 $SFS_MODULE_SETUP[] =
+	array('var'=>"insite_teacher_only", 'msg'=>"校內文件限教師才能閱讀", 'value'=>array("0"=>"否","1"=>"是"));
+$SFS_MODULE_SETUP[] =
 	array('var'=>"title_img", 'msg'=>"標題圖連結", 'value'=>"images/title.gif");
 $SFS_MODULE_SETUP[] =
 	array('var'=>"bg_img", 'msg'=>"背景圖連結", 'value'=>"images/backg.gif");
