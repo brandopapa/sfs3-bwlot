@@ -9,6 +9,15 @@ function disp_text()
     document.myform.city.value = selected_city;
     document.myform.school.value = selected_text;
     document.myform.school_id.value = selected_value;
+    if (selected_city == '其他' && selected_text == '其他') {
+        document.myform.city.readOnly = false;
+        document.myform.school.readOnly = false;
+        document.myform.school_id.readOnly = false;
+    } else {
+        document.myform.city.readOnly = true;
+        document.myform.school.readOnly = true;
+        document.myform.school_id.readOnly = true;
+    }
 }
 
 function fillCity() {
@@ -49,10 +58,10 @@ function SelectCity() {
     if (document.myform.selectcity.value == '其他') {
         addOption(document.myform.selectdistrict, "其他", "其他", "");
     }
-    if (document.myform.selectcity.value == '外籍生'){
+    if (document.myform.selectcity.value == '外籍生') {
         addOption(document.myform.selectdistrict, "外籍生", "外籍生", "");
     }
-    if (document.myform.selectcity.value == '港澳大陸生'){
+    if (document.myform.selectcity.value == '港澳大陸生') {
         addOption(document.myform.selectdistrict, "港澳大陸生", "港澳大陸生", "");
     }
     if (document.myform.selectcity.value == '出國') {
@@ -748,7 +757,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "411303", "私立華興中學附設國中", "");
         addOption(document.myform.selectschool, "413301", "市立陽明高中附設國中", "");
         addOption(document.myform.selectschool, "413302", "市立百齡高中附設國中", "");
-				addOption(document.myform.selectschool, "413F01", "市立啟智學校", "");
+        addOption(document.myform.selectschool, "413F01", "市立啟智學校", "");
         addOption(document.myform.selectschool, "413F02", "市立啟明學校", "");
     }
     if (document.myform.selectcity.value == '臺北市' && document.myform.selectdistrict.value == '北投區') {
@@ -1618,7 +1627,7 @@ function SelectDistrict() {
     if (document.myform.selectcity.value == '彰化縣' && document.myform.selectdistrict.value == '和美鎮') {
         addOption(document.myform.selectschool, "074535", "縣立和群國中", "");
         addOption(document.myform.selectschool, "074323", "縣立和美高中附設國中", "");
-        addOption(document.myform.selectschool, "070F01", "國立和美實驗學校", "");        
+        addOption(document.myform.selectschool, "070F01", "國立和美實驗學校", "");
     }
     if (document.myform.selectcity.value == '彰化縣' && document.myform.selectdistrict.value == '田中鎮') {
         addOption(document.myform.selectschool, "071317", "私立文興高中附設國中", "");
@@ -2005,7 +2014,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "154509", "縣立吉安國中", "");
         addOption(document.myform.selectschool, "154510", "縣立宜昌國中", "");
         addOption(document.myform.selectschool, "154523", "縣立化仁國中", "");
-				addOption(document.myform.selectschool, "150F01", "國立花蓮啟智學校", "");
+        addOption(document.myform.selectschool, "150F01", "國立花蓮啟智學校", "");
     }
     if (document.myform.selectcity.value == '花蓮縣' && document.myform.selectdistrict.value == '壽豐鄉') {
         addOption(document.myform.selectschool, "154511", "縣立壽豐國中", "");
