@@ -1,6 +1,6 @@
 <?php
 
-// $Id: newstud_manage.php 6756 2012-05-04 08:59:42Z brucelyc $
+// $Id: newstud_manage.php 8458 2015-06-26 03:13:46Z brucelyc $
 
 /*引入學務系統設定檔*/
 require "config.php";
@@ -341,7 +341,7 @@ switch($work){
 			}
 		}
 		echo "</table>";
-		echo $msg1;
+		echo "<br>下載<a href=\"export.php\">「就學系統檔案」</a>".$msg1;
 		break;
 
 	case 2:

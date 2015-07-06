@@ -9,6 +9,15 @@ function disp_text()
     document.myform.city.value = selected_city;
     document.myform.school.value = selected_text;
     document.myform.school_id.value = selected_value;
+    if (selected_city == '其他' && selected_text == '其他') {
+        document.myform.city.readOnly = false;
+        document.myform.school.readOnly = false;
+        document.myform.school_id.readOnly = false;
+    } else {
+        document.myform.city.readOnly = true;
+        document.myform.school.readOnly = true;
+        document.myform.school_id.readOnly = true;
+    }
 }
 
 function fillCity() {
@@ -1799,7 +1808,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "553613", "市立陽明國小", "");
         addOption(document.myform.selectschool, "553614", "市立河堤國小", "");
     }
-    
+
     if (document.myform.selectcity.value == '高雄市' && document.myform.selectdistrict.value == '新興區') {
         addOption(document.myform.selectschool, "563601", "市立新興區新興國小　", "");
         addOption(document.myform.selectschool, "563602", "市立大同國小　", "");
