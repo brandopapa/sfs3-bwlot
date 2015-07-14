@@ -32,7 +32,7 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 		$tempArr = array();
 		$tempArr[] = $row['teach_person_id'];
 		$tempArr[] = $row['name'];
-		$tempArr[] = $row['teach_id'];
+		$tempArr[] = $row['teach_person_id'];
 		$tempArr[] = $absExportIdArr[$abs_kind_arr[$row['abs_kind']]];
 		$tempArr[] = $abs_kind_arr[$row['abs_kind']];
 		$startDate = explode(' ',$row['start_date']);
@@ -49,7 +49,7 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 		$endTime = explode(':', $endDate[1]);
 		$tempArr[] = $endTime[0].$endTime[1];
 
-		$tempArr[] = ($row['day']?$row['day']:'0').($row['hour']?($row['hour']%8):'');
+		$tempArr[] = (int)$row['day'].'.'.($row['hour']?($row['hour']%8):'');
 
         // 是否含假日
 		$tempArr[] = '0';
@@ -62,6 +62,7 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 		$arr[] = implode(',' ,$tempArr);
 
 	}
+
 	$filename = '請假本文檔.csv';
 	header("Content-disposition: attachment; filename=$filename");
 	header("Content-type: text/x-csv");
