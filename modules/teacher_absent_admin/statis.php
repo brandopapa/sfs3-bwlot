@@ -28,37 +28,70 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 	$sql_select .=" order by d.rank, a.start_date  desc ";
 	$result = $CONN->Execute($sql_select) or die($sql_select);
 	$arr = array();
+
 	foreach ($result as $row) {
 		$tempArr = array();
+		//身分證1
 		$tempArr[] = $row['teach_person_id'];
-		$tempArr[] = $row['name'];
+		//姓名
+		$tempArr[] = str_replace(array(',',';'),'',$row['name']);
+		//員工代號
 		$tempArr[] = $row['teach_person_id'];
+		// 請假別代碼
 		$tempArr[] = $absExportIdArr[$abs_kind_arr[$row['abs_kind']]];
+		// 請假別名稱
 		$tempArr[] = $abs_kind_arr[$row['abs_kind']];
+		// 開始日期
 		$startDate = explode(' ',$row['start_date']);
 		$startDate2 = explode('-', $startDate[0]);
 		$tempArr[] = ($startDate2[0]-1911).$startDate2[1].$startDate2[2];
 
+		//結束日期
 		$endDate = explode(' ',$row['end_date']);
 		$endDate2 = explode('-', $endDate[0]);
 		$tempArr[] = ($endDate2[0]-1911).$endDate2[1].$endDate2[2];
 
+		//開始時間
 		$startTime = explode(':', $startDate[1]);
 		$tempArr[] = $startTime[0].$startTime[1];
 
+		//結束時間
 		$endTime = explode(':', $endDate[1]);
 		$tempArr[] = $endTime[0].$endTime[1];
 
+		// 合計日時數
 		$tempArr[] = (int)$row['day'].'.'.($row['hour']?($row['hour']%8):'');
 
         // 是否含假日
 		$tempArr[] = '0';
+
+		//出差地點
 		$tempArr[] = $row['locale'];
 		// 公假具公假性質，無資料
 		$tempArr[] = '';
 		// 申請國民旅遊補助, 無資料
 		$tempArr[] = '';
-
+		// 假由類別
+		$tempArr[] = '';
+		// 事實發生日
+		$tempArr[] = '';
+		// 休假扣保留日數
+		$tempArr[] = '';
+		// 辭世者姓名
+		$tempArr[] = '';
+		// 國內國外
+		$tempArr[] = '';
+		// 前往國家
+		$tempArr[] = '';
+		// 出差費已領註記
+		$tempArr[] = '';
+		// 可補休時數
+		$tempArr[] = '';
+		//出差事由
+		$memo = str_replace(array(',',';'),'，',$row['reason']);
+		if ($row['deputy_sn'])
+			$memo .= '；職務代理人:'. get_teacher_name($row['deputy_sn']);
+		$tempArr[] = $memo;
 		$arr[] = implode(',' ,$tempArr);
 
 	}

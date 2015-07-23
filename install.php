@@ -1,6 +1,6 @@
 <?php
 
-// $Id: install.php 5350 2009-01-19 16:00:12Z brucelyc $
+// $Id: install.php 8466 2015-07-20 16:05:21Z smallduh $
 /*
 // 檢查 php.ini
 if (ini_get('register_globals')) {
@@ -59,12 +59,12 @@ if(!chk_permit($cfg_file)){
     .small{font-size: 12px}
     </style>
 <body background='images/bg.png'>
-<?echo $main;?>
+<?php echo $main;?>
 </body>
 </html>
 
 
-<?
+<?php
 
 
 /*  函式區*/
@@ -111,11 +111,13 @@ function install_sfs_db($host, $adm_user, $adm_pass,$db,$user,$passwd){
 
 			run_sql($sql_query, $db);
 
-			mysql_db_query($db,$str,$link) or user_error("資料庫 $db 無法建立！請回上頁修改！",256);
-
+			//mysql_db_query($db,$str,$link) or user_error("資料庫 $db 無法建立！請回上頁修改！",256);
+			mysql_query($str,$link) or user_error("資料庫 $db 無法建立！請回上頁修改！",256);
+			
 			$str="grant create  on $db.* to sfs3addman@$host identified by '$passwd'";
 
-			mysql_db_query ($db,$str,$link) or user_error("無法建立用來匯入資料表的使用者權限！<br>$str",256);
+			//mysql_db_query ($db,$str,$link) or user_error("無法建立用來匯入資料表的使用者權限！<br>$str",256);
+			mysql_query ($str,$link) or user_error("無法建立用來匯入資料表的使用者權限！<br>$str",256);
 
 			// 更新權限，以免 MySQL 4.1.X 版無法讓新增使用者連線
 			mysql_query ("FLUSH PRIVILEGES", $link) or user_error("無法更新使用者權限！請手動重新啟動 MySQL",256);
