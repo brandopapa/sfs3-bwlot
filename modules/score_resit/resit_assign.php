@@ -73,6 +73,7 @@ if ($_POST['act']=='setup_paper') {
    $items=$res->fields['items'];
    $double_papers=$res->fields['double_papers'];
    $item_mode=$res->fields['item_mode'];
+   $top_marks=$res->fields['top_marks'];
   } else {
    $start_time=date('Y-m-d H:i:00');
    $end_time=date('Y-m-d H:i:00');
@@ -81,6 +82,7 @@ if ($_POST['act']=='setup_paper') {
    $relay_answer=0;
    $items=0;
    $double_papers=0;
+   $top_marks=100;
   }	
    //製作各分科出題數表單
    //讀取分析出題數設定
@@ -154,6 +156,14 @@ if ($_POST['act']=='setup_paper') {
    		    <br><font size=2>(預設「否」，可避免異地登入同帳號重覆領卷)</font>
    		</td>
    	</tr>
+   	<tr>
+   		<td valign='top' align='right'>試卷總分</td>
+   		<td valign='top'><input type='text' size='5' name='top_marks' value='$top_marks'>分</td>
+   	</tr>
+   	<tr>
+   		<td valign='top' align='right'>儲存後重算成績</td>
+   		<td valign='top'><input type='checkbox' name='reset_score'></td>
+   	</tr>
 
    </table>
 
@@ -178,14 +188,50 @@ if ($_POST['act']=='setup_paper_submit') {
 	$item_mode=$_POST['item_mode'];
 	$relay_answer=$_POST['relay_answer'];
 	$double_papers=$_POST['double_papers'];
+	$top_marks=$_POST['top_marks'];
 	//echo "<pre>";
 	//print_r($_POST);
 	//exit();
 	if ($res->recordcount()) {
-	  $sql="update resit_paper_setup set start_time='$start_time',end_time='$end_time',timer_mode='$timer_mode',timer='$timer',items='$items',relay_answer='$relay_answer',double_papers='$double_papers',item_mode='$item_mode' where seme_year_seme='".$SETUP['now_year_seme']."' and class_year='$Cyear' and scope='$scope'";
+	  $sql="update resit_paper_setup set start_time='$start_time',end_time='$end_time',timer_mode='$timer_mode',timer='$timer',items='$items',relay_answer='$relay_answer',double_papers='$double_papers',item_mode='$item_mode',top_marks='$top_marks' where seme_year_seme='".$SETUP['now_year_seme']."' and class_year='$Cyear' and scope='$scope'";
     $res=$CONN->Execute($sql) or die ('Error! Query='.$sql);
+  
+    //是否重算分數
+    $reset_score_txt="";
+    if ($_POST['reset_score']==1) {
+  	  $paper_setup=get_paper_sn($SETUP['now_year_seme'],$Cyear,$scope);
+      $sql="select sn,items,answers from resit_exam_score where paper_sn='".$paper_setup['sn']."' and complete='1'";  
+      $res=$CONN->Execute($sql)or die ('Error! Query='.$sql);
+      $i=0;  //計數
+      while ($row=$res->fetchRow()) {
+        $i++;
+        $items=unserialize($row['items']);
+				$answers=unserialize($row['answers']);
+				//逐題評分
+				$item_count=0;
+				$item_correct=0;
+				foreach ($items as $k=>$v) {
+    	  	$item_count++;
+    	  	// $v 為試題的 sn
+    	  	$sql="select answer from resit_exam_items where sn='$v'";
+        	$res_ans=$CONN->Execute($sql) or die($sql);
+        	$row_ans=$res_ans->fetchRow();
+					if ($row_ans['answer']==$answers[$k]) $item_correct++;					  
+    
+        } // end foreach
+				$score=($item_correct/$item_count)*$top_marks;
+        $score=round($score,2);
+				$sql_score="update resit_exam_score set score='$score' where sn='".$row['sn']."'";
+				$res_score=$CONN->Execute($sql_score)or die ('Error! Query='.$sql_score);
+				//echo $sql_score."<br>";
+      } // end while
+      
+      $reset_score_txt="已重算 ".$i." 位學生的成績!";
+      
+    } // end if $_POST['reset_score']==1
+
 	} else {
-	  $sql="insert into resit_paper_setup (seme_year_seme,class_year,scope,start_time,end_time,timer_mode,timer,items,relay_answer,double_papers,item_mode) values ('".$SETUP['now_year_seme']."','$Cyear','$scope','$start_time','$end_time','$timer_mode','$timer','$items','$relay_answer','$double_papers','$item_mode')";
+	  $sql="insert into resit_paper_setup (seme_year_seme,class_year,scope,start_time,end_time,timer_mode,timer,items,relay_answer,double_papers,item_mode,top_marks) values ('".$SETUP['now_year_seme']."','$Cyear','$scope','$start_time','$end_time','$timer_mode','$timer','$items','$relay_answer','$double_papers','$item_mode','$top_marks')";
 	  $res=$CONN->Execute($sql) or die ('Error! Query='.$sql);
 	}
 
@@ -213,8 +259,8 @@ if ($_POST['act']=='setup_paper_submit') {
 		   } // end if $res->RecoreCount()  
 		} // end foreach   	
 	} // end if ($item_mode==1)
-	
-	echo "<font color=red>".$link_ss[$scope]."</font>領域試卷設定儲存完畢!";
+
+	echo "<font color=red>".$link_ss[$scope]."</font>領域試卷設定儲存完畢! <br> $reset_score_txt";
 	
   exit();
 }
@@ -985,6 +1031,14 @@ $("#setup_paper_submit").click(function(){
 	var Cyear='<?php echo $Cyear;?>';
 	var timer=document.myform.timer.value;
 	var items=document.myform.items.value;
+	var top_marks=document.myform.top_marks.value;
+	//是否重算分數
+	if (document.myform.reset_score.checked) {
+	  var reset_score=1;
+	} else {
+		var reset_score=0;
+	}
+	
 	//取得 timer_mode , 由於是利用 ajax 動態產生的畫面，這邊無法使用 jQuery 取值
 	for (var i=0; i<myform.timer_mode.length; i++) {
    if (myform.timer_mode[i].checked)
@@ -1057,7 +1111,7 @@ $("#setup_paper_submit").click(function(){
 	$.ajax({
    	type: "post",
     url: 'resit_assign.php',
-    data: { act:act,scope:scope,Cyear:Cyear,start_time:start_time,end_time:end_time,timer:timer,items:items,timer_mode:timer_mode,relay_answer:relay_answer,double_papers:double_papers,item_mode:item_mode,subject:strSubject },
+    data: { act:act,scope:scope,Cyear:Cyear,start_time:start_time,end_time:end_time,timer:timer,items:items,timer_mode:timer_mode,relay_answer:relay_answer,double_papers:double_papers,item_mode:item_mode,subject:strSubject,top_marks:top_marks,reset_score:reset_score },
     //data : postData,
     dataType: "text",
     error: function(xhr) {

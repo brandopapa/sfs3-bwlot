@@ -1,4 +1,4 @@
-# $Id: sfs3.sql 6534 2011-09-22 09:46:05Z infodaes $
+# $Id: sfs3.sql 8468 2015-07-27 16:31:47Z smallduh $
 # phpMyAdmin MySQL-Dump
 # version 2.4.0
 # http://www.phpmyadmin.net/ (download page)
@@ -1296,7 +1296,8 @@ CREATE TABLE file_db (
   FULLTEXT KEY description (description),
   FULLTEXT KEY filename (filename),
   KEY category (category_sn)
-) ;
+) ENGINE=MyISAM;
+
 
 #
 # 列出以下資料庫的數據： `file_db`

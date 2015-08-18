@@ -1,5 +1,5 @@
 <?php
-// $Id: module-upgrade.php 8101 2014-08-31 14:51:15Z infodaes $
+// $Id: module-upgrade.php 8485 2015-08-14 15:23:04Z smallduh $
 if(!$CONN){
         echo "go away !!";
         exit;
@@ -14,7 +14,7 @@ $upgrade_str = set_upload_path("$upgrade_path");
 
 $up_file_name =$upgrade_str."2003-08-22.txt";
 if (!is_file($up_file_name)){
-	$query = "CREATE TABLE seme_course_date (seme_year_seme varchar(6) NOT NULL default '', days tinyint(3) unsigned NOT NULL default '0', UNIQUE KEY seme_year_seme (seme_year_seme))  COMMENT='學期上課日數'";
+	$query = "CREATE TABLE seme_course_date (seme_year_seme varchar(6) NOT NULL default '', days tinyint(3) unsigned NOT NULL default '0',`school_days` text NOT NULL, UNIQUE KEY seme_year_seme (seme_year_seme))  COMMENT='學期上課日數'";
 
 	if ($CONN->Execute($query)) 
 		$temp_query = "加入學期上課日數資料表 seme_course_date -- by hami (2003-06-08)\n$query";
@@ -28,9 +28,12 @@ if (!is_file($up_file_name)){
 
 $up_file_name =$upgrade_str."2003-09-26.txt";
 if (!is_file($up_file_name)){
-	$query = "ALTER TABLE `seme_course_date` ADD `class_year` VARCHAR( 3 ) NOT NULL AFTER `seme_year_seme` ;";
+	$query = "ALTER TABLE `seme_course_date` ADD `class_year` VARCHAR( 3 ) NOT NULL default '' AFTER `seme_year_seme` ;";
 	$CONN->Execute($query);
 	$CONN->Execute("ALTER TABLE `seme_course_date` DROP INDEX `seme_year_seme` ");
+	$query = "ALTER TABLE `seme_course_date` ADD `school_days` text NOT NULL default '';";
+	$CONN->Execute($query);	
+	
 	$query = "ALTER TABLE `seme_course_date` DROP PRIMARY KEY ,ADD PRIMARY KEY ( seme_year_seme, `class_year` ) ";
 	
 	if ($CONN->Execute($query)) 

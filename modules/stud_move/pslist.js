@@ -1215,6 +1215,7 @@ function SelectDistrict() {
         addOption(document.myform.selectschool, "193659", "市立上安國小", "");
         addOption(document.myform.selectschool, "193661", "市立長安國小", "");
         addOption(document.myform.selectschool, "193662", "市立惠來國小", "");
+        addOption(document.myform.selectschool, "193664", "市立東海國小", "");
         addOption(document.myform.selectschool, "191301", "私立東大附中附設國小", "");
     }
     if (document.myform.selectcity.value == '臺中市' && document.myform.selectdistrict.value == '中區') {

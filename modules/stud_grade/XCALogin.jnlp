@@ -7,22 +7,22 @@
     <offline-allowed/>
   </information>
   <resources>
-    <j2se version="1.6+" java-vm-args="-Xmx128m "  href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="XCALogin.jar" size="197116" download="eager" />
-    <jar href="lib/P11JNI.jar" size="152300" download="eager" />
-    <jar href="lib/commons-codec-1.9.jar" size="288476" download="eager" />
-    <jar href="lib/commons-lang3-3.3.2.jar" size="440293" download="eager" />
-    <jar href="lib/commons-logging-1.2.jar" size="69261" download="eager" />
-    <jar href="lib/httpasyncclient-4.1.jar" size="190823" download="eager" />
-    <jar href="lib/httpasyncclient-cache-4.1.jar" size="40724" download="eager" />
-    <jar href="lib/httpclient-4.4.1.jar" size="774263" download="eager" />
-    <jar href="lib/httpclient-cache-4.4.1.jar" size="172336" download="eager" />
-    <jar href="lib/httpcore-4.4.1.jar" size="353386" download="eager" />
-    <jar href="lib/httpcore-nio-4.4.1.jar" size="385664" download="eager" />
-    <jar href="lib/jfxmessagebox-1.1.0.jar" size="40449" download="eager" />
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="XCALogin.jar" size="212537" download="eager" />
+    <jar href="lib/P11JNI.jar" size="152302" download="eager" />
+    <jar href="lib/commons-codec-1.9.jar" size="288475" download="eager" />
+    <jar href="lib/commons-lang3-3.3.2.jar" size="440290" download="eager" />
+    <jar href="lib/commons-logging-1.2.jar" size="69262" download="eager" />
+    <jar href="lib/httpasyncclient-4.1.jar" size="190821" download="eager" />
+    <jar href="lib/httpasyncclient-cache-4.1.jar" size="40723" download="eager" />
+    <jar href="lib/httpclient-4.4.1.jar" size="774267" download="eager" />
+    <jar href="lib/httpclient-cache-4.4.1.jar" size="172339" download="eager" />
+    <jar href="lib/httpcore-4.4.1.jar" size="353384" download="eager" />
+    <jar href="lib/httpcore-nio-4.4.1.jar" size="385663" download="eager" />
+    <jar href="lib/jfxmessagebox-1.1.0.jar" size="40448" download="eager" />
     <jar href="lib/joda-time-2.5.jar" size="659744" download="eager" />
     <jar href="lib/json.jar" size="42274" download="eager" />
-    <jar href="lib/log4j-1.2.16.jar" size="513767" download="eager" />
+    <jar href="lib/log4j-1.2.16.jar" size="513766" download="eager" />
   </resources>
 <security>
   <all-permissions/>

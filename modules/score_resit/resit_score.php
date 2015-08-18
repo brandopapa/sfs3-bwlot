@@ -101,12 +101,12 @@ if ($_POST['act']=='html_resit_list') {
 	   } else {
 	  	$main.="   
 	     <td style='font-size:9pt'>".$row['entrance_time']."</td>		
-	  	 <td style='font-size:10pt' align='center'>".$row['score']."</td>
-	     <td style='font-size:9pt'>".$row['complete_time'];
+	  	 <td style='font-size:9pt'>".$row['complete_time']."</td>
+	     <td style='font-size:10pt' align='center'>".$row['score'];
 		 }
 
 		if ($row['complete']==1) {
-		 $main.="<a href='resit_list_paper.php?seme_year_seme=$seme_year_seme&Cyear=$Cyear&scope=$scope&sn=".$row['sn']."' target='_blank' title='瀏覽《".$row['stud_name']."》的作答'><img src='images/filefind.png'></a></td>
+		 $main.=" <a href='resit_list_paper.php?seme_year_seme=$seme_year_seme&Cyear=$Cyear&scope=$scope&sn=".$row['sn']."' target='_blank' title='瀏覽《".$row['stud_name']."》的作答'><img src='images/filefind.png'></a></td>
 			</tr>";
 		} else {
 		 $main.="</td>
