@@ -1,6 +1,6 @@
 <?php
 
-// $Id: teach_list.php 7551 2013-09-19 03:36:31Z hami $
+// $Id: teach_list.php 8486 2015-08-16 02:55:19Z smallduh $
 
 // 載入設定檔
 include "teach_config.php";
@@ -123,7 +123,22 @@ switch ($do_key){
 			$teacher_sn ="";
 		}
 	break;
-
+	case $srchID: //ID搜尋
+	 $sql_search="select teacher_sn,teach_condition from teacher_base where teach_id='".$_POST['srchKey']."'";
+	 $res_search=$CONN->Execute($sql_search);
+	 if ($res_search->RecordCount()>0) {
+	  $teacher_sn=$res_search->fields['teacher_sn'];
+	  $sel=$res_search->fields['teach_condition'];
+	 }
+  break;
+	case $srchName: //姓名搜尋
+	 $sql_search="select teacher_sn,teach_condition from teacher_base where name like'".$_POST['srchKey']."%'";
+	 $res_search=$CONN->Execute($sql_search);
+	 if ($res_search->RecordCount()>0) {
+	  $teacher_sn=$res_search->fields['teacher_sn'];
+	  $sel=$res_search->fields['teach_condition'];
+	 }
+  break;
 
 } 
 //印出檔頭
@@ -257,7 +272,11 @@ function checkok() {
 	}
 	$upstr .= "</select>"; 
 	if($sel == 0) //在職時顯示 新增鈕 
-		$downstr = "<hr size=1><input type=submit name=\"do_key\" value =\"$newBtn\">"; 
+		$downstr = "<hr size=1><input type=submit name=\"do_key\" value =\"$newBtn\">";
+		$downstr.="<hr size=1>
+		<input type='text' name='srchKey' size='15'><br>
+		<input type=submit name=\"do_key\" value =\"$srchID\"><br>
+		<input type=submit name=\"do_key\" value =\"$srchName\">"; 
 
 	$grid1 = new ado_grid_menu($_SERVER['PHP_SELF'],$URI,$CONN);  //建立選單
 	$grid1->bgcolor = $gridBgcolor;  // 顏色

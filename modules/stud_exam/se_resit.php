@@ -296,6 +296,11 @@ if ($_POST['act']=='start_test') {
 if ($_POST['act']=='start_test_submit') {
  $score_sn=$_POST['score_sn'];
  $paper_sn=$_POST['paper_sn'];
+ 
+ $sql="select * from resit_paper_setup where sn='$paper_sn'";
+ $res=$CONN->Execute($sql) or die('讀取試卷設定錯誤! SQL='.$sql);
+ $top_marks=$res->fields['top_marks'];
+ 
  $answers=$_POST['answers'];  // array
  $complete=1;
  $complete_time=date("Y-m-d H:i:s");
@@ -316,7 +321,7 @@ if ($_POST['act']=='start_test_submit') {
     } // end for
     
     //分數
-    $score=($correct/$test_count)*100;
+    $score=($correct/$test_count)*$top_marks;
     $score=round($score,2);
     
     $write_answers=serialize($answers);
@@ -501,6 +506,7 @@ $answers=unserialize($row['answers']);
  			   if ($paper_setup['relay_answer']==1) {
  			    $show4="<input type='button' style='color:#0000FF' value='檢視作答' class='report_test' id='".$v."'>";
  			   } else {
+ 			   	$show2="未開放";
  			    $show4="<font size='2'>未開放閱卷</font>";
  			   }
  			 } elseif ($resit_data['entrance'] and $paper_setup['double_papers']==0) {

@@ -1,5 +1,5 @@
 <?php
-// $Id: stud_move_out.php 8398 2015-04-22 06:23:49Z hsiao $
+// $Id: stud_move_out.php 8482 2015-08-10 16:23:40Z hsiao $
 // 載入設定檔
 include "stud_move_config.php";
 include_once "../../include/sfs_case_dataarray.php";
@@ -44,6 +44,7 @@ if (!$curr_seme) {
 $seme_year_seme = sprintf("%04d", $curr_seme);
 
 $do_upload_script = "var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_upload.php?curr_seme=" . $curr_seme . "');window.open(targeturi);";
+$do_xcatest_script = "var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_xcatest.php');window.open(targeturi);";
 $upload_script = "<script>alert('請記得將學生異動資料上傳\\n至臺中市就學管控系統哦！')</script>";
 
 //echo $upload_script;
@@ -186,6 +187,13 @@ echo $do_upload_script;
 
     }
 
+
+    function doXCATestScript() {
+<?php
+echo $do_xcatest_script;
+?>
+
+    }
 
 //var oform = document.forms["myform"];
     function getSN() {
@@ -441,6 +449,7 @@ echo $do_upload_script;
                     if ($isTaichung == '06' || $isTaichung == '19') {
                         echo "<tr><td colspan=13 class=title_top1 align=center ><button onclick=\"doUploadScript()\">按我上傳本學期學生異動資料至臺中市就學管控系統</button></td></tr>";
                     }
+                    echo "<tr><td colspan=13 class=title_top1 align=center ><button onclick=\"doXCATestScript()\">按我進行XCA全自動加解密測試！</button></td></tr>";
                     echo "<tr><td colspan=13 class=title_top1 align=center >本學期調出學生</td></tr>";
                     echo "
 			<TR class=title_mbody >

@@ -28,10 +28,10 @@ class basic_chc{
 	var $tol;//資料總筆數
 //	var $scope=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',
 //	5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動',8=>'全部領域');
-//	var $scope=array(7=>'全部領域+CSV下載',8=>'全部領域+網頁顯示');
-    var $scope=array(8=>'全部領域');
+	var $scope=array(8=>'全部領域');
 	var $scope2=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',
 	5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動');
+    
 	var $scopefailnum=array(1=>'一個領域以上不及格',2=>'二個領域以上不及格',3=>'三個領域以上不及格',4=>'四個領域以上不及格',
 	5=>'五個領域以上不及格',6=>'六個領域以上不及格',7=>'七個領域以上不及格',8=>'全部領域不及格'); 
 	var $Semesfailnum=array(1=>'一個學期成績列表',2=>'二個學期成績列表',3=>'三個學期成績列表',4=>'四個學期成績列表',5=>'五個學期成績列表',6=>'六個學期成績列表'); 
@@ -74,7 +74,7 @@ class basic_chc{
 	}
 	//顯示
 	function display(){
-//		$temp1 = dirname (__file__)."/templates/ungraduate_stu_print.htm";
+//		$temp1 = dirname (__file__)."/templates/score_list04.htm";
 		$temp2 = dirname (__file__)."/templates/ungraduate_stu.htm";
 //		($this->S == "8") ? $tpl=$temp2 : $tpl = $temp1;
         ($this->S == "8") ? $tpl = $temp2 : $tpl = $temp2;
@@ -84,7 +84,6 @@ class basic_chc{
 	//擷取資料
 	function all(){
 //		var $scope2=array(1=>'語文',2=>'數學',3=>'自然與生活科技',4=>'社會',5=>'健康與體育',6=>'藝術與人文',7=>'綜合活動');
-         $student_sex = array("1"=>"男","2"=>"女");
 		 $cal_fin_score_ss = array("language"=>"1","math"=>"2","nature"=>"3","social"=>"4","health"=>"5","art"=>"6","complex"=>"7");
 		if ($this->Y=='') return;
 		if ($this->G=='') return;
@@ -101,154 +100,174 @@ class basic_chc{
         if ($sel_seme==1) {
 		 switch ($this->Semesnum) {
 		  case 1:
-		  	$all_seme_mysql = "("."'".$ys[0]."_".$ys[1]."'".")";
-		  	$all_seme_array[1] = $ys[0].$ys[1];
+		  	$all_seme_array[1] = $ys[0]."_".$ys[1];
+		  	$Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G,$this->S);
 			break;
 		  case 2:	 
-		    $all_seme_mysql = "("."'".($ys[0]-1)."_".($ys[1]+1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1] = ($ys[0]-1).($ys[1]+1);
-		    $all_seme_array[2] = $ys[0].$ys[1];
+		    $all_seme_array[1] = ($ys[0]-1)."_".($ys[1]+1);
+		    $all_seme_array[2] = $ys[0]."_".$ys[1];
+		    $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-1,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G,$this->S);
 			break;	
 		  case 3:	
-		    $all_seme_mysql = "("."'".($ys[0]-1)."_".$ys[1]."'".","."'".($ys[0]-1)."_".($ys[1]+1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-1).$ys[1];
-            $all_seme_array[2]= ($ys[0]-1).($ys[1]+1);
-            $all_seme_array[3]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-1)."_".$ys[1];
+            $all_seme_array[2]= ($ys[0]-1)."_".($ys[1]+1);
+            $all_seme_array[3]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-1,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-1,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G,$this->S);
 			break;
 		  case 4:	
-		    $all_seme_mysql = "("."'".($ys[0]-2)."_".($ys[1]+1)."'".","."'".($ys[0]-1)."_".$ys[1]."'".","."'".($ys[0]-1)."_".($ys[1]+1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-2).($ys[1]+1);
-            $all_seme_array[2]= ($ys[0]-1).$ys[1];
-            $all_seme_array[3]= ($ys[0]-1).($ys[1]+1);
-            $all_seme_array[4]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-2)."_".($ys[1]+1);
+            $all_seme_array[2]= ($ys[0]-1)."_".$ys[1];
+            $all_seme_array[3]= ($ys[0]-1)."_".($ys[1]+1);
+            $all_seme_array[4]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-2,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-1,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G-1,$this->S);
+		    $Test[4]=$this->chc_mend_one_seme_score($all_seme_array[4],$this->G,$this->S);
 			break;		
 		  case 5:	
-		    $all_seme_mysql = "("."'".($ys[0]-2)."_".($ys[1])."'".","."'".($ys[0]-2)."_".($ys[1]+1)."'".","."'".($ys[0]-1)."_".$ys[1]."'".","."'".($ys[0]-1)."_".($ys[1]+1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-2).($ys[1]);
-            $all_seme_array[2]= ($ys[0]-2).($ys[1]+1);
-            $all_seme_array[3]= ($ys[0]-1).$ys[1];
-            $all_seme_array[4]= ($ys[0]-1).($ys[1]+1);
-            $all_seme_array[5]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-2)."_".($ys[1]);
+            $all_seme_array[2]= ($ys[0]-2)."_".($ys[1]+1);
+            $all_seme_array[3]= ($ys[0]-1)."_".$ys[1];
+            $all_seme_array[4]= ($ys[0]-1)."_".($ys[1]+1);
+            $all_seme_array[5]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-2,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-2,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G-1,$this->S);
+		    $Test[4]=$this->chc_mend_one_seme_score($all_seme_array[4],$this->G-1,$this->S);
+		    $Test[5]=$this->chc_mend_one_seme_score($all_seme_array[5],$this->G,$this->S);
 			break;
 		  case 6:	
-		    $all_seme_mysql = "("."'".($ys[0]-3)."_".($ys[1]+1)."'".","."'".($ys[0]-2)."_".($ys[1])."'".","."'".($ys[0]-2)."_".($ys[1]+1)."'".","."'".($ys[0]-1)."_".$ys[1]."'".","."'".($ys[0]-1)."_".($ys[1]+1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-3).($ys[1]+1);
-            $all_seme_array[2]= ($ys[0]-2).($ys[1]);
-            $all_seme_array[3]= ($ys[0]-2).($ys[1]+1);
-            $all_seme_array[4]= ($ys[0]-1).$ys[1];
-            $all_seme_array[5]= ($ys[0]-1).($ys[1]+1);
-            $all_seme_array[6]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-3)."_".($ys[1]+1);
+            $all_seme_array[2]= ($ys[0]-2)."_".($ys[1]);
+            $all_seme_array[3]= ($ys[0]-2)."_".($ys[1]+1);
+            $all_seme_array[4]= ($ys[0]-1)."_".$ys[1];
+            $all_seme_array[5]= ($ys[0]-1)."_".($ys[1]+1);
+            $all_seme_array[6]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-3,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-2,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G-2,$this->S);
+		    $Test[4]=$this->chc_mend_one_seme_score($all_seme_array[4],$this->G-1,$this->S);
+		    $Test[5]=$this->chc_mend_one_seme_score($all_seme_array[5],$this->G-1,$this->S);
+		    $Test[6]=$this->chc_mend_one_seme_score($all_seme_array[6],$this->G,$this->S);
 			break;		
 	      }
 		} else {
 		  switch ($this->Semesnum) {
 		  case 1:
-		  	$all_seme_mysql = "("."'".$ys[0]."_".$ys[1]."'".")";
-		  	$all_seme_array[1] = $ys[0].$ys[1];
+		  	$all_seme_array[1] = $ys[0]."_".$ys[1];
+		  	$Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G,$this->S);
 			break;
 		  case 2:	
-		    $all_seme_mysql = "("."'".($ys[0])."_".($ys[1]-1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1] = ($ys[0]).($ys[1]-1);
-		    $all_seme_array[2] = $ys[0].$ys[1];
+		    $all_seme_array[1] = ($ys[0])."_".($ys[1]-1);
+		    $all_seme_array[2] = $ys[0]."_".$ys[1];
+		    $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G,$this->S);
 			break;	
 		  case 3:	
-		    $all_seme_mysql = "("."'".($ys[0]-1)."_".$ys[1]."'".","."'".($ys[0])."_".($ys[1]-1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-1).$ys[1];
-            $all_seme_array[2]= ($ys[0]).($ys[1]-1);
-            $all_seme_array[3]= $ys[0].$ys[1]; 
+		    $all_seme_array[1]= ($ys[0]-1)."_".$ys[1];
+            $all_seme_array[2]= ($ys[0])."_".($ys[1]-1);
+            $all_seme_array[3]= $ys[0]."_".$ys[1]; 
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-1,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G,$this->S);
 			break;
 		  case 4:	
-		    $all_seme_mysql = "("."'".($ys[0]-1)."_".($ys[1]-1)."'".","."'".($ys[0]-1)."_".$ys[1]."'".","."'".($ys[0])."_".($ys[1]-1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-1).($ys[1]-1);
-            $all_seme_array[2]= ($ys[0]-1).$ys[1];
-            $all_seme_array[3]= ($ys[0]).($ys[1]-1);
-            $all_seme_array[4]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-1)."_".($ys[1]-1);
+            $all_seme_array[2]= ($ys[0]-1)."_".$ys[1];
+            $all_seme_array[3]= ($ys[0])."_".($ys[1]-1);
+            $all_seme_array[4]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-1,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-1,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G,$this->S);
+		    $Test[4]=$this->chc_mend_one_seme_score($all_seme_array[4],$this->G,$this->S);
 			break;		
 		  case 5:	
-		    $all_seme_mysql = "("."'".($ys[0]-2)."_".($ys[1])."'".","."'".($ys[0]-1)."_".($ys[1]-1)."'".","."'".($ys[0]-1)."_".($ys[1])."'".","."'".($ys[0])."_".($ys[1]-1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-2).($ys[1]);
-            $all_seme_array[2]= ($ys[0]-1).($ys[1]-1);
-            $all_seme_array[3]= ($ys[0]-1).($ys[1]);
-            $all_seme_array[4]= ($ys[0]).($ys[1]-1);
-            $all_seme_array[5]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-2)."_".($ys[1]);
+            $all_seme_array[2]= ($ys[0]-1)."_".($ys[1]-1);
+            $all_seme_array[3]= ($ys[0]-1)."_".($ys[1]);
+            $all_seme_array[4]= ($ys[0])."_".($ys[1]-1);
+            $all_seme_array[5]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-2,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-1,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G-1,$this->S);
+		    $Test[4]=$this->chc_mend_one_seme_score($all_seme_array[4],$this->G,$this->S);
+		    $Test[5]=$this->chc_mend_one_seme_score($all_seme_array[5],$this->G,$this->S);
 			break;
 		  case 6:	
-		    $all_seme_mysql = "("."'".($ys[0]-2)."_".($ys[1]-1)."'".","."'".($ys[0]-2)."_".($ys[1])."'".","."'".($ys[0]-1)."_".($ys[1]-1)."'".","."'".($ys[0]-1)."_".($ys[1])."'".","."'".($ys[0])."_".($ys[1]-1)."'".","."'".$ys[0]."_".$ys[1]."'".")";
-		    $all_seme_array[1]= ($ys[0]-2).($ys[1]-1);
-            $all_seme_array[2]= ($ys[0]-2).($ys[1]);
-            $all_seme_array[3]= ($ys[0]-1).($ys[1]-1);
-            $all_seme_array[4]= ($ys[0]-1).($ys[1]);
-            $all_seme_array[5]= ($ys[0]).($ys[1]-1);
-            $all_seme_array[6]= $ys[0].$ys[1];
+		    $all_seme_array[1]= ($ys[0]-2)."_".($ys[1]-1);
+            $all_seme_array[2]= ($ys[0]-2)."_".($ys[1]);
+            $all_seme_array[3]= ($ys[0]-1)."_".($ys[1]-1);
+            $all_seme_array[4]= ($ys[0]-1)."_".($ys[1]);
+            $all_seme_array[5]= ($ys[0])."_".($ys[1]-1);
+            $all_seme_array[6]= $ys[0]."_".$ys[1];
+            $Test[1]=$this->chc_mend_one_seme_score($all_seme_array[1],$this->G-2,$this->S);
+		    $Test[2]=$this->chc_mend_one_seme_score($all_seme_array[2],$this->G-2,$this->S);
+		    $Test[3]=$this->chc_mend_one_seme_score($all_seme_array[3],$this->G-1,$this->S);
+		    $Test[4]=$this->chc_mend_one_seme_score($all_seme_array[4],$this->G-1,$this->S);
+		    $Test[5]=$this->chc_mend_one_seme_score($all_seme_array[5],$this->G,$this->S);
+		    $Test[6]=$this->chc_mend_one_seme_score($all_seme_array[6],$this->G,$this->S);
 			break;		
 	      }
 		}
-		$this->all_seme_array_smarty=$all_seme_array;		
-		$seme_class=$this->G."%";
-		$Scope=$this->S;
-		$SQL2="and c.scope='$Scope'";
-		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL='';
-//		($Scope!="8") ? $ADD_SQL=$SQL2:$ADD_SQL=$SQL2;	
-		$query="SELECT a.stud_id, a.stud_name, a.stud_sex, b.seme_class, b.seme_num, b.seme_year_seme, c.* 
-        FROM stud_base a, stud_seme b, chc_mend c
-        WHERE a.student_sn = c.student_sn 
-        AND c.student_sn = b.student_sn 
-        AND a.stud_study_cond='0'
-        AND c.seme IN $all_seme_mysql
-        AND b.seme_year_seme = REPLACE (c.`seme` ,'_','')
-        $ADD_SQL
-        ORDER BY b.seme_class,b.seme_num,b.seme_year_seme,c.student_sn,c.scope
-        ";		
-		$res=$this->CONN->Execute($query);
-		$ALL=$res->GetArray();
-		$i=0;
-		if ($Scope=="8") {
-			$New=array();
-			foreach ($ALL as $ary){
-				$sn=$ary['student_sn'];//系統編號
-				$snlist[]=$ary['student_sn'];//系統編號列表
-				$ss=$ary['scope'];//領域
-				$semes=$ary['seme_year_seme'];//學期
-				$score_end = $ary['score_end'];//補考完成績
-	            //$New['A']為學生基本資料
-				$New['A'][$sn]=$ary;
-				//$New['B']為全領域成績
-				$New['B'][$sn][$semes][$ss]=$ary;
-				//$New['C']、$New['D']為補考後成績
-				$New['C'][$sn][$semes][$ss]=$score_end;
-				$New['D'][$sn][$semes][$ss]=$score_end;
-//				$New['G'][$sn][$semes][$ss]=$score_end;
-				//$New['C']要計算補考通過領域數total_ss_pass、$New['D']要計算補考領域數total_ss]
-				$New['D'][$sn][$semes][total_ss]= (count($New['D'][$sn][$semes])==1)?(count($New['D'][$sn][$semes])):(count($New['D'][$sn][$semes])-1);
-				$New['C'][$sn][$semes][total_ss_pass]= 0;		
-                foreach ($New['C'][$sn][$semes] as $ss => $v) {
-				     if ($v ==60) {
-						 $New['C'][$sn][$semes][total_ss_pass]++;
-					  } 
-				 }
-				 //$New['E']要計算補考未通過領域數total_ss_Nopass
-				 $New['E'][$sn][$semes][total_ss]=$New['D'][$sn][$semes][total_ss];
-				 $New['E'][$sn][$semes][total_ss_pass]=$New['C'][$sn][$semes][total_ss_pass];
-				 $New['E'][$sn][$semes][total_ss_Nopass]=$New['E'][$sn][$semes][total_ss]-$New['E'][$sn][$semes][total_ss_pass];
-                 $New['A'][$sn][total_ss_Nopass]=$New['E'][$sn][$semes][total_ss_Nopass];
-			}			 			
-			//取得其他領域成績
-			$snlist_uniqe_csv = array_unique($snlist);//系統編號唯一列表用於CSV						
-			$snlist_uniqe = array_unique($snlist);//系統編號唯一列表						
-		    sort($snlist_uniqe);								
-			$cal_fin_score_array = $this->cal_fin_score($snlist_uniqe,$all_seme_array,"","",2);												
-			foreach ($snlist_uniqe as $value_sn){
+		$this->all_seme_array_smarty=$all_seme_array;
+		$all_seme_array_mysql=str_replace("_","",$all_seme_array);	
+		$all_seme_array2mysql=array_combine($all_seme_array,$all_seme_array_mysql);	
+		$all_student_sn=array();		
+       for ($i=1;$i<=$this->Semesnum;$i++) {
+			for ($j=0;$j<count($Test[$i][snlist]);$j++) {
+			array_push($all_student_sn,$Test[$i][snlist][$j]);
+			}					
+		}		
+        $all_student_sn_unique=array_unique($all_student_sn);
+        sort($all_student_sn_unique);
+        for ($i=1;$i<=$this->Semesnum;$i++) {
+            foreach ($all_student_sn_unique as $value_sn) {
+				if ($Test[$i]['A'][$value_sn]!="") {
+				//$New['A']為學生基本資料
+				$New['A'][$value_sn]=$Test[$i]['A'][$value_sn];
+			    }
+		            foreach ($all_seme_array as $value_seme){
+			        	    foreach ($cal_fin_score_ss as $index_ss => $value_ss){
+			        	           if ($Test[$i]['B'][$value_sn][$value_seme][$value_ss]!="") {
+			        	              //$New['B']為全領域成績
+				                      $New['B'][$value_sn][$value_seme][$value_ss]=$Test[$i]['B'][$value_sn][$value_seme][$value_ss];
+					                }
+					                if ($Test[$i]['D'][$value_sn][$value_seme][$value_ss]!="") {
+			        	              //$New['E']要計算補考未通過領域數total_ss_Nopass
+				                      $New['E'][$value_sn][$value_seme][$value_ss]=$Test[$i]['D'][$value_sn][$value_seme][$value_ss];
+					                }					                
+			                }
+			                if ($Test[$i]['E'][$value_sn][$value_seme][total_ss]!="") {
+				                $New['E'][$value_sn][$value_seme][total_ss]=$Test[$i]['E'][$value_sn][$value_seme][total_ss];
+					        }
+					        if ($Test[$i]['E'][$value_sn][$value_seme][total_ss_pass]!="") {			        	          
+				                $New['E'][$value_sn][$value_seme][total_ss_pass]=$Test[$i]['E'][$value_sn][$value_seme][total_ss_pass];
+					        }
+					        if ($Test[$i]['E'][$value_sn][$value_seme][total_ss_Nopass]!="") {			        	          
+				                $New['E'][$value_sn][$value_seme][total_ss_Nopass]=$Test[$i]['E'][$value_sn][$value_seme][total_ss_Nopass];
+					        }
+					        if ($Test[$i]['E'][$value_sn][$value_seme][total_ss]!=""&&$Test[$i]['E'][$value_sn][$value_seme][total_ss_Nopass]!="") {			        	          
+				                $New['E'][$value_sn][$value_seme][total_ss_pass]=$New['E'][$value_sn][$value_seme][total_ss]-$New['E'][$value_sn][$value_seme][total_ss_Nopass];
+					        }
+				     }	        
+		    }
+	    }
+        $cal_fin_score_array = $this->cal_fin_score($all_student_sn_unique,$all_seme_array_mysql,"","",2);	
+        foreach ($all_student_sn_unique as $value_sn){
 			   foreach ($all_seme_array as $value_seme){
-				  foreach ($cal_fin_score_ss as $index_ss => $value_ss){
+				  foreach ($cal_fin_score_ss as $index_ss => $value_ss){					  
 					  //$New['F']要取得未補考領域成績
-					  $New['F'][$value_sn][$value_seme][$value_ss] = $cal_fin_score_array[$value_sn][$index_ss][$value_seme];
+					  $New['F'][$value_sn][$value_seme][$value_ss] = $cal_fin_score_array[$value_sn][$index_ss][$all_seme_array2mysql[$value_seme]];
 					  $New['I'][$value_sn][$value_ss][$value_seme] = $New['F'][$value_sn][$value_seme][$value_ss];
 					  //$New['G']要計算各領域各學期平均成績
-					  $New['G'][$value_sn][$value_ss][$value_seme] =$New['B'][$value_sn][$value_seme][$value_ss][score_end];
+					  $New['G'][$value_sn][$value_ss][$value_seme] =$New['B'][$value_sn][$value_seme][$value_ss][score_end];				      
 				  } 
 			   } 				
 			}
-			foreach ($snlist_uniqe as $value_sn){
+        	foreach ($all_student_sn_unique as $value_sn){
 			   foreach ($all_seme_array as $value_seme){
 				  foreach ($cal_fin_score_ss as $index_ss => $value_ss){
 					 if ($New['G'][$value_sn][$value_ss][$value_seme] =="") {
@@ -257,12 +276,12 @@ class basic_chc{
 	              } 
 			   } 				
 			}
-			foreach ($snlist_uniqe as $value_sn){			   
+			foreach ($all_student_sn_unique as $value_sn){			   
 			   foreach ($cal_fin_score_ss as $index_ss => $value_ss){				
-				  foreach ($all_seme_array as $value_seme){ 
+				  foreach ($all_seme_array as $value_seme){  
 					  $New['G'][$value_sn][$value_ss][total_score]=$New['G'][$value_sn][$value_ss][total_score]+$New['G'][$value_sn][$value_ss][$value_seme];
 					  if ($New['G'][$value_sn][$value_ss][$value_seme]!="") $New['G'][$value_sn][$value_ss][rate_score]++;
-					  $New['G'][$value_sn][$value_ss][avg_score]=$New['G'][$value_sn][$value_ss][total_score]/$New['G'][$value_sn][$value_ss][rate_score];
+					  $New['G'][$value_sn][$value_ss][avg_score]=round($New['G'][$value_sn][$value_ss][total_score]/$New['G'][$value_sn][$value_ss][rate_score],2);
 			          //$New['H']要計算各領域(1,2,3,4,5,6)學期平均成績來計算通過領域數
 					  $New['H'][$value_sn][$value_ss]=$New['G'][$value_sn][$value_ss][avg_score];					  
 				  } 				 
@@ -270,20 +289,15 @@ class basic_chc{
 				  $New['H'][$value_sn][total_ss_Nopass]=7-$New['H'][$value_sn][total_ss_pass];
 			   } 				
 			}
-		$this->stu_data=$New;
-		//echo "<pre>";
-		//print_r($this->stu_data);
-		//		echo "</pre>";
-		
-	    if ($_REQUEST['op']=="CSV") {
+        $this->stu_data=$New;
+        
+        if ($_REQUEST['op']=="CSV") {
 	    $this->stu_data=$New;	 
 		//$CSV_data 為CSV輸出檔案
 		$CSV_data = "學號,班級,座號,姓名,性別,語文平均,數學平均,自然與生活科技平均,社會平均,健康與體育平均,藝術與人文平均,綜合活動平均,通過領域數,未通過領域數\r\n";
-		foreach ($snlist_uniqe_csv as $value_sn) {	
+		foreach ($all_student_sn_unique as $value_sn) {	
 		  if ($this->stu_data['H'][$value_sn]['total_ss_Nopass'] >= $this->Sfailnum) {		   
-		    if (substr($this->stu_data['A'][$value_sn][seme_class],0,1) == $this->G) {
-		      $CSV_data .="{$this->stu_data['A'][$value_sn]['stud_id']},{$this->stu_data['A'][$value_sn]['seme_class']},{$this->stu_data['A'][$value_sn]['seme_num']},{$this->stu_data['A'][$value_sn]['stud_name']},{$student_sex[$this->stu_data['A'][$value_sn]['stud_sex']]},{$this->stu_data['H'][$value_sn][1]},{$this->stu_data['H'][$value_sn][2]},{$this->stu_data['H'][$value_sn][3]},{$this->stu_data['H'][$value_sn][4]},{$this->stu_data['H'][$value_sn][5]},{$this->stu_data['H'][$value_sn][6]},{$this->stu_data['H'][$value_sn][7]},{$this->stu_data['H'][$value_sn]['total_ss_pass']},{$this->stu_data['H'][$value_sn]['total_ss_Nopass']}\r\n";
-		    }  
+		      $CSV_data .="{$this->stu_data['A'][$value_sn]['stud_id']},{$this->stu_data['A'][$value_sn]['seme_class']},{$this->stu_data['A'][$value_sn]['seme_num']},{$this->stu_data['A'][$value_sn]['stud_name']},{$student_sex[$this->stu_data['A'][$value_sn]['stud_sex']]},{$this->stu_data['H'][$value_sn][1]},{$this->stu_data['H'][$value_sn][2]},{$this->stu_data['H'][$value_sn][3]},{$this->stu_data['H'][$value_sn][4]},{$this->stu_data['H'][$value_sn][5]},{$this->stu_data['H'][$value_sn][6]},{$this->stu_data['H'][$value_sn][7]},{$this->stu_data['H'][$value_sn]['total_ss_pass']},{$this->stu_data['H'][$value_sn]['total_ss_Nopass']}\r\n";  
 		  }  
 		}	      	
 		$CSV_filename = $ys[0]."學年".$ys[1]."學期".$this->G."年級".$this->Semesnum."學期".$this->Sfailnum."個領域以上不及格.csv";
@@ -294,7 +308,6 @@ class basic_chc{
 		echo $CSV_data;
 		die();
 	     }
-		}			
 	}	
 	
 	function cal_fin_score($student_sn=array(),$seme=array(),$succ="",$strs="",$precision=1)   //$succ:需合格領域數 $strs:等第評斷代換字串
@@ -329,7 +342,6 @@ class basic_chc{
 			$rate[$res->fields[student_sn]][$res->fields[link_ss]][$res->fields[seme_year_seme]]+=$res->fields[rate];
 			$res->MoveNext();
 		}
-
 		//處理各學期領域平均
 		$IS5=false;
 		$IS7=false;
@@ -346,7 +358,6 @@ class basic_chc{
 					while(list($seme_year_seme,$s)=each($vv)) {
 						$fin_score[$sn][$ls][$seme_year_seme][score]=number_format($s/$rate[$sn][$link_ss][$seme_year_seme],$precision);
 						$fin_score[$sn][$ls][$seme_year_seme][rate]=$rate[$sn][$link_ss][$seme_year_seme];
-
 						//$FIN_SCORE_RATE_MODE=1為加權平均  0為算數平均   假設畢業總平均加權數來自原始科目加權數   須注意各學期加權是否合理  比如  前一學期以100 200  500 設定   但次一學期以節數 2  3 6  設定  如此會造成單一學期的該領域成績比重失衡問題
 						if($FIN_SCORE_RATE_MODE=='1') {
 							//領域畢業總成績
@@ -357,7 +368,6 @@ class basic_chc{
 							$fin_score[$sn][$ls][total][score]+=$fin_score[$sn][$ls][$seme_year_seme][score];
 							$fin_score[$sn][$ls][total][rate]+=1;
 						}
-
 						//當學期學期總平均處理
 						if ($ls=="chinese" || $ls=="local" || $ls=="english") {
 							//語文領域特別處理部份
@@ -365,7 +375,6 @@ class basic_chc{
 							$fin_score[$sn][language][$seme_year_seme][score]+=$fin_score[$sn][$ls][$seme_year_seme][score]*$fin_score[$sn][$ls][$seme_year_seme][rate];
 							$fin_score[$sn][language][$seme_year_seme][rate]+=$fin_score[$sn][$ls][$seme_year_seme][rate];
 						} else {
-
 							if($FIN_SCORE_RATE_MODE=='1') {
 								$fin_score[$sn][$seme_year_seme][total][score]+=$fin_score[$sn][$ls][$seme_year_seme][score]*$rate[$sn][$link_ss][$seme_year_seme];
 								$fin_score[$sn][$seme_year_seme][total][rate]+=$rate[$sn][$link_ss][$seme_year_seme];
@@ -377,7 +386,6 @@ class basic_chc{
 					}
 				}
 				$fin_score[$sn][$ls][avg][score]=number_format($fin_score[$sn][$ls][total][score]/$fin_score[$sn][$ls][total][rate],$precision);
-
 				//除 本國語文  鄉土語言  英語  和 彈性課程 外   將其他領域平均成績加入"畢業"總成績
 				if ($ls!="chinese" && $ls!="local" && $ls!="english" && $ls!="") {
 					if($FIN_SCORE_RATE_MODE=='1') {
@@ -392,38 +400,27 @@ class basic_chc{
 					if ($fin_score[$sn][$ls][avg][score] >= 60) $fin_score[$sn][succ]++;
 				}
 			}
-
-
 			//生活領域成績特別處理
 			if($IS5 && $IS7) {
 				$fin_score[$sn][art][total][score]+=$fin_score[$sn][life][avg][score]*$fin_score[$sn][life][total][rate]/3;
 				$fin_score[$sn][nature][total][score]+=$fin_score[$sn][life][avg][score]*$fin_score[$sn][life][total][rate]/3;
 				$fin_score[$sn][social][total][score]+=$fin_score[$sn][life][avg][score]*$fin_score[$sn][life][total][rate]/3;
-
 				$fin_score[$sn][art][total][rate]+=$fin_score[$sn][life][total][rate]/3;
 				$fin_score[$sn][nature][total][rate]+=$fin_score[$sn][life][total][rate]/3;
 				$fin_score[$sn][social][total][rate]+=$fin_score[$sn][life][total][rate]/3;
-
 				$fin_score[$sn][art][avg][score]=number_format($fin_score[$sn][art][total][score]/$fin_score[$sn][art][total][rate],$precision);
 				$fin_score[$sn][nature][avg][score]=number_format($fin_score[$sn][nature][total][score]/$fin_score[$sn][nature][total][rate],$precision);
 				$fin_score[$sn][social][avg][score]=number_format($fin_score[$sn][social][total][score]/$fin_score[$sn][social][total][rate],$precision);
 			}
-
-
 			//語文領域成績特別獨立計算
 			if (count($sys)>0) {
 				$r=0;
 				while(list($seme_year_seme,$s)=each($sys)) {
 					$fin_score[$sn][language][$seme_year_seme][score]=number_format($fin_score[$sn][language][$seme_year_seme][score]/$fin_score[$sn][language][$seme_year_seme][rate],$precision);
-
-
 					if($FIN_SCORE_RATE_MODE=='1')	{
 						$fin_score[$sn][language][avg][score]+=$fin_score[$sn][language][$seme_year_seme][score]*$fin_score[$sn][language][$seme_year_seme][rate];
 						$fin_score[$sn][language][total][score]+=$fin_score[$sn][language][$seme_year_seme][score]*$fin_score[$sn][language][$seme_year_seme][rate];
 						$fin_score[$sn][language][total][rate]+=$fin_score[$sn][language][$seme_year_seme][rate];
-
-
-
 						$fin_score[$sn][$seme_year_seme][total][score]+=$fin_score[$sn][language][$seme_year_seme][score]*$fin_score[$sn][language][$seme_year_seme][rate];
 						$r+=$fin_score[$sn][language][$seme_year_seme][rate];
 		//echo $sn."---".$r."---".$fin_score[$sn][language][$seme_year_seme][rate]."---".$fin_score[$sn][language][avg][score]."<BR>";
@@ -436,7 +433,6 @@ class basic_chc{
 					}
 					$fin_score[$sn][$seme_year_seme][avg][score]=number_format($fin_score[$sn][$seme_year_seme][total][score]/$fin_score[$sn][$seme_year_seme][total][rate],$precision);
 				}
-
 				$fin_score[$sn][language][avg][score]=number_format($fin_score[$sn][language][avg][score]/$r,$precision);
 				if($FIN_SCORE_RATE_MODE=='1')	{
 					$fin_score[$sn][total][score]+=$fin_score[$sn][language][avg][score]*$r;
@@ -445,19 +441,14 @@ class basic_chc{
 					$fin_score[$sn][total][score]+=$fin_score[$sn][language][avg][score];
 					$fin_score[$sn][total][rate]+=1;
 				}
-
 				$fin_score[$sn][avg][score]=number_format($fin_score[$sn][total][score]/$fin_score[$sn][total][rate],$precision);
 				//複製到排名陣列
 				$rank_score[$sn]=$fin_score[$sn]['total']['score'];
-
-
 				if ($fin_score[$sn][language][avg][score] >= 60) $fin_score[$sn][succ]++;
 			}
-
 			if ($succ) {
 				if ($fin_score[$sn][succ] < $succ) $show_score[$sn]=$fin_score[$sn];
 			}
-      
       //針對最後結果做排序
 			arsort($rank_score);
 			//計算名次
@@ -466,10 +457,7 @@ class basic_chc{
 				$rank+=1;
 				$fin_score[$key]['total']['rank']=$rank;
 			}
-
 		}
-
-
 		if ($succ)
 			return $show_score;
 		else
@@ -480,5 +468,74 @@ class basic_chc{
 		return "沒有傳入學期";
 	}
    }
-
+   function chc_mend_one_seme_score($this_Y,$this_G,$this_S)
+   {
+        if ($this_Y=='') return;
+		if ($this_G=='') return;
+		if ($this_S=='') return;
+		$ys=explode("_",$this_Y);
+		$sel_year=$ys[0];
+		$sel_seme=$ys[1];
+		$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
+		$seme_class=$this_G."%";
+		$Scope=$this_S;
+		//增加判斷是否為今年再籍學生，如此轉學生也會顯現
+		//本學年度-選擇學年+選擇年級=目前年級，才被選取。
+		//但是如此一來又會產生畢業生無法被選取的另一個問題
+		$curr_y=curr_year();
+		$sel_y=substr($this_Y,0,-2);
+		$sel_g=$this_G;
+		$opt=$curr_y-$sel_y+$sel_g."%";
+		$query=
+		"SELECT a.stud_id,a.stud_name,a.stud_sex,
+		b.seme_class,b.seme_num,b.seme_year_seme,c.* 
+		FROM stud_base a,chc_mend c LEFT JOIN stud_seme b 
+		ON (c.student_sn=b.student_sn  
+		AND b.seme_year_seme='$seme_year_seme'  
+		AND b.seme_class like '$seme_class' )
+		WHERE a.student_sn=c.student_sn 
+		AND c.seme='$this_Y' 
+		AND a.stud_study_cond=0
+		AND a.curr_class_num LIKE '$opt' 
+		ORDER BY b.seme_class,b.seme_num ";
+		$res=$this->CONN->Execute($query);
+		$ALL=$res->GetArray();
+		if ($Scope=="8") {
+			$New=array();
+			foreach ($ALL as $ary){
+				$sn=$ary['student_sn'];//學號
+				$snlist[]=$ary['student_sn'];//學號列表
+				$ss=$ary['scope'];//領域
+				$semes=$ary['seme'];//學期
+				$score_end = $ary['score_end'];//補考完成績
+	            //$New['A']為學生基本資料
+				$New['A'][$sn]=$ary;
+				//$New['B']為全領域成績
+				$New['B'][$sn][$semes][$ss]=$ary;
+				//$New['C']、$New['D']為補考後成績
+				$New['C'][$sn][$semes][$ss]=$score_end;
+				$New['D'][$sn][$semes][$ss]=$score_end;
+//				$New['G'][$sn][$semes][$ss]=$score_end;
+				//$New['C']要計算補考通過領域數total_ss_pass、$New['D']要計算補考領域數total_ss]
+				$New['D'][$sn][$semes][total_ss]= (count($New['D'][$sn][$semes])==1)?(count($New['D'][$sn][$semes])):(count($New['D'][$sn][$semes])-1);
+				$New['C'][$sn][$semes][total_ss_pass]= 0;		
+                foreach ($New['C'][$sn][$semes] as $ss => $v) {
+				     if ($v ==60) {
+						 $New['C'][$sn][$semes][total_ss_pass]++;
+					  } 
+				 }
+				 //$New['E']要計算補考未通過領域數total_ss_Nopass
+				 $New['E'][$sn][$semes][total_ss]=$New['D'][$sn][$semes][total_ss];
+				 $New['E'][$sn][$semes][total_ss_pass]=$New['C'][$sn][$semes][total_ss_pass];
+				 $New['E'][$sn][$semes][total_ss_Nopass]=$New['E'][$sn][$semes][total_ss]-$New['E'][$sn][$semes][total_ss_pass];
+                 $New['A'][$sn][total_ss_Nopass]=$New['E'][$sn][$semes][total_ss_Nopass];
+			}			 			
+			$snlist_uniqe = array_unique($snlist);			
+			sort($snlist_uniqe);
+		    $New[snlist]=$snlist_uniqe;										
+	    }
+     return $New;
+   }
+   
+   
 }

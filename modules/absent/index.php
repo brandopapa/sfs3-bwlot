@@ -1,6 +1,6 @@
 <?php
 
-// $Id: index.php 7871 2014-02-12 01:56:14Z smallduh $
+// $Id: index.php 8478 2015-08-06 15:39:00Z smallduh $
 
 /* 取得設定檔 */
 include_once "config.php";
@@ -395,7 +395,7 @@ function &signForm($sel_year,$sel_seme,$class_id,$thisOne=array(),$One=""){
                         $did=date("Y-m-d",$smkt);
 //                        if ($DAY[$did]!='1' and $DAY['School_days']>0) continue;  //若非上學日,且有進行期初設定,跳過
                         //非上學日以灰底色註明
-                        $day_bgcolor=($DAY[$did]!='1' and $DAY['School_days']>0)?"#CCCCCC":"#FFFFFF";
+                        $day_bgcolor=($DAY[$did]=='1' and $DAY['School_days']>0)?"#FFFFFF":"#CCCCCC";
                         $pid=date("Y-m-d",$fday-7*86400);
                         $fid=date("Y-m-d",$fday+7*86400);
                         $e_name="cb_".$dd[wday];
@@ -443,9 +443,9 @@ function &signForm($sel_year,$sel_seme,$class_id,$thisOne=array(),$One=""){
                                 <td rowspan='6' align='center'>$seme_num</td>
                                 <td rowspan='6'>$stud_name</td>";
                         else
-                                $data.="<tr bgcolor='$day_bgcolor'>";
+                                $data.="<tr bgcolor='#FFFFFF'>";
                         $data.="
-                        <td align='center'><a href='$_SERVER[SCRIPT_NAME]?class_id=$class_id&this_date=$did'>".$did."<br>(".$weekN[$dd[wday]-1].")</a></td>
+                        <td align='center' bgcolor='$day_bgcolor'><a href='$_SERVER[SCRIPT_NAME]?class_id=$class_id&this_date=$did'>".$did."<br>(".$weekN[$dd[wday]-1].")</a></td>
                         $uf
                         $sections_data
                         $df

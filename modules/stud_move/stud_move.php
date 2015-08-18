@@ -42,6 +42,7 @@ $seme_year_seme = sprintf("%04d", $curr_seme);
 $temp_class_no_num = $sel_class_year . $sel_class_name;
 
 $do_upload_script = "var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_upload.php?curr_seme=" . $curr_seme . "');window.open(targeturi);";
+$do_xcatest_script = "var targeturi = encodeURI('" . $SFS_PATH_HTML . "modules/stud_move/session_xcatest.php');window.open(targeturi);";
 $upload_script = "<script>alert('請記得將學生異動資料上傳\\n至臺中市就學管控系統哦！')</script>";
 //echo $upload_script;
 //判斷是否是台中市學校
@@ -263,6 +264,13 @@ print_menu($student_menu_p);
     function doUploadScript() {
 <?php
 echo $do_upload_script;
+?>
+
+    }
+
+    function doXCATestScript() {
+<?php
+echo $do_xcatest_script;
 ?>
 
     }
@@ -525,6 +533,7 @@ echo $do_upload_script;
                 if ($isTaichung == '06' || $isTaichung == '19') {
                     echo "<tr><td colspan=11 class=title_top1 align=center ><button onclick=\"doUploadScript()\">按我上傳本學期學生異動資料至臺中市就學管控系統</button></td></tr>";
                 }
+                echo "<tr><td colspan=13 class=title_top1 align=center ><button onclick=\"doXCATestScript()\">按我進行XCA全自動加解密測試！</button></td></tr>";
                 echo "<tr><td colspan=11 class=title_top1 align=center >本學期轉入學生</td></tr>";
                 echo "
 			<TR class=title_mbody >

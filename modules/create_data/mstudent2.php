@@ -1,6 +1,6 @@
 <?php
 
-// $Id: mstudent2.php 7546 2013-09-19 03:35:15Z hami $
+// $Id: mstudent2.php 8472 2015-08-01 14:38:41Z infodaes $
 
 // --系統設定檔
 include "create_data_config.php";
@@ -53,31 +53,71 @@ if ($do_key=="批次建立資料")
 	if ($_FILES['userdata']['size'] >0 && $_FILES['userdata']['name'] != ""){
 //		copy($_FILES['userdata']['tmp_name'] , $temp_file);		
 		$fd = fopen ($_FILES['userdata']['tmp_name'],"r");
+  $tt_analyse = sfs_fgetcsv ($fd, 5000, ",");
+			//進行抬頭欄位分析
+			//學號,姓名,英文姓名,性別,入學年,班級,座號,生日(西元),身份證字號,父親姓名,母親姓名,郵遞區號,電話,住址(不含縣市鄉鎮),緊急聯絡方式,入學前國小名稱,戶籍遷入日期(西元),學生行動電話,連絡地址,監護人,監護人行動電話
+	//變數定義 
+	$tt_test[0]="學號";
+	$tt_test[1]="姓名"; 
+	$tt_test[2]="英文姓名";
+	$tt_test[3]="性別";
+	$tt_test[4]="入學年";
+	$tt_test[5]="班級";
+	$tt_test[6]="座號";
+	$tt_test[7]="生日(西元)"; 
+	$tt_test[8]="身份證字號";
+	$tt_test[9]="父親姓名";
+	$tt_test[10]="母親姓名";
+	$tt_test[11]="郵遞區號";
+	$tt_test[12]="電話"; 
+	$tt_test[13]="住址(不含縣市?鎮)";
+	$tt_test[14]="緊急聯方式"; 
+	$tt_test[15]="入學前國小名稱"; 
+	$tt_test[16]="戶籍遷入日期(西元)";	
+	$tt_test[17]="學生行動電話"; 
+	$tt_test[18]="連絡地址"; 
+	$tt_test[19]="監護人"; 
+	$tt_test[20]="監護人行動電話"; 
+	//預設只檢查是有存在此 21 個欄位, 先把每個欄位的序號( $tt_test[$i) , $i 即為序號)記下, 之後讀取資料後, 再依實際資料內容導正序號
+	$trans_field=array();
+	for ($i=0;$i<count($tt_test);$i++) { $trans_field[$i]=-1; }
+	foreach ($tt_analyse as $user_field=>$v) {
+	  foreach ($tt_test as $sql_field=>$V) {
+	   if ($v==$V) {
+	   	$trans_field[$sql_field]=$user_field;   //第幾欄的資料, 將來必須取用使用者輸入的第幾欄資料	    
+	   }
+	  }
+	} 		
+	
+	//抬頭資料分析完畢, 稍後取得csv欄位資料後, 利用 trand_to_right_field 函式導正
 		
+		rewind($fd);
 		for ($i=0;$i<2;$i++){
-		    $tt = sfs_fgetcsv ($fd, 5000, ",");
+		    $tt_org = sfs_fgetcsv ($fd, 5000, ",");
 		    // 只抓取匯入檔的第二列
-		    if ($i==1)
-		      $c_year = $class_year-$tt[3]+1+$IS_JHORES; // 計算年級，$IS_JHORES 使三種學制的年級計算正常
+		    if ($i==1) {
+		      $tt=trans_to_right_field($tt_org);
+		      $c_year = $class_year-$tt[4]+1+$IS_JHORES; // 計算年級，$IS_JHORES 使三種學制的年級計算正常
+		      
+		    }
 		}
 		$query = "select c_sort,c_name  from school_class where year='$class_year' and semester='$curr_seme' and c_year='$c_year' ";
 		$res = $CONN->Execute($query)or die ($query) ;
 		if ($res->EOF){
-		  $con_temp =  "您的匯入檔中 $c_year 年級(入學年: $tt[3])，尚未設定班級數，請注意這個年級在貴校學制中是否有效？若屬有效年級範圍，請至教務處->學期初設定，將班級數設定好之後，再執行本程式。<br>本次執行中斷的查詢指令為： $query";
+		  $con_temp =  "您的匯入檔中 $c_year 年級(入學年: $tt[4])，尚未設定班級數，請注意這個年級在貴校學制中是否有效？若屬有效年級範圍，請至教務處->學期初設定，將班級數設定好之後，再執行本程式。<br>本次執行中斷的查詢指令為： $query";
 		}
 		else {
 			while (!$res->EOF) {
 				$temp_class_name[$res->fields[0]] = $res->fields[1];
 				$res->MoveNext();
 			}
-									
 			
 			//進行匯入資料的檢查			
 			rewind($fd);
 			$j =0;
 			$stud_id_array=array();
 			$curr_class_num_array=array();
-			while ($ck_tt = sfs_fgetcsv ($fd, 5000, ",")) {
+			while ($ck_tt_org = sfs_fgetcsv ($fd, 5000, ",")) {
 				if ($j++ == 0){ //第一筆為抬頭，不檢查
                     continue ;
                 }
@@ -87,11 +127,13 @@ if ($do_key=="批次建立資料")
 				else
 					$stud_id= trim($ck_tt[0]);
 				*/
+				//導正欄位序號 
+				$ck_tt=trans_to_right_field($ck_tt_org);
 				//修改的程式碼
 				$stud_id= trim($ck_tt[0]);
 
 				
-				$rollin_year=trim($ck_tt[3]);
+				$rollin_year=trim($ck_tt[4]);
 
 				//檢查學號是否存在
 				if($stud_id=="") {
@@ -125,7 +167,7 @@ if ($do_key=="批次建立資料")
 					exit;
 				}
 				
-				$stud_sex = trim($ck_tt[2]);				
+				$stud_sex = trim($ck_tt[3]);				
 				//檢查性別				
 				if($stud_sex!=1 && $stud_sex!=2) {
 					$msg="學號：$stud_id  姓名：$stud_name 的學生性別錯誤"; 
@@ -135,7 +177,7 @@ if ($do_key=="批次建立資料")
 					exit;
 				}
 				
-				$stud_study_year = chop ($ck_tt[3]);				
+				$stud_study_year = chop ($ck_tt[4]);				
 				// 引入 $IS_JHORES
 				$year = $class_year-$stud_study_year+1+$IS_JHORES;
 				$ck_query = "select c_sort,c_name  from school_class where year='$class_year' and semester='$curr_seme' and c_year='$year' and enable=1";
@@ -155,7 +197,7 @@ if ($do_key=="批次建立資料")
 					$k++;
 				}
 				//檢查班級
-				$class=trim($ck_tt[4]);
+				$class=trim($ck_tt[5]);
 				if(!in_array($class,$c_sort)){
 					$msg="學號：$stud_id  姓名：$stud_name 的學生班級（ $year 年 $class 班 ）填寫錯誤或班級尚未設定"; 
 					$alert="<p></p><table cellspacing=1 cellpadding=6 border=0 bgcolor='#FFF829' width='80%' align='center'><tr><td align='center'><h1><img src='images/caution.png' align='middle' border=0> 警告</h1></font></td></tr><tr><td align='center' bgcolor='#FFFFFF' width='90%'> $msg </td></tr></table>";
@@ -164,11 +206,11 @@ if ($do_key=="批次建立資料")
 					exit;
 					}
 								
-				if($year==0) $class_name= sprintf("%03d",$ck_tt[4]);
-				else $class_name = $year*100+$ck_tt[4];
-				$class_name_id = $ck_tt[4];
-				if($year==0) $curr_class_num=sprintf("%03d%02d",$ck_tt[4],$ck_tt[5]);
-				else $curr_class_num= $class_name*100+$ck_tt[5];
+				if($year==0) $class_name= sprintf("%03d",$ck_tt[5]);
+				else $class_name = $year*100+$ck_tt[5];
+				$class_name_id = $ck_tt[5];
+				if($year==0) $curr_class_num=sprintf("%03d%02d",$ck_tt[5],$ck_tt[6]);
+				else $curr_class_num= $class_name*100+$ck_tt[6];
 				//檢查座號是否重複			
 				if(in_array($curr_class_num,$curr_class_num_array))  {
 					$msg= "您所要匯入的學生資料中座號（ $year 年 $class 班 ".substr($curr_class_num,-1,2)." 號 ） 重複"; 
@@ -181,7 +223,7 @@ if ($do_key=="批次建立資料")
 				//沒有重複則加入座號陣列
 				$curr_class_num_array[$j]=$curr_class_num;
 				
-				$stud_birthday = trim ($ck_tt[6]);
+				$stud_birthday = trim ($ck_tt[7]);
 				//檢查生日
 				
 				//$stud_birthday_array=explode("/",$stud_birthday);
@@ -194,7 +236,7 @@ if ($do_key=="批次建立資料")
 					exit;
 				}
 				
-				$stud_person_id = trim ($ck_tt[7]);
+				$stud_person_id = trim ($ck_tt[8]);
 				//檢查身份證
 				if($stud_person_id=="") {
 					$msg="身份證不准空白，於第 ".($j-1)." 筆學生資料";
@@ -240,7 +282,7 @@ if ($do_key=="批次建立資料")
 			if($check_pass=="ok"){			
 				rewind($fd);
 				$i =0;
-				while ($tt = sfs_fgetcsv ($fd, 5000, ",")) {
+				while ($tt_org = sfs_fgetcsv ($fd, 5000, ",")) {
 					if ($i++ == 0){ //第一筆為抬頭
 						$ok_temp .="<font color='red'>第一筆應為抬頭，若您的學生基本資料檔的第一筆是學生資料的話，該位學生將無法匯入！</font><br>";
 						continue ;
@@ -251,15 +293,19 @@ if ($do_key=="批次建立資料")
 					else
 						$stud_id= trim($tt[0]);
 					*/
+					//導正欄位序號
+					$tt=trans_to_right_field($tt_org);
 					//修改的程式碼
 					$stud_id= trim($tt[0]);
 					$stud_name = trim (addslashes($tt[1]));
 					
+					$stud_name_eng = trim($tt[2]);
+					
 					//加入將全形空白替換的功能
 					$stud_name=str_replace('　','',$stud_name); 
 					
-					$stud_sex = trim($tt[2]);
-					$stud_study_year = chop ($tt[3]);
+					$stud_sex = trim($tt[3]);
+					$stud_study_year = chop ($tt[4]);
 					
 					$go=true;				
 					if($newer_only and $stud_study_year<>$class_year) $go=false;
@@ -268,49 +314,49 @@ if ($do_key=="批次建立資料")
 						// 引入 $IS_JHORES
 						$year = $class_year-$stud_study_year+1+$IS_JHORES;
 						//幼稚班的年級為0
-						if($year==0) $class= sprintf("%03d",$tt[4]);
-						else $class = $year*100+$tt[4];
-						$class_name_id = $tt[4];
-						if($year==0) $curr_class_num=sprintf("%03d%02d",$tt[4],$tt[5]);
-						else $curr_class_num= $class*100+$tt[5];
-						$seme_num = sprintf("%02d",$tt[5]);
-						$stud_birthday = trim ($tt[6]);
-						$stud_person_id = trim ($tt[7]);
-						$fath_name = trim (addslashes($tt[8]));
-						$moth_name = trim (addslashes($tt[9]));
+						if($year==0) $class= sprintf("%03d",$tt[5]);
+						else $class = $year*100+$tt[5];
+						$class_name_id = $tt[5];
+						if($year==0) $curr_class_num=sprintf("%03d%02d",$tt[5],$tt[6]);
+						else $curr_class_num= $class*100+$tt[6];
+						$seme_num = sprintf("%02d",$tt[6]);
+						$stud_birthday = trim ($tt[7]);
+						$stud_person_id = trim ($tt[8]);
+						$fath_name = trim (addslashes($tt[9]));
+						$moth_name = trim (addslashes($tt[10]));
 
-						$stud_tel_1 = trim ($tt[11]);
-						$stud_tel_2 = trim ($tt[13]);
-						$stud_mschool_name = trim ($tt[14]);
-						$zip_id = trim($tt[10]);
-						$addr = $zip_arr[$tt[10]].trim(addslashes($tt[12]));
+						$stud_tel_1 = trim ($tt[12]);
+						$stud_tel_2 = trim ($tt[14]);
+						$stud_mschool_name = trim ($tt[15]);
+						$zip_id = trim($tt[11]);
+						$addr = $zip_arr[$tt[11]].trim(addslashes($tt[13]));
 						
 						//20120825新增欄位   戶籍遷入日期、學生行動電話、連絡地址、監護人、監護人行動電話
-						$addr_move_in=trim($tt[15]);
-						$stud_tel_3 = trim ($tt[16]);
-						$stud_addr_2 = trim(addslashes($tt[17]));
+						$addr_move_in=trim($tt[16]);
+						$stud_tel_3 = trim ($tt[17]);
+						$stud_addr_2 = trim(addslashes($tt[18]));
 						$stud_addr_2 = $stud_addr_2?$stud_addr_2:$addr;	
-						$guardian_name=trim($tt[18]);
-						$guardian_hand_phone=trim($tt[19]);							
+						$guardian_name=trim($tt[19]);
+						$guardian_hand_phone=trim($tt[20]);							
 						$edu_key =  hash('sha256', strtoupper($stud_person_id));
 						//拆解地址
 						$addr_arr = change_addr($addr);
 						$stud_kind =',0,';
 						//空值NULL的判斷，修正未keyin戶籍遷入日期時，基本資料（stud_list.php）遷入日期-1911-00-00的錯置。修改 by chunkai 102.9.6
-						$sql_insert1 = "replace into stud_base (stud_id,stud_name,stud_person_id,stud_birthday,stud_sex,stud_study_cond,
+						$sql_insert1 = "replace into stud_base (stud_id,stud_name,stud_name_eng,stud_person_id,stud_birthday,stud_sex,stud_study_cond,
 						curr_class_num,stud_study_year,stud_addr_a,stud_addr_b,stud_addr_c,stud_addr_d,stud_addr_e,stud_addr_f,
 						stud_addr_g,stud_addr_h,stud_addr_i,stud_addr_j,stud_addr_k,stud_addr_l,stud_addr_m,stud_addr_1,stud_addr_2,
 						stud_tel_1,stud_tel_2,stud_kind,stud_mschool_name,addr_zip,enroll_school,addr_move_in,stud_tel_3,edu_key) 
-						values ('$stud_id','$stud_name ','$stud_person_id','$stud_birthday','$stud_sex','0','$curr_class_num','$stud_study_year',
+						values ('$stud_id','$stud_name ','$stud_name_eng','$stud_person_id','$stud_birthday','$stud_sex','0','$curr_class_num','$stud_study_year',
 						'$addr_arr[0]','$addr_arr[1]','$addr_arr[2]','$addr_arr[3]','$addr_arr[4]','$addr_arr[5]','$addr_arr[6]','$addr_arr[7]',
 						'$addr_arr[8]','$addr_arr[9]','$addr_arr[10]','$addr_arr[11]','$addr_arr[12]','$addr','$stud_addr_2','$stud_tel_1',
 						'$stud_tel_2','$stud_kind','$stud_mschool_name','$zip_id','$school_long_name','$addr_move_in','$stud_tel_3','$edu_key')";
 						
-						$sql_insert2 = "replace into stud_base (stud_id,stud_name,stud_person_id,stud_birthday,stud_sex,stud_study_cond,
+						$sql_insert2 = "replace into stud_base (stud_id,stud_name,stud_name_eng,stud_person_id,stud_birthday,stud_sex,stud_study_cond,
 						curr_class_num,stud_study_year,stud_addr_a,stud_addr_b,stud_addr_c,stud_addr_d,stud_addr_e,stud_addr_f,
 						stud_addr_g,stud_addr_h,stud_addr_i,stud_addr_j,stud_addr_k,stud_addr_l,stud_addr_m,stud_addr_1,stud_addr_2,
 						stud_tel_1,stud_tel_2,stud_kind,stud_mschool_name,addr_zip,enroll_school,addr_move_in,stud_tel_3,edu_key)
-						 values ('$stud_id','$stud_name ','$stud_person_id','$stud_birthday','$stud_sex','0','$curr_class_num','$stud_study_year',
+						 values ('$stud_id','$stud_name ','$stud_name_eng','$stud_person_id','$stud_birthday','$stud_sex','0','$curr_class_num','$stud_study_year',
 						'$addr_arr[0]','$addr_arr[1]','$addr_arr[2]','$addr_arr[3]','$addr_arr[4]','$addr_arr[5]','$addr_arr[6]','$addr_arr[7]',
 						'$addr_arr[8]','$addr_arr[9]','$addr_arr[10]','$addr_arr[11]','$addr_arr[12]','$addr','$stud_addr_2','$stud_tel_1',
 						'$stud_tel_2','$stud_kind','$stud_mschool_name','$zip_id','$school_long_name',NULL,'$stud_tel_3','$edu_key')";
@@ -399,5 +445,20 @@ else
 echo $ok_temp;
 foot();
 
-
+//將實際欄位順序導正為配合資料庫欄位資料
+function trans_to_right_field($tt_org) {
+  global $trans_field,$tt_test;
+  
+  $tt=array();
+  for ($i=0;$i<count($tt_test);$i++) {  	
+  	if ($trans_field[$i]>-1) {
+  		$tt[$i]=$tt_org[$trans_field[$i]];
+    } else {
+  	  $tt[$i]=""; 
+    }
+  } // end for
+  
+  return $tt;
+  
+}
 ?> 

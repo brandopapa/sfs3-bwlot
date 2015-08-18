@@ -1,5 +1,5 @@
 <?php
-	// $Id: teach_config.php 7521 2013-09-14 08:57:38Z smallduh $
+	// $Id: teach_config.php 8486 2015-08-16 02:55:19Z smallduh $
 	//系統設定檔
 	include_once "../../include/config.php";
 	//函式庫
@@ -16,6 +16,12 @@
 	$postBtn = " 確定新增 ";
 	//新增時啟用流水號功能
 	$is_IDauto = 1 ; // 0 為取消	
+
+	//搜尋代號
+	$srchID = " 搜尋代號 ";
+	//搜尋姓名
+	$srchName = " 搜尋姓名 ";
+
 	
 	//左選單設定顯示筆數
 	$gridRow_num = 16;

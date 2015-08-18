@@ -2,7 +2,8 @@
   <TR bgcolor=#9EBCDD>
     <td width=100%  style="vertical-align: top;" colspan=2>
     <!-- 第1格內容 -->
-      {{$this->sel_year}}{{$this->sel_grade}} ==> <FONT  COLOR="#FF0000">先選學期,再選年級,請點選全部領域,幾個領域以上不及格,幾個學期成績列表,就會出現網頁列表與CSV</FONT>
+      {{$this->sel_year}}{{$this->sel_grade}} ==> <FONT  COLOR="#FF0000">先選學期,再選年級,請點選全部領域,幾個領域以上不及格,幾個學期成績列表,就會出現網頁列表與CSV！！</FONT>
+      <br><FONT  COLOR="#FF0000">如要知道各班補考人數，請下載CSV，再用EXCEL做班級排序即可知道細節。如有疑問請先看未執行程式前的說明與注意事項</FONT>
     </td>
   </tr>  
   <TR bgcolor=#9EBCDD>
@@ -97,7 +98,7 @@
 </TR>
 {{foreach from=$this->stu_data.A item=stu key=SN}}
 {{if $this->stu_data.H.$SN.total_ss_Nopass>=$smarty.get.Sfailnum}}
-  {{if substr($stu.seme_class,0,1)==$this->G}}
+ 
 <TR bgcolor=white  align=center>
   <TD rowspan={{$smarty.get.Semesnum+1}} align=center>{{$stu.stud_id}}</TD>
   <TD rowspan={{$smarty.get.Semesnum+1}} align=center>{{$stu.seme_class}}</TD>
@@ -111,7 +112,7 @@
        {{foreach from=$this->scope2 item=SS key=K}}
         <TD bgcolor=white align=left><font {{if $this->stu_data.B.$SN.$allsemes.$K.score_src<60}}color=#FF0000{{/if}}>{{$this->stu_data.B.$SN.$allsemes.$K.score_src}}</font></TD>
         <TD bgcolor=white align=left><font {{if $this->stu_data.B.$SN.$allsemes.$K.score_test<60}}color=#FF0000{{/if}}>{{$this->stu_data.B.$SN.$allsemes.$K.score_test}}</font></TD>
-        <TD bgcolor=#E5E5E5 align=left><font {{if $this->stu_data.B.$SN.$asK.$K.score_end<60}}color=#FF0000{{/if}}>{{if $this->stu_data.B.$SN.$allsemes.$K.score_end!=""}}{{$this->stu_data.B.$SN.$allsemes.$K.score_end}}{{else}}<font color=#1A1A1A>{{$this->stu_data.F.$SN.$allsemes.$K.score}}</font>{{/if}}</font></TD>      
+        <TD bgcolor=#E5E5E5 align=left><font {{if $this->stu_data.B.$SN.$allsemes.$K.score_end<60}}color=#FF0000{{/if}}>{{if $this->stu_data.B.$SN.$allsemes.$K.score_end!=""}}{{$this->stu_data.B.$SN.$allsemes.$K.score_end}}{{else}}<font color=#1A1A1A>{{$this->stu_data.F.$SN.$allsemes.$K.score}}</font>{{/if}}</font></TD>      
        {{/foreach}}
        <TD bgcolor=white align=center>{{$this->stu_data.E.$SN.$allsemes.total_ss}}</TD>
        <TD bgcolor=#E5E5E5 align=center>{{$this->stu_data.E.$SN.$allsemes.total_ss_pass}}</TD>
@@ -128,7 +129,7 @@
        <TD bgcolor=#E5E5E5 align=center>{{$this->stu_data.H.$SN.total_ss_pass}}</TD>
        <TD bgcolor=white align=center>{{$this->stu_data.H.$SN.total_ss_Nopass}}</TD>  </tr>
        
-  {{/if}}
+ 
 {{/if}}
 {{/foreach}}
 </TABLE>
@@ -164,13 +165,19 @@ memory_limit </span><span style="font-family: 新細明體,serif">的設定值，將預設值
 <span style="font-family: 新細明體,serif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
 請如下圖點選</span></p>
 <p>
-<img border="0" src="images/ungraduate_stu02_00_01.JPG" width="585" height="168"></p>
-<p>3、四個領域不及格的判斷標準為下圖所示</p>
-<p><img border="0" src="images/ungraduate_stu02_000.JPG" width="585" height="168"></p>
-<p>4、紅色字的成績為補考模組中的成績；黑色字的成績為原始成績</p>
-<p><img border="0" src="images/ungraduate_stu02_01.JPG" width="585" height="227"></p>
-<p>5、若出現下方的情況，表示補考成績還未輸入。若輸入，就會變成紅字。目前由原始成績取代。下圖中黑色框旁，有一排0分，表示補考成績輸入成績為零分。</p>
-<p><img border="0" src="images/ungraduate_stu02_02.JPG" width="585" height="131"></p>
+<img border="0" src="images/ungraduate_stu02_00_01.JPG" width="885" height="268"></p>
+<p>3、新版注意。無班級與座號，表示該生為轉學生，其補考科目為轉學前，原學校期間不及格科目。若要其班級與座號，可由學號搜尋。</p>
+<p><img border="0" src="images/ungraduate_stu02_03.png" width="985" height="368"></p>
+<p>4、新版注意。表示該生，在8年級以前有補考科目。8年級以後無補考科目。由學期可知，在101-1~102-1有補考科目。目前年班，可直接將8改為9即可。可藉由學號查詢。</p>
+<p><img border="0" src="images/ungraduate_stu02_04.png" width="985" height="368"></p>
+<p>5、新版注意。CSV檔，出現,,,,,0,0,0,0,0,0,0,,7，表示該生為轉出生。已離開本校。</p>
+<p><img border="0" src="images/ungraduate_stu02_05.png" width="985" height="368"></p>
+<p>6、四個領域不及格的判斷標準為下圖所示</p>
+<p><img border="0" src="images/ungraduate_stu02_000.JPG" width="885" height="268"></p>
+<p>7、紅色字的成績為補考模組中的成績；黑色字的成績為原始成績</p>
+<p><img border="0" src="images/ungraduate_stu02_01.JPG" width="885" height="268"></p>
+<p>8、若出現下方的情況，表示補考成績還未輸入。若輸入，就會變成紅字。目前由原始成績取代。下圖中黑色框旁，有一排0分，表示補考成績輸入成績為零分。</p>
+<p><img border="0" src="images/ungraduate_stu02_02.JPG" width="885" height="268"></p>
 <p>　</DIV>
 </FONT>
 

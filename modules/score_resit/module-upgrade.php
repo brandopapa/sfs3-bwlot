@@ -68,5 +68,23 @@ if (!is_file($up_file_name)){
 	fclose ($fd);
 }
 
+$up_file_name =$upgrade_str."2015-08-06.txt";
+if (!is_file($up_file_name)){
+	$query = array();
+	//在 resit_paper_setup 裡增加一個出題模式欄位 0表亂數出題 , 1表依不及格分科
+	$query[0] = "ALTER TABLE `resit_paper_setup` ADD `top_marks` int(3) not NULL" ; 
+	
+	$temp_str = '';
+	for($i=0;$i<count($query);$i++) {	
+		if ($CONN->Execute($query[$i]))
+			$temp_str .= "$query[$i]\n 更新成功 ! \n";
+		else
+			$temp_str .= "$query[$i]\n 更新失敗 ! \n";
+	}
+	$temp_query = "增加試卷總分設定 -- by smallduh (2015-08-06)\n\n$temp_str";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_query);
+	fclose ($fd);
+}
 
 ?>
