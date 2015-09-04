@@ -337,7 +337,7 @@ function past_form() {
 
 
 <tr id="nor_form5">
-    <td align="right" CLASS="title_sbody1">內容要點<br><br><font size=1 color="red">(超過<?php echo $talk_length; ?>個字會被自動刪除！)</font></td>
+    <td align="right" CLASS="title_sbody1">內容要點<br><font size=1 color="red"><br>(超過<?php echo $talk_length; ?>個字會被自動刪除！)<br>不可使用半形的 & < > " ' 等符號，請使用標準的標點符號。</font></td>
     <td><textarea name="sst_memo" cols=40 rows=5 wrap=virtual onchange="check_length(this,<?php echo $talk_length; ?>);"><?php echo $sst_memo ?></textarea></td>
 </tr>
 </table>

@@ -1,4 +1,4 @@
-{{* $Id: score_nor_disgrad2.tpl 5464 2009-04-27 13:50:49Z brucelyc $ *}}
+{{* $Id: score_nor_disgrad2.tpl 8492 2015-08-19 12:53:57Z brucelyc $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 {{assign var=semeday2 value=$smarty.post.semeday2}}
@@ -14,8 +14,8 @@
 <input type="checkbox" name="chk3" checked OnClick="this.form.submit();">在學期間記滿三大過(含)以上者<span style="color:blue;"> (含折算累計：三次警告折算一次小過，三次小過折算一次大過)</span><br>
 <input type="checkbox" name="neu" {{if $smarty.post.neu}}checked{{/if}} OnClick="this.form.submit();" value="1">功過不相抵<span style="color:blue;">(僅統計懲戒)</span><br>
 {{else}}
-<input type="checkbox" name="chk1" {{if $smarty.post.chk1}}checked{{/if}} OnClick="this.form.submit();">任一學期曠課超過<input type="text" name="semeday" value="{{$smarty.post.semeday}}" style="width:20pt" OnChange="this.form.submit();">節<br>
-<input type="checkbox" name="chk2" {{if $smarty.post.chk2}}checked{{/if}} OnClick="this.form.submit();">任一學期缺席超過<input type="text" name="semeday2" value="{{$smarty.post.semeday2}}" style="width:20pt" OnChange="this.form.submit();">節<span style="color:blue"> (預設33.4天╳7節=234節)</span><br>
+<input type="checkbox" name="chk1" {{if $smarty.post.chk1}}checked{{/if}} OnClick="this.form.submit();">任一學期曠課、事假超過<input type="text" name="semeday" value="{{$smarty.post.semeday}}" style="width:20pt" OnChange="this.form.submit();">節<br>
+<input type="checkbox" name="chk3" {{if $smarty.post.chk3}}checked{{/if}} OnClick="this.form.submit();">應出席未達2/3(67%)，各學期應出席總節數為<input type="text" name="tdays" value="{{$smarty.post.tdays}}" style="width: 30pt;">節<br>
 {{/if}}
 <span style="color:red;">(請依各縣市規定選取)</span><br>
 {{if $smarty.post.item}}
@@ -37,17 +37,24 @@
 <td>{{$i}}學年度<br>第{{$show_seme[$j]}}學期
 {{if !$smarty.post.item}}
 <br>
-{{if $smarty.post.chk1}}曠課{{/if}}
+{{if $smarty.post.chk1}}事曠節數{{/if}}
 {{if $smarty.post.chk1 && $smarty.post.chk2}} | {{/if}}
-{{if $smarty.post.chk2}}總缺席{{/if}}
+{{if $smarty.post.chk2}}其他節數{{/if}}
 {{/if}}
 </td>
 {{/foreach}}
 {{if $smarty.post.item}}
 <td>合計</td>
 {{/if}}
+{{if $smarty.post.chk3}}
+<td>事曠<br>總節數</td>
+<td>應出席<br>總節數</td>
+<td>出席率</td>
+{{/if}}
 </tr>
 {{foreach from=$show_sn item=sc key=sn}}
+{{assign var=dall value=0}}
+{{assign var=sall value=0}}
 <tr bgcolor="#ddddff" align="center">
 <td>{{$sclass[$sn]}}</td>
 <td>{{$snum[$sn]}}</td>
@@ -61,12 +68,24 @@
 <td>
 {{if $smarty.post.chk1}}<span {{if $fin_score.$sn.$si.abs.3 >= $smarty.post.semeday}}style="color:red;"{{/if}}>{{$fin_score.$sn.$si.abs.3|intval}}</span>{{/if}}
 {{if $smarty.post.chk1 && $smarty.post.chk2}} | {{/if}}
-{{if $smarty.post.chk2}}<span {{if $fin_score.$sn.$si.abs.all >= $semeday2}}style="color:red;"{{/if}}>{{$fin_score.$sn.$si.abs.all|intval}}</span>{{/if}}
+{{if $smarty.post.chk2}}{{$fin_score.$sn.$si.abs.all-$fin_score.$sn.$si.abs.3|intval}}{{/if}}
 </td>
+{{assign var=dall value=$dall+$fin_score.$sn.$si.abs.3}}
+{{assign var=sall value=$sall+$fin_score.$sn.$si.abs.all-$fin_score.$sn.$si.abs.3}}
 {{/if}}
 {{/foreach}}
 {{if $smarty.post.item}}
 <td>{{$fin_score.$sn.all.rew.all}}</td>
+{{/if}}
+{{if $smarty.post.chk3}}
+<td>{{$dall}}</td>
+{{assign var=stotal value=$smarty.post.tdays-$sall}}
+<td>{{$stotal}}</td>
+{{assign var=rtotal value=$stotal-$dall}}
+{{php}}
+$this->_tpl_vars['rr'] = round($this->_tpl_vars['rtotal'] * 100 / $this->_tpl_vars['stotal']); 
+{{/php}}
+<td><span style="color: {{if $rr<67}}red{{else}}black{{/if}};">{{$rr}}%</span></td>
 {{/if}}
 </tr>
 {{/foreach}}

@@ -4,6 +4,7 @@
 
 /*引入學務系統設定檔*/
 include "config.php";
+require_once "../../include/sfs_case_excel.php";
 
 //使用者認證
 sfs_check();
@@ -60,6 +61,16 @@ if($_POST['act'])
 		case 'student':
 			if($_POST['class_selected'])
 			{
+				if ($_POST['act']=='excel') {
+						$x=new sfs_xls();
+	 					$x->setUTF8();
+	 					$x->filename=$school_long_name.$title.'.xls';
+	 					$Excel_tag=count($_POST['class_selected']);
+						$x->setBorderStyle(1);
+						$x->addSheet($title);
+						$HEADER=explode(",",$csv_header);
+						$x->items[0]=$HEADER;   //第1列            
+				}
 				$last_key=count($_POST['class_selected'])-1;
 				$data='';
 				foreach($_POST['class_selected'] as $key=>$class_id)
@@ -99,6 +110,37 @@ if($_POST['act'])
 						if($key<$last_key) $data.=$page_break;
 						echo $data;
 						$data='';
+					//Excel輸出
+					} elseif ($_POST['act']=='excel'){
+						
+					  
+						$my_class_name=$class_name_arr[$class_id];
+						while(!$rs_student->EOF) {
+							$data="";
+							foreach($fields_list_array as $field_name)
+							{
+								$field_data=$rs_student->fields[$field_name];
+								//特殊欄位處理
+								if($field_name=='curr_class_num') $field_data=substr($field_data,-2); else
+								if($field_name=='class_name') $field_data=$class_name_arr[$field_data]; else
+								if(substr($field_name,-11)=='birth_place') $field_data=$birth_place_array[$field_data]; else
+								if(substr($field_name,-5)=='alive') $field_data=$is_live[$field_data]; else
+								if($field_name=='stud_sex') $field_data=$sex_arr[$field_data]; else
+								if(substr($field_name,-8)=='birthday') $field_data=(date('Y',strtotime($field_data))-1911).date('年m月d日',strtotime($field_data)); else
+								if($field_name=='guardian_relation') $field_data=$guardian_relation[$field_data];
+								
+								if($field_name=='obtain') $field_data=$obtain_arr[$field_data];
+								if($field_name=='safeguard') $field_data=$safeguard_arr[$field_data];
+								
+								$data.="$field_data,";
+							}
+							$Excel_row=explode(",",substr($data,0,-1));
+							$x->items[]=$Excel_row;  //加入 row
+							$rs_student->MoveNext();
+						} // end while
+   				 
+   				
+					//CSV輸出	
 					} else {
 						$my_class_name=$class_name_arr[$class_id];
 						while(!$rs_student->EOF) {
@@ -123,6 +165,12 @@ if($_POST['act'])
 							$rs_student->MoveNext();
 						}
 					}
+				}
+				
+				if ($_POST['act']=='excel') {
+				  $x->writeSheet();
+					$x->process();
+					exit();
 				}
 				$filename=$school_long_name.$title.$header.".csv";
 				header("Content-disposition: attachment; filename=$filename");
@@ -163,6 +211,7 @@ if($_POST['act'])
 			echo $data;
 			break;	
 	}
+	
 } else {
 	//秀出網頁
 	head("通訊錄輸出");
@@ -193,6 +242,7 @@ if($_POST['act'])
 		$saved_format.="<tr bgcolor='$myselef_color'><td align='center'>{$rs->fields['title']}</td><td>{$rs->fields['fields']}</td><td align='center'>{$rs->fields['columns']}</td><td align='center'>{$rs->fields['creater']}</td><td align='center'>{$rs->fields['update_time']}</td><td align='center'>
 						<input type='button' value='網頁輸出' onclick='this.form.target_sn.value=\"$target_sn\"; this.form.act.value=\"html\"; this.form.target=\"_blank\"; this.form.submit();'>
 						<input type='button' value='CSV輸出' onclick='this.form.target_sn.value=\"$target_sn\"; this.form.act.value=\"csv\"; this.form.submit();'>
+						<input type='button' value='Excel輸出' onclick='this.form.target_sn.value=\"$target_sn\"; this.form.act.value=\"excel\"; this.form.submit();'>
 						<input type='button' value='修改' onclick='this.form.target_sn.value=\"$target_sn\"; this.form.act.value=\"modify\"; this.form.action=\"manage.php\"; this.form.target=\"_self\"; this.form.submit();'>
 						</td></tr>";
 		$rs->MoveNext();

@@ -73,18 +73,21 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
 //各年級要檢查的學期別 $Year_scan[1]~$Year_scan[9]
 
 //年級別, 國小一,二年級只有五個領域
- 		if($year_name>2){
-			$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
-			$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
-			$area_rowspan=9;
+ 		if($year_name>2 and (curr_seme()==2 or $now>$st_end_line)){
+			//$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
+			//$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
+			//$area_rowspan=9;
+		  $ALL_areas=8;
 		} else {
-			$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","健康與體育"=>"health","生活"=>"life","綜合活動"=>"complex");
-			$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","health"=>"健康與體育","life"=>"生活","complex"=>"綜合活動");
-			$area_rowspan=7;
+			//$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","健康與體育"=>"health","生活"=>"life","綜合活動"=>"complex");
+			//$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","health"=>"健康與體育","life"=>"生活","complex"=>"綜合活動");
+			//$area_rowspan=7;
+		  $ALL_areas=5;
 		} 	
 
   //確認本年級有幾個領域
-  $ALL_areas=$area_rowspan-2;
+   if ($IS_JHORES==6) $ALL_areas=7;
+  //$ALL_areas=$area_rowspan-2;
 
 	//不及格領域數的人數統計
 			$NO_PASS[$year_name][1]=0;
@@ -145,31 +148,31 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
 			if ($fin_score[$student_sn][succ]==$ALL_areas-3) $NO_PASS[$year_name][3]++; 
 			if ($fin_score[$student_sn][succ]==$ALL_areas-4) $NO_PASS[$year_name][4]++; 
 			if ($fin_score[$student_sn][succ]==$ALL_areas-5) $NO_PASS[$year_name][5]++; 
-			if ($fin_score[$student_sn][succ]==$ALL_areas-6) $NO_PASS[$year_name][6]++; 
-			if ($fin_score[$student_sn][succ]==$ALL_areas-7) $NO_PASS[$year_name][7]++; 
-			
+		  if ($fin_score[$student_sn][succ]==$ALL_areas-6) $NO_PASS[$year_name][6]++; 
+		  if ($fin_score[$student_sn][succ]==$ALL_areas-7) $NO_PASS[$year_name][7]++; 
+		  
 			//語文不及格
-			if ($fin_score[$student_sn][language][avg][score]<60) $NO_PASS[$year_name][language]++;
+			if ($fin_score[$student_sn][language][avg][score]<60 and $fin_score[$student_sn][language][avg][score]>0) $NO_PASS[$year_name][language]++;
 			//數學不及格
-			if ($fin_score[$student_sn][math][avg][score]<60) $NO_PASS[$year_name][math]++;
+			if ($fin_score[$student_sn][math][avg][score]<60 and $fin_score[$student_sn][math][avg][score]>0) $NO_PASS[$year_name][math]++;
 			//健體
-			if ($fin_score[$student_sn][health][avg][score]<60) $NO_PASS[$year_name][health]++;
+			if ($fin_score[$student_sn][health][avg][score]<60 and $fin_score[$student_sn][health][avg][score]>0) $NO_PASS[$year_name][health]++;
 			
 			//三年級以上
-      if ($year_name>2) {
+      //if ($year_name>3) {
 				//自然
-				if ($fin_score[$student_sn][nature][avg][score]<60) $NO_PASS[$year_name][nature]++;
+				if ($fin_score[$student_sn][nature][avg][score]<60 and $fin_score[$student_sn][nature][avg][score]>0) $NO_PASS[$year_name][nature]++;
 				//藝文
-				if ($fin_score[$student_sn][art][avg][score]<60) $NO_PASS[$year_name][art]++;
+				if ($fin_score[$student_sn][art][avg][score]<60 and $fin_score[$student_sn][art][avg][score]>0) $NO_PASS[$year_name][art]++;
 				//社會
-				if ($fin_score[$student_sn][social][avg][score]<60) $NO_PASS[$year_name][social]++;
-      } else { 
+				if ($fin_score[$student_sn][social][avg][score]<60 and $fin_score[$student_sn][social][avg][score]>0) $NO_PASS[$year_name][social]++;
+      //} else { 
 				//生活 國小一二年級
-				if ($fin_score[$student_sn][life][avg][score]<60) $NO_PASS[$year_name][life]++;
-			}
+				if ($fin_score[$student_sn][life][avg][score]<60 and $fin_score[$student_sn][life][avg][score]>0) $NO_PASS[$year_name][life]++;
+			//}
 
 			//綜合
-			if ($fin_score[$student_sn][complex][avg][score]<60) $NO_PASS[$year_name][complex]++;
+			if ($fin_score[$student_sn][complex][avg][score]<60 and $fin_score[$student_sn][complex][avg][score]>0) $NO_PASS[$year_name][complex]++;
 
    } //end foreach $fin_score
    

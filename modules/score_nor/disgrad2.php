@@ -1,5 +1,5 @@
 <?php
-//$Id: disgrad2.php 5435 2009-03-18 02:45:58Z brucelyc $
+//$Id: disgrad2.php 8492 2015-08-19 12:53:57Z brucelyc $
 include "config.php";
 include "../../include/sfs_case_menu.php";
 include "../../include/sfs_case_score.php";
@@ -71,6 +71,7 @@ if ($_POST[year_name]) {
 	}
 }
 
+if ($_POST['chk3']) $_POST['chk2']=1;
 $smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE); 
 $smarty->assign("module_name","修業建議名單"); 
 $smarty->assign("SFS_MENU",$menu_p); 
@@ -88,5 +89,7 @@ $smarty->assign("sclass",$sclass);
 $smarty->assign("snum",$snum);
 $smarty->assign("fin_score",$fin_score);
 $smarty->assign("fin_score_num",count($fin_score));
+for($i=1;$i<=$_POST['years'];$i++) $y[$i]=$_POST['sday'][$i];
+$smarty->assign("y",$y);
 $smarty->display('score_nor_disgrad2.tpl'); 
 ?>

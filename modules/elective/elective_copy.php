@@ -1,6 +1,6 @@
 <?php
 
-// $Id: elective_copy.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: elective_copy.php 8512 2015-09-02 01:44:17Z smallduh $
 
 // 取得設定檔
 include "config.php";
@@ -49,7 +49,7 @@ if ($_POST[c_year]) {
 
 	//分組班資料
 	if ($_POST[curr]) $c_str="where b.year='".curr_year()."' and b.semester='".curr_seme()."'";
-	$query="select a.*,b.year,b.semester from elective_tea a left join score_ss b on a.ss_id=b.ss_id $c_str order by b.year,b.semester,a.ss_id,a.group_id";
+	$query="select a.*,b.year,b.semester,b.class_year from elective_tea a left join score_ss b on a.ss_id=b.ss_id $c_str order by b.year,b.semester,a.ss_id,a.group_id";
 	$res=$CONN->Execute($query);
 	$class_arr=array();
 	$rowdata=array();

@@ -1,5 +1,5 @@
 <?php
-//$Id: cal_elps_class.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: cal_elps_class.php 8513 2015-09-02 05:18:04Z chiming $
 //物件class
 class cal_elps{
 	var $CONN;//adodb物件
@@ -34,7 +34,8 @@ class cal_elps{
 	function get_use_set(){
 		if ($this->seme_ary=='') return;
 			$arr=$this->seme_ary;
-			$this->unit=split("@@@",$arr[unit]);//單位陣列
+			//$this->unit=split("@@@",$arr[unit]);//單位陣列
+			$this->unit=explode("@@@",$arr[unit]);//單位陣列
 			$unit_nu=count($this->unit);//取單位數
 			$this->wd=round(80/$unit_nu);//計算欄寬
 			$this->colspan=2+$unit_nu;//計算合併欄位數
@@ -66,7 +67,8 @@ class cal_elps{
 
 	function get_week(){
 		$loop=$this->seme_ary[weeks];
-		$sday=split("-",$this->seme_ary[sday]);//時間陣列 年月日
+		//$sday=split("-",$this->seme_ary[sday]);//時間陣列 年月日
+		$sday=explode("-",$this->seme_ary[sday]);//時間陣列 年月日
 		$TT1=mktime(1,1,0,$sday[1],$sday[2],$sday[0]);
 		$one_day=60*60*24;
 		$week_ord=date("w",$TT1);//取得星期幾
@@ -94,7 +96,8 @@ class cal_elps{
 		$one_day=60*60*24;
 		foreach ($arr as $ary){
 			$key=$ary[week_no];
-			$start=split("-",$ary[start_date]);//時間陣列 年月日
+			//$start=split("-",$ary[start_date]);//時間陣列 年月日
+			$start=explode("-",$ary[start_date]);//時間陣列 年月日
 			$wk_1=mktime(1,1,0,$start[1],$start[2],$start[0]);//週日
 			$wk_2=$wk_1+$one_day*6;//週六
 			$WK[$key][No]=$key;//週日
@@ -111,4 +114,3 @@ class cal_elps{
 }
 }
 
-?>

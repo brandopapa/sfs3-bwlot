@@ -20,37 +20,16 @@ $is_print=$_GET['print'];
 $yorn=findyorn();
 $teacher_course = $_REQUEST[teacher_course];
 $curr_sort = $_REQUEST[curr_sort];
-//if(empty($sel_year))$sel_year = curr_year(); //目前學年 update 20150831
-//if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期 update 20150831
-
-//update 20150831
-$year_seme=$_REQUEST[year_seme];
-if($year_seme=="") {
-  $sel_year = curr_year(); //目前學年
-  $sel_seme = curr_seme(); //目前學期
-	$year_seme = sprintf("%03d%d",curr_year(),curr_seme());
-	//成績表名稱
-	$nor_score="nor_score_".curr_year()."_".curr_seme();
-	$score_semester="score_semester_".curr_year()."_".curr_seme();	
-}	
-else {
-	$ys=explode("_",$year_seme);
-	if ($ys[1]!="") $year_seme=sprintf("%03d",$ys[0]).$ys[1];
-	$sel_year=substr($year_seme,0,3);
-	$sel_seme=substr($year_seme,-1);
-	
-	//成績表名稱
-	$nor_score="nor_score_".$sel_year."_".$sel_seme;
-	$score_semester="score_semester_".$sel_year."_".$sel_seme;
-}//update 20150831
+if(empty($sel_year))$sel_year = curr_year(); //目前學年
+if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 
 //教師代號
 $teacher_sn = $_SESSION[session_tea_sn];
 
 //成績表名稱
-//$nor_score="nor_score_".curr_year()."_".curr_seme(); update 20150831
-//$score_semester="score_semester_".curr_year()."_".curr_seme(); update 20150831
- 
+$nor_score="nor_score_".curr_year()."_".curr_seme();
+$score_semester="score_semester_".curr_year()."_".curr_seme();
+
  //若是該學期的平時成績資料表不存在就依照命名規則自動建立一個 	 
 $creat_table_sql="
 	CREATE TABLE if not exists $nor_score ( 	 
@@ -69,32 +48,11 @@ $creat_table_sql="
 $rs=$CONN->Execute($creat_table_sql);
 
 //取得正確任教課程
-$course_arr_all=get_teacher_course($sel_year,$sel_seme,$teacher_sn,$is_allow);
+$course_arr_all=get_teacher_course(curr_year(),curr_seme(),$teacher_sn,$is_allow);
 $course_arr = $course_arr_all['course'];
 // 檢查課程權限是否正確
 $cc_arr=array_keys($course_arr);
 $err=(in_array($teacher_course,$cc_arr) || $teacher_course=="")?0:1;
-
-
-
-//新增修改 加入學年學期選單
-//取得學年學期陣列
-$year_seme_arr = get_class_seme();
-//新增一個下拉選單實例
-$ss1 = new drop_select();
-//下拉選單名稱
-$ss1->s_name = "year_seme";
-//提示字串
-$ss1->top_option = "選擇學期";
-//下拉選單預設值
-$ss1->id = $year_seme;
-//下拉選單陣列
-$ss1->arr = $year_seme_arr;
-//自動送出
-$ss1->is_submit = true;
-//傳回下拉選單字串
-$year_seme_menu = $ss1->get_select();
-$smarty->assign("year_seme_sel",$year_seme_menu);
 
 if ($err==0) {
 
@@ -111,7 +69,6 @@ if ($err==0) {
 	$course_sel = $sel->get_select();
 	//------------- 科目下拉選單 結束
 	$smarty->assign("course_sel",$course_sel);
-	
 
 	if(strstr ($teacher_course, 'g')){
 

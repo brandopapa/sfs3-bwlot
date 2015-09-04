@@ -96,7 +96,7 @@ echo '
 </tr>
 <tr><td style="line-height:150%;">
 <ol>
-<li class="small">您必須先安裝<a href="http://www.tc.edu.tw/SetupCDC.zip" target="new">自然人憑證登入元件</a>及<a href="http://gca.nat.gov.tw/download/HiCOSClient_v2.1.7.zip" target="new">HiCOS憑證管理程式</a>, 若已安裝過則不須重覆安裝</li>
+<li class="small">您必須先安裝<a href="http://www.sfs.project.edu.tw/modules/mydownloads/visit.php?cid=2&lid=47" target="new">臺中市憑證登入元件v0.4版</a>及<a href="http://gca.nat.gov.tw/download/HiCOSClient_v2.1.7.zip" target="new">HiCOS憑證管理程式</a>, 若已安裝過則不須重覆安裝</li>
 <li class="small">憑證註冊只須在第一次使用或憑證更換時進行即可</li>
 </ol>
 </td></tr></table>

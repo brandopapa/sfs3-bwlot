@@ -3,6 +3,7 @@ header('Content-type: text/html; charset=utf-8');
 include_once ('config.php');
 include_once ('my_functions.php');
 
+
 //$_SESSION['MSN_LOGIN_ID'] 登入帳號
 
 ?>
@@ -55,7 +56,7 @@ if ($_POST['act']=='登入') {
 	
 $log_id=$_POST['log_id']; 
 $log_pass=pass_operate($_POST['log_pass']);
-mysql_query("SET NAMES 'latin1'");
+if ($IS_UTF8==0) mysql_query("SET NAMES 'latin1'");
 $query="select teacher_sn, login_pass from teacher_base where teach_condition=0 and teach_id='$log_id' and login_pass='$log_pass' and teach_id<>''";
 $result=mysql_query($query);
 
@@ -80,8 +81,12 @@ if (mysql_num_rows($result)) {
    	  $query="update sc_msn_online set onlinetime='".date("Y-m-d H:i:s")."',ifonline='1',hits='$hits' where teach_id='$log_id'";
       mysql_query($query);
    }else{
-    	mysql_query("SET NAMES 'latin1'");
+   	if ($IS_UTF8==0) {
+   		mysql_query("SET NAMES 'latin1'");
     	$name=big52utf8(get_teacher_name_by_id($_SESSION['MSN_LOGIN_ID']));
+    } else {
+      $name=get_teacher_name_by_id($_SESSION['MSN_LOGIN_ID']);
+    }
   	  mysql_query("SET NAMES 'utf8'");
    	  $query="insert into sc_msn_online (teach_id,name,from_ip,lasttime,onlinetime,ifonline,state,hits) values ('".$_SESSION['MSN_LOGIN_ID']."','".$name."','".$my_ip."','".$onlinetime."','".$onlinetime."','1','上線','1')";
     if (!mysql_query($query)) {
@@ -116,7 +121,7 @@ if (mysql_num_rows($result)) {
 if ($_SESSION['MSN_LOGIN_ID']!="") {
 	
 //取得教師等級
-mysql_query("SET NAMES 'latin1'");
+if ($IS_UTF8==0) mysql_query("SET NAMES 'latin1'");
 $query="select teacher_sn from teacher_base where teach_id='".$_SESSION['MSN_LOGIN_ID']."'";
 $result=mysql_query($query);
 list($teacher_sn)=mysql_fetch_row($result);

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_seme_talk2.php 8108 2014-09-02 14:17:44Z infodaes $
+// $Id: stud_seme_talk2.php 8516 2015-09-03 01:15:41Z infodaes $
 
 // 載入設定檔
 include "config.php";
@@ -302,7 +302,7 @@ function setfocus(element) {
 
 
 <tr>
-    <td align="right" CLASS="title_sbody1">內容要點</td>
+    <td align="right" CLASS="title_sbody1">內容要點<br><br><font size=1 color="red">不可使用半形的 & < > " ' 等符號，請使用標準的標點符號。</font></td>
     <td><textarea name="sst_memo" cols=40 rows=5 wrap=virtual><?php echo $sst_memo ?></textarea></td>
 </tr>
 

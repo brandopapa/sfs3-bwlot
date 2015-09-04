@@ -2,7 +2,7 @@
 
 /**
 * 身分模擬物件
-* $Id: simu_class.php 6814 2012-06-22 08:24:26Z smallduh $
+* $Id: simu_class.php 8511 2015-09-02 01:05:33Z smallduh $
 */
 if (!$CONN)
 	exit;
@@ -71,9 +71,10 @@ class simu_class{
 				$wherestr .= " a.name,";
 				break;
 				default :
+				
 				break;
 			}
-			$wherestr .= " b.teach_title_id, b.class_num";
+			$wherestr .= " d.rank, b.class_num";
 		} else if (!empty($_POST['name'])){
 			$wherestr = " and a.name like '%{$_POST['name']}%'";
 		}
@@ -81,7 +82,7 @@ class simu_class{
 			return false;
 		}
 		$query="
-		SELECT a.teacher_sn,a.teach_id,a.name, b.post_kind, b.post_office,d.title_name ,b.class_num FROM teacher_base a , teacher_post b, teacher_title d WHERE a.teacher_sn = b.teacher_sn AND b.teach_title_id = d.teach_title_id  AND a.teach_condition = 0 ".$limit_id . $wherestr ;
+		SELECT a.teacher_sn,a.teach_id,a.name, b.post_kind, b.post_office,d.title_name ,b.class_num,d.rank FROM teacher_base a , teacher_post b, teacher_title d WHERE a.teacher_sn = b.teacher_sn AND b.teach_title_id = d.teach_title_id  AND a.teach_condition = 0 ".$limit_id . $wherestr ;
 
 		$res = $this->adodb->Execute($query) or die($query);
 		return $res->getRows();

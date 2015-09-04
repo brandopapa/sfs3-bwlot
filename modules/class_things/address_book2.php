@@ -1,6 +1,6 @@
 <?php
 
-// $Id: address_book2.php 8117 2014-09-15 00:44:40Z smallduh $
+// $Id: address_book2.php 8508 2015-09-01 13:48:07Z brucelyc $
 
 /*引入學務系統設定檔*/
 include "config.php";
@@ -167,7 +167,7 @@ function print_key($sel_year="",$sel_seme="",$print_key="",$cols=""){
 	while(!$rs->EOF){
         $stud_id = $rs->fields["stud_id"];
         $site_num = $rs->fields["seme_num"];
-        $rs_name=$CONN->Execute("select b.* , d.*  from stud_base b ,stud_domicile d  where b.stud_id='$stud_id' and b.stud_id =d.stud_id and b.stud_study_cond =0  ");
+        $rs_name=$CONN->Execute("select b.* , d.*  from stud_base b ,stud_domicile d  where b.stud_id='$stud_id' and b.student_sn =d.student_sn and b.stud_study_cond =0  ");
 	 
       if ($rs_name->fields["stud_name"]) { 
         $stud_name = $rs_name->fields["stud_name"];
@@ -294,7 +294,7 @@ function all_ooo($sel_year  ) {
 		$stud_tel_2 = $rs_name->fields["stud_tel_2"];
 		$stud_tel_3 = $rs_name->fields["stud_tel_3"];
 	*/	
-        $rs_name=$CONN->Execute("select b.* , d.*  from stud_base b ,stud_domicile d  where b.stud_id='$stud_id' and b.stud_id =d.stud_id and b.stud_study_cond =0  ");
+        $rs_name=$CONN->Execute("select b.* , d.*  from stud_base b ,stud_domicile d  where b.stud_id='$stud_id' and b.student_sn =d.student_sn and b.stud_study_cond =0  ");
 
      if ($rs_name->fields["stud_name"]) {   
      	  $stud_id_arr[$m] = $rs_name->fields["stud_id"];

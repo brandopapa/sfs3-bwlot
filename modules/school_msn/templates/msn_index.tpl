@@ -5,7 +5,7 @@
 (1)請【<a href="javascript: msg_form()">按我</a>】開啟彈出畫面。<br>
 (2)使用方法通常是在校園首頁設置一個可開啟彈出視窗的選單，超連結位置設定為 {{$SFS_PATH_HTML}}modules/school_msn/main_index.php</br>
 建議的 JavaScript 指令如下：<br>
- window.open('{{$SFS_PATH_HTML}}modules/school_msn/main_index.php','messageWindow','resizable=0,toolbar=no,scrollbars=auto');<br>
+ window.open('{{$SFS_PATH_HTML}}{{$MSN_WINDOW}}','messageWindow','resizable=0,toolbar=no,scrollbars=auto');<br>
 <br>
 二、說明:<br>
 1.校園MSN是一個可以供學校教師之間進行訊息交流或檔案傳遞的模組.<br>
@@ -33,7 +33,7 @@
 
 function msg_form()
 {
- flagWindow=window.open('main_index.php','messageWindow','resizable=0,toolbar=no,scrollbars=auto');
+ flagWindow=window.open('{{$SFS_PATH_HTML}}{{$MSN_WINDOW}}','messageWindow','resizable=0,toolbar=no,scrollbars=auto');
 }
 
 </Script>

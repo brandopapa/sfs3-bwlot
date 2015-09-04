@@ -55,7 +55,7 @@ for($i=1;$i<=$all_years;$i++) {
 //年級別, 國小一,二年級只有五個領域
 $year_name=$_POST['year_name'];
 
- 		if($year_name>2){
+ 		if($year_name>2 and (curr_seme()==2 or $now>$st_end_line)){
 			$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
 			$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
 			$area_rowspan=9;

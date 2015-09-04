@@ -154,6 +154,7 @@ function listall_club($year_seme) {
 	       
         <script src="include/jquery-1.6.2.min.js"></script> 
         <script src="include/jquery.idTabs.min.js"></script> 
+        <script src="include/jquery.blockUI.js"></script>
 
     <div> 
         <ul class="idTabs"> 
@@ -278,7 +279,7 @@ function list_class_club_choice_detail($year_seme,$club_class,$show_link,$show_c
             //顯示已選志願明細時, 不列出簡介
 				    if ($show_choice==1) {
 					    for ($i=1;$i<=$SETUP['choice_num'];$i++) {
-					     echo "<td align=\"center\" style=\"font-size:10pt\">".get_club_choice_rank($row['club_sn'],$i)."</td>";
+					     echo "<td align=\"center\" style=\"font-size:10pt\"><a style=\"cursor:pointer\" id=\"".$row['club_sn']."_".$i."\" class=\"list_choice_rank\">".get_club_choice_rank($row['club_sn'],$i)."</a></td>";
 					    }
 					  } // end if 
 					    ?>
@@ -982,10 +983,6 @@ function get_club_student_num($year_seme,$club_sn) {
 	
 }
 
-
-
-
-
 //取得社團基本資料
 function get_club_base($club_sn) {
 	$query="select * from stud_club_base where club_sn='$club_sn'";
@@ -1007,18 +1004,6 @@ function get_club_class($club_sn) {
 	return $club_class;
 	
 }
-
-/***
-//依 sn 取得老師名字
-function get_teach_Name ($teacher_sn) {
-	$query="select name from teacher_base where teacher_sn='$teacher_sn'";
-	$result=mysql_query($query);
-	$row=mysql_fetch_array($result);
-	
-	return $row['name'];
-
-}
-***/
 
 //依 sn 取得學生資料 array
 function get_student($student_sn,$seme_year_seme) {
@@ -1129,6 +1114,17 @@ function get_seme_stud_choice_rank($year_seme,$student_sn,$choice_rank) {
  list($club_sn)=mysql_fetch_row($result);
  
  return $club_sn; 
+
+}
+
+//取得某社團某志願序的所有學生
+function get_students_by_club_choice_rank($club_sn,$choice_rank) {
+	global $CONN;
+	$query="select a.student_sn,b.stud_name,b.curr_class_num from stud_club_temp as a,stud_base as b where a.club_sn='$club_sn' and a.student_sn=b.student_sn and a.choice_rank='$choice_rank' order by curr_class_num";
+  $result=$CONN->Execute($query) or die ("讀取資料發生錯誤! sql=".$query);
+  $row=$result->getRows();
+ 
+ return $row; 
 
 }
 
