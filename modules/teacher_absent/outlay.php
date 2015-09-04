@@ -102,9 +102,9 @@ function &room_setup_form($mode="",$cc_id,$c_d_kind){
 
 	
 		$add_form="<tr >
-		<td><input type='text' style='font-size: 12pt' size='10' maxlength='10' name='start_date' value='$c_start_date'></td>
-		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='10' name='end_date' value='$c_locale'></td>
-		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='10' name='class_name' value='$class_name'></td>
+		<td><input type='text' style='font-size: 12pt' size='10' maxlength='50' name='start_date' value='$c_start_date'></td>
+		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='50' name='end_date' value='$c_locale'></td>
+		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='50' name='class_name' value='$class_name'></td>
 		<td align='center' ><input type='text' style='font-size: 12pt' size='4'  name='outlay1'></td>
 		<td align='center' ><input type='text' style='font-size: 12pt' size='4'  name='outlay2'></td>
 		<td align='center' ><input type='text' style='font-size: 12pt' size='4'  name='outlay3'></td>
@@ -175,9 +175,9 @@ function &room_setup_form($mode="",$cc_id,$c_d_kind){
 		
 	
 		$room=($mode=="edit" and $c_id==$cc_id)?
-		"<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='10' name='start_date' value='$start_date'></td>
-		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='10' name='end_date' value='$end_date'></td>
-		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='10' name='class_name' value='$class_name'></td>
+		"<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='50' name='start_date' value='$start_date'></td>
+		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='50' name='end_date' value='$end_date'></td>
+		<td align='center' ><input type='text' style='font-size: 12pt' size='10' maxlength='50' name='class_name' value='$class_name'></td>
 		<td align='center' ><input type='text' style='font-size: 12pt' size='4'  name='outlay1' value='$outlay1'></td>
 		<td align='center' ><input type='text' style='font-size: 12pt' size='4'  name='outlay2' value='$outlay2'></td>
 		<td align='center' ><input type='text' style='font-size: 12pt' size='4'  name='outlay3' value='$outlay3'></td>

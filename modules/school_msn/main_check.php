@@ -2,8 +2,9 @@
 header('Content-type: text/html; charset=utf-8');
 include_once ('config.php');
 include_once ('my_functions.php');
+ini_set( 'date.timezone', 'Asia/Taipei' );
 
-mysql_query("SET NAMES 'utf8'");
+if ($IS_UTF8==0) mysql_query("SET NAMES 'utf8'");
 
 //$_SESSION['MSN_LOGIN_ID'] 登入帳號
 if ($_SESSION['MSN_LOGIN_ID']!="") {
@@ -22,9 +23,13 @@ if ($_SESSION['MSN_LOGIN_ID']!="") {
      }
     mysql_query($query);
    }else{
-   	mysql_query("SET NAMES 'latin1'");
-   	$name=big52utf8(get_teacher_name_by_id($_SESSION['MSN_LOGIN_ID']));
-    mysql_query("SET NAMES 'utf8'");
+   	if ($IS_UTF8==0) {
+   	 mysql_query("SET NAMES 'latin1'");
+   	 $name=big52utf8(get_teacher_name_by_id($_SESSION['MSN_LOGIN_ID']));
+     mysql_query("SET NAMES 'utf8'");
+    } else {
+     $name=get_teacher_name_by_id($_SESSION['MSN_LOGIN_ID']);
+    }
    	$query="insert into sc_msn_online (teach_id,name,from_ip,lasttime,onlinetime,ifonline,state) values ('".$_SESSION['MSN_LOGIN_ID']."','".$name."','".$my_ip."','".$onlinetime."','".$onlinetime."','1','上線')";
     if (!mysql_query($query)) {
      echo "query=".$query;

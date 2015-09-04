@@ -1,11 +1,33 @@
 <?php
-
+header('Content-type: text/html;charset=big5');
 // $Id: reward_one.php 6735 2012-04-06 08:14:54Z smallduh $
 
 //取得設定檔
 include_once "config.php";
 
 sfs_check();
+
+//ajax輸出
+if ($_POST['act']=='list_choice_rank') {
+
+ $club_sn=$_POST['club_sn'];
+ $rank=$_POST['rank'];
+ $CLUB=get_club_base($club_sn);
+ $students=get_students_by_club_choice_rank($club_sn,$rank);
+ $show="";
+ $show="<font color=blue>《".$CLUB['club_name']."》 第".$rank."志願名單 </font><br><br>";
+ $show.="<table border='0' style='font-size:10pt'>";
+ $i=0;
+ foreach ($students as $S) {
+ 	$i++;
+ 	if ($i%5==1) $show.="<tr>";
+  $show.="<td>".$S['curr_class_num'].$S['stud_name']."</td>";
+  if ($i%5==0) $show.="</tr>";
+ }
+ $show.="</table><br>共計 $i 人";
+ echo $show;
+ exit();
+}
 
 
 //秀出網頁
@@ -453,6 +475,7 @@ if ($_POST['club_sn']!="") $c_curr_class=get_club_class($_POST['club_sn']);
 		 
 	  //顯示所有社團設定(社團總表) ================================================================
 	  if ($_POST['mode']=="listall") {
+	  	
 	    listall_club($c_curr_seme);
 	  }
 	  //顯示某社團 ================================================================
@@ -696,6 +719,17 @@ if ($_POST['mode']=="club_clear") {
   </td>
 	</tr>
 </table>
+<div id="domMessage" style="display:none;overflow:auto">
+    <table border='0' width='100%'>
+        <tr>
+            <td align='right'>
+                <img src='images/close.png' width='20' style='cursor:pointer' class='RemoveBlock' title='關閉視窗'>
+            </td>
+    </table>
+
+    <span id="showboard">這是原始資料</span>
+    
+</div>
 <Script>
 		function club_clear() {
 			if_confirm=confirm('您確定要清除所有編班資料？\n（注意！本動作會把本學期「所有開放選課的社團」名單全數清除！）');
@@ -706,4 +740,47 @@ if ($_POST['mode']=="club_clear") {
 			 return false;
 			}
 		}		
+		
+		//列出某志願名單
+		$(".list_choice_rank").click(function(){
+			 var btnID=$(this).attr("id");			 
+			 var NewArray = btnID.split("_");
+       var club_sn=NewArray[0];
+       var rank=NewArray[1];
+	     var act='list_choice_rank';
+	     
+    	$.ajax({
+   		  type: "post",
+    	  url: 'club_manage.php',
+    	  data: { act:act,club_sn:club_sn,rank:rank },
+    	  dataType: "text",
+    	  error: function(xhr) {
+      	 alert('ajax request 發生錯誤!');
+    	  },
+    	  success: function(response) {
+    	   $('#showboard').html(response);
+         $('#showboard').fadeIn(); 			
+    	  } // end success
+	    });   // end $.ajax
+	    
+			NowShow();
+
+			 return false;
+		});
+		
+
+$('.RemoveBlock').click(function(){
+         $.unblockUI();
+         return false;
+});
+
+function NowShow(){
+     $.blockUI({
+            	message: $('#domMessage'),
+            	centerX: true,
+              centerY: false,
+              css: { top: '100px' }
+     });
+}
+
 </Script>

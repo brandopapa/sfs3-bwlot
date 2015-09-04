@@ -119,4 +119,6 @@ $SFS_MODULE_SETUP[] = array('var'=>"SMPTpassword", 'msg'=>"SMPT的使用者帳號", 'v
 
 $SFS_MODULE_SETUP[] = array('var'=>"portfolio", 'msg'=>"教師網頁連結列表", 'value'=>array(0=>"不啟用",1=>"啟用"));
 
+$SFS_MODULE_SETUP[] = array('var'=>"IS_UTF8", 'msg'=>"sfs3的編碼方式(通常為Big5)", 'value'=>array(0=>"Big5",1=>"UTF8"));
+
 ?>

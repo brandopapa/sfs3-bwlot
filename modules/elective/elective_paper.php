@@ -1,5 +1,5 @@
 <?php
-// $Id: elective_paper.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: elective_paper.php 8514 2015-09-02 06:17:01Z smallduh $
 
 // 引入您自己的 config.php 檔
 require "config.php";
@@ -47,7 +47,7 @@ foreach($ctrl_A as $v){
 
 $class_selecter="<form action='{$_SERVER[PHP_SELF]}' method='POST'><select name='c_year' onchange='this.form.submit()'>$option_c_year</select></form>\n";
 
-if($c_year=="") $c_year="1";
+if($c_year=="") { $c_year=$IS_JHORES+1; }
 
 //年級科目選單
 $class=array($curr_year,$curr_seme,"",$c_year);
@@ -163,7 +163,7 @@ if($ss_id){
 				$st_data=student_sn_to_classinfo($student_sn[$a]);
 				if($a%2==0) $bg="#FFE2E8";
 				else $bg="#DAF7CD";
-				$one_student.="<tr bgcolor=$bg onmouseover=\"style.background='#FFF6BA'\" onmouseout=\"style.background='$bg'\"><td>{$st_data[0]}年{$st_data[5]}班</td><td>{$st_data[2]}</td><td>{$st_data[4]}</td><td>
+				$one_student.="<tr bgcolor=$bg onmouseover=\"style.background='#FFF6BA'\" onmouseout=\"style.background='$bg'\"><td>{$st_data[0]} 年 {$st_data[1]} 班</td><td>{$st_data[2]}</td><td>{$st_data[4]}</td><td>
 				<form action='{$_SERVER['PHP_SELF']}' method='POST' name='KL'>
 				<input type='hidden' name='c_year' value='$c_year'>
 				<input type='hidden' name='ss_id' value='$ss_id'>

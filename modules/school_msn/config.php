@@ -2,8 +2,8 @@
 //$Id$
 ini_set ('display_errors', 'off');
 //預設的引入檔，不可移除。
-require_once "./module-cfg.php";
 include_once "../../include/config.php";
+require_once "./module-cfg.php";
 //您可以自己加入引入檔
 // 
 //結合學務系統, 非完全真正 UTF8 , 會變亂碼

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_setup3_teacher.php 8101 2014-08-31 14:51:15Z infodaes $
+// $Id: course_setup3_teacher.php 8497 2015-08-26 04:55:12Z smallduh $
 
 /* 取得基本設定檔 */
 require_once "config.php";
@@ -774,6 +774,7 @@ function save_class_table($sel_year="",$sel_seme="",$hide_class_id="",$ss_id="",
 		
 		if ($subject == 0 and $class_id) {
 			 delete_course($c[course_id],$sel_year,$sel_seme,$teacher,$cooperate,$class_id,$day,$sector,$subject,$r); 
+		                 
 		}	else {
     		//先取得看看有無課程
     		$c=&get_course("",$day,$sector,$class_id);
@@ -823,11 +824,12 @@ function update_course($course_id="",$sel_year="",$sel_seme="",$teacher,$coopera
 }
 
 //刪除一筆課程資料（一班一天的某一節）
-function delete_course($course_id="",$sel_year="",$sel_seme="",$teacher,$class_id="",$day,$sector,$subject,$room){
+function delete_course($course_id="",$sel_year="",$sel_seme="",$teacher,$cooperate="",$class_id="",$day,$sector,$subject,$room){
 	global $CONN;
-	$sql_update = "delete from score_course where teacher_sn = '$teacher'  and  day='$day'  and sector='$sector'";
-  //	echo $sql_update;
-	$CONN->Execute($sql_update) ;
+	$sql_update = "delete from score_course where year=$sel_year and semester='$sel_seme' and teacher_sn = '$teacher'  and  day='$day'  and sector='$sector'";
+  //echo $sql_update;
+	//exit();
+	$CONN->Execute($sql_update) or die ("刪除失敗! SQL Error! sql=".$sql_update);
 	return true;
 }
 

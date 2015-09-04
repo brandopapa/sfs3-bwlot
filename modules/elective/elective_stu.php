@@ -1,5 +1,5 @@
 <?php
-// $Id: elective_stu.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: elective_stu.php 8510 2015-09-01 15:29:21Z smallduh $
 
 // 引入您自己的 config.php 檔
 require "config.php";
@@ -77,7 +77,7 @@ foreach($ctrl_A as $v){
 
 $class_selecter="<form action='{$_SERVER[PHP_SELF]}' method='POST'><select name='c_year' onchange='this.form.submit()'>$option_c_year</select></form>\n";
 
-if($c_year=="") $c_year="1";
+if($c_year=="") { $c_year=$IS_JHORES+1; }
 
 //年級科目選單
 $class=array($curr_year,$curr_seme,"",$c_year);

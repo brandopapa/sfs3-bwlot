@@ -89,7 +89,7 @@ if($c_id){
 }
 
 $checked=$_POST['dm']?'checked':'';
-$main="<font size=2><form method='post' action='$_SERVER[SCRIPT_NAME]' name='myform'>$class_select ◎預設備註：<input type='text' name='dm' id='dm' value='{$_POST['dm']}'> <input type='checkbox' name='na' value=1 $checked>允許雙擊寫入資料 <input type='submit' name='go' value='寫入簽記資料'>
+$main="<font size=2><form method='post' action='$_SERVER[SCRIPT_NAME]' name='myform'>$class_select ◎預設備註：<input type='text' name='dm' id='dm' value='{$_POST['dm']}'> <input type='checkbox' id= 'na' name='na' value=1 $checked>允許雙擊寫入資料 <input type='submit' name='go' value='寫入簽記資料'>
 <br>$student_select $showdata<br>$act</form></font>";
 
 echo $main;

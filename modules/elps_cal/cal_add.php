@@ -56,7 +56,8 @@ if ($i%5==0)echo "<br>\n";
 <tr bgcolor=white><td>單位分類別</td>
 <td>
 <?php
-	$unit=split("@@@",$barr[unit]);//單位陣列
+	//$unit=split("@@@",$barr[unit]);//單位陣列
+	$unit=explode("@@@",$barr[unit]);//單位陣列
 	$unit_nu=count($unit);//取單位數
 echo set_select2("unit",$unit,'');
 ?>

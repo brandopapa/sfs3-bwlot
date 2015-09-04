@@ -33,7 +33,7 @@ $disadvantage_level=array(0=>'無 ',1=>'中低收入戶',2=>'低收入戶');
 $balance_score=4;
 $balance_score_max=12;
 //$balance_semester=array('1011','1012');  //試探系統
-$balance_semester=array('1011','1012','1021','1022','1031');  //實際報名
+$balance_semester=array('1021','1022','1031','1032');  //實際報名
 
 $balance_area=array('health','art','complex');
 

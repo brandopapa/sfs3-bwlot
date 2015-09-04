@@ -1,5 +1,5 @@
 <?php
-	// $Id: teach_config.php 8486 2015-08-16 02:55:19Z smallduh $
+	// $Id: teach_config.php 8495 2015-08-21 09:28:00Z smallduh $
 	//系統設定檔
 	include_once "../../include/config.php";
 	//函式庫
@@ -35,7 +35,7 @@
 	$img_width = 120;	
 	
 	//目錄內程式
-	$teach_menu_p = array("teach_list.php"=>"基本資料","teach_post.php"=>"任職資料","teach_connect.php"=>"網路資料","mteacher.php"=>"匯入教師資料","teach_list_photo.php"=>"在職教師一覽表");
+	$teach_menu_p = array("teach_list.php"=>"基本資料","teach_post.php"=>"任職資料","teach_connect.php"=>"網路資料","mteacher.php"=>"匯入教師資料","teach_list_photo.php"=>"在職教師一覽表","teach_list_subject.php"=>"任教一覽表");
 	
 	//設定上傳圖片路徑
 	$img_path = "photo/teacher";
@@ -44,6 +44,11 @@
 	$path_str = "temp/teacher";
 	set_upload_path($path_str);
 	$temp_path = $UPLOAD_PATH.$path_str;
+	
+  //取得模組設定
+  $m_arr = get_sfs_module_set();
+  extract($m_arr, EXTR_OVERWRITE);
+  
 
 	//取得流水號
 	function get_sfs_id() {

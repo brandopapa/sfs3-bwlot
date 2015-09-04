@@ -1,5 +1,12 @@
 <?php
+//如果為中 心端, 設定 COOKIE
+if ($_GET['sch_id']) {
+ $sch_id = $_GET['sch_id'];
+ setcookie("cookie_sch_id","$sch_id",0,"/","");
+}
 include_once ('config.php');
+
+
 ?>
 <html>
 <head>

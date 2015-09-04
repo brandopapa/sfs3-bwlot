@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_demote.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: stud_demote.php 8494 2015-08-21 08:31:03Z smallduh $
 
 // 載入設定檔
 include "stud_move_config.php";
@@ -32,25 +32,40 @@ switch($do_key) {
 		$update_ip = getip();
 		$move_date = ChtoD($move_date);
 		$move_c_date = ChtoD($move_c_date);
+		if(abs(intval(substr($stud_class,0,1)) - intval(substr($demote_class,0,1)))>1) {
+		  echo "升降級請勿超過(含)2級!";
+		  exit();
+		}
+		
 		if(intval(substr($stud_class,0,1)) < intval(substr($demote_class,0,1)))
 			$move_kind = 9; //升級
 		else
 			$move_kind = 10; //降級
-		//加入異動記錄		
-		$sql_insert = "insert into stud_move (stud_id,move_kind,move_year_seme,move_date,move_c_unit,move_c_date,move_c_word,move_c_num,update_id,update_ip,update_time) values ('$stud_id','$move_kind','$curr_seme','$move_date','$move_c_unit','$move_c_date','$move_c_word','$move_c_num','$update_id','$update_ip','".date("Y-m-d G:i:s")."')";
-//		echo $sql_insert;
+		//加入異動記錄
+		$sql_select="select stud_id from stud_base where student_sn='$student_sn'";
+		$res=$CONN->Execute($sql_select);
+		$stud_id=$res->fields['stud_id'];		
+		$sql_insert = "insert into stud_move (stud_id,move_kind,move_year_seme,move_date,move_c_unit,move_c_date,move_c_word,move_c_num,update_id,update_ip,update_time,student_sn) values ('$stud_id','$move_kind','$curr_seme','$move_date','$move_c_unit','$move_c_date','$move_c_word','$move_c_num','$update_id','$update_ip','".date("Y-m-d G:i:s")."','$student_sn')";
+		//echo $sql_insert;
+		//exit();
 		$CONN->Execute($sql_insert) or die ($sql_insert);
 		
 		// 就讀年
 		//$stud_study_year = $curr_year-substr($sel_year,0,1)+1 ;
-		$tempyear = curr_year() - substr($demote_class,0,1) +1;
+		$tempyear = curr_year() - (substr($demote_class,0,1)-$IS_JHORES) +1;
+		//取得原就讀年 2015.08.10 by smallduh  因10年學號重覆, 若不連同比對原入學年 , 會把 10年前學號重覆的學生也改掉
+		$orgyear= curr_year() - (substr($stud_class,0,1)-$IS_JHORES) +1;
+
 		$temp = curr_year() - $tempyear ;
 		$query1 = "select max(curr_class_num) as mm from stud_base where curr_class_num like '$demote_class%' ";
 		$result1 = $CONN->Execute($query1) or die($query1) ;
 		$max_site_num=$result1->fields[0];
 		$new_site_num=sprintf("%02d",substr($max_site_num,-2)+1);
 		$num = $demote_class.$new_site_num;
-		$sql_update = "update stud_base set stud_study_year ='$tempyear' ,curr_class_num = '$num' where stud_id='$stud_id'";
+		//echo $demote_class;
+		//exit();
+		//$sql_update = "update stud_base set stud_study_year ='$tempyear' ,curr_class_num = '$num' where stud_id='$stud_id' and stud_study_year='$orgyear'";
+	  $sql_update = "update stud_base set stud_study_year ='$tempyear' ,curr_class_num = '$num' where student_sn='$student_sn'";
 	//	echo "<BR>".$sql_update;
 		$CONN->Execute($sql_update) or die ($sql_update);
 		
@@ -59,27 +74,39 @@ switch($do_key) {
 		$seme_class=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,substr($demote_class,0,-2),substr($demote_class,-2));
 		$rs=$CONN->Execute("select c_name from school_class where class_id='$seme_class' and enable=1");
 		$seme_class_name=$rs->fields[c_name];
-		$query = "update stud_seme set seme_num='$new_site_num',seme_class='$demote_class' , seme_class_name='$seme_class_name' where seme_year_seme ='$c_curr_seme' and  seme_class ='$stud_class' and stud_id='$stud_id'";
+		//$query = "update stud_seme set seme_num='$new_site_num',seme_class='$demote_class' , seme_class_name='$seme_class_name' where seme_year_seme ='$c_curr_seme' and  seme_class ='$stud_class' and stud_id='$stud_id'";
+		$query = "update stud_seme set seme_num='$new_site_num',seme_class='$demote_class' , seme_class_name='$seme_class_name' where seme_year_seme ='$c_curr_seme' and  seme_class ='$stud_class' and student_sn='$student_sn'";
 		$CONN->Execute($query) or die($query);
 	break;
 
 	case "delete" :
+	  //取出升降級資料
+	  $query ="select * from stud_move where move_id ='$move_id'";
+	  $res=$CONN->Execute($query);
+	  $move_kind=$res->fields['move_kind'];
+	  $student_sn=$res->fields['student_sn'];
+	
 		$query ="delete from stud_move where move_id ='$move_id'";
 		$CONN->Execute($query)or die ($query);
 
 		//學生基本資料表修改
-		$tempyear = $sel_year-substr($stud_class,0,-2)+1;
+		//$tempyear = $sel_year-substr($stud_class,0,-2)+1;
+		$tempyear = curr_year() - (substr($stud_class,0,1)-$IS_JHORES) +1;
+		
 		$query1 = "select max(curr_class_num) as mm from stud_base where curr_class_num like '$stud_class%' ";
 		$result1 = $CONN->Execute($query1) or die($query1) ;
 		$max_site_num=$result1->fields[0];
 		$new_site_num=sprintf("%02d",substr($max_site_num,-2)+1);
 		$num = $stud_class.$new_site_num;
-		$sql_update = "update stud_base set stud_study_year ='$tempyear',curr_class_num = '$num' where stud_id='$stud_id'";
+		//$sql_update = "update stud_base set stud_study_year ='$tempyear',curr_class_num = '$num' where stud_id='$stud_id'";
+    $sql_update = "update stud_base set stud_study_year ='$tempyear',curr_class_num = '$num' where student_sn='$student_sn'";
+    //echo $sql_update;
+    //exit(); 
 		$CONN->Execute($sql_update) or die ($sql_update);
 		
 		//學年記錄修改
 		$c_curr_seme = sprintf("%04d",$curr_seme);
-		$query = "update stud_seme set seme_num='$new_site_num',seme_class='$stud_class'  where seme_year_seme ='$c_curr_seme'  and stud_id='$stud_id'";		
+		$query = "update stud_seme set seme_num='$new_site_num',seme_class='$stud_class'  where seme_year_seme ='$c_curr_seme' and stud_id='$stud_id'";
 		$CONN->Execute($query)or die($query);
 	break;
 }
@@ -158,12 +185,12 @@ function setfocus(element) {
 	$grid1->bgcolor ="FFFFFF";
 	$grid1->nodata_name ="沒有學生";
 	$grid1->top_option = "-- 選擇學生 --";
-	$grid1->key_item = "stud_id";  // 索引欄名  	
+	$grid1->key_item = "student_sn";  // 索引欄名  	
 	$grid1->display_item = array("sit_num","stud_name");  // 顯示欄名   
 	$grid1->display_color = array("1"=>"$gridBoy_color","2"=>"$gridGirl_color"); //男女生別
 	$grid1->color_index_item ="stud_sex" ; //顏色判斷值
 	$grid1->class_ccs = " class=leftmenu";  // 顏色顯示
-	$grid1->sql_str = "select stud_id,stud_name,stud_sex,substring(curr_class_num,4,2)as sit_num from stud_base where stud_study_year='$stud_study_year' and curr_class_num like '$stud_class%' and stud_study_cond=0 order by curr_class_num";   //SQL 命令 
+	$grid1->sql_str = "select student_sn,stud_id,stud_name,stud_sex,substring(curr_class_num,4,2)as sit_num from stud_base where stud_study_year='$stud_study_year' and curr_class_num like '$stud_class%' and stud_study_cond=0 order by curr_class_num";   //SQL 命令 
 	$grid1->do_query(); //執行命令
 
 	$downstr = "<input type=hidden name=ckey value=\"$ckey\">";
@@ -238,8 +265,12 @@ function setfocus(element) {
 		while(list($tid,$tname)=each($demote_arr))
 			$temp_move_kind .="a.move_kind = $tid or ";
 		$temp_move_kind = substr($temp_move_kind,0,-3);
-		$query = "select a.*,b.stud_name,b.curr_class_num from stud_move a ,stud_base b where a.stud_id=b.stud_id and a.move_year_seme='$curr_seme'  and ( $temp_move_kind ) order by a.move_date desc ";
-
+		
+		//組合 SQL 語法
+		//$query = "select a.*,b.stud_name,b.curr_class_num from stud_move a ,stud_base b where a.stud_id=b.stud_id and a.move_year_seme='$curr_seme'  and ( $temp_move_kind ) order by a.move_date desc ";
+		$query = "select a.*,b.stud_name,b.curr_class_num from stud_move a ,stud_base b where a.student_sn=b.student_sn and a.move_year_seme='$curr_seme'  and ( $temp_move_kind ) order by a.move_date desc ";
+    //echo $query;
+    //exit();
 		$result = $CONN->Execute($query) or die ($query);
 		if (!$result->EOF) {
 			echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"2\" bordercolorlight=\"#333354\" bordercolordark=\"#FFFFFF\"  width=\"100%\" class=main_body >";
@@ -273,15 +304,30 @@ function setfocus(element) {
 			$curr_seme_temp = sprintf("%03d",$curr_seme);
 			$edit_data = $SFS_PATH_HTML."studentreg/stud_reg/stud_list.php?stud_id=$stud_id&sel=$class_num&curr_seme=$curr_seme_temp";
 			echo ($i++ %2)?"<TR class=nom_1>":"<TR class=nom_2>";
-			$tempyear = substr($stud_id,0,2);
+			
+			//依升降級, 分析取消時要回到哪一級
+			if ($move_kind==9) {
+				//升級, 要降回來
+			  $stud_class=sprintf("%d%02d",substr($class_num,0,1)-1,substr($class_num,1,2));
+			} elseif ($move_kind==10) {
+				//降級, 要升回來
+			  $stud_class=sprintf("%d%02d",substr($class_num,0,1)+1,substr($class_num,1,2));
+			} else {
+			  echo "發生錯誤!";
+			  exit();
+			}
+			
+			//$tempyear = substr($stud_id,0,2);
+			$tempyear = curr_year() - (substr($stud_class,0,1)-$IS_JHORES) +1;
 			$temp = curr_year() - $tempyear +1;
+      
             
 
-            $stud_class_cname[year]=substr($stud_class,0,-2)."年";
-            $back_class=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,substr($stud_class,0,-2),substr($stud_class,-2));
+            $stud_class_cname[year]=substr($stud_class,0,1)."年";
+            $back_class=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,substr($stud_class,0,1),substr($stud_class,1,2));
             $back_rs=$CONN->Execute("select c_name from school_class where class_id='$back_class' and enable=1");
             $stud_class_cname[ben]=$back_rs->fields[c_name]."班";
-            $stud_class_cname=$stud_class_cname[year].$stud_class_cname[ben];
+            $stud_class_c_name=$stud_class_cname[year].$stud_class_cname[ben];
 			echo "			
 					<TD>$demote_arr[$move_kind]</TD>
 					<TD>$move_date</TD>
@@ -290,7 +336,7 @@ function setfocus(element) {
 					<TD>$stud_clss</TD>					
 					<TD>$move_c_unit</TD>
 					<TD>$move_c_date $move_word $move_c_num</TD>
-				<TD><a href=\"{$_SERVER['PHP_SELF']}?do_key=delete&move_id=$move_id&stud_id=$stud_id&stud_class=$stud_class\" onClick=\"return confirm('確定取消 $stud_name 記錄 ?\\n$stud_name 將被編回 $stud_class_cname\\n若將被編回的班級不正確，請自行調整『選擇班級』欄位');\">取消</a></TD>
+				<TD><a href=\"{$_SERVER['PHP_SELF']}?do_key=delete&move_id=$move_id&stud_id=$stud_id&stud_class=$stud_class\" onClick=\"return confirm('確定取消 $stud_name 記錄 ?\\n$stud_name 將被編回 $stud_class_c_name\\n若將被編回的班級不正確，請自行調整『選擇班級』欄位');\">取消</a></TD>
 				</TR>";
 		$result->MoveNext();
 		}

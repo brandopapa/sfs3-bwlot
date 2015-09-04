@@ -6,14 +6,22 @@ include_once ('my_functions.php');
 //讀取近日公告 , 儲存在 $ann_data 陣列 , $ann_num 變數表公告數
 $BOARD_P=$SOURCE."_p";
 $BOARD_KIND=$SOURCE."_kind";
-$CONN->Execute("SET NAMES 'latin1'");
+if ($IS_UTF8==0) {
+ $CONN->Execute("SET NAMES 'latin1'"); 
+} else {
+ $CONN->Execute("SET NAMES 'utf8'"); 
+}
 $query="select a.* from $BOARD_P a,$BOARD_KIND b where to_days(a.b_open_date)+$LAST_DAYS > to_days(curdate()) and a.bk_id = b.bk_id order by a.b_open_date desc ,a.b_post_time desc ";
 $res=$CONN->Execute($query) or die("Error! query=".$query);
 $ann_num=-1;
 if ($res->RecordCount()>0) {
  while ($row=$res->FetchRow()) {
   $ann_num++;
-  $ann_data[$ann_num]=big52utf8($row['b_open_date']." ".$row['b_sub']." <font size=1>(".$row['b_unit']."_".$row['b_title'].")</font>");
+  if ($IS_UTF8==0) {
+   $ann_data[$ann_num]=big52utf8($row['b_open_date']." ".$row['b_sub']." <font size=1>(".$row['b_unit']."_".$row['b_title'].")</font>");
+  } else {
+   $ann_data[$ann_num]=$row['b_open_date']." ".$row['b_sub']." <font size=1>(".$row['b_unit']."_".$row['b_title'].")</font>";
+  }
  }
 } else {
  $ann_num=0;

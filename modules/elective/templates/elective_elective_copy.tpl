@@ -1,4 +1,4 @@
-{{* $Id: elective_elective_copy.tpl 5310 2009-01-10 07:57:56Z hami $ *}}
+{{* $Id: elective_elective_copy.tpl 8512 2015-09-02 01:44:17Z smallduh $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -48,7 +48,7 @@ function chg() {
 {{foreach from=$rowdata item=d}}
 {{assign var=tsn value=$d.teacher_sn}}
 {{assign var=gid value=$d.group_id}}
-<tr bgcolor="#E1E5F5"><td align="center"><input type="radio" name="sel_group" value="{{$gid}}"></td><td>{{$d.year}}</td><td>{{$d.semester}}</td><td>{{$d.group_name}}</td><td>{{$tea_arr.$tsn}}</td><td align="center">{{$stu_num.$gid.num|@intval}} / {{$d.member}}</td><td>{{$d.open}}</td>
+<tr bgcolor="#E1E5F5"><td align="center"><input type="radio" name="sel_group" value="{{$gid}}"></td><td>{{$d.year}}</td><td>{{$d.semester}}</td><td>({{$d.class_year}}¦~¯Å) {{$d.group_name}}</td><td>{{$tea_arr.$tsn}}</td><td align="center">{{$stu_num.$gid.num|@intval}} / {{$d.member}}</td><td>{{$d.open}}</td>
 </tr>
 {{/foreach}}
 </table><br>

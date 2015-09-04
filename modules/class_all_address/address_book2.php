@@ -1,11 +1,12 @@
 <?php
 
-// $Id: address_book2.php 8126 2014-09-16 08:56:20Z smallduh $
+// $Id: address_book2.php 8503 2015-08-28 05:36:36Z smallduh $
 
 /*引入學務系統設定檔*/
 include "../../include/config.php";
 include "../../include/sfs_oo_zip2.php";
 include_once "../../include/sfs_case_PLlib.php";
+require_once "../../include/sfs_case_excel.php";
 
 //引入函數
 //include "./my_fun.php";
@@ -138,24 +139,35 @@ function get_class_data($sel_year="",$sel_seme="",$print_key="" ,$allyear=0){
 function print_key($sel_year="",$sel_seme="",$print_key="" ,$allyear=0){
 	global $CONN, $class_name ,$sex_arr , $SFS_PATH ,$smarty ;
 
+    $data_array = get_class_data($sel_year,$sel_seme,$print_key ,$allyear) ;
 
 	//轉出為excel、word
-	if ($print_key=="Excel")
-		$filename =  "name.xls";
-	else if ($print_key=="Word")
-		$filename =  "name.doc";
+	if ($print_key=="Excel") {
+		
+	 $x=new sfs_xls();
+	 $x->setUTF8();
+	 $x->filename='name.xls';
+	 $x->setBorderStyle(1);
+	 $x->addSheet("通訊錄");
+	 $x->items[0]=array('學號','班級','座號','姓名','性別','英文姓名','身份證號','生日','地址','電話','監護人','工作地','職稱','緊急電話');
 
+   foreach ($data_array as $k=>$v) {
+     $x->items[]=array($v['stud_id'],$v['classname'],$v['site_num'],$v['stud_name'],$v['stud_sex'],$v['stud_name_eng'],$v['stud_person_id'],$v['stud_birthday'],$v['stud_addr_1'],$v['stud_tel_1'],$v['d_guardian_name'],$v['guardian_unit'],$v['guardian_work_name'],$v['stud_tel_2']);
+    }
+
+   $x->writeSheet();
+	 $x->process();
+	
+	}	else if ($print_key=="Word") {
+		$filename =  "name.doc";
+  
 	header("Content-disposition: filename=$filename");
 	header("Content-type: application/octetstream");
 	//header("Pragma: no-cache");
 					//配合 SSL連線時，IE 6,7,8下載有問題，進行修改 
-				header("Cache-Control: max-age=0");
-				header("Pragma: public");
-
-	header("Expires: 0");
-
-    $data_array = get_class_data($sel_year,$sel_seme,$print_key ,$allyear) ;
-
+		header("Cache-Control: max-age=0");
+		header("Pragma: public");
+		header("Expires: 0");
 
 
     //使用樣版
@@ -173,7 +185,7 @@ function print_key($sel_year="",$sel_seme="",$print_key="" ,$allyear=0){
     $smarty->assign("template_dir",$template_dir);
 
     $smarty->display("$template_dir/address_exec.htm");
-
+  }
 	exit;
 }
 

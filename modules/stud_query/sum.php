@@ -1,5 +1,5 @@
 <?php
-// $Id: sum.php 6534 2011-09-22 09:46:05Z infodaes $
+// $Id: sum.php 8489 2015-08-18 00:55:37Z smallduh $
 
 include "stud_query_config.php";
 
@@ -414,11 +414,11 @@ for ($y=1; $y<=6 ; $y++) {
 </table>
 <table width="720" border="0" cellspacing="0" cellpadding="0" align="left" >
 <tr class="trs">
-<td>校長</td>
+<td>註冊組長</td>
 <td>&nbsp;</td>
 <td>教務處主任</td>
 <td>&nbsp;</td>
-<td>註冊組長</td>
+<td>校長</td>
 <td>&nbsp;</td>
 <td><? echo $ny-1911 . "年" .$m ."月". date('d') ."日填報" ?></td>
 </tr>
