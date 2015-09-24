@@ -1,8 +1,8 @@
-# $Id: module_health_accident.sql 8149 2014-09-27 02:32:17Z smallduh $
+# $Id: module_health_accident.sql 8539 2015-09-23 03:26:41Z chiming $
 CREATE TABLE if not exists  health_accident_place (
   id int(6) unsigned NOT NULL default '1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_place VALUES ( 1,'操場',1);
@@ -23,8 +23,8 @@ INSERT INTO health_accident_place VALUES ( 999,'其他',1);
 
 CREATE TABLE if not exists health_accident_reason (
   id int(6) unsigned NOT NULL default '1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_reason VALUES ( 1,'下課遊戲',1);
@@ -43,8 +43,8 @@ INSERT INTO health_accident_reason VALUES ( 999,'其他',1);
 
 CREATE TABLE  if not exists health_accident_part (
   id int(6) unsigned NOT NULL default '1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_part VALUES ( 1,'頭',1);
@@ -69,8 +69,8 @@ INSERT INTO health_accident_part VALUES ( 15,'會陰部',1);
 
 CREATE TABLE if not exists  health_accident_status (
   id int(6) unsigned NOT NULL default'1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_status VALUES ( 1,'擦傷',1);
@@ -104,8 +104,8 @@ INSERT INTO health_accident_status VALUES ( 24,'內科其他',1);
 
 CREATE TABLE if not exists  health_accident_attend (
   id int(6) unsigned NOT NULL default'1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_attend VALUES ( 1,'傷口處理',1);
@@ -124,15 +124,15 @@ INSERT INTO health_accident_attend VALUES ( 999,'其他處理',1);
 
 CREATE TABLE if not exists  health_accident_record (
 	id int(10) unsigned NOT NULL auto_increment,
-	year smallint(5) unsigned NOT NULL default '0',
-	semester enum('0','1','2') NOT NULL default '0',
+	`year` smallint(5) unsigned NOT NULL default '0',
+	`semester` enum('0','1','2') NOT NULL default '0',
 	student_sn int(10) unsigned NOT NULL default '0',
 	sign_time datetime NOT NULL default '0000-00-00 00:00:00',
 	obs_min int(6) unsigned NOT NULL default '0',
-	temp decimal(3,1) NOT NULL default '0.0',
+	`temp` decimal(3,1) NOT NULL default '0.0',
 	place_id int(6) unsigned NOT NULL default '0',
 	reason_id int(6) unsigned NOT NULL default '0',
-	memo text NOT NULL default '',
+	`memo` text NOT NULL default '',
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
 	PRIMARY KEY (id)
@@ -143,10 +143,10 @@ CREATE TABLE if not exists  health_accident_record (
 #
 
 CREATE TABLE if not exists  health_accident_part_record (
-	pid int(10) unsigned NOT NULL auto_increment,
+	`pid` int(10) unsigned NOT NULL auto_increment,
 	id int(10) unsigned NOT NULL default '0',
 	part_id int(6) unsigned NOT NULL default '0',
-	PRIMARY KEY (pid)
+	PRIMARY KEY (`pid`)
 ) ENGINE=MyISAM;
 
 #
@@ -154,10 +154,10 @@ CREATE TABLE if not exists  health_accident_part_record (
 #
 
 CREATE TABLE if not exists  health_accident_status_record (
-	sid int(10) unsigned NOT NULL auto_increment,
+	`sid` int(10) unsigned NOT NULL auto_increment,
 	id int(10) unsigned NOT NULL default '0',
 	status_id int(6) unsigned NOT NULL default '0',
-	PRIMARY KEY (sid)
+	PRIMARY KEY (`sid`)
 ) ENGINE=MyISAM;
 
 #

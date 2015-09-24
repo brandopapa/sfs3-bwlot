@@ -64,7 +64,7 @@ if ($_POST['act']=="Start1") {
 //抓取班級設定裡的班級名稱
 	$class_base= class_base($seme_year_seme);
 //foreach ($_POST['year_name'] as $year_name) {
-  $query="select a.*,b.stud_name,b.stud_person_id from stud_seme a left join stud_base b on a.student_sn=b.student_sn where a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
+  $query="select a.*,b.stud_name,b.stud_person_id,b.curr_class_num from stud_seme a left join stud_base b on a.student_sn=b.student_sn where a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
 	$res=$CONN->Execute($query);
 	while(!$res->EOF) {
 		$student_sn=$res->fields['student_sn'];
@@ -75,6 +75,7 @@ if ($_POST['act']=="Start1") {
 		$student_data[$student_sn]['stud_id']=$res->fields['stud_id'];
 		$seme_class=$res->fields['seme_class'];
 		$student_data[$student_sn]['class_name']=$class_base[$seme_class];
+		$student_data[$student_sn]['curr_class_num']=$res->fields['curr_class_num'];
 
 		$res->MoveNext();
 	}
@@ -141,7 +142,7 @@ if ($_POST['act']=="Start2") {
 	$class_base= class_base($seme_year_seme);
 //foreach ($_POST['year_name'] as $year_name) {
   //$query="select a.*,b.stud_name,b.stud_person_id,b.stud_addr_2,b.addr_zip from stud_seme a left join stud_base b on a.student_sn=b.student_sn where a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
-  $query="select a.*,b.stud_name,b.stud_person_id,b.stud_addr_2,b.addr_zip,c.guardian_name from stud_seme a,stud_base b,stud_domicile c where a.student_sn=b.student_sn and b.student_sn=c.student_sn and a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
+  $query="select a.*,b.stud_name,b.stud_person_id,b.curr_class_num,b.stud_addr_2,b.addr_zip,c.guardian_name from stud_seme a,stud_base b,stud_domicile c where a.student_sn=b.student_sn and b.student_sn=c.student_sn and a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
 
 	$res=$CONN->Execute($query);
 	while(!$res->EOF) {
@@ -153,6 +154,7 @@ if ($_POST['act']=="Start2") {
 		$student_data[$student_sn]['stud_id']=$res->fields['stud_id'];
 		$seme_class=$res->fields['seme_class'];
 		$student_data[$student_sn]['class_name']=$class_base[$seme_class];
+		$student_data[$student_sn]['curr_class_num']=$res->fields['curr_class_num'];
 		
 		$student_data[$student_sn]['stud_addr_2']=$res->fields['stud_addr_2'];
 		$student_data[$student_sn]['addr_zip']=$res->fields['addr_zip'];
@@ -191,19 +193,19 @@ if ($_POST['act']=="Start2") {
 if($_POST['option1']=='CSV'){
 	$filename=$seme_year_seme.'_'.$school_id.$school_long_name."年級學期成績篩選.csv";
 	if ($year_name>2) {
-	$csv_data="班級,座號,學號,身份證字號,姓名,本國語文,英文,本土語言,語文平均,數學,自然與生活科技,社會,健康與體育,藝術與人文,綜合活動,領域平均,監護人,聯絡地址\r\n";
+	$csv_data="班級,座號,學號,身份證字號,姓名,目前班級座號,本國語文,英文,本土語言,語文平均,數學,自然與生活科技,社會,健康與體育,藝術與人文,綜合活動,領域平均,監護人,聯絡地址\r\n";
 		foreach($student_data as $student_sn=>$data) { 
 			if ($data['chk']==1) {
-		 	$csv_data.="{$data['class_name']},{$data['seme_num']},{$data['stud_id']},{$data['stud_person_id']},{$data['stud_name']},{$fin_score[$student_sn][chinese][$seme_year_seme][score]},{$fin_score[$student_sn][english][$seme_year_seme][score]},{$fin_score[$student_sn][local][$seme_year_seme][score]},{$fin_score[$student_sn][language][$seme_year_seme][score]},";
+		 	$csv_data.="{$data['class_name']},{$data['seme_num']},{$data['stud_id']},{$data['stud_person_id']},{$data['stud_name']},{$data['curr_class_num']},{$fin_score[$student_sn][chinese][$seme_year_seme][score]},{$fin_score[$student_sn][english][$seme_year_seme][score]},{$fin_score[$student_sn][local][$seme_year_seme][score]},{$fin_score[$student_sn][language][$seme_year_seme][score]},";
 		 	$csv_data.="{$fin_score[$student_sn][math][$seme_year_seme][score]},{$fin_score[$student_sn][nature][$seme_year_seme][score]},{$fin_score[$student_sn][social][$seme_year_seme][score]},{$fin_score[$student_sn][health][$seme_year_seme][score]},{$fin_score[$student_sn][art][$seme_year_seme][score]},{$fin_score[$student_sn][complex][$seme_year_seme][score]},{$fin_score[$student_sn][avg][score]},";
 		 	$csv_data.="{$data['guardian_name']},{$data['addr_zip']}{$data['stud_addr_2']}\r\n";
 	  	}
 		}
   } else {
-   	$csv_data="班級,座號,學號,身份證字號,姓名,本國語文,英文,本土語言,語文平均,數學,健康與體育,生活,綜合活動,領域平均,監護人,聯絡地址\r\n";
+   	$csv_data="班級,座號,學號,身份證字號,姓名,目前班級座號,本國語文,英文,本土語言,語文平均,數學,健康與體育,生活,綜合活動,領域平均,監護人,聯絡地址\r\n";
 		foreach($student_data as $student_sn=>$data) { 
 			if ($data['chk']==1) {
-		 	$csv_data.="{$data['class_name']},{$data['seme_num']},{$data['stud_id']},{$data['stud_person_id']},{$data['stud_name']},{$fin_score[$student_sn][chinese][$seme_year_seme][score]},{$fin_score[$student_sn][english][$seme_year_seme][score]},{$fin_score[$student_sn][local][$seme_year_seme][score]},{$fin_score[$student_sn][language][$seme_year_seme][score]},";
+		 	$csv_data.="{$data['class_name']},{$data['seme_num']},{$data['stud_id']},{$data['stud_person_id']},{$data['stud_name']},{$data['curr_class_num']},{$fin_score[$student_sn][chinese][$seme_year_seme][score]},{$fin_score[$student_sn][english][$seme_year_seme][score]},{$fin_score[$student_sn][local][$seme_year_seme][score]},{$fin_score[$student_sn][language][$seme_year_seme][score]},";
 		 	$csv_data.="{$fin_score[$student_sn][math][$seme_year_seme][score]},{$fin_score[$student_sn][health][$seme_year_seme][score]},{$fin_score[$student_sn][life][$seme_year_seme][score]},{$fin_score[$student_sn][complex][$seme_year_seme][score]},{$fin_score[$student_sn][avg][score]},";
 		 	$csv_data.="{$data['guardian_name']},{$data['addr_zip']}{$data['stud_addr_2']}\r\n";
 	  	}

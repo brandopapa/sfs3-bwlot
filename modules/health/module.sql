@@ -1,4 +1,4 @@
-# $Id: module.sql 8149 2014-09-27 02:32:17Z smallduh $
+# $Id: module.sql 8539 2015-09-23 03:26:41Z chiming $
 
 #
 # 資料表格式： `BMI`
@@ -9,7 +9,7 @@ CREATE TABLE BMI (
   `sex` int(1) unsigned NOT NULL default '0',
   `range` int(1) unsigned NOT NULL default '0',
   `value` float NOT NULL default '0',
-  PRIMARY KEY (year,sex,range)
+  PRIMARY KEY (`year`,`sex`,`range`)
 ) ENGINE=MyISAM;
 
 INSERT INTO BMI VALUES ( 2,1,1,15.2);
@@ -120,10 +120,10 @@ INSERT INTO BMI VALUES (18,2,3,25.3);
 #
 
 CREATE TABLE GHD (
-  year int(2) unsigned NOT NULL default '0',
-  sex int(1) unsigned NOT NULL default '0',
-  value float NOT NULL default '0',
-  PRIMARY KEY (year,sex)
+  `year` int(2) unsigned NOT NULL default '0',
+  `sex` int(1) unsigned NOT NULL default '0',
+  `value` float NOT NULL default '0',
+  PRIMARY KEY (`year`,`sex`)
 ) ENGINE=MyISAM;
 
 INSERT INTO GHD VALUES (5,1,103);
@@ -160,18 +160,18 @@ INSERT INTO GHD VALUES (18,2,148.9);
 #
 
 CREATE TABLE health_WH (
-  year smallint(5) unsigned NOT NULL default '0',
-  semester enum('1','2') NOT NULL default '1',
-  student_sn int(10) unsigned NOT NULL default '0',
-  weight decimal(4,1) NOT NULL default '0.0',
-  height decimal(4,1) NOT NULL default '0.0',
-  measure_date date NOT NULL default '0000-00-00',
-  diag_id tinyint(3) NOT NULL default '0',
-  diag_place varchar(40) NOT NULL default '',
-  diag varchar(40) NOT NULL default '',
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (year,semester,student_sn)
+  `year` smallint(5) unsigned NOT NULL default '0',
+  `semester` enum('1','2') NOT NULL default '1',
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `weight` decimal(4,1) NOT NULL default '0.0',
+  `height` decimal(4,1) NOT NULL default '0.0',
+  `measure_date` date NOT NULL default '0000-00-00',
+  `diag_id` tinyint(3) NOT NULL default '0',
+  `diag_place` varchar(40) NOT NULL default '',
+  `diag` varchar(40) NOT NULL default '',
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
+  PRIMARY KEY (`year`,`semester`,`student_sn`)
 ) ENGINE=MyISAM;
 
 #
@@ -179,25 +179,25 @@ CREATE TABLE health_WH (
 #
 
 CREATE TABLE health_sight (
-  year smallint(5) unsigned NOT NULL default '0',
-  semester enum('1','2') NOT NULL default '1',
-  student_sn int(10) unsigned NOT NULL default '0',
-  side char(1) NOT NULL default '',
-  sight_o varchar(3) NOT NULL default '',
-  sight_r varchar(3) NOT NULL default '',
-  My char(1) NOT NULL default '',
-  Hy char(1) NOT NULL default '',
-  Ast char(1) NOT NULL default '',
-  Amb char(1) NOT NULL default '',
-  other char(1) NOT NULL default '',
-  measure_date date NOT NULL default '0000-00-00',
-  manage_id char(1) NOT NULL default '',
-  manage text NOT NULL default '',
-  diag_id char(1) NOT NULL default '',
-  diag text NOT NULL default '',
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (year,semester,student_sn,side)
+  `year` smallint(5) unsigned NOT NULL default '0',
+  `semester` enum('1','2') NOT NULL default '1',
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `side` char(1) NOT NULL default '',
+  `sight_o` varchar(3) NOT NULL default '',
+  `sight_r` varchar(3) NOT NULL default '',
+  `My` char(1) NOT NULL default '',
+  `Hy` char(1) NOT NULL default '',
+  `Ast` char(1) NOT NULL default '',
+  `Amb` char(1) NOT NULL default '',
+  `other` char(1) NOT NULL default '',
+  `measure_date` date NOT NULL default '0000-00-00',
+  `manage_id` char(1) NOT NULL default '',
+  `manage` text NOT NULL default '',
+  `diag_id` char(1) NOT NULL default '',
+  `diag` text NOT NULL default '',
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
+  PRIMARY KEY (`year`,`semester`,`student_sn`,`side`)
 ) ENGINE=MyISAM;
 
 #
@@ -205,10 +205,10 @@ CREATE TABLE health_sight (
 #
 
 CREATE TABLE health_sight_ntu (
-  student_sn int(10) unsigned NOT NULL default '0',
-  ntu varchar(1) NOT NULL default '', 
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `ntu` varchar(1) NOT NULL default '', 
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
   PRIMARY KEY (student_sn)
 ) ENGINE=MyISAM;
 
@@ -217,16 +217,16 @@ CREATE TABLE health_sight_ntu (
 #
 
 CREATE TABLE health_worm (
-  year smallint(5) unsigned NOT NULL default '0',
-  semester enum('1','2') NOT NULL default '1',
-  student_sn int(10) unsigned NOT NULL default '0',
-  no int(1) unsigned NOT NULL default '1',
-  worm varchar(1) NOT NULL default '',
-  med varchar(1) NOT NULL default '',
-  measure_date date NOT NULL default '0000-00-00',
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (year,semester,student_sn,no)
+  `year` smallint(5) unsigned NOT NULL default '0',
+  `semester` enum('1','2') NOT NULL default '1',
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `no` int(1) unsigned NOT NULL default '1',
+  `worm` varchar(1) NOT NULL default '',
+  `med` varchar(1) NOT NULL default '',
+  `measure_date` date NOT NULL default '0000-00-00',
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
+  PRIMARY KEY (`year`,`semester`,`student_sn`,`no`)
 ) ENGINE=MyISAM;
 
 #
@@ -234,19 +234,19 @@ CREATE TABLE health_worm (
 #
 
 CREATE TABLE health_uri (
-  year smallint(5) unsigned NOT NULL default '0',
-  semester enum('1','2') NOT NULL default '1',
-  student_sn int(10) unsigned NOT NULL default '0',
-  no int(1) unsigned NOT NULL default '1',
-  pro varchar(1) NOT NULL default '',
-  bld varchar(1) NOT NULL default '',
-  glu varchar(1) NOT NULL default '',
-  ph float NOT NULL default '0',
-  memo text NOT NULL default '',
-  measure_date date NOT NULL default '0000-00-00',
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (year,semester,student_sn,no)
+  `year` smallint(5) unsigned NOT NULL default '0',
+  `semester` enum('1','2') NOT NULL default '1',
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `no` int(1) unsigned NOT NULL default '1',
+  `pro` varchar(1) NOT NULL default '',
+  `bld` varchar(1) NOT NULL default '',
+  `glu` varchar(1) NOT NULL default '',
+  `ph` float NOT NULL default '0',
+  `memo` text NOT NULL default '',
+  `measure_date` date NOT NULL default '0000-00-00',
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
+  PRIMARY KEY (`year`,`semester`,`student_sn`,`no`)
 ) ENGINE=MyISAM;
 
 #
@@ -254,14 +254,14 @@ CREATE TABLE health_uri (
 #
 
 CREATE TABLE health_disease (
-  student_sn int(10) unsigned NOT NULL default '0',
-  di_id char(2) NOT NULL default '',
-  enter_date date NOT NULL default '0000-00-00',
-  state text NOT NULL default '',
-  treate text NOT NULL default '',
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (student_sn,di_id)
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `di_id` char(2) NOT NULL default '',
+  `enter_date` date NOT NULL default '0000-00-00',
+  `state` text NOT NULL default '',
+  `treate` text NOT NULL default '',
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
+  PRIMARY KEY (`student_sn`,`di_id`)
 ) ENGINE=MyISAM;
 
 #
@@ -269,12 +269,12 @@ CREATE TABLE health_disease (
 #
 
 CREATE TABLE health_diseaseserious (
-  student_sn int(10) unsigned NOT NULL default '0',
-  di_id char(2) NOT NULL default '',
-  enter_date date NOT NULL default '0000-00-00',
-  update_date timestamp,
-  teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (student_sn,di_id)
+  `student_sn` int(10) unsigned NOT NULL default '0',
+  `di_id` char(2) NOT NULL default '',
+  `enter_date` date NOT NULL default '0000-00-00',
+  `update_date` timestamp,
+  `teacher_sn` int(11) NOT NULL default '0',
+  PRIMARY KEY (`student_sn`,`di_id`)
 ) ENGINE=MyISAM;
 
 #
@@ -311,10 +311,10 @@ CREATE TABLE health_inherit (
 
 CREATE TABLE health_checks_item (
 	subject varchar(50) NOT NULL default'',
-	no int(5) NOT NULL default '0',
+	`no` int(5) NOT NULL default '0',
 	item varchar(50) NOT NULL default '',
 	ps int(4) NOT NULL default '0',
-	PRIMARY KEY (subject,no)
+	PRIMARY KEY (subject,`no`)
 ) ENGINE=MyISAM;
 INSERT INTO health_checks_item VALUES ( 'Oph',0,'無異狀',0);
 INSERT INTO health_checks_item VALUES ( 'Oph',1,'視力不良',0);
@@ -379,16 +379,16 @@ INSERT INTO health_checks_item VALUES ( 'Ora',8,'缺牙',0);
 #
 
 CREATE TABLE health_checks_record (
-	year smallint(5) unsigned NOT NULL default '0',
+	`year` smallint(5) unsigned NOT NULL default '0',
 	semester enum('0','1','2') NOT NULL default '0',
 	student_sn int(10) unsigned NOT NULL default '0',
 	subject varchar(50) NOT NULL default'',
-	no int(4) NOT NULL default '0',
-	status varchar(5) NOT NULL default '',
-	ps varchar(50) NOT NULL default '',
+	`no` int(4) NOT NULL default '0',
+	`status` varchar(5) NOT NULL default '',
+	`ps` varchar(50) NOT NULL default '',
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
-	PRIMARY KEY (year,semester,student_sn,subject,no)
+	PRIMARY KEY (`year`,`semester`,student_sn,subject,`no`)
 ) ENGINE=MyISAM;
 
 #
@@ -396,14 +396,14 @@ CREATE TABLE health_checks_record (
 #
 
 CREATE TABLE health_teeth (
-	year smallint(5) unsigned NOT NULL default '0',
+	`year` smallint(5) unsigned NOT NULL default '0',
 	semester enum('0','1','2') NOT NULL default '0',
 	student_sn int(10) unsigned NOT NULL default '0',
-	no varchar(3) NOT NULL default '',
-	status varchar(3) NOT NULL default '',
+	`no` varchar(3) NOT NULL default '',
+	`status` varchar(3) NOT NULL default '',
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
-	PRIMARY KEY (year,semester,student_sn,no)
+	PRIMARY KEY (`year`,semester,student_sn,`no`)
 ) ENGINE=MyISAM;
 
 #
@@ -412,7 +412,7 @@ CREATE TABLE health_teeth (
 
 CREATE TABLE health_hospital (
   id int(6) unsigned NOT NULL auto_increment,
-  name varchar(100) NOT NULL default '',
+  `name` varchar(100) NOT NULL default '',
   enable varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
@@ -423,11 +423,11 @@ CREATE TABLE health_hospital (
 
 CREATE TABLE health_hospital_record (
   student_sn int(10) unsigned NOT NULL default '0',
-  no int(1) unsigned NOT NULL default '1',
+  `no` int(1) unsigned NOT NULL default '1',
   id int(6) unsigned NOT NULL default '1',
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (student_sn,no)
+  PRIMARY KEY (student_sn,`no`)
 ) ENGINE=MyISAM;
 
 #
@@ -436,8 +436,8 @@ CREATE TABLE health_hospital_record (
 
 CREATE TABLE health_insurance (
   id int(6) unsigned NOT NULL auto_increment,
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 
@@ -450,11 +450,11 @@ INSERT INTO health_insurance VALUES ( 2,'學生團體保險',1);
 
 CREATE TABLE health_insurance_record (
   student_sn int(10) unsigned NOT NULL default '0',
-  no int(1) unsigned NOT NULL default '1',
+  `no` int(1) unsigned NOT NULL default '1',
   id int(6) unsigned NOT NULL default '1',
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (student_sn,no)
+  PRIMARY KEY (student_sn,`no`)
 ) ENGINE=MyISAM;
 
 #
@@ -463,8 +463,8 @@ CREATE TABLE health_insurance_record (
 
 CREATE TABLE health_exam_item (
   id int(6) unsigned NOT NULL auto_increment,
-  name varchar(200) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(200) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_exam_item VALUES ( 1,'頭蝨檢查',1);
@@ -475,17 +475,17 @@ INSERT INTO health_exam_item VALUES ( 2,'心臟超音波篩檢',1);
 #
 
 CREATE TABLE health_exam_record (
-  year smallint(5) unsigned NOT NULL default '0',
-  semester enum('0','1','2') NOT NULL default '0',
+  `year` smallint(5) unsigned NOT NULL default '0',
+  `semester` enum('0','1','2') NOT NULL default '0',
   student_sn int(10) unsigned NOT NULL default '0',
   id int(6) unsigned NOT NULL auto_increment,
   measure_date date NOT NULL default '0000-00-00',
-  diag varchar(100) NOT NULL default '',
+  `diag` varchar(100) NOT NULL default '',
   diag_hos int(6) unsigned NOT NULL default '1',
   rediag varchar(100) NOT NULL default '',
   update_date timestamp,
   teacher_sn int(11) NOT NULL default '0',
-  PRIMARY KEY (year,semester,student_sn,id)
+  PRIMARY KEY (`year`,semester,student_sn,id)
 ) ENGINE=MyISAM;
 
 #
@@ -494,17 +494,17 @@ CREATE TABLE health_exam_record (
 
 CREATE TABLE health_inject_item (
   id int(6) unsigned NOT NULL auto_increment,
-  name varchar(200) NOT NULL default '',
+  `name` varchar(200) NOT NULL default '',
   lname varchar(200) NOT NULL default '',
-  times int(4) unsigned NOT NULL default '0',
+  `times` int(4) unsigned NOT NULL default '0',
   ltimes int(4) unsigned NOT NULL default '0',
   lack0 varchar(10) NOT NULL default '',
   lack1 varchar(10) NOT NULL default '',
   lack2 varchar(10) NOT NULL default '',
   lack3 varchar(10) NOT NULL default '',
   lack4 varchar(10) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
-  memo text NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
+  `memo` text NOT NULL default '',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_inject_item VALUES ( 1,'卡介苗','卡介苗',1,1,'1','1','','','',1,'');
@@ -522,7 +522,7 @@ INSERT INTO health_inject_item VALUES ( 7,'MMR','MMR',2,2,'1','1','1,2','','',1,
 CREATE TABLE health_inject_record (
   student_sn int(10) unsigned NOT NULL default '0',
   id int(6) unsigned NOT NULL default '0',
-  times int(4) unsigned NOT NULL default '0',
+  `times` int(4) unsigned NOT NULL default '0',
   date0 date NOT NULL default '0000-00-00',
   date1 date NOT NULL default '0000-00-00',
   date2 date NOT NULL default '0000-00-00',
@@ -539,7 +539,7 @@ CREATE TABLE health_inject_record (
 
 CREATE TABLE health_yellowcard (
 	student_sn int(10) unsigned NOT NULL default '0',
-	value tinyint(1) unsigned NOT NULL default '0',
+	`value` tinyint(1) unsigned NOT NULL default '0',
 	PRIMARY KEY (student_sn)
 ) ENGINE=MyISAM;
 
@@ -549,8 +549,8 @@ CREATE TABLE health_yellowcard (
 
 CREATE TABLE health_accident_place (
   id int(6) unsigned NOT NULL default '1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_place VALUES ( 1,'操場',1);
@@ -571,8 +571,8 @@ INSERT INTO health_accident_place VALUES ( 999,'其他',1);
 
 CREATE TABLE health_accident_reason (
   id int(6) unsigned NOT NULL default '1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_reason VALUES ( 1,'下課遊戲',1);
@@ -591,8 +591,8 @@ INSERT INTO health_accident_reason VALUES ( 999,'其他',1);
 
 CREATE TABLE health_accident_part (
   id int(6) unsigned NOT NULL default '1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_part VALUES ( 1,'頭',1);
@@ -617,8 +617,8 @@ INSERT INTO health_accident_part VALUES ( 15,'會陰部',1);
 
 CREATE TABLE health_accident_status (
   id int(6) unsigned NOT NULL default'1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_status VALUES ( 1,'擦傷',1);
@@ -652,8 +652,8 @@ INSERT INTO health_accident_status VALUES ( 24,'內科其他',1);
 
 CREATE TABLE health_accident_attend (
   id int(6) unsigned NOT NULL default'1',
-  name varchar(100) NOT NULL default '',
-  enable varchar(1) NOT NULL default '1',
+  `name` varchar(100) NOT NULL default '',
+  `enable` varchar(1) NOT NULL default '1',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 INSERT INTO health_accident_attend VALUES ( 1,'傷口處理',1);
@@ -672,7 +672,7 @@ INSERT INTO health_accident_attend VALUES ( 999,'其他處理',1);
 
 CREATE TABLE health_accident_record (
 	id int(10) unsigned NOT NULL auto_increment,
-	year smallint(5) unsigned NOT NULL default '0',
+	`year` smallint(5) unsigned NOT NULL default '0',
 	semester enum('0','1','2') NOT NULL default '0',
 	student_sn int(10) unsigned NOT NULL default '0',
 	sign_time datetime NOT NULL default '0000-00-00 00:00:00',
@@ -680,7 +680,7 @@ CREATE TABLE health_accident_record (
 	temp decimal(3,1) NOT NULL default '0.0',
 	place_id int(6) unsigned NOT NULL default '0',
 	reason_id int(6) unsigned NOT NULL default '0',
-	memo text NOT NULL default '',
+	`memo` text NOT NULL default '',
 	update_date timestamp,
 	teacher_sn int(11) NOT NULL default '0',
 	PRIMARY KEY (id)
@@ -691,10 +691,10 @@ CREATE TABLE health_accident_record (
 #
 
 CREATE TABLE health_accident_part_record (
-	pid int(10) unsigned NOT NULL auto_increment,
+	`pid` int(10) unsigned NOT NULL auto_increment,
 	id int(10) unsigned NOT NULL default '0',
 	part_id int(6) unsigned NOT NULL default '0',
-	PRIMARY KEY (pid)
+	PRIMARY KEY (`pid`)
 ) ENGINE=MyISAM;
 
 #
@@ -702,10 +702,10 @@ CREATE TABLE health_accident_part_record (
 #
 
 CREATE TABLE health_accident_status_record (
-	sid int(10) unsigned NOT NULL auto_increment,
+	`sid` int(10) unsigned NOT NULL auto_increment,
 	id int(10) unsigned NOT NULL default '0',
 	status_id int(6) unsigned NOT NULL default '0',
-	PRIMARY KEY (sid)
+	PRIMARY KEY (`sid`)
 ) ENGINE=MyISAM;
 
 #

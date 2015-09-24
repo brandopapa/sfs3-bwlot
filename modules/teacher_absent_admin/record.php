@@ -91,13 +91,13 @@ if ($_POST[sure]) {
             $row = $res->fetchRow();
 
             unlink($filePath.$row['note_file']);
-
-        }
+			$note_file_SQL=" , note_file='$fileName' ";
+        }else{$note_file_SQL='';}
 		$query="update teacher_absent set year='$sel_year',semester='$sel_seme',month='$month',teacher_sn='$sn',
 		reason='$reason',abs_kind='$abs_kind',start_date='$start_date',end_date='$end_date',
 		class_dis='$class_dis',deputy_sn='$agent_sn',record_id='$_SESSION[session_log_id]',
 		record_date='".date("Y-m-d H:i:s")."',day='$day',hour='$hour' ,note='$note',post_k='$post_k',
-		locale='$locale', note_file='$fileName' where id='$id'";
+		locale='$locale' $note_file_SQL  where id='$id'";
 		$CONN->Execute($query);		
 		header("Location: deputy.php?year_seme=$sel_year"."_"."$sel_seme");
 	}
@@ -133,4 +133,4 @@ $smarty->assign("status_kind_arr",$status_kind);
 
 
 $smarty->display('record_a.tpl'); 
-?>
+

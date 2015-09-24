@@ -1,5 +1,5 @@
 <?php
-//$Id: chi_paddr.php 7704 2013-10-23 08:51:29Z smallduh $
+//$Id: chi_paddr.php 8527 2015-09-15 01:52:08Z chiming $
 /*引入學務系統設定檔*/
 include "../../include/config.php";
 
@@ -22,7 +22,7 @@ if ($_GET[act]=='csv' && $_GET[Year]!='' && $_GET[Sclass]!='' ){
 	$Year=$_GET[Year];$Sclass=$_GET[Sclass];
 	$SQL="select right((a.stud_birthday - INTERVAL 1911 YEAR),8) as bir,b.stud_id, b.seme_num, a.stud_name, a.stud_sex,  a.stud_person_id, a.stud_tel_1, a.stud_tel_2, a.stud_tel_3, a.stud_addr_1, a.stud_addr_2  from  stud_base a , stud_seme b where  a.student_sn= b.student_sn  and b.seme_year_seme='$Year' and b.seme_class='$Sclass'  and a.stud_study_cond=0  order by  b.seme_num ";
 	$arr=get_order2($SQL) or die($SQL);
-	$filename = $Sclass."_".date("Y_m_d").".csv";
+	$filename = $Year."_".$Sclass."_".date("Ymd").".csv";
 	$Str="代號,姓名,性別,班級,座號,生日,身分證字號, 戶籍電話,連絡電話,行動電話,戶籍地址,連絡地址\n";
 for ($i=0;$i<count($arr);$i++) {
 	$Str.=$arr[$i][stud_id].",".$arr[$i][stud_name].",".$Sex[$arr[$i][stud_sex]].",".$Sclass.",".
@@ -77,7 +77,7 @@ if ($_GET[act]=='Allcsv' && $_GET[Year]!='' && $_GET[Sclass]!='' ){
 $Sclass=substr($Sclass,0,1);
 	$SQL="select right((a.stud_birthday - INTERVAL 1911 YEAR),8) as bir,b.stud_id, b.seme_class,b.seme_num, a.stud_name, a.stud_sex,  a.stud_person_id, a.stud_tel_1, a.stud_tel_2, a.stud_tel_3, a.stud_addr_1, a.stud_addr_2  from  stud_base a , stud_seme b where  a.student_sn= b.student_sn  and b.seme_year_seme='$Year' and b.seme_class like '$Sclass%'  and a.stud_study_cond=0  order by   b.seme_class,b.seme_num ";
 	$arr=get_order2($SQL) or die($SQL);
-	$filename = "ALL_".$Sclass."_".date("Y_m_d").".csv";
+	$filename =$Year."_ALL_".$Sclass."_".date("Ymd").".csv";
 	$Str="代號,姓名,性別,班級,座號,生日,身分證字號,戶籍電話,連絡電話,行動電話,戶籍地址,連絡地址\n";
 for ($i=0;$i<count($arr);$i++) {
 	$Str.=$arr[$i][stud_id].",".$arr[$i][stud_name].",".$Sex[$arr[$i][stud_sex]].",".$arr[$i][seme_class].",".
@@ -126,4 +126,3 @@ for ($i=0;$i<count($arr);$i++) {
 	header("Expires: 0");
 	echo $Str."</TABLE>";
 	}
-?>
