@@ -1,0 +1,4 @@
+增加成績加權欄位 -- by smallduh (2015-05-12)
+
+ALTER TABLE `class_report_test` ADD `rate` TINYINT( 3 ) NOT NULL DEFAULT '1'
+ 更新成功 ! 
