@@ -554,6 +554,10 @@ $answers=unserialize($row['answers']);
  		  } // end foreach
  		  ?>
   	</table>
+  	<br>
+  	
+  	※補考後學期成績是否合格，請在學校進行成績重算並公告可查詢後，<br>　再經由<font color=blue>「<a href="../stud_eduh_self/"><u>學生資料自建</u></a>／學習成果及特殊表現／我的學習表現」</font>查詢各學期總成績。
+  	
  	</div>
     </td>
   </tr>

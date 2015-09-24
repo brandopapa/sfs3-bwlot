@@ -43,7 +43,7 @@ while($row =$res->fetchRow()) {
 
 $arr2 = array();
 
-$query = "SELECT student_sn,substring(seme_class,1,1) AS c_year ,substring(seme_class,2)  AS c_class,seme_num FROM stud_seme WHERE seme_year_seme='$last_year_seme' AND seme_class LIKE '$last_curr_class%' ORDER BY seme_class";
+$query = "SELECT student_sn,substring(seme_class,1,1) AS c_year ,substring(seme_class,2)  AS c_class,seme_num FROM stud_seme WHERE seme_year_seme='$last_year_seme' AND seme_class LIKE '$last_curr_class%' ORDER BY seme_class,seme_num ";
 
 $res2 = $CONN->Execute($query) or die($query);
 //echo $query;

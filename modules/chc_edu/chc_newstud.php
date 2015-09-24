@@ -11,7 +11,8 @@ function download_csv($year){
    $in_time = $year.".08";
       
    $data = "學號,姓名,性別,身分證字號,生日,入學時間,入學資格,戶籍地址\r\n";
-   $sql_select="select stud_id,stud_name,stud_sex,stud_person_id,stud_birthday,stud_addr_1 from stud_base where stud_study_year ='".$year."' and (stud_study_cond='0' or stud_study_cond='8') ";
+//   $sql_select="select stud_id,stud_name,stud_sex,stud_person_id,stud_birthday,stud_addr_1 from stud_base where stud_study_year ='".$year."' and (stud_study_cond='0' or stud_study_cond='8') ";
+   $sql_select="select stud_id,stud_name,stud_sex,stud_person_id,stud_birthday,stud_addr_1 from stud_base where stud_study_year ='".$year."' and stud_study_cond='0'";
    $recordSet=$CONN->Execute($sql_select) or user_error("讀取失敗！<br>$sql_select",256);
    while( list($stud_id,$stud_name,$stud_sex,$stud_person_id,$stud_birthday,$stud_addr_1)=$recordSet->FetchRow() ){
      //性別轉換為男女

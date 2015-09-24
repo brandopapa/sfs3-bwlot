@@ -726,9 +726,9 @@ if ($_POST['mode']=="club_clear") {
                 <img src='images/close.png' width='20' style='cursor:pointer' class='RemoveBlock' title='關閉視窗'>
             </td>
     </table>
-
+   <center>
     <span id="showboard">這是原始資料</span>
-    
+    </center>
 </div>
 <Script>
 		function club_clear() {

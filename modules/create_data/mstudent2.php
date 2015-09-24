@@ -1,6 +1,6 @@
 <?php
 
-// $Id: mstudent2.php 8472 2015-08-01 14:38:41Z infodaes $
+// $Id: mstudent2.php 8525 2015-09-14 02:09:49Z smallduh $
 
 // --系統設定檔
 include "create_data_config.php";
@@ -329,18 +329,27 @@ if ($do_key=="批次建立資料")
 						$stud_tel_2 = trim ($tt[14]);
 						$stud_mschool_name = trim ($tt[15]);
 						$zip_id = trim($tt[11]);
-						$addr = $zip_arr[$tt[11]].trim(addslashes($tt[13]));
+						//若住址中,使用全形數字,將其轉換成半形,以利拆解 2015.09.14 修改 by smallduh.
+						$search  = array('０', '１', '２', '３', '４','５', '６', '７', '８', '９');
+						$replace = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+						$tt[13]=str_replace($search, $replace, $tt[13]);
+						$addr = $zip_arr[$tt[11]].trim($tt[13]);
 						
 						//20120825新增欄位   戶籍遷入日期、學生行動電話、連絡地址、監護人、監護人行動電話
 						$addr_move_in=trim($tt[16]);
 						$stud_tel_3 = trim ($tt[17]);
 						$stud_addr_2 = trim(addslashes($tt[18]));
-						$stud_addr_2 = $stud_addr_2?$stud_addr_2:$addr;	
+						$stud_addr_2 = $stud_addr_2?$stud_addr_2:addslashes($addr);
 						$guardian_name=trim($tt[19]);
 						$guardian_hand_phone=trim($tt[20]);							
 						$edu_key =  hash('sha256', strtoupper($stud_person_id));
 						//拆解地址
 						$addr_arr = change_addr($addr);
+						//加上跳脫字元，避免許功蓋問題  如：成功路，會出現亂碼 2015.09.14 修改 by smallduh.
+						foreach ($addr_arr as $k=>$v) {
+						  $addr_arr[$k]=addslashes($v);
+						}
+						$addr=addslashes($addr);
 						$stud_kind =',0,';
 						//空值NULL的判斷，修正未keyin戶籍遷入日期時，基本資料（stud_list.php）遷入日期-1911-00-00的錯置。修改 by chunkai 102.9.6
 						$sql_insert1 = "replace into stud_base (stud_id,stud_name,stud_name_eng,stud_person_id,stud_birthday,stud_sex,stud_study_cond,

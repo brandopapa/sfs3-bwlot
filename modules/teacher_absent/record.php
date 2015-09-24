@@ -1,5 +1,5 @@
 <?php
-//$Id: record.php 8104 2014-09-01 05:56:02Z hami $
+//$Id: record.php 8537 2015-09-21 02:41:40Z chiming $
 include "config.php";
 include "../../include/sfs_class_absent.php";
 
@@ -91,13 +91,13 @@ if ($_POST[sure]) {
             $row = $res->fetchRow();
 
             unlink($filePath.$row['note_file']);
-
-        }
+			$note_file_SQL=", note_file='$fileName' ";
+        }else{$note_file_SQL='';}
 
 		$query="update teacher_absent set year='$sel_year',semester='$sel_seme',month='$month',teacher_sn='$sn',reason='$reason',
 		abs_kind='$abs_kind',start_date='$start_date',end_date='$end_date',class_dis='$class_dis',deputy_sn='$agent_sn',
 		record_id='$_SESSION[session_log_id]',record_date='".date("Y-m-d H:i:s")."',day='$day',hour='$hour' ,note='$note',
-		post_k='$post_k',locale='$locale' ,note_file='$fileName' where id='$id'";
+		post_k='$post_k',locale='$locale' $note_file_SQL  where id='$id'";
 		$CONN->Execute($query) or die ($query);
 		header("Location: deputy.php?year_seme=$sel_year"."_"."$sel_seme");
 	}
@@ -117,4 +117,3 @@ $smarty->assign("status_menu",status_menu($_POST[status]));
 $smarty->assign("tea_name",$_SESSION[session_tea_name]); 
 
 $smarty->display('record.tpl'); 
-?>

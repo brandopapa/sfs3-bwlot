@@ -9,6 +9,7 @@
 <td rowspan=2 width={{$m_arr.num_width}}>座號</td>
 <td rowspan=2 width={{$m_arr.id_width}}>學號</td>
 <td rowspan=2 width={{$m_arr.name_width}}>姓名</td>
+<td rowspan=2 width={{$m_arr.class_width}}>目前班級座號</td>
 <td colspan=4>語文領域</td>
 <td rowspan=2 width={{$m_arr.area_width}}>健康與體育</td>
 <td rowspan=2 width={{$m_arr.area_width}}>數學</td>
@@ -30,7 +31,6 @@
 <td width={{$m_arr.area_width}}>英語</td>
 <td width={{$m_arr.area_width}}>本土語言</td>
 <td width={{$m_arr.avg_width}}>平均</td>
-
 </tr>
 
 {{foreach from=$student_data item=data key=sn}}
@@ -40,6 +40,7 @@
 <td>{{$data.seme_num}}</td>
 <td>{{$data.stud_id}}</td>
 <td>{{$data.stud_name}}</td>
+<td>{{$data.curr_class_num}}</td>
 
 <td>{{$fin_score.$sn.chinese.$curr_seme.score}}</td>
 <td>{{$fin_score.$sn.english.$curr_seme.score}}</td>

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: explode_stu.php 7705 2013-10-23 08:58:49Z smallduh $
+// $Id: explode_stu.php 8534 2015-09-20 12:23:57Z infodaes $
 
 // --系統設定檔
 include "create_data_config.php";
@@ -30,7 +30,7 @@ if ($do_key =="Excel 輸出") {
 
 	header("Expires: 0");
 	echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; Charset=Big5\"></head><body><table border=1>\n";
-	echo "<tr><td>代號</td><td>姓名</td><td>性別</td><td>入學年</td><td>班級</td><td>座號</td><td>生日(西元)</td><td>身份證字號</td><td>父親姓名</td><td>母親姓名</td><td>郵遞區號</td><td>電話</td><td>住址</td><td>緊急聯絡方式</td></tr>\n";
+	echo "<tr><td>代號</td><td>姓名</td><td>性別</td><td>入學年</td><td>班級</td><td>座號</td><td>生日(西元)</td><td>身分證字號</td><td>父親姓名</td><td>母親姓名</td><td>郵遞區號</td><td>電話</td><td>住址</td><td>緊急聯絡方式</td></tr>\n";
 	
 	if ($chk_all_year) {
 	  $query = "select a.* from stud_base a,stud_seme b where a.student_sn=b.student_sn and b.seme_year_seme='$_REQUEST[curr_seme]' and b.seme_class like '" . substr( $_REQUEST[curr_class_year],0,1) ."%'  and a.stud_study_cond in (0,5) order by  a.curr_class_num";

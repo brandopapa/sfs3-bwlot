@@ -1,5 +1,5 @@
 <?php
-//$Id: export.php 7705 2013-10-23 08:58:49Z smallduh $
+//$Id: export.php 8524 2015-09-09 14:36:41Z chiming $
 include "config.php";
 
 //認證
@@ -22,7 +22,7 @@ if ($_POST[do_key]) {
 
 		//取出學生身分別資料
 		$query="select student_sn,clan,type_id from stud_subkind where type_id in ('6','9')";
-		$res=$CONN->Execute($query);
+		$res=$CONN->Execute($query) or die('缺少學生身份類別與屬性資料表stud_subkind');
 		while(!$res->EOF) {
 			$student_sn=$res->fields[student_sn];
 			$clan[$student_sn]=trim($res->fields[clan]);
@@ -39,7 +39,7 @@ if ($_POST[do_key]) {
 		$query="select student_sn,area from stud_subkind where type_id='".($m_arr['foreign_id']?$m_arr['foreign_id']:'100')."'";
 		
 		
-		$res=$CONN->Execute($query);
+		$res=$CONN->Execute($query) or die('缺少學生身份類別與屬性資料表stud_subkind');
 		while(!$res->EOF) {
 			$student_sn=$res->fields[student_sn];
 			$foreign_area[$student_sn]=trim($res->fields[area]);
@@ -51,7 +51,7 @@ if ($_POST[do_key]) {
 		
 		//取出視力資料
 		$query="select * from health_sight where year='$sel_year' and semester='$sel_seme'";
-		$res=$CONN->Execute($query);
+		$res=$CONN->Execute($query) or die('缺少學生健康資訊模組資料表 health_sight');
 		while(!$res->EOF) {
 			$sight_v[$res->fields[student_sn]][$res->fields[side]]=$res->fields[sight_o];
 			$res->MoveNext();
@@ -90,7 +90,7 @@ if ($_POST[do_key]) {
 				//抓取家庭狀況(以學期反向排序，抓取最後學期的註記)    L：家庭現況( 1碼)，1=雙親，2=單親，3=寄親
 				//$curr_year_seme=sprintf("%03d%d",curr_year(),curr_seme());
 				$sql="SELECT sse_family_kind FROM stud_seme_eduh WHERE stud_id='$stud_id' ORDER BY seme_year_seme DESC";
-				$res2=$CONN->Execute($sql);
+				$res2=$CONN->Execute($sql) or die('缺少學生輔導資料表 stud_seme_eduh');
 				$family_kind=$res2->fields[0]?$res2->fields[0]:1;  //若無記錄則預設為~~ 1.雙親 
 				
 				
@@ -143,4 +143,4 @@ $smarty->assign("module_name","資料匯出");
 $smarty->assign("SFS_MENU",$school_menu_p);
 $smarty->assign("STUDENT_ERROR",$student_error);
 if($student_error) $smarty->display("edu_chart_error.tpl"); else $smarty->display("edu_chart_export.tpl");
-?>
+
