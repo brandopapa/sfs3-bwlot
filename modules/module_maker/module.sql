@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8546 2015-10-01 01:38:43Z infodaes $
 
 CREATE TABLE module_maker (
   mms smallint(5) unsigned NOT NULL auto_increment,
@@ -14,7 +14,7 @@ CREATE TABLE module_maker (
   news text NOT NULL,
   readme text NOT NULL,
   PRIMARY KEY  (mms)
-) TYPE=MyISAM;
+) ;
 
 CREATE TABLE module_maker_col (
   mmscs int(10) unsigned NOT NULL auto_increment,
@@ -24,4 +24,4 @@ CREATE TABLE module_maker_col (
   default_txt text NOT NULL,
   PRIMARY KEY  (mmscs),
   UNIQUE KEY table_name (table_name,ename)
-) TYPE=MyISAM;
+) ;

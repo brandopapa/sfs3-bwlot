@@ -1,5 +1,5 @@
 <?php
-//$Id: module-cfg.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: module-cfg.php 8542 2015-09-24 07:25:39Z chiming $
 
 //---------------------------------------------------
 //
@@ -63,7 +63,8 @@ $MODULE_UPDATE="2006-10-12";
 
 //目錄內程式
 $school_menu_p = array(
-"export.php"=>"資料匯出"
+"export.php"=>"資料匯出",
+"chc_export.php"=>" 彰縣公務報表學生匯出"
 );
 
 //,"login_edu.php"=>"定期公務報表填報登入"

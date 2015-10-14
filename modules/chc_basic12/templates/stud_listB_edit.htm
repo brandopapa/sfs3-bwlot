@@ -92,9 +92,9 @@ function chcchk(){
 				var OV=FF.elements[i].value;
 				//檢查生活教育
 				if (OBJ.substr(0,11)=='score_fault') {
-					if ( OV!=0 && OV!=4 && OV!=8 && OV!=''){ 
+					if ( OV!=0 && OV!=2 && OV!=6 && OV!=8 && OV!=''){ 
 					OK='Y';var j=i+1;var Oname=FF.elements[j].value;
-					alert(Oname+' 生活教育填寫出錯！');
+					alert(Oname+' 生活教育填寫出錯！(只能0,2,6,8)！');
 					
 					}				
 				}
@@ -126,9 +126,9 @@ function rew_check(obj){
 
 function fau_check(obj){
 	var OV=obj.value;
-	if(OV!='' && OV!=0 && OV!=4 && OV!=8){
+	if(OV!='' && OV!=0 && OV!=2 && OV!=6 && OV!=8){
 		obj.value='';
-		alert('生活教育填寫出錯！(只能0,4,8)');
+		alert('生活教育填寫出錯！(只能0,2,6,8)');
 		setTimeout(function(){obj.focus();}, 1);
 	}
 }

@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8546 2015-10-01 01:38:43Z infodaes $
 # phpMyAdmin MySQL-Dump
 # version 2.3.3pl1
 # http://www.phpmyadmin.net/ (download page)
@@ -25,5 +25,5 @@ CREATE TABLE stud_sta (
   prove_cancel char(2) NOT NULL default '0',
   PRIMARY KEY  (stud_id,prove_id),
   UNIQUE KEY prove_id (prove_id)
-) TYPE=MyISAM;
+) ;
 

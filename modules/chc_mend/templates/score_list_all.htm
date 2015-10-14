@@ -10,6 +10,13 @@
 {{$this->sel_year}}{{$this->sel_grade}} ==> <FONT  COLOR="#FF0000">先選學期,再選年級,再選領域</FONT>
 </td>
 </tr>
+<tr>
+<td>
+{{if $smarty.get.Y!='' && $smarty.get.G!=''}}
+    <button onClick="javascript:window.open('{{$smarty.server.PHP_SELF}}?Y={{$this->Y}}&G={{$this->G}}&S={{$this->S}}&op=CSV','_blank')">{{$this->Y}}學期{{$this->G}}年級補考成績列表CSV檔</button> 
+{{/if}}
+</td>
+</tr>
 <TR bgcolor=#9EBCDD>
 <td colspan=2>
 <!-- 班級資料區段 --開始-->

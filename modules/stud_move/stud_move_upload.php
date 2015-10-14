@@ -55,7 +55,7 @@ if ($_POST['getkey'] == 'true') {
 //header("content-type:text/html; charset=utf-8");
     $curr_seme = $_POST['curr_seme'];
 
-    $sql = "select a.stud_person_id,a.stud_name,a.stud_birthday,substring(a.curr_class_num,1,1) as stud_grade,a.stud_study_cond,a.obtain,a.safeguard,b.move_kind,b.move_c_date,b.school_id,concat(b.city,b.school) as schoolname from stud_base as a, stud_move as b where a.student_sn = b.student_sn and b.move_year_seme=" . $curr_seme;
+    $sql = "select a.stud_person_id,a.stud_name,a.stud_birthday,substring(a.curr_class_num,1,1) as stud_grade,a.stud_study_cond,a.obtain,a.safeguard,b.move_kind,b.move_c_date,b.school_id,concat(b.city,b.school) as schoolname from stud_base as a, stud_move as b where a.student_sn = b.student_sn and b.move_kind not in (5,13) and b.move_year_seme=" . $curr_seme;
 
     $rs = $CONN->Execute($sql) or trigger_error("建立上傳異動資料失敗 <br/>" . $sql, E_USER_ERROR);
 //print_r($rs);

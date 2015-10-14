@@ -138,10 +138,32 @@ class basic_chc{
 				$sn=$ary['student_sn'];
 				$ss=$ary['scope'];
 				$New['A'][$sn]=$ary;
-				$New['B'][$sn][$ss]=$ary;			
+				$New['B'][$sn][$ss]=$ary;
+				//CSV 用$all_student_sn
+				$all_student_sn[]=$sn;
+				//CSV 結束			
 				}
-			$this->stu_data=$New;
-			//echo "<pre>";print_r($New);
+			$this->stu_data=$New;			
+		//CSV 開始            
+        $all_student_sn_unique=array_unique($all_student_sn);
+		if ($_REQUEST['op']=="CSV") {
+		$student_sex = array(1=>"男",2=>"女");
+	    $this->stu_data=$New;	 
+		//$CSV_data 為CSV輸出檔案
+		$CSV_data = "學號,班級,座號,姓名,性別,語文原始,語文補考,語文採計,數學原始,數學補考,數學採計,自然原始,自然補考,自然採計,社會原始,社會補考,社會採計,健體原始,健體補考,健體採計,藝術原始,藝術補考,藝術採計,綜合原始,綜合補考,綜合採計\r\n";
+		foreach ($all_student_sn_unique as $value_sn) {	
+		      $CSV_data .="{$this->stu_data['A'][$value_sn]['stud_id']},{$this->stu_data['A'][$value_sn]['seme_class']},{$this->stu_data['A'][$value_sn]['seme_num']},{$this->stu_data['A'][$value_sn]['stud_name']},{$student_sex[$this->stu_data['A'][$value_sn]['stud_sex']]},{$this->stu_data['B'][$value_sn][1][score_src]},{$this->stu_data['B'][$value_sn][1][score_test]},{$this->stu_data['B'][$value_sn][1][score_end]},{$this->stu_data['B'][$value_sn][2][score_src]},{$this->stu_data['B'][$value_sn][2][score_test]},{$this->stu_data['B'][$value_sn][2][score_end]},{$this->stu_data['B'][$value_sn][3][score_src]},{$this->stu_data['B'][$value_sn][3][score_test]},{$this->stu_data['B'][$value_sn][3][score_end]},{$this->stu_data['B'][$value_sn][4][score_src]},{$this->stu_data['B'][$value_sn][4][score_test]},{$this->stu_data['B'][$value_sn][4][score_end]},{$this->stu_data['B'][$value_sn][5][score_src]},{$this->stu_data['B'][$value_sn][5][score_test]},{$this->stu_data['B'][$value_sn][5][score_end]},{$this->stu_data['B'][$value_sn][6][score_src]},{$this->stu_data['B'][$value_sn][6][score_test]},{$this->stu_data['B'][$value_sn][6][score_end]},{$this->stu_data['B'][$value_sn][7][score_src]},{$this->stu_data['B'][$value_sn][7][score_test]},{$this->stu_data['B'][$value_sn][7][score_end]}\r\n";  
+		}	      	
+		$CSV_filename = $ys[0]."學年".$ys[1]."學期".$this->G."年級補考成績列表.csv";
+		header("Content-disposition: attachment;filename=$CSV_filename");
+		header("Content-type: text/x-csv ; Charset=Big5");
+		header("Progma: no-cache");
+		header("Expires: 0");
+		echo $CSV_data;
+		die();
+	     }
+	     //CSV 結束
+			
 			}
 		else{
 			$this->stu_data=$ALL;

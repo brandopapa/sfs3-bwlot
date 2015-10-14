@@ -1,4 +1,4 @@
-# $Id: module.sql 5311 2009-01-10 08:11:55Z hami $
+# $Id: module.sql 8546 2015-10-01 01:38:43Z infodaes $
 
 #
 # 資料表格式： `form_all`
@@ -17,7 +17,7 @@ CREATE TABLE form_all (
   enable enum('1','0') NOT NULL default '1',
   PRIMARY KEY  (ofsn),
   KEY eduer_unit_sn (teacher_sn)
-) TYPE=MyISAM;
+) ;
 # --------------------------------------------------------
 
 #
@@ -36,7 +36,7 @@ CREATE TABLE form_col (
   col_sort tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (col_sn),
   KEY ofsn (ofsn)
-) TYPE=MyISAM;
+) ;
 # --------------------------------------------------------
 
 #
@@ -54,7 +54,7 @@ CREATE TABLE form_fill_in (
   PRIMARY KEY  (schfi_sn),
   KEY ofsn (ofsn,teacher_sn),
   KEY SHN (teacher_sn)
-) TYPE=MyISAM;
+) ;
 # --------------------------------------------------------
 
 #
@@ -72,4 +72,4 @@ CREATE TABLE form_value (
   KEY schfi_sn (schfi_sn,ofsn,col_sn),
   KEY SHN (teacher_sn),
   KEY col_sn (col_sn)
-) TYPE=MyISAM;
+) ;

@@ -69,7 +69,7 @@ class sfsxmlfile
 		$study_cond_arr=study_cond();
 		
 		//取出 stud_base 資料
-		$query="select a.*,left(a.curr_class_num,length(a.curr_class_num)-4) as year_num,mid(a.curr_class_num,length(a.curr_class_num)-3,2) as class_num,right(a.curr_class_num,2) as site_num,b.grad_kind,b.grad_date,b.grad_word,b.grad_num from stud_base a left join grad_stud b on a.stud_id=b.stud_id where a.student_sn in ($this->sn_str) order by a.student_sn";
+		$query="select a.*,left(a.curr_class_num,length(a.curr_class_num)-4) as year_num,mid(a.curr_class_num,length(a.curr_class_num)-3,2) as class_num,right(a.curr_class_num,2) as site_num,b.grad_kind,b.grad_date,b.grad_word,b.grad_num from stud_base a left join grad_stud b on a.student_sn=b.student_sn where a.student_sn in ($this->sn_str) order by a.student_sn";
 		$res=$CONN->Execute($query) or die("SQL錯誤： $query");
 		while(!$res->EOF) {
 			//處理學生身分別 1~18 為標準選項

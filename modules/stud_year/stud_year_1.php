@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_year_1.php 6173 2010-09-20 05:43:38Z infodaes $
+// $Id: stud_year_1.php 8547 2015-10-01 02:10:53Z infodaes $
 
 // 載入設定檔
 include "stud_year_config.php";
@@ -149,7 +149,7 @@ elseif($_GET[key]== "priorseme"){ //參照上學期編班
 		$CONN->Execute($query)or die ($query);
 		$seme_year_seme = sprintf("%03d2",$curr_year-1);
 		$seme_year = $s_year-1;
-		$query = "select a.* from stud_seme a,stud_base b  where a.student_sn=b.student_sn and a.seme_year_seme ='$seme_year_seme' and a.seme_class like '$seme_year%' and b.stud_study_cond=0";
+		$query = "select a.* from stud_seme a,stud_base b  where a.student_sn=b.student_sn and a.seme_year_seme ='$seme_year_seme' and a.seme_class like '$seme_year%' and b.stud_study_cond not in ($not_up)";  // 原為 b.stud_study_cond=0
 		
 		$res = $CONN->Execute($query) or die($query);
 		while (!$res->EOF) {

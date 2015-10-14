@@ -1,6 +1,6 @@
 <?php
 
-//$Id: sfs_upgrade_list.php 8164 2014-10-08 13:05:57Z infodaes $
+//$Id: sfs_upgrade_list.php 8551 2015-10-07 02:19:09Z qfon $
 
 if(!$CONN){
         echo "go away !!";
@@ -870,5 +870,20 @@ if (!is_file($up_file_name)){
 	fwrite($fp,$temp_str);
 	fclose ($fp);
 }
+
+
+$dstr="2015-10-04";
+$dsstr=str_replace("-","",$dstr);
+$temp_str = "校正畢業生流水號避免學號十年重複問題: ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+$up_file_name =$upgrade_str.$dstr.".txt";
+if (!is_file($up_file_name)){
+	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_str);
+	fclose ($fp);
+}
+
+
+
 
 ?>

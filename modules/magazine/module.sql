@@ -15,7 +15,7 @@ CREATE TABLE magazine (
   book_path varchar(10) NOT NULL default '',
   themes varchar(60) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ;
 
 
 
@@ -38,7 +38,7 @@ CREATE TABLE magazine_chap (
   stud_upload tinyint(4) NOT NULL default '0',
   include_mode tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ;
 
 
 
@@ -66,7 +66,7 @@ CREATE TABLE magazine_paper (
   editId varchar(20) default NULL,
   editDate datetime default NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ;
 
 #
 #tmode(類型) 0->"文章",1->"圖檔",2->"班級訊息",3->"網頁"
