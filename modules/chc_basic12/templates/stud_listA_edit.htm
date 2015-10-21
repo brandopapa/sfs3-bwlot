@@ -81,7 +81,7 @@ bgcolor=white ondblclick="jampb('{{$stu.student_sn}}')"  onMouseOver="this.style
 <!--<td><input type="text" name="income[{{$stu.student_sn}}]" value="{{$stu.income}}" size="3" /></td>-->
 <td><select name="income[{{$stu.student_sn}}]">{{html_options options=$this->income3 selected=$stu.income}}</select></td>
 
-<td><input type="text" size=2 name="score_nearby[{{$stu.student_sn}}]" value="{{$stu.score_nearby}}" /></td>
+<td><input type="text" size=2 name="score_nearby[{{$stu.student_sn}}]" value="{{$stu.score_nearby}}" readonly="readonly" /></td>
 <!--<td><input type="text" size=2 name="score_balance[{{$stu.student_sn}}]" value="{{$stu.score_balance}}" /></td>-->
 <td><select name="score_balance[{{$stu.student_sn}}]">{{html_options options=$this->balance_s selected=$stu.score_balance}}</select></td>
 

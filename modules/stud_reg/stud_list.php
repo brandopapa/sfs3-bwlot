@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_list.php 8165 2014-10-08 15:11:08Z infodaes $
+// $Id: stud_list.php 8566 2015-10-19 08:37:20Z qfon $
 
 // 載入設定檔
 include "stud_reg_config.php";
@@ -284,9 +284,25 @@ if ($_GET[c_curr_class] <>''){
 	echo "<table align='center'><tr><td>
 	<form action='{$_SERVER['SCRIPT_NAME']}' method='POST' name='new_form'>
 	<input type='hidden' name='year_seme' value='$c_curr_class'>
-	<input type='hidden' name='do_key' value='new_stud'>
-	<input type='button' value='新增' onclick=\"if(confirm('您確定要新增一位學生於？\\n$c_name')) this.form.submit()\">
-	</form>
+	<input type='hidden' name='do_key' value='new_stud'>";
+	
+	
+	//是否顯示新增學生按鈕
+	$sql_select="select pm_id,pm_item,pm_memo,pm_value from pro_module where pm_name = 'stud_reg' and pm_item='view_add' Limit 1";
+	$recordSet=$CONN->Execute($sql_select);
+	$view_add=$recordSet->fields['pm_value'];
+
+	
+	$ba=explode("_",$c_curr_class); 
+	
+	
+	if ($view_add>0 || $ba[2]=="00" || $ba[2]=="01" || $ba[2]=="07")
+	{
+		echo "<input type='button' value='新增' onclick=\"if(confirm('您確定要新增一位學生於？\\n$c_name')) this.form.submit()\">";
+	
+	}
+	
+	echo "</form>
 	</td></tr></table>";
 	//顯示資料
 	//if($_GET['stud_id']) $stud_id=$_GET['stud_id'];

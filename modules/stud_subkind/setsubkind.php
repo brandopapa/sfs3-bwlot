@@ -1,5 +1,5 @@
 <?php
-// $Id: setsubkind.php 5395 2009-02-12 07:23:41Z infodaes $
+// $Id: setsubkind.php 8561 2015-10-14 02:36:14Z infodaes $
 
 include_once "config.php";
 //include_once "../../include/sfs_case_dataarray.php";
@@ -38,16 +38,18 @@ $clandata=$_POST[clandata];
 $areadata=$_POST[areadata];
 $memodata=$_POST[memodata];
 $notedata=$_POST[notedata];
+$ext1data=$_POST[ext1data];
+$ext2data=$_POST[ext2data];
 
 if($clandata)
 {
    //替換原來的資料
    foreach($clandata as $key=>$value) {
-           if($value) { $data.="($key,'$value','$areadata[$key]','$memodata[$key]','$notedata[$key]','$type_id'),"; }
+           if($value) { $data.="($key,'$value','$areadata[$key]','$memodata[$key]','$notedata[$key]','$ext1data[$key]','$ext2data[$key]','$type_id'),"; }
            }
    $data=str_replace(chr(13),'',substr($data,0,-1));
    //echo $data;
-   $replace_Sql="REPLACE stud_subkind(student_sn,clan,area,memo,note,type_id) VALUES $data";
+   $replace_Sql="REPLACE stud_subkind(student_sn,clan,area,memo,note,ext1,ext2,type_id) VALUES $data";
    $recordSetYear=$CONN->Execute($replace_Sql) or user_error("寫入失敗！<br>$replace_Sql",256);
 }
 
@@ -75,10 +77,15 @@ $clan_title=$sunkind_data[clan_title];
 $area_title=$sunkind_data[area_title];
 $memo_title=$sunkind_data[memo_title];
 $note_title=$sunkind_data[note_title];
+$ext1_title=$sunkind_data[ext1_title];
+$ext2_title=$sunkind_data[ext2_title];
+
 $clan_list=explode("\r\n",$sunkind_data[clan]);
 $area_list=explode("\r\n",$sunkind_data[area]);
 $memo_list=explode("\r\n",$sunkind_data[memo]);
 $note_list=explode("\r\n",$sunkind_data[note]);
+$ext1_list=explode("\r\n",$sunkind_data[ext1]);
+$ext2_list=explode("\r\n",$sunkind_data[ext2]);
 
 
 // 取出班級陣列
@@ -124,6 +131,8 @@ while ($data=$recordSet->FetchRow()) {
           $stud_data[$data['student_sn']]['area']=$data['area'];
           $stud_data[$data['student_sn']]['memo']=$data['memo'];
           $stud_data[$data['student_sn']]['note']=$data['note'];
+		  $stud_data[$data['student_sn']]['ext1']=$data['ext1'];
+		  $stud_data[$data['student_sn']]['ext2']=$data['ext2'];
           }
 }
 //是否開放導師可以自由輸入屬性
@@ -147,6 +156,8 @@ $listdata.="<table width='100%' cellspacing='1' cellpadding='3' bgcolor='#FFCCCC
              <td>$area_title</td>
              <td>$memo_title</td>
              <td>$note_title</td>
+			 <td>$ext1_title</td>
+			 <td>$ext2_title</td>
              </tr>";
 $sn_data=explode(',',$select_sn);
 for($k=0;$k<$row_count;$k++)
@@ -156,6 +167,8 @@ if($setmethod){
          $areadata="<select name='areadata[$sn_data[$k]]'>";
          $memodata="<select name='memodata[$sn_data[$k]]'>";
          $notedata="<select name='notedata[$sn_data[$k]]'>";
+		 $ext1data="<select name='ext1data[$sn_data[$k]]'>";
+		 $ext2data="<select name='ext2data[$sn_data[$k]]'>";
          for($i=0;$i<=count($clan_list);$i++){
                  if ($stud_data[($sn_data[$k])][clan]==$clan_list[$i])
                      $clandata.="<option value='$clan_list[$i]' selected>$clan_list[$i]</option>";
@@ -176,15 +189,29 @@ if($setmethod){
                      $notedata.="<option value='$note_list[$i]' selected>$note_list[$i]</option>";
                  else $notedata.="<option value='$note_list[$i]'>$note_list[$i]</option>";
                  }
+		  for($i=0;$i<=count($ext1_list);$i++){
+                 if ($stud_data[($sn_data[$k])][ext1]==$ext1_list[$i])
+                     $ext1data.="<option value='$ext1_list[$i]' selected>$ext1_list[$i]</option>";
+                 else $ext1data.="<option value='$ext1_list[$i]'>$ext1_list[$i]</option>";
+                 }
+		for($i=0;$i<=count($ext2_list);$i++){
+                 if ($stud_data[($sn_data[$k])][ext2]==$ext2_list[$i])
+                     $ext2data.="<option value='$ext2_list[$i]' selected>$ext2_list[$i]</option>";
+                 else $ext2data.="<option value='$ext2_list[$i]'>$ext2_list[$i]</option>";
+                 }
          $clandata.="</select>";
          $areadata.="</select>";
          $memodata.="</select>";
          $notedata.="</select>";
+		 $ext1data.="</select>";
+		 $ext2data.="</select>";
 } else {
          $clandata="<input type='text' name='clandata[$sn_data[$k]]' size='15' value='".$stud_data[($sn_data[$k])][clan]."'>";
          $areadata="<input type='text' name='areadata[$sn_data[$k]]' size='15' value='".$stud_data[($sn_data[$k])][area]."'>";
          $memodata="<input type='text' name='memodata[$sn_data[$k]]' size='15' value='".$stud_data[($sn_data[$k])][memo]."'>";
          $notedata="<input type='text' name='notedata[$sn_data[$k]]' size='15' value='".$stud_data[($sn_data[$k])][note]."'>";
+		 $ext1data="<input type='text' name='ext1data[$sn_data[$k]]' size='15' value='".$stud_data[($sn_data[$k])][ext1]."'>";
+		 $ext2data="<input type='text' name='ext2data[$sn_data[$k]]' size='15' value='".$stud_data[($sn_data[$k])][ext2]."'>";
 }
          $class_id=$stud_data[($sn_data[$k])]['class_id'];
          $class_name=$class_base[$class_id];
@@ -198,6 +225,8 @@ if($setmethod){
          <td>$areadata</td>
          <td>$memodata</td>
          <td>$notedata</td>
+		 <td>$ext1data</td>
+		 <td>$ext2data</td>
          </tr>";
 
 }

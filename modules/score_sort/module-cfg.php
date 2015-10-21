@@ -1,6 +1,5 @@
 <?php
-
-// $Id: module-cfg.php 8566 2015-10-19 08:37:20Z qfon $
+// $Id: module-cfg.php 5700 2009-10-23 06:18:16Z infodaes $
 
 //---------------------------------------------------
 //
@@ -32,7 +31,7 @@ $MODULE_TABLE_NAME[0] = "";
 //-----------------------------------------------
 
 
-$MODULE_PRO_KIND_NAME = "學籍管理";
+$MODULE_PRO_KIND_NAME = "補救教學名單";
 
 
 //---------------------------------------------------
@@ -43,10 +42,10 @@ $MODULE_PRO_KIND_NAME = "學籍管理";
 //---------------------------------------------------
 
 // 模組最後更新版本
-$MODULE_UPDATE_VER="";
+$MODULE_UPDATE_VER="1.1";
 
 // 模組最後更新日期
-$MODULE_UPDATE="";
+$MODULE_UPDATE="2015/10/17";
 
 //重要模組，免被勿刪
 $SYS_MODULE=1;
@@ -92,20 +91,6 @@ $SYS_MODULE=1;
 //
 // 這區的 "變數名稱 $SFS_MODULE_SETUP" 請勿改變!!!
 //---------------------------------------------------
-
-// =
-//	array('var'=>"IS_STANDALONE", 'msg'=>"是否有獨立的界面(1是,0否)", 'value'=>0);
-
-
-// 第2,3,4....個，依此類推： 
-//本模組須區分管理權
-$MODULE_MAN = 1 ;
-
-
-$SFS_MODULE_SETUP[1] =
-	array('var'=>"edit_kind", 'msg'=>'是否限定管理權限人員才可修改(1是,0否)', 'value'=>0);
-
-$SFS_MODULE_SETUP[2] =
-   array('var'=>"view_add", 'msg'=>"2~6年級8~9年級是否顯示新增學生按鈕(1是,0否)", 'value'=>0);
-
+$SFS_MODULE_SETUP[0]=array('var'=>"sort_enable", 'msg'=>"列印名次功能", 'value'=>array("0"=>"不啟用","1"=>"啟用"));
+$SFS_MODULE_SETUP[0]=array('var'=>"ranks", 'msg'=>"預設排名人數", 'value'=>100);
 ?>

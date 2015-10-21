@@ -127,9 +127,9 @@ var $school_menu_p;
 			$score_race=(float)$_POST['score_race'][$K];
 			$score_physical=(int)$_POST['score_physical'][$K];
 
-			$SQL="update chc_basic12 set 	`score_service`='' ,
-		`score_reward`='' ,`score_fault`='' ,
-		`score_race`='' ,`score_physical`='', update_sn = '{$session_tea_sn}'  
+			$SQL="update chc_basic12 set 	`score_service`=NULL ,
+		`score_reward`=NULL ,`score_fault`=NULL ,
+		`score_race`=NULL ,`score_physical`=NULL, update_sn = '{$session_tea_sn}'  
 		where   `academic_year`='{$academic_year}' and `student_sn`='{$K}' ";
 			$rs=$this->CONN->Execute($SQL) or die($SQL);
 			//echo 		$SQL.'<br />';

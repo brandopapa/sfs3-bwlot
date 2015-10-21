@@ -151,9 +151,9 @@ class chc_seme{
 			$income		=(int)$_POST['income'][$K];
 			$score_nearby	=(int)$_POST['score_nearby'][$K];
 			$score_balance	=(int)$_POST['score_balance'][$K];
-			$SQL="update chc_basic12 set `kind_id`='' ,	`special`='' ,
-			`unemployed`='' ,`graduation`='1' ,`income`='' ,
-		`score_nearby`='' ,`score_balance`='' ,
+			$SQL="update chc_basic12 set `kind_id`=NULL ,	`special`=NULL ,
+			`unemployed`=NULL ,`graduation`='1' ,`income`=NULL ,
+		`score_nearby`='7' ,`score_balance`=NULL,
 		 update_sn = '{$session_tea_sn}'  where  `academic_year`='{$academic_year}' and `student_sn`='{$K}' ";
 
 		$rs=$this->CONN->Execute($SQL) or die($SQL);

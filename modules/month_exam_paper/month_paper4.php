@@ -1,5 +1,5 @@
 <?php
-// $Id: month_paper4.php 7708 2013-10-23 12:19:00Z smallduh $
+// $Id: month_paper4.php 8564 2015-10-17 05:18:59Z qfon $
 // 引入 SFS3 的函式庫
 //include "../../include/config.php";
 
@@ -28,6 +28,9 @@ if($act=="dl_pdf_one"){
 			$ratio=test_ratio($curr_year,$curr_seme);//本學期的成績設定
 			$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 			$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
+		
+			if (ceil($R0)!=$R0)$R0=number_format($R0,2);
+			if (ceil($R1)!=$R1)$R1=number_format($R1,2);
 		}
 		if($add_wet){
 			$wchecked=" checked";
@@ -151,6 +154,9 @@ elseif($act=="dl_pdf_class"){
 		$ratio=test_ratio($curr_year,$curr_seme);//本學期的成績設定
 		$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 		$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
+	
+		if (ceil($R0)!=$R0)$R0=number_format($R0,2);
+		if (ceil($R1)!=$R1)$R1=number_format($R1,2);
 	}
 	if($add_wet){
 		$wchecked=" checked";
@@ -312,6 +318,9 @@ else{
 		$R0=round($R0);$R1=round($R1);
 			$rowspan=" rowspan='2'";
 			$colspan=" colspan='2'";
+			
+			if (ceil($R0)!=$R0)$R0=number_format($R0,2);
+			if (ceil($R1)!=$R1)$R1=number_format($R1,2);
 		}
 		if($add_wet){
 			$wchecked=" checked";

@@ -1,5 +1,5 @@
 <?php
-// $Id: setreference.php 5393 2009-02-12 01:34:05Z infodaes $
+// $Id: setreference.php 8561 2015-10-14 02:36:14Z infodaes $
 include_once "config.php";
 sfs_check();
 //秀出網頁
@@ -33,17 +33,21 @@ $clan_title=$_POST[clan_title];
 $area_title=$_POST[area_title];
 $memo_title=$_POST[memo_title];
 $note_title=$_POST[note_title];
+$ext1_title=$_POST[ext1_title];
+$ext2_title=$_POST[ext2_title];
 $clan=$_POST[clan];
 $area=$_POST[area];
 $memo=$_POST[memo];
 $note=$_POST[note];
+$ext1=$_POST[ext1];
+$ext2=$_POST[ext2];
 
 
 
 if($clan)
 {
    //替換原來的資料
-   $replace_Sql="REPLACE stud_subkind_ref(type_id,clan_title,area_title,memo_title,note_title,clan,area,memo,note) VALUES ('$type_id','$clan_title','$area_title','$memo_title','$note_title','$clan','$area','$memo','$note')";
+   $replace_Sql="REPLACE stud_subkind_ref(type_id,clan_title,area_title,memo_title,note_title,ext1_title,ext2_title,clan,area,memo,note,ext1,ext2) VALUES ('$type_id','$clan_title','$area_title','$memo_title','$note_title','$ext1_title','$ext2_title','$clan','$area','$memo','$note','$ext1','$ext2')";
    $recordSetYear=$CONN->Execute($replace_Sql) or user_error("寫入失敗！<br>$replace_Sql",256);
    $updatetime=date('m-d h:m:s');
    echo "\n<script language=\"Javascript\"> alert (\"$updatetime 已經將參照設定更新 !!'\")</script>";
@@ -79,12 +83,16 @@ $listdata.="<table width='100%' cellspacing='1' cellpadding='3' bgcolor='#FFCCCC
              <td><input type='text' name='area_title' value='$data[area_title]'></td>
              <td><input type='text' name='memo_title' value='$data[memo_title]'></td>
              <td><input type='text' name='note_title' value='$data[note_title]'></td>
+			 <td><input type='text' name='ext1_title' value='$data[ext1_title]'></td>
+			 <td><input type='text' name='ext2_title' value='$data[ext2_title]'></td>
              </tr>";
 $listdata.="<tr>
          <td><textarea rows=15 name='clan' cols='20'>$data[clan]</textarea></td>
          <td><textarea rows=15 name='area' cols='20'>$data[area]</textarea></td>
          <td><textarea rows=15 name='memo' cols='20'>$data[memo]</textarea></td>
          <td><textarea rows=15 name='note' cols='20'>$data[note]</textarea></td>
+		 <td><textarea rows=15 name='ext1' cols='20'>$data[ext1]</textarea></td>
+		 <td><textarea rows=15 name='ext2' cols='20'>$data[ext2]</textarea></td>
          </tr>";
 $listdata.="<tr><td colspan=6><center><input type='hidden' name='type_id' value='$type_id'>
 <input type='submit' value='更改寫入' name='replace'>

@@ -1,6 +1,6 @@
 <?php
 
-//$Id: stud_reg_config.php 8529 2015-09-15 06:17:47Z hsiao $
+//$Id: stud_reg_config.php 8558 2015-10-13 01:45:06Z hsiao $
 //系統設定檔
 include_once "../../include/config.php";
 //函式庫
@@ -40,7 +40,7 @@ $img_width = 120;
 
 //目錄內程式
 
-$menu_p = array("stud_list.php" => "基本資料", "chi_edit.php" => "整班編修", "chi_photo.php" => "相片", "stud_photo.php" => "相片2", "stud_dom1.php" => "戶口資料", "stud_ext_data.php" => "補充資料", "stud_bs.php" => "兄弟姐妹", "stud_kinfolk.php" => "其他親屬", "../stud_move/" => "學生異動", "stud_drop.php" => "學籍資料刪除", "../stud_query/check_error2.php" => "學籍資料檢查^", "show_ext_data.php" => "補充資料管理", "session_upload.php" => "本學年度在籍生資料上傳臺中市就學管控系統");
+$menu_p = array("stud_list.php" => "基本資料", "chi_edit.php" => "整班編修", "chi_photo.php" => "相片", "stud_photo.php" => "相片2", "stud_dom1.php" => "戶口資料", "stud_ext_data.php" => "補充資料", "stud_bs.php" => "兄弟姐妹", "stud_kinfolk.php" => "其他親屬", "../stud_move/" => "學生異動","basisdata_check.php" => "全校基本資料檢查", "stud_drop.php" => "學籍資料刪除", "../stud_query/check_error2.php" => "學籍資料檢查^", "show_ext_data.php" => "補充資料管理", "session_upload.php" => "本學年度在籍生資料上傳臺中市就學管控系統");
 
 //設定上傳檔案路徑
 $img_path = "photo/student";
@@ -55,9 +55,9 @@ if ($sys_arr['edit_kind']) {
 }
 //目錄內程式
 if ($modify_flag) {
-    $menu_p = array("stud_list.php" => "基本資料", "chi_edit.php" => "整班編修", "chi_photo.php" => "相片", "stud_photo.php" => "相片2", "stud_dom1.php" => "戶口資料", "stud_ext_data.php" => "補充資料", "stud_bs.php" => "兄弟姐妹", "stud_kinfolk.php" => "其他親屬", "session_upload.php" => "本學年度在籍生資料上傳臺中市就學管控系統", "../stud_move/" => "學生異動", "stud_drop.php" => "學籍資料刪除", "../stud_query/check_error2.php" => "學籍資料檢查^", "show_ext_data.php" => "補充資料管理",);
+    $menu_p = array("stud_list.php" => "基本資料", "chi_edit.php" => "整班編修", "chi_photo.php" => "相片", "stud_photo.php" => "相片2", "stud_dom1.php" => "戶口資料", "stud_ext_data.php" => "補充資料", "stud_bs.php" => "兄弟姐妹", "stud_kinfolk.php" => "其他親屬", "session_upload.php" => "本學年度在籍生資料上傳臺中市就學管控系統", "../stud_move/" => "學生異動","basisdata_check.php" => "全校基本資料檢查", "stud_drop.php" => "學籍資料刪除", "../stud_query/check_error2.php" => "學籍資料檢查^", "show_ext_data.php" => "補充資料管理",);
 } else {
-    $menu_p = array("stud_list.php" => "基本資料", "chi_edit.php" => "整班編修", "stud_dom1.php" => "戶口資料", "stud_ext_data.php" => "補充資料", "stud_bs.php" => "兄弟姐妹", "stud_kinfolk.php" => "其他親屬", "session_upload.php" => "本學年度在籍生資料上傳臺中市就學管控系統");
+    $menu_p = array("stud_list.php" => "基本資料", "chi_edit.php" => "整班編修", "stud_dom1.php" => "戶口資料", "stud_ext_data.php" => "補充資料", "stud_bs.php" => "兄弟姐妹", "stud_kinfolk.php" => "其他親屬", "session_upload.php" => "本學年度在籍生資料上傳臺中市就學管控系統","basisdata_check.php" => "全校基本資料檢查");
 }
 ?>
  

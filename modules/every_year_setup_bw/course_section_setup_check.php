@@ -302,7 +302,7 @@ function &ss_class_num($sel_year,$sel_seme){
 		
 		//$class=&get_all_ss($sel_year,$sel_seme,$yc[Cyear],$yc[class_id]);
 		$class=&get_all_ss($sel_year,$sel_seme,$yc[Cyear]);
-		$n=sizeof($class);
+		$n=sizeof($class);//科目數
 		if(sizeof($n)==0){
 			trigger_error("n", E_USER_ERROR);
 		}
@@ -319,8 +319,9 @@ function &ss_class_num($sel_year,$sel_seme){
 			$ss_name=&get_ss_name("","","長",$ss_id);
 			$ss_session = $data[$ss_id];
 			$td.="<tr bgcolor='#FFFFF0'><td class='small'>$ss_name</td><td class='small'>$ss_session</td>";
-			for($k=0;$k < $c_year_class[$Cyear];$k++){
-				$sector=$ss_yc_array[$ss_id][$class_id];
+			for($k=0;$k < $c_year_class[$Cyear];$k++){//該年級有幾個班
+				$class_id = $class_id_array[$Cyear][$k];//取得班級
+				$sector=$ss_yc_array[$ss_id][$class_id];//取得該科目該班級的上課的所有節次
 				if ($sector != ''){
 			    $td.="<td>$sector</td>";
 			  }

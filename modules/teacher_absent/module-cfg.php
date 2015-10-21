@@ -1,5 +1,5 @@
 <?php
-//$Id: module-cfg.php 8456 2015-06-21 22:44:38Z chiming $
+//$Id: module-cfg.php 8559 2015-10-13 14:21:34Z chiming $
 
 //---------------------------------------------------
 //
@@ -68,6 +68,7 @@ $school_menu_p = array(
 "supply.php"=>"課務代理",
 "deputy.php"=>"職務代理",
 "travel.php"=>"差旅費列表",
+"travel_chi.php"=>"差旅費列印",
 "statis.php"=>"差假統計",
 "help.htm"=>"使用說明",
 "../teacher_absent_admin/"=>"★管理模式"

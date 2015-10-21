@@ -1,5 +1,5 @@
 <?php
-// $Id: statistics.php 6932 2012-10-08 06:38:53Z infodaes $
+// $Id: statistics.php 8561 2015-10-14 02:36:14Z infodaes $
 
 include_once "config.php";
 //include_once "../../include/sfs_case_dataarray.php";
@@ -10,6 +10,13 @@ head("人數分析統計");
 //目標身份t_id
 $type_id=$_REQUEST[type_id];
 if($type_id=='') $type_id='1';
+
+
+//$seme_year_seme=sprintf("%03d%d",curr_year(),curr_seme());
+//$family_kind=sfs_text("家庭類型");
+
+//echo $seme_year_seme;
+//print_r($family_kind);
 
 //橫向選單標籤
 $linkstr="type_id=$type_id";
@@ -31,10 +38,13 @@ $clan_option=($_POST[clan_option]);
 $area_option=($_POST[area_option]);
 $memo_option=($_POST[memo_option]);
 $note_option=($_POST[note_option]);
+$ext1_option=($_POST[ext1_option]);
+$ext2_option=($_POST[ext2_option]);
 $sex_option=($_POST[sex_option]);
 $grade_option=($_POST[grade_option]);
+$family_option=($_POST[family_option]);
 
-if($clan_option.$area_option.$memo_option.$note_option=="") $clan_option="on";
+if($clan_option.$area_option.$memo_option.$note_option.$ext1_option.$ext2_option.$family_option=="") $clan_option="on";
 
 //取得學生身份列表
 $type_select="SELECT d_id,t_name FROM sfs_text WHERE t_kind='stud_kind' AND d_id>0 order by t_order_id";
@@ -56,23 +66,32 @@ $clan_title=$sunkind_data[clan_title];
 $area_title=$sunkind_data[area_title];
 $memo_title=$sunkind_data[memo_title];
 $note_title=$sunkind_data[note_title];
+$ext1_title=$sunkind_data[ext1_title];
+$ext2_title=$sunkind_data[ext2_title];
 $sex_title='性別';
 $grade_title='年級別';
+$family_title='家庭類型';
 
 
 $group_fields=(($clan_option)?"a.clan,":"").
               (($area_option)?"a.area,":"").
               (($memo_option)?"a.memo,":"").
               (($note_option)?"a.note,":"").
+			  (($ext1_option)?"a.ext1,":"").
+			  (($ext2_option)?"a.ext2,":"").
 			  (($sex_option)?"if(b.stud_sex='1','男','女'),":"").
 			  (($grade_option)?"left(b.curr_class_num,1),":"");
+			  //(($family_option)?"c.family_kind,":"");
 
 $fields_title=(($clan_option)?"<td align='center'>$clan_title</td>":"").
               (($area_option)?"<td align='center'>$area_title</td>":"").
               (($memo_option)?"<td align='center'>$memo_title</td>":"").
               (($note_option)?"<td align='center'>$note_title</td>":"").
+			  (($ext1_option)?"<td align='center'>$ext1_title</td>":"").
+			  (($ext2_option)?"<td align='center'>$ext2_title</td>":"").
 			  (($sex_option)?"<td align='center'>$sex_title</td>":"").
-			  (($grade_option)?"<td align='center'>$grade_title</td>":"").
+			  (($grade_option)?"<td align='center'>$grade_title</td>":"");
+			  //(($family_option)?"<td align='center'>$family_title</td>":"").
               "<td>人數統計</td>";
 
 $group_fields=substr($group_fields,0,-1);
@@ -81,14 +100,17 @@ $sta_options=(($clan_title<>"")?"<input type='checkbox' name='clan_option' ".(($
                (($area_title<>"")?"<input type='checkbox' name='area_option' ".(($area_option)?"checked":"")." onclick='this.form.submit()'>$area_title ":"").
                (($memo_title<>"")?"<input type='checkbox' name='memo_option' ".(($memo_option)?"checked":"")." onclick='this.form.submit()'>$memo_title ":"").
                (($note_title<>"")?"<input type='checkbox' name='note_option' ".(($note_option)?"checked":"")." onclick='this.form.submit()'>$note_title ":"").
+			   (($ext1_title<>"")?"<input type='checkbox' name='ext1_option' ".(($ext1_option)?"checked":"")." onclick='this.form.submit()'>$ext1_title ":"").
+			   (($ext2_title<>"")?"<input type='checkbox' name='ext2_option' ".(($ext2_option)?"checked":"")." onclick='this.form.submit()'>$ext2_title ":"").
 			   (($sex_title<>"")?"<input type='checkbox' name='sex_option' ".(($sex_option)?"checked":"")." onclick='this.form.submit()'>$sex_title ":"").
 			   (($grade_title<>"")?"<input type='checkbox' name='grade_option' ".(($grade_option)?"checked":"")." onclick='this.form.submit()'>$grade_title ":"");
+			   //(($family_title<>"")?"<input type='checkbox' name='family_option' ".(($family_option)?"checked":"")." onclick='this.form.submit()'>$family_title ":"");
 /*
 // 取出班級陣列
 $class_base = class_base($work_year_seme);
 */
 //取得統計資料
-$type_select="SELECT $group_fields,count(*) as `人數` FROM stud_subkind a LEFT JOIN stud_base b ON a.student_sn=b.student_sn WHERE b.stud_study_cond=0 and a.type_id='$type_id'";
+$type_select="SELECT $group_fields,count(*) as `人數` FROM stud_subkind a LEFT JOIN stud_base b ON a.student_sn=b.student_sn WHERE b.stud_study_cond=0 and a.type_id='$type_id'"; // LEFT JOIN stud_seme_eduh c ON a.stud_id=c.stud_id   
 $type_select.=(!checkid($SCRIPT_FILENAME,1) AND $class_num<>'')?" AND b.curr_class_num like '$class_num%'":"";
 $type_select.=" GROUP BY $group_fields";
 $recordSet=$CONN->Execute($type_select) or user_error("讀取失敗！<br>$type_select",256);
@@ -97,7 +119,7 @@ $listdata.="<table width='100%' cellspacing='1' cellpadding='3' bgcolor='#FFCCCC
              <form name=\"stud_subkind\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
              <tr>
              <td><img border='0' src='images/pin.gif'>學生身份選項：<select name='type_id' onchange='this.form.submit()'>
-             $typedata</select></td></tr><tr><td>※分組統計項目： $sta_options $sex_included $grade_included</td></tr>
+             $typedata</select></td></tr><tr><td>※分組統計項目： $sta_options</td></tr>
              </form></table>";
 //<input type='submit' value='依選定項目統計列示' name='replace'>
 $data=$recordSet->GetRows();
