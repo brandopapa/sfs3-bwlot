@@ -49,6 +49,8 @@ if($_POST['act']=='刪除選取' and $_POST['sn']){
 	$res=$CONN->Execute($sql) or user_error("刪除失敗！<br>$sql",256);
 }
 */
+//台師大心測中心要的學校代碼
+$school_id =  $SCHOOL_BASE['sch_id'];
 //抓取畢業年度列表
 $grad_year_radio='畢業年度：';
 $sql="SELECT DISTINCT stud_grad_year FROM grad_stud";
@@ -65,19 +67,21 @@ if($_POST['grad_year']) {
 	$grad_kind=array(1=>'畢業',2=>'修業');
 	//抓取資料
 	$i=0;
-	$stud_select="SELECT a.*,b.curr_class_num,b.stud_name,b.stud_addr_1,b.stud_addr_2,b.stud_tel_1,b.stud_tel_2,b.enroll_school FROM grad_stud a LEFT JOIN stud_base b ON a.student_sn=b.student_sn WHERE a.stud_grad_year='{$_POST[grad_year]}' ORDER BY b.curr_class_num"; //a.class_year,a.class_sort,a.grad_kind,a.grad_num
-	$rs=$CONN->Execute($stud_select) or user_error("讀取失敗！<br>$stud_select",256);
-	$data="<tr align='center' bgcolor='#ffdddd'><td>NO.</td><td>班級</td><td>座號</td><td>學號</td><td>姓名</td><td>類別</td><td>證書號</td><td>畢業成績</td><td>入學學校</td><td>升學學校</td><td>戶籍地址</td><td>戶籍電話</td><td>聯絡地址</td><td>聯絡電話</td>";
-	while(!$rs->EOF) {
-		$i++;
-		$class_id=substr($rs->fields['curr_class_num'],0,3);
-		$class_num=substr($rs->fields['curr_class_num'],-2);
-		$nature=$grad_kind[$rs->fields['grad_kind']];
-		$bgcolor=($rs->fields['grad_kind']==1)?'#ffffff':'#dddddd';
-		$data.="<tr align='center' bgcolor='$bgcolor'><td>$i</td><td>$class_id</td><td>$class_num</td><td>{$rs->fields['stud_id']}</td><td>{$rs->fields['stud_name']}</td><td>$nature</td>
-				<td>{$rs->fields['grad_num']}</td><td>{$rs->fields['grad_score']}</td><td>{$rs->fields['enroll_school']}</td><td>{$rs->fields['new_school']}</td>
-				<td align='left'>{$rs->fields['stud_addr_1']}</td><td>{$rs->fields['stud_tel_1']}</td><td align='left'>{$rs->fields['stud_addr_2']}</td><td>{$rs->fields['stud_tel_2']}</td>";
-		$rs->MoveNext();
+	$stud_select="SELECT a.*,b.curr_class_num,b.stud_name,b.stud_person_id,b.stud_addr_1,b.stud_addr_2,b.stud_tel_1,b.stud_tel_2,b.enroll_school FROM grad_stud a LEFT JOIN stud_base b ON a.student_sn=b.student_sn WHERE a.stud_grad_year='{$_POST[grad_year]}' ORDER BY b.curr_class_num"; //a.class_year,a.class_sort,a.grad_kind,a.grad_num
+        $rs=$CONN->Execute($stud_select) or user_error("讀取失敗！<br>$stud_select",256);
+        $data="<tr align='center' bgcolor='#ffdddd'><td>NO.</td><td>班級</td><td>座號</td><td>學號</td><td>學校代碼</td><td>姓名</td><td>身分證字號</td><td>性別</td><td>類別</td><td>證書號</td><td>畢業成績</td><td>入學學校</td><td>升學學校</td><td>戶籍地址</td><td>戶籍電話</td><td>聯絡地址</td><td>聯絡電話</td>";
+        while(!$rs->EOF) {
+                $i++;
+                $person_id=($rs->fields['stud_person_id']);
+                $sex = substr($person_id,1,1);
+                $class_id=substr($rs->fields['curr_class_num'],0,3);
+                $class_num=substr($rs->fields['curr_class_num'],-2);
+                $nature=$grad_kind[$rs->fields['grad_kind']];
+                $bgcolor=($rs->fields['grad_kind']==1)?'#ffffff':'#dddddd';
+                $data.="<tr align='center' bgcolor='$bgcolor'><td>$i</td><td>$class_id</td><td>$class_num</td><td>{$rs->fields['stud_id']}</td><td>$school_id</td><td>{$rs->fields['stud_name']}</td><td>$person_id</td><td>$sex</td><td>$nature</td>
+                                <td>{$rs->fields['grad_num']}</td><td>{$rs->fields['grad_score']}</td><td>{$rs->fields['enroll_school']}</td><td>{$rs->fields['new_school']}</td>
+                                <td align='left'>{$rs->fields['stud_addr_1']}</td><td>{$rs->fields['stud_tel_1']}</td><td align='left'>{$rs->fields['stud_addr_2']}</td><td>{$rs->fields['stud_tel_2']}</td>";
+                $rs->MoveNext();
 	}
 }
 echo "<form name='myform' method='post' action='$_SERVER[SCRIPT_NAME]'>$grad_year_radio

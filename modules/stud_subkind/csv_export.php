@@ -1,5 +1,5 @@
 <?php
-// $Id: csv_export.php 7712 2013-10-23 13:31:11Z smallduh $
+// $Id: csv_export.php 8570 2015-10-21 06:02:51Z qfon $
 
 include "config.php";
 include "../../include/sfs_case_dataarray.php";
@@ -89,7 +89,7 @@ $note_title=$sunkind_data[note_title];
 //exit;
 
 ################################    輸出 CSV    ##################################
-$filename ="$school_short_name $class_num 學生身份($type_id)清冊.csv";
+$filename ="$school_short_name"."_"."$class_num"."學生身份($type_id)清冊.csv";
 $Str="編號,班級,班級名稱,座號,學號,姓名,性別,出生年,出生月,出生日,身分證字號,戶籍地址,通訊地址,戶籍電話,通訊電話,父親姓名,父親存歿,母親姓名,母親存歿,監護人姓名,關係,電話,手機,$clan_title,$area_title,$memo_title,$note_title\r\n";
 
 $i=0;

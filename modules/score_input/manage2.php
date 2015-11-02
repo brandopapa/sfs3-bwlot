@@ -1,5 +1,5 @@
 <?php
-// $Id: manage2.php 8420 2015-05-13 07:32:22Z smallduh $
+// $Id: manage2.php 8572 2015-10-24 09:14:01Z smallduh $
 
 
 /*引入學務系統設定檔*/
@@ -696,8 +696,138 @@ if ($is_print!=1) {
 		}
 		echo "</td></tr></table>";
 		echo "</form>";
-	}
+//2015.10.24 by smallduh	
+//如果有階段成績
+if (count($score_arr) and $score_analyse) {
+	//成績分析
+	$analyse_table=array();
+	foreach ($score_arr as $t=>$analyse) {
+		$total=0;
+		$count_number=0;
+		//將陣列由高分排列
+		arsort($analyse);
+		//暫存用, 拾棄 -100分的
+		$temp_arr=array();
+	   foreach ($analyse as $v) {	 
+	   	if ($v>=0) {
+	   		$temp_arr[]=$v;
+	   		//echo $v."<br>";
+	   	 $count_number++;
+	   	 $total+=$v;
+	   	 $m=floor($v/10);
+	   	 if ($m<6) {
+	   	   $analyse_table[$t][5]++;
+	   	 } else {
+	   	   $analyse_table[$t][$m]++;
+	   	 }
+	    }
+	   } // end foreach
+	   $analyse_table[$t]['avg']=round($total/$count_number,2);
+	   //標準差
+	   $analyse_table[$t]['standv']=standv($temp_arr);
+	   //求高低標
+	   $corner=round(count($temp_arr)*0.5);
+	   
+	   
+	   //求高標
+	   arsort($temp_arr);
+	   $total=0;
+	   for ($i=0;$i<$corner;$i++) {
+	   	$total+=$temp_arr[$i];
+	   }
+	   $analyse_table[$t]['high_avg']=round($total/$corner,2);
+	   //求低標
+	   sort($temp_arr);
+	   $total=0;
+	   for ($i=0;$i<$corner;$i++) {
+	   	$total+=$temp_arr[$i];
+	   }
+	   $analyse_table[$t]['low_avg']=round($total/$corner,2);
+	} // end foreach
+	?>
+※<?= $test_sort_name[$curr_sort]?>成績分析
+<table border=0>
+	<tr>
+		<td valign="top">
+			<!--成績分析 -->
+			<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse; font-size=12px;' bordercolor='#111111'>
+ <tr>
+ 	<td width='100' align='center'>\</td>
+ 	<td width='80' align='center'>定期評量</td>
+ 	<td width='80' align='center'>平時成績</td>
+ </tr>	
+ <tr>
+ 	<td align='center'>100分</td>
+ 	<td align='center'><?= $analyse_table[0][10]?></td>
+ 	<td align='center'><?= $analyse_table[1][10]?></td>
+ </tr>	
+ <tr>
+ 	<td align='center'>90分~99分</td>
+ 	<td align='center'><?= $analyse_table[0][9]?></td>
+ 	<td align='center'><?= $analyse_table[1][9]?></td>
+ </tr>	
+ <tr>
+ 	<td align='center'>80分~89分</td>
+ 	<td align='center'><?= $analyse_table[0][8]?></td>
+ 	<td align='center'><?= $analyse_table[1][8]?></td>
+ </tr>	
+ <tr>
+ 	<td align='center'>70分~79分</td>
+ 	<td align='center'><?= $analyse_table[0][7]?></td>
+ 	<td align='center'><?= $analyse_table[1][7]?></td>
+ </tr>	
+  <tr>
+ 	<td align='center'>60分~69分</td>
+ 	<td align='center'><?= $analyse_table[0][6]?></td>
+ 	<td align='center'><?= $analyse_table[1][6]?></td>
+ </tr>	
+  <tr>
+ 	<td align='center'>59分以下</td>
+ 	<td align='center'><?= $analyse_table[0][5]?></td>
+ 	<td align='center'><?= $analyse_table[1][5]?></td>
+ </tr>
+ <tr>
+ 	<td align='center'>平均</td>
+ 	<td align='center'><?= $analyse_table[0]['avg']?></td>
+ 	<td align='center'><?= $analyse_table[1]['avg']?></td>
+ </tr>		
+ <tr>
+ 	<td align='center'>高標</td>
+ 	<td align='center'><?= $analyse_table[0]['high_avg']?></td>
+ 	<td align='center'><?= $analyse_table[1]['high_avg']?></td>
+ </tr>
+  <tr>
+ 	<td align='center'>低標</td>
+ 	<td align='center'><?= $analyse_table[0]['low_avg']?></td>
+ 	<td align='center'><?= $analyse_table[1]['low_avg']?></td>
+ </tr>		
+  <tr>
+ 	<td align='center'>標準差</td>
+ 	<td align='center'><?= round($analyse_table[0]['standv'],2)?></td>
+ 	<td align='center'><?= round($analyse_table[1]['standv'],2)?></td>
+ </tr>
+</table>	
+		</td>	
+		<td valign="top">
+			<!--公式說明 -->
+			※公式說明：<br>
+			。平均：即算術平均數 <img src="./images/average.png"><br>
+			。高標：全班分數前 50% 學生的算術平均數。<br>
+			。低標：全班分數後 50% 學生的算術平均數。<br>
+			。標準差：<img src="./images/standv.png">
+		</td>
+	
+	</tr>
+
+</table>
+
+<?php
+ }	// end if (count($score_arr)) {
+
+}
+		
 	foot();
+	
 } else {
 	$query="select sch_cname from school_base";
 	$res=$CONN->Execute($query);
@@ -781,6 +911,40 @@ if ($is_print!=1) {
 			</tr>
 			</tbody></table></td></tr></tbody></table></body></html>";
 }
+//傳入陣列的標準差公式
+function standv($m=array())
+{
+	$num=count($m);
+	$total=0;
+	foreach ($m as $v) {	
+		$total+=$v;
+  	//$numx+=$v*$v;
+	}
+ 	$avg=$total/$num;
+ 	
+ 	$total=0;
+	foreach ($m as $v) {	
+		$total+=($v-$avg)*($v-$avg);
+  	//$numx+=$v*$v;
+	}
+ 	return sqrt($total/($num-1));
+ 	/*
+ 	//所有平方和
+ 	$numx=0;
+ 	$total=0;
+	foreach ($m as $v) {	
+		$total+=$v;
+  	$numx+=$v*$v;
+	}
+	
+   $numall=$total*$total;
+//所有平方和: $numx 
+//所有和的平方 : $numall
+//echo "所有和的平方: $numall <br>";
+ $S2=(($num*$numx)-$numall)/($num*$num);
+ return sqrt($S2);
+ */
+}//end function
 ?> 
 <script language="JavaScript1.2">
 <!-- Begin

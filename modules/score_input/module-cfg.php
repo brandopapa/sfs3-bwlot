@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 6819 2012-06-22 08:57:13Z infodaes $
+// $Id: module-cfg.php 8571 2015-10-24 08:13:06Z smallduh $
 
 //---------------------------------------------------
 //
@@ -115,4 +115,5 @@ $SFS_MODULE_SETUP[3] =array('var'=>"is_new_nor", 'msg'=>"¤¹³\¥ô½ÒªÌ¦Û¦æ¼W¥[©Î§R°
 $SFS_MODULE_SETUP[4] =array('var'=>"is_mod_nor", 'msg'=>"¤¹³\¥ô½ÒªÌ¦Û¦æ­×§ï¥­®É¦¨ÁZ¶µ¥Ø¦WºÙ©Î¥[Åv", 'value'=>$IS_MODULE_ARR2);
 $SFS_MODULE_SETUP[5] =array('var'=>"pic_checked", 'msg'=>"µn¥´¦¨ÁZ®ÉÅã¥Ü¤jÀY·Ó", 'value'=>array("0"=>"§_","1"=>"¬O"));
 $SFS_MODULE_SETUP[6] =array('var'=>"pic_width", 'msg'=>"¤jÀY·ÓÅã¥Üªº¼e«×", 'value'=>'60');
+$SFS_MODULE_SETUP[5] =array('var'=>"score_analyse", 'msg'=>"¬O§_Åã¥Ü¶¥¬q¦¨ÁZ¤ÀªR", 'value'=>array("0"=>"§_","1"=>"¬O"));
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 7859 2014-01-17 13:03:38Z infodaes $
+// $Id: module-cfg.php 8575 2015-10-27 09:11:28Z qfon $
 
 //---------------------------------------------------
 //
@@ -77,8 +77,8 @@ if ($IS_JHORES=="6") {
 $school_menu_p = array(
 "chart_j.php"=>"國中成績單制作",
 "chc_9401.php"=>"網頁式成績單",
-"chc_seme.php"=>"月考成績檢查",
-"chc_seme_rank.php"=>"月考進退步查詢",
+"chc_seme.php"=>"階段成績成績檢查",
+"chc_seme_rank.php"=>"階段成績進退步查詢",
 "chc_check.php"=>"各班成績檢查"
 );
 
@@ -86,8 +86,8 @@ $school_menu_p = array(
 $school_menu_p = array(
 "chart_e.php"=>"國小成績單制作",
 "chc_9401.php"=>"網頁式成績單",
-"chc_seme.php"=>"月考成績檢查",
-"chc_seme_rank.php"=>"月考進退步查詢",
+"chc_seme.php"=>"階段成績成績檢查",
+"chc_seme_rank.php"=>"階段成績進退步查詢",
 "chc_check.php"=>"各班成績檢查"
 );
 }

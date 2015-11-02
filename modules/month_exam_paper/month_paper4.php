@@ -1,5 +1,5 @@
 <?php
-// $Id: month_paper4.php 8564 2015-10-17 05:18:59Z qfon $
+// $Id: month_paper4.php 8568 2015-10-19 16:15:13Z qfon $
 // 引入 SFS3 的函式庫
 //include "../../include/config.php";
 
@@ -29,8 +29,8 @@ if($act=="dl_pdf_one"){
 			$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 			$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 		
-			if (ceil($R0)!=$R0)$R0=number_format($R0,2);
-			if (ceil($R1)!=$R1)$R1=number_format($R1,2);
+		if (ceil($R0)!=$R0)$R0=round($R0,2);
+		if (ceil($R1)!=$R1)$R1=round($R1,2);
 		}
 		if($add_wet){
 			$wchecked=" checked";
@@ -87,21 +87,42 @@ if($act=="dl_pdf_one"){
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score*$wet;
+						
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					array_push($data[$k],"$s_name*$wet","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 					//echo "$s_name*$wet","$score_b[$ss_id]","$score_b_nor[$ss_id] <br>";
 				}else{
+					
+					 $score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					array_push($data[$k],"$s_name*$wet","$score_b[$ss_id]");
 				}
 			}else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					array_push($data[$k],"$s_name","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 				}else{
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					array_push($data[$k],"$s_name","$score_b[$ss_id]");
 				}
 			}
@@ -155,8 +176,8 @@ elseif($act=="dl_pdf_class"){
 		$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 		$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 	
-		if (ceil($R0)!=$R0)$R0=number_format($R0,2);
-		if (ceil($R1)!=$R1)$R1=number_format($R1,2);
+		if (ceil($R0)!=$R0)$R0=round($R0,2);
+		if (ceil($R1)!=$R1)$R1=round($R1,2);
 	}
 	if($add_wet){
 		$wchecked=" checked";
@@ -217,20 +238,37 @@ elseif($act=="dl_pdf_class"){
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						$an_score=number_format($an_score,2);
+						
 						$an_total[$m]=$an_total[$m]+$an_score*$wet;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
 					array_push($data[$m][$k],"$s_name*$wet","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 				}else{
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					array_push($data[$m][$k],"$s_name*$wet","$score_b[$ss_id]");
 				}
 			}else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total[$m]=$an_total[$m]+$an_score;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
 					array_push($data[$m][$k],"$s_name","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 				}else{
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					array_push($data[$m][$k],"$s_name","$score_b[$ss_id]");
 				}
 			}
@@ -319,8 +357,8 @@ else{
 			$rowspan=" rowspan='2'";
 			$colspan=" colspan='2'";
 			
-			if (ceil($R0)!=$R0)$R0=number_format($R0,2);
-			if (ceil($R1)!=$R1)$R1=number_format($R1,2);
+		if (ceil($R0)!=$R0)$R0=round($R0,2);
+		if (ceil($R1)!=$R1)$R1=round($R1,2);
 		}
 		if($add_wet){
 			$wchecked=" checked";
@@ -386,22 +424,41 @@ else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score*$wet;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					$paper.="<tr bgcolor='#E4EDFF'><td$rowspan>".$s_name."*".$wet."</td><td>月考 $R0 %</td><td>$score_b[$ss_id]</td><td$rowspan>".$an_score."</td></tr>";
 					$paper.="<tr bgcolor='#E4EDFF'><td>平時 $R1 %</td><td>$score_b_nor[$ss_id]</td></tr>";
 				}else{
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					$paper.="<tr bgcolor='#E4EDFF'><td>".$s_name."*".$wet."</td><td>$score_b[$ss_id]</td></tr>";
 				}
 			}else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					$paper.="<tr bgcolor='#E4EDFF'><td$rowspan>$s_name</td><td>月考 $R0 %</td><td>$score_b[$ss_id]</td><td$rowspan>".$an_score."</td></tr>";
 					$paper.="<tr bgcolor='#E4EDFF'><td>平時 $R1 %</td><td>$score_b_nor[$ss_id]</td></tr>";
 				}else{
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					$paper.="<tr bgcolor='#E4EDFF'><td>$s_name</td><td>$score_b[$ss_id]</td></tr>";
 				}
 			}

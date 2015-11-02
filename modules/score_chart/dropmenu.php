@@ -1,5 +1,5 @@
 <?php
-// $Id: sfs_oo_dropmenu.php 8576 2015-10-27 11:13:27Z qfon $
+// $Id: sfs_oo_dropmenu.php 5351 2009-01-20 00:39:21Z brucelyc $
 //---Class用法-------------//
 /*
 $ob=new drop($CONN);
@@ -20,7 +20,7 @@ class drop {
 	var $YS='year_seme';//下拉式選單學期的奱數名稱
 	var $year_seme;//下拉式選單班級的奱數值
 	var $Sclass='class_id';//下拉式選單班級的奱數名稱
-	
+	var $Skind='kind';//下拉式選單班級的奱數名稱
 
 	function drop($CONN){
 		global $IS_JHORES;
@@ -50,6 +50,7 @@ function select() {
 		}
 	$str.="</select>";
 	$str.=$this->grade();
+	$str.=$this->grade2();
 	return $str;
 }
 ##################陣列列示函式2##########################
@@ -74,6 +75,35 @@ function grade() {
 	return $str;
 	}
 
+
+##################陣列列示函式2##########################
+function grade2() {
+
+	//名稱,起始值,結束值,選擇值
+	
+	
+//echo "<pre>";	
+//print_r($_GET);
+//echo "</pre>";	
+//exit;
+
+	$url="?".$this->YS."=". $this->year_seme."&".$this->Sclass."=".$_GET['class_id']."&".$this->Skind."=";
+	
+	$array1=array("1"=>"定期","2"=>"平時","3"=>"定期+平時");
+	
+	$str="<select name='".$this->Skind."' onChange=\"location.href='".$url."'+this.options[this.selectedIndex].value;\">\n";
+	$str.= "<option value=''>-未選擇-</option>\n";
+	
+	foreach($array1 as $key=>$val) {
+		($key==$_GET[$this->Skind]) ? $bb=' selected':$bb='';
+		$str.= "<option value='".$key."' $bb>".$val."</option>\n";
+		}
+
+	$str.="</select>";
+	
+
+	return $str;
+	}
 
 
 

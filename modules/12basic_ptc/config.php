@@ -28,7 +28,7 @@ $rank_score_array=explode(',',$rank_score);
 //均衡學習單一領域及格積分得分
 $balance_score=3;
 $balance_score_max=9;
-$balance_semester=array('1011','1012','1021','1022','1031');   //2014-11-23校對修改
+$balance_semester=array('1021','1022','1031','1032','1041');   //2015-10-30校對修改
 $balance_area=array('health','art','complex');
 
 
@@ -40,7 +40,7 @@ $leader_semester=array('7-1','7-2','8-1','8-2','9-1');
 
 //社團社長
 $association_leader=2;    //2014-11-23校對修改
-$association_semester="'1011','1012','1021','1022','1031'";
+$association_semester="'1021','1022','1031','1032','1041'";  //2015-10-30校對修改
 
 $service_score_max=10;  //2014-11-23校對修改
 
@@ -51,7 +51,7 @@ $fault_none=10;    //2014-11-23校對修改
 $fault_warning=7;    //2014-11-23校對修改
 $fault_peccadillo=4;
 $fault_score_max=10;    //2014-11-23校對修改
-$reward_date_limit='2015-04-30';    //2014-11-23校對新增
+$reward_date_limit='2016-04-30';    //2014-11-23校對新增
 
 //獎勵紀錄  屏東縣未使用       //2014-11-23校對未修改
 /*
@@ -76,11 +76,11 @@ $fitness_medal=array('gold'=>'金','silver'=>'銀','copper'=>'銅','no'=>'--');
 */
 $fitness_score_test_all=2;  //2014-11-23校對新增
 $fitness_score_one=2;
-//$fitness_semester="'1011','1012','1021','1022','1031','1032'";  改為用日期判定
+//$fitness_semester="'1021','1022','1031','1032','1041','1032'";  改為用日期判定
 $fitness_score_disability=8;
 $fitness_score_max=10;
 //$fitness_date_limit='2015-04-30';    //2014-11-23校對新增
-$fitness_date_limit='104-04';    //2015-5-5 修正
+$fitness_date_limit='105-04';    //2015-10-30 修正
 
 //適性發展
 $my_aspiration=2;

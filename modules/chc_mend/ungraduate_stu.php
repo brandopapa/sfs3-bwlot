@@ -62,6 +62,12 @@ class basic_chc{
 		$this->sel_grade=sel_grade('G',$this->G,$_SERVER['PHP_SELF'].'?Y='.$this->Y.'&G=');
 		//頁數
 		//$this->page=($_GET[page]=='') ? 0:$_GET[page];
+		//取送出 修業警示通知單
+		$this->act_up=$_REQUEST['act_up'];
+        $this->note_up=$_REQUEST['note_up'];
+        //取送出 修業警示通知單家長回條
+		$this->act_down=$_REQUEST['act_down'];
+        $this->note_down=$_REQUEST['note_down'];
 		//其他分頁連結參數
 		$this->linkstr="Y={$this->Y}&G={$this->G}&S={$this->S}&Sfailnum={$this->Sfailnum}&Semesnum={$this->Semesnum}";
 		//$this->linkstr="Y={$this->Y}&G={$this->G}";
@@ -71,6 +77,14 @@ class basic_chc{
 		//if ($_GET['act']=='update') $this->updateDate();
 		$this->init();
 		$this->all();
+		//修業警示通知單
+		$this->Edit_note_up();
+		$this->ReEdit_note_up();
+		$this->Read_note_up();
+		//修業警示通知單家長回條
+		$this->Edit_note_down();
+		$this->ReEdit_note_down();
+		$this->Read_note_down();
 	}
 	//顯示
 	function display(){
@@ -290,10 +304,10 @@ class basic_chc{
 			   } 				
 			}
         $this->stu_data=$New;
-        
+        //CSV輸出
         if ($_REQUEST['op']=="CSV") {
-	    $this->stu_data=$New;	 
-		//$CSV_data 為CSV輸出檔案
+//	    $this->stu_data=$New;	 
+		//$CSV_data 為CSV輸出檔案		
 		$CSV_data = "學號,班級,座號,姓名,性別,語文平均,數學平均,自然與生活科技平均,社會平均,健康與體育平均,藝術與人文平均,綜合活動平均,通過領域數,未通過領域數\r\n";
 		foreach ($all_student_sn_unique as $value_sn) {	
 		  if ($this->stu_data['H'][$value_sn]['total_ss_Nopass'] >= $this->Sfailnum) {		   
@@ -308,6 +322,68 @@ class basic_chc{
 		echo $CSV_data;
 		die();
 	     }
+	   
+	    //修業警示單與家長回條輸出
+	    if ($_REQUEST['op']=="ungraduate_note_print_up") {
+			$today = date("Y-m-d");
+	        $year = date("Y")-1911;
+	        $month = date("m");
+          $SCHOOL_BASE = get_school_base();  
+          $school_sshort_name = $SCHOOL_BASE["sch_cname_ss"]; /* 學校簡稱 */ 
+		  $ungraduate_note_up = $this->Read_note_up();
+		  $ungraduate_note_down = $this->Read_note_down();
+		  $CSV_data01 ="    
+              <body onload='window.print()'>
+              ";
+		foreach ($all_student_sn_unique as $value_sn) {			
+		  if ($this->stu_data['H'][$value_sn]['total_ss_Nopass'] >= $this->Sfailnum) {
+              $CSV_data01 .="
+              <table cellPadding='0' border=0 cellSpacing='0' width='90%' align=center style='border-collapse:collapse;font-size:12pt;line-height:16pt'>
+	          <tr><td colspan=8 align=center><H3>{$school_sshort_name}學生修業警示通知單</H3></td></tr>
+	          <tr>
+	          <td><H4>{$ungraduate_note_up}</H4></td>
+	          </tr>
+	          </table>
+	          <div align=center>
+	          <table  style='text-align: left;border-collapse:collapse' border='1' cellspacing='2' cellpadding='2'>
+	          <tr bgcolor='#FFFFFF' align='center'><td width=50>學號</td><td width=40>班級</td><td width=30>座號</td><td width=100>姓名</td><td width=80>語文平均</td><td width=80>數學平均</td><td width=100>自然與生活科技平均</td><td width=80>社會平均</td><td width=100>健康與體育平均</td><td width=100>藝術與人文平均</td><td width=100>綜合活動平均</td><td width=100>通過領域數</td><td width=100>未通過領域數</td></tr>";
+	          if ($_REQUEST['show_score']==0) {
+				  for ($i=1;$i<=7;$i++) {
+				     if ($this->stu_data['H'][$value_sn][$i]>=60) {$this->stu_data['H'][$value_sn][$i]="及格";}
+				     else {$this->stu_data['H'][$value_sn][$i]="不及格";}
+			      }
+			  }
+	          $CSV_data01 .="
+	          <tr bgcolor='#FFFFFF' align='center'><td width=50>{$this->stu_data['A'][$value_sn]['stud_id']}</td><td width=40>{$this->stu_data['A'][$value_sn]['seme_class']}</td><td width=30>{$this->stu_data['A'][$value_sn]['seme_num']}</td><td width=100>{$this->stu_data['A'][$value_sn]['stud_name']}</td><td width=80>{$this->stu_data['H'][$value_sn][1]}</td><td width=80>{$this->stu_data['H'][$value_sn][2]}</td><td width=100>{$this->stu_data['H'][$value_sn][3]}</td><td width=80>{$this->stu_data['H'][$value_sn][4]}</td><td width=100>{$this->stu_data['H'][$value_sn][5]}</td><td width=100>{$this->stu_data['H'][$value_sn][6]}</td><td width=100>{$this->stu_data['H'][$value_sn][7]}</td><td width=100>{$this->stu_data['H'][$value_sn]['total_ss_pass']}</td><td width=100>{$this->stu_data['H'][$value_sn]['total_ss_Nopass']}</td></tr>
+	           </table>
+	           </div>
+		       <div align=right><H3>{$school_sshort_name} 敬啟　{$today}　　　　</H3></div>
+	           <table cellPadding='0' border=0 cellSpacing='0' width='90%' align=center >
+	           <tr><td>-------------------------------------------------------------------------------------------------</td></tr>
+	           <tr><td colspan=8 align=center><H3>{$school_sshort_name}學生修業警示通知單回條<BR></td></tr>
+	           <tr></tr>
+	           
+	           <tr style='font-size:12pt;line-height:20pt'  align=left >
+	           <td><H4>{$ungraduate_note_down}</H4></td>
+	           </tr>
+	           <tr><td align=left>此致</td></tr>
+	           <tr><td><H3>{$school_sshort_name}</td></tr>
+	           <tr></tr>
+	           <tr><td align=right><H3>{$this->stu_data['A'][$value_sn]['seme_class']}班 {$this->stu_data['A'][$value_sn]['seme_num']}號 {$this->stu_data['A'][$value_sn]['stud_name']}家長簽章___________________ {$year}年{$month}月 </td></tr>
+	           </table>
+	           <p style='page-break-after:always'></p>
+	           ";
+		  }  
+		}
+		$CSV_data01 = substr($CSV_data01,0,-39);
+		$CSV_data01 .= "
+		       </body>
+               ";
+        echo  $CSV_data01; 
+        die();    
+   	   }
+       //修業警示單輸出
+	     
 	}	
 	
 	function cal_fin_score($student_sn=array(),$seme=array(),$succ="",$strs="",$precision=1)   //$succ:需合格領域數 $strs:等第評斷代換字串
@@ -468,6 +544,7 @@ class basic_chc{
 		return "沒有傳入學期";
 	}
    }
+   
    function chc_mend_one_seme_score($this_Y,$this_G,$this_S)
    {
         if ($this_Y=='') return;
@@ -538,4 +615,71 @@ class basic_chc{
    }
    
    
+//修業警示通知單   	
+	function Edit_note_up() {
+        if ($this->act_up=="send_up") {
+	      if (!is_dir("../../data/school/chc_mend")){mkdir("../../data/school/chc_mend");}
+	        $fp=fopen("../../data/school/chc_mend/ungraduate_note_up.txt",'w');
+	        fwrite($fp,$this->note_up);
+	        fclose($fp);
+	     }		
+	}
+	function ReEdit_note_up() { 
+	     if (!is_dir("../../data/school/chc_mend")){mkdir("../../data/school/chc_mend");}	
+	       if (!is_file("../../data/school/chc_mend/ungraduate_note_up.txt")) {
+		     $newnote_up ="敬愛的家長您好：\r\n\t依據「國民小學及國民中學學生成績評量準則」第十一條規定(之ㄧ)：\r\n四個領域以上（含）畢業總平均成績丙等（60分）以下無法領取國中畢業證書，僅發給國中修業證\r\n書。貴子弟經補考完成截至103學年第二學期止，已有四個領域(以上)平均成績未合乎規定,已\r\n列入修業警示名單，請家長多關心\r\n並鼓勵孩子在學業上勤勉向上，以免除修業危機。\r\n\t P.S.103學年第二學期補考成績已請貴子弟貼聯絡簿。\r\n★	貴子弟截至103學年第二學期止學期領域成績平均如下：\r\n";
+		     $fp=fopen("../../data/school/chc_mend/ungraduate_note_up.txt",'w');
+	         fwrite($fp,$newnote_up);
+	          fclose($fp);
+		   }	           
+	     $fp=fopen("../../data/school/chc_mend/ungraduate_note_up.txt",'r');
+	     while(! feof($fp)) {
+	      $this->oldnote_up .= fgets($fp);	      
+	     }
+	     $this->smarty->assign("oldnote_up",$this->oldnote_up);
+	  }	
+	 //讀取TXT檔
+     function Read_note_up() {
+	    $fp=fopen("../../data/school/chc_mend/ungraduate_note_up.txt",'r');
+	    while(! feof($fp)) {
+	    $return_oldnote_up .= fgets($fp)."<br>"; 	 
+	 }
+	return $return_oldnote_up; 	
+	}	 
+	  
+//修業警示通知單
+//修業警示通知單家長回條   	
+	function Edit_note_down() {
+        if ($this->act_down=="send_down") {
+	      if (!is_dir("../../data/school/chc_mend")){mkdir("../../data/school/chc_mend");}
+	        $fp=fopen("../../data/school/chc_mend/ungraduate_note_down.txt",'w');
+	        fwrite($fp,$this->note_down);
+	        fclose($fp);
+	     }		
+	}
+	function ReEdit_note_down() { 
+	     if (!is_dir("../../data/school/chc_mend")){mkdir("../../data/school/chc_mend");}	
+	       if (!is_file("../../data/school/chc_mend/ungraduate_note_down.txt")) {
+		     $newnote_down ="下方□請家長勾選並簽名\r\n□我已明白「國民小學及國民中學學生成績評量準則」第十一條有關發給畢業證書的成績條件。\r\n□我已知道子弟已列入修業警示名單。\r\n□我會叮嚀孩子準備考試，以免除修業危機。\r\n★請同學在10/12(一)前交給副班長，副班長收齊後依座號序排放交回註冊組。\r\n";
+		     $fp=fopen("../../data/school/chc_mend/ungraduate_note_down.txt",'w');
+	         fwrite($fp,$newnote_down);
+	          fclose($fp);
+		   }	           
+	     $fp=fopen("../../data/school/chc_mend/ungraduate_note_down.txt",'r');
+	     while(! feof($fp)) {
+	      $this->oldnote_down .= fgets($fp);	      
+	     }
+	     $this->smarty->assign("oldnote_down",$this->oldnote_down);
+	  }	
+	 //讀取TXT檔
+     function Read_note_down() {
+	    $fp=fopen("../../data/school/chc_mend/ungraduate_note_down.txt",'r');
+	    while(! feof($fp)) {
+	    $return_oldnote_down .= fgets($fp)."<br>"; 	 
+	    }
+	   return $return_oldnote_down; 	
+	 }	 
+	  
+//修業警示通知單家長回條       
+       
 }

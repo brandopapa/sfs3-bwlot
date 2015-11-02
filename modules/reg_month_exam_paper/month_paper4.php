@@ -1,5 +1,5 @@
 <?php
-// $Id: month_paper4.php 7709 2013-10-23 12:24:27Z smallduh $
+// $Id: month_paper4.php 8568 2015-10-19 16:15:13Z qfon $
 // 引入 SFS3 的函式庫
 //include "../../include/config.php";
 
@@ -30,6 +30,9 @@ if($act=="dl_pdf_one"){
 			$ratio=test_ratio($curr_year,$curr_seme);//本學期的成績設定
 			$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 			$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
+			
+		if (ceil($R0)!=$R0)$R0=round($R0,2);
+		if (ceil($R1)!=$R1)$R1=round($R1,2);
 		}
 		if($add_wet){
 			$wchecked=" checked";
@@ -86,21 +89,41 @@ if($act=="dl_pdf_one"){
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score*$wet;
 					}
+					
+				    $score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
+					
 					array_push($data[$k],"$s_name*$wet","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 					//echo "$s_name*$wet","$score_b[$ss_id]","$score_b_nor[$ss_id] <br>";
 				}else{
+					
+					 $score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					array_push($data[$k],"$s_name*$wet","$score_b[$ss_id]");
 				}
 			}else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score;
 					}
+					
+				    $score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					array_push($data[$k],"$s_name","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 				}else{
+					
+					 $score_b[$ss_id]=number_format($score_b[$ss_id],2);
 					array_push($data[$k],"$s_name","$score_b[$ss_id]");
 				}
 			}
@@ -154,6 +177,10 @@ $class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base'
 		$ratio=test_ratio($curr_year,$curr_seme);//本學期的成績設定
 		$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 		$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
+		
+		if (ceil($R0)!=$R0)$R0=round($R0,2);
+		if (ceil($R1)!=$R1)$R1=round($R1,2);
+		
 	}
 	if($add_wet){
 		$wchecked=" checked";
@@ -214,20 +241,41 @@ $class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base'
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total[$m]=$an_total[$m]+$an_score*$wet;
 					}
+					
+				    $score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					array_push($data[$m][$k],"$s_name*$wet","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 				}else{
+					
+					
+					 $score_b[$ss_id]=number_format($score_b[$ss_id],2);
+
 					array_push($data[$m][$k],"$s_name*$wet","$score_b[$ss_id]");
 				}
 			}else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total[$m]=$an_total[$m]+$an_score;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					array_push($data[$m][$k],"$s_name","$score_b[$ss_id]","$score_b_nor[$ss_id]","$an_score");
 				}else{
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					
 					array_push($data[$m][$k],"$s_name","$score_b[$ss_id]");
 				}
 			}
@@ -335,6 +383,10 @@ else{
 			$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 			$rowspan=" rowspan='2'";
 			$colspan=" colspan='2'";
+			
+		if (ceil($R0)!=$R0)$R0=round($R0,2);
+		if (ceil($R1)!=$R1)$R1=round($R1,2);
+			
 		}
 		if($add_wet){
 			$wchecked=" checked";
@@ -400,8 +452,15 @@ else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score*$wet;
 					}
+					
+					$score_b[$ss_id]=number_format($score_b[$ss_id],2);
+					$score_b_nor[$ss_id]=number_format($score_b_nor[$ss_id],2);
+					
 					$paper.="<tr bgcolor='#E4EDFF'><td$rowspan>".$s_name."*".$wet."</td><td>月考 $R0 %</td><td>$score_b[$ss_id]</td><td$rowspan>".$an_score."</td></tr>";
 					$paper.="<tr bgcolor='#E4EDFF'><td>平時 $R1 %</td><td>$score_b_nor[$ss_id]</td></tr>";
 				}else{
@@ -411,6 +470,9 @@ else{
 				if($add_nor){
 					if($score_b[$ss_id] || $score_b_nor[$ss_id]) {
 						$an_score=((($score_b[$ss_id]*$R0)+($score_b_nor[$ss_id]*$R1))/($R0+$R1));
+						
+						$an_score=number_format($an_score,2);
+						
 						$an_total=$an_total+$an_score;
 					}
 					$paper.="<tr bgcolor='#E4EDFF'><td$rowspan>$s_name</td><td>月考 $R0 %</td><td>$score_b[$ss_id]</td><td$rowspan>".$an_score."</td></tr>";

@@ -1,11 +1,11 @@
 <?php
-//$Id: chc_seme_rank.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: chc_seme_rank.php 8576 2015-10-27 11:13:27Z qfon $
 include "chc_config.php";
 //認證
 sfs_check();
 
 //引入換頁物件(學務系統用法)
-include_once "../../include/sfs_oo_dropmenu.php";
+include_once "dropmenu.php";
 include_once "chc_seme_advance.php";
 //程式使用的Smarty樣本檔
 $template_file = dirname (__file__)."/templates/chc_seme_rank.htm";
@@ -17,7 +17,7 @@ $obj->init();
 $obj->process();
 
 //秀出網頁布景標頭
-head("月考進退步查詢");
+head("階段成績進退步查詢");
 
 //顯示SFS連結選單(欲使用請拿開註解)
 echo make_menu($school_menu_p);

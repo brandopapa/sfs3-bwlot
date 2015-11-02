@@ -7,6 +7,7 @@ class chc_seme_advance{
 	var $subj;//科目陣列
 	var $rule;//等第
 	var $TotalSco;//各段考分數
+	var $kind;
 
 	//建構函式
 	function chc_seme_advance($CONN,$smarty){
@@ -32,7 +33,8 @@ class chc_seme_advance{
 		$this->class_id=$_GET[class_id];
 		$this->stu=$this->get_stu();
 		$this->subj=$this->get_subj("seme");
-		$this->sco=$this->get_sco();
+		$this->sco=$this->get_sco($_GET[kind]);
+		$this->kind=$this->get_kind($_GET[kind]);
 
 		foreach($this->stu as $sn => $value){
          if(isset($this->sco[$sn]) AND isset($this->stu[$sn])){
@@ -41,6 +43,17 @@ class chc_seme_advance{
       }
 
 	}
+	
+	function get_kind($a){
+
+	    if ($a==1)$obj_kind="定期";
+		if ($a==2)$obj_kind="平時";
+		if ($a==3)$obj_kind="[定期+平時]";
+		
+		return $obj_kind;
+	}	
+	
+	
 
 /* 取學生陣列,取自stud_base表與stud_seme表*/
 	function get_stu(){
@@ -134,7 +147,7 @@ function get_subj($type='') {
 
 	}
 	//取所有成績
-	function get_sco(){
+	function get_sco($a){
 		$ss=join(",",array_keys($this->subj));
 		$stu=join(",",array_keys($this->stu));
 		$YSGC=split("_",$this->class_id);
@@ -142,16 +155,99 @@ function get_subj($type='') {
 		$SQL="select score_id,class_id,student_sn,ss_id,score,test_name,test_kind,test_sort from `$tb` where  student_sn in ($stu) and  ss_id in ($ss) ";
 		$rs=&$this->CONN->Execute($SQL) or die("無法查詢，語法:".$SQL."可能是課程或無學生資料");
 		$All_sco=&$rs->GetArray();
+		
+				
 		foreach ($All_sco as $sco){
 			$sn=$sco[student_sn];
 			$ss_id=$sco[ss_id];
 			$test_sort=$sco[test_sort];
 
-			if ($sco[test_kind]=='定期評量'){
-            $kind='mon';
-            $TotalSco[$sn][$test_sort]+=$sco[score];
-            $TotalSco[$sn][TopMarks.'_'.$test_sort]+=100;  //計算該生的滿分是多少
-         }
+			if ($a==1)
+			{
+			 if ($sco[test_kind]=='定期評量'){
+             $kind='mon';
+			
+             $TotalSco[$sn][$test_sort]+=$sco[score];
+             $TotalSco[$sn][TopMarks.'_'.$test_sort]+=100;  //計算該生的滿分是多少
+	         }
+			}
+			
+			if ($a==2)
+			{
+			 if ($sco[test_kind]=='平時成績'){
+             $kind='nor';
+             $TotalSco[$sn][$test_sort]+=$sco[score];
+             $TotalSco[$sn][TopMarks.'_'.$test_sort]+=100;  //計算該生的滿分是多少
+	         }	
+			}
+			
+			
+			if($a==3)
+			{
+				
+				$CID=split("_",$this->class_id);//093_1_01_01
+			    $year=(int)$CID[0];				
+		        $seme=$CID[1];
+		        $grade=(int)$CID[2];//年級
+		        $class=$CID[3];//班級
+				
+		      ///////////////////////////////////////////////////////////////		
+			  $sql="select * from score_setup where class_year='$grade' and year='$year' and semester='$seme'";
+	          $rs=&$this->CONN->Execute($sql) or die("無法查詢，語法:".$sql."可能是課程或無學生資料");
+	         
+			  
+			  $score_mode= $rs->fields['score_mode'];
+			  
+			  $performance_test_times= $rs->fields['performance_test_times'];
+			  
+	          if ($score_mode=="all" || $performance_test_times==1)
+			  {
+			  $test_ratio=explode("-",$rs->fields['test_ratio']);
+	          $sratio=$test_ratio[0]*0.01;
+	          $nratio=$test_ratio[1]*0.01;	
+			  }
+			  else
+			  {
+			    $test_rv=explode(",",$rs->fields['test_ratio']);
+				
+		        for($j=0;$j<$performance_test_times;$j++)
+                {
+				$jj=$j+1;
+			    $rv=explode("-",$test_rv[$j]);
+			    $sratioi[$jj]=$rv[0]*0.01;
+			    $nratioi[$jj]=$rv[1]*0.01;	
+	
+		        }		
+
+                $sratio=$sratioi[$test_sort];
+	            $nratio=$nratioi[$test_sort];					
+				  
+			  }
+				///////////////////////////////////////////////////////  
+	
+			 
+			 if ($sco[test_kind]=='定期評量'){
+ 		
+               $TotalSco[$sn][$test_sort]+=$sco[score]*$sratio;
+               
+	         }
+			  
+			   if ($sco[test_kind]=='平時成績'){
+
+              $TotalSco[$sn][$test_sort]+=$sco[score]*$nratio;
+              //$TotalSco[$sn][TopMarks.'_'.$test_sort]+=100;  //計算該生的滿分是多少
+	          }	
+			  
+			   $TotalSco[$sn][TopMarks.'_'.$test_sort]+=100;  //計算該生的滿分是多少
+			   
+			   
+			   
+			   
+			   
+			}
+			
+			
+			
          if ($sco[test_kind]=='平時成績') $kind='nor';
 			if ($sco[test_kind]=='全學期') $kind='all';
 			$Vsco[$sn][$ss_id][$test_sort][$kind]=$sco[score];
@@ -160,6 +256,7 @@ function get_subj($type='') {
 		}
 
       foreach ($TotalSco as $sn => $sco){
+		  
          $TotalSco[$sn][diff2]="--";
          $TotalSco[$sn][diff3]="--";
          $TotalSco[$sn][sco_order1]="--";
