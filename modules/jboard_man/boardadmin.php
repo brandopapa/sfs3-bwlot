@@ -40,14 +40,16 @@ switch($key) {
 		$row['board_is_sort']=$board_is_sort;
 		$row['position']=$position;
 		$row['board_is_coop_edit']=$board_is_coop_edit;
+		$row["synchronize"]=$synchronize;
+		$row["synchronize_days"]=$synchronize_days;
 		
 	} else {
-	 $sql_insert = "insert into jboard_kind (bk_id,board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin,bk_order,board_is_sort,position,board_is_coop_edit) values ('$bk_id','$board_name','$board_date','$board_k_id','$board_last_date','$board_is_upload','$board_is_public','$board_admin','$bk_order','$board_is_sort','$position','$board_is_coop_edit')";
+	 $sql_insert = "insert into jboard_kind (bk_id,board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin,bk_order,board_is_sort,position,board_is_coop_edit,synchronize,synchronize_days) values ('$bk_id','$board_name','$board_date','$board_k_id','$board_last_date','$board_is_upload','$board_is_public','$board_admin','$bk_order','$board_is_sort','$position','$board_is_coop_edit','$synchronize','$synchronize_days')";
 	 mysql_query($sql_insert,$conID) or die($sql_insert);
   }
 	break;
 	case "確定修改" :
-	$sql_update = "update jboard_kind set board_name='$board_name ',board_date='$board_date',board_k_id='$board_k_id',board_last_date='$board_last_date',board_is_upload='$board_is_upload',board_is_public='$board_is_public',board_admin='$board_admin',bk_order='$bk_order',board_is_sort='$board_is_sort',position='$position',board_is_coop_edit='$board_is_coop_edit' where bk_id='$bk_id' ";
+	$sql_update = "update jboard_kind set board_name='$board_name ',board_date='$board_date',board_k_id='$board_k_id',board_last_date='$board_last_date',board_is_upload='$board_is_upload',board_is_public='$board_is_public',board_admin='$board_admin',bk_order='$bk_order',board_is_sort='$board_is_sort',position='$position',board_is_coop_edit='$board_is_coop_edit',synchronize='$synchronize',synchronize_days='$synchronize_days' where bk_id='$bk_id' ";
 	mysql_query($sql_update,$conID) or die ($sql_update);
 	//更改代碼
 	if ($new_bk_id!=$bk_id) {
@@ -97,6 +99,8 @@ $board_is_public = $row["board_is_public"];
 $board_is_coop_edit = $row["board_is_coop_edit"];
 $board_admin = $row["board_admin"];
 $position = $row["position"];
+$synchronize = $row["synchronize"];
+$synchronize_days = ($row["synchronize_days"]=='')?30:$row["synchronize_days"];
 $bk_order = ($row["bk_order"]>0)?$row["bk_order"]:100;
 
 if($board_date ==0)
@@ -343,7 +347,13 @@ if ($key == "刪除"){
 	(若「否」,則只能編輯自己的文件)
 	</td>
 </tr>
-
+<tr>
+	<td align="right" >同步呈現板區</td>
+	<td align="left" ><input type="text" size="10" maxlength="10" name="synchronize" value="<?php echo $synchronize; ?>">(輸入分類區代碼)</td>
+</tr><tr>
+	<td align="right" >同步期限</td>
+	<td align="left" ><input type="text" size="10" maxlength="10" name="synchronize_days" value="<?php echo $synchronize_days; ?>">(輸入期限)</td>
+</tr>
 <tr>
 	<td align="center" valign="middle" bgcolor="#c0c0c0" colspan ="2" BGCOLOR=#cbcbcb >
 <?php	

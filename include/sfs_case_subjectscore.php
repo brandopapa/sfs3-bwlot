@@ -1,6 +1,6 @@
 <?php
 
-// $Id: sfs_case_subjectscore.php 6900 2012-09-23 06:20:12Z hami $
+// $Id: sfs_case_subjectscore.php 8596 2015-11-19 02:21:51Z qfon $
 // 取代 subject_score.php
 
 
@@ -138,6 +138,42 @@ function get_ss_num_arr($class_id){
         global $CONN;
                                                                                                                             
         $sql_select = "select ss_id ,count(*) as cc from score_course where  class_id='$class_id' and  day!='' and sector!=0 group by ss_id ";
+        $recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
+	while(!$recordSet->EOF){
+		$res_arr[$recordSet->fields[ss_id]] = $recordSet->fields[cc];
+		$recordSet->MoveNext();
+	}
+        return $res_arr;
+}
+
+
+//取得科目節數陣列(以課程設定的節數為主)
+function get_ss_num_arr_from_score_ss($class_id){
+        global $CONN;
+		
+		$aa=explode("_",$class_id);
+		$aa[0]=intval($aa[0]);
+		$aa[2]=intval($aa[2]);
+                                                                                                                            
+        $sql_select = "select ss_id ,sections as cc from score_ss where  year='$aa[0]' and semester='$aa[1]' and class_year='$aa[2]'";
+        $recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
+	while(!$recordSet->EOF){
+		$res_arr[$recordSet->fields[ss_id]] = $recordSet->fields[cc];
+		$recordSet->MoveNext();
+	}
+        return $res_arr;
+}
+
+
+//取得科目節數陣列(以課程設定的加權做為節數)
+function get_ss_num_arr_from_score_ss_rate($class_id){
+        global $CONN;
+		
+		$aa=explode("_",$class_id);
+		$aa[0]=intval($aa[0]);
+		$aa[2]=intval($aa[2]);
+                                                                                                                            
+        $sql_select = "select ss_id ,rate as cc from score_ss where  year='$aa[0]' and semester='$aa[1]' and class_year='$aa[2]'";
         $recordSet=$CONN->Execute($sql_select) or trigger_error("錯誤訊息： $sql_select", E_USER_ERROR);
 	while(!$recordSet->EOF){
 		$res_arr[$recordSet->fields[ss_id]] = $recordSet->fields[cc];

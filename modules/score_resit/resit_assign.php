@@ -90,7 +90,7 @@ if ($_POST['act']=='setup_paper') {
    $subject_items_input="
     <table border='0' >    
    ";
-   foreach ($scope_subject[$scope] as $k=>$v) {
+   foreach ($scope_subject['ALL'][$scope] as $k=>$v) {
    	$subject_items[$k]=($subject_items[$k]=="" or $subject_items[$k]<0)?(20):$subject_items[$k];
    	$subject_items_input.="<tr><td width='20'>&nbsp;</td><td>".$v['subject']." </td><td><input type='text' name='subject_".$k."' size='5' value='".$subject_items[$k]."'>題 <font size=2>(加權:".$v['rate'].", 已命".$v['items']."題)</font></td></tr>";
    }
@@ -252,7 +252,7 @@ if ($_POST['act']=='setup_paper_submit') {
 		   } else {
 		   	 $seme_year_seme=$SETUP['now_year_seme'];
 		   	 $subject_id=$V[0];
-		   	 $subject=$scope_subject[$scope][$subject_id]['subject'];
+		   	 $subject=$scope_subject['ALL'][$scope][$subject_id]['subject'];
 		   	 $items=$V[1];
 		   	 $sql="insert into resit_scope_subject (seme_year_seme,cyear,scope,subject_id,subject,items) values ('$seme_year_seme','$Cyear','$scope','$subject_id','$subject','$items')";
 		     $res=$CONN->Execute($sql) or user_error("儲存分科設定錯誤! $sql",256);

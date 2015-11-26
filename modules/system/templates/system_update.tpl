@@ -1,4 +1,4 @@
-{{* $Id: system_update.tpl 7191 2013-03-05 03:11:34Z infodaes $ *}}
+{{* $Id: system_update.tpl 8598 2015-11-19 06:42:56Z infodaes $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -70,6 +70,7 @@ function copyToClipboard(txt) {
 </td><td style="vertical-align:top;width:50%;">
 {{if $crontime}}
 <span style="font-size:10pt;color:blue;">※定期排程最後執行時間：{{$crontime}}</span><br>
+<span style="font-size:10pt;color:blue;">※欲重現本主機更新的script，請進入系統刪除{{$cron}}</span><br>
 {{else}}
 &nbsp; <textarea id="sct" style="font-size:8pt;color:grey;" cols="64" rows="10">
 #!/usr/bin/php

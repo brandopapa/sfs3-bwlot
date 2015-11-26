@@ -69,7 +69,11 @@
 		$ss_links["10"]="語文-鄉土語文";
 		$ss_links["11"]="語文-英語";
 		//---------------------------------------------
-
+				/*
+         * 把 語文_學習領域文字描述 , 利用 explode 切割分配給本國語文、本土語文、英語  2015.11.09 by smallduh
+         */
+        $lang_all=explode(';',$seme_score->語文_學習領域文字描述,3);
+        
 		$SQL="";
 		$SQL2="";
 		$SQL3="";
@@ -79,6 +83,21 @@
 			
 			$area_score=$seme_score->$content_score;
 			$area_description=$seme_score->$content_description;
+			   	/*
+         	 * 把 本國語文、本土語文、英語 的文字描述, 用切割後的 語文_學習領域文字 取代 2015.11.09 by smallduh
+        	 */
+			     switch ($topic) {
+                case '本國語文':
+                    $area_description=$lang_all[0];
+                    break;
+                case '本土語文':
+                    $area_description=$lang_all[1];
+                    break;
+                case '英語':
+                    $area_description=$lang_all[2];
+                    break;
+           }
+           
 			if($topic=="本土語文")
 			{
 				$area_comment=",comment='$seme_score->本土語言類別'";

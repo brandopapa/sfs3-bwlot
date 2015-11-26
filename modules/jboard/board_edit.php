@@ -85,11 +85,11 @@ $board_is_public = $row["board_is_public"];
 if ($_POST['key'] == "確定修改"){
 	$b_post_time = mysql_date();
 	//$b_unit = $board_name;  
-  
+  $b_sort=($_POST['top_days']==0)?"100":"99";
 	$sql_update = "update jboard_p set bk_id='".$_POST['bk_id']."',b_open_date='{$_POST['b_open_date']}', " .
 			"b_days='{$_POST['b_days']}',b_unit='$b_unit', b_sub='{$_POST['b_sub']}'," .
 			"b_con='{$_POST['b_con']}', b_url='{$_POST['b_url']}' ,b_post_time='$b_post_time'," .
-			"b_is_intranet='{$_POST['b_is_intranet']}',b_is_sign='{$_POST['b_is_sign']}',b_is_marquee='{$_POST['b_is_marquee']}' ";
+			"b_is_intranet='{$_POST['b_is_intranet']}',b_is_sign='{$_POST['b_is_sign']}',b_is_marquee='{$_POST['b_is_marquee']}' ,b_sort='$b_sort',top_days='{$_POST['top_days']}'";
 	if ($_POST['del_sign']=='1'){
 		$sql_update .= ",b_signs='' ";
 	}
@@ -132,6 +132,7 @@ $b_is_intranet = $row["b_is_intranet"];
 $b_is_marquee = $row["b_is_marquee"];
 $b_is_sign = $row["b_is_sign"];
 $b_signs = $row['b_signs'];
+$top_days=$row['top_days'];
 
 //是否有獨立的界面
 if ($is_standalone)

@@ -28,7 +28,7 @@ $Manager=false;
 if ($bk_id!="") {
 	$Manager=board_checkid($bk_id);
 	$Board_is_sort=board_checksort($bk_id);
-	$B_SORT="b_sort,";
+	$B_SORT="a.b_sort,";
 }	
 
 
@@ -40,15 +40,35 @@ else
 
 if ($topage !="")
 	$page = $topage;
+	
+//取得同步顯示板區的資料
+if ($bk_id!='') {
+$sql_sync="select bk_id,synchronize_days from jboard_kind where synchronize='$bk_id' and bk_id<>'$bk_id'";
+$res=$CONN->Execute($sql_sync) or die ($sql_sync);
+
+if ($res->RecordCount()) {
+ while ($row=$res->fetchRow()) {
+   $SYNC[]=array('bk_id'=>$row['bk_id'],'days'=>$row['synchronize_days']); //同步板區 id
+ }
+}
+}
+
 
 //計算本列表所有文章數
 $sql_select = "select  a.b_id from jboard_p a,jboard_kind b where ";
 if ($bk_id!="")
-	$sql_select .= " a.bk_id='$bk_id' ";
+	$sql_select .= " ( a.bk_id='$bk_id'  ";
 else
 	$sql_select .= " to_days(a.b_open_date)+ 10 > to_days(curdate()) ";
 
-$sql_select .= " and a.bk_id = b.bk_id order by a.b_open_date desc ,a.b_post_time desc ";
+if (count($SYNC)>0) {
+  foreach ($SYNC as $v) {
+  	$sql_select .=" or (a.bk_id='".$v['bk_id']."' and to_days(a.b_open_date)+ ".$v['days']." > to_days(curdate()))";
+  }
+}
+
+$sql_select .= (($bk_id!="")?")":"")." and a.bk_id = b.bk_id order by a.b_open_date desc ,a.b_post_time desc ";
+
 $result = $CONN->Execute($sql_select)or die ($sql_select);
 $tol_num= $result->RecordCount();
 
@@ -60,14 +80,20 @@ else
 //取得指定頁碼列表
 $sql_select = "select  a.* from jboard_p a,jboard_kind b where ";
 if ($bk_id != "")
-	$sql_select .= " a.bk_id='$bk_id' ";
+	$sql_select .= "( a.bk_id='$bk_id' ";
 else
 	$sql_select .= " to_days(a.b_open_date)+ 10 > to_days(curdate())";
+	
+if (count($SYNC)>0) {
+  foreach ($SYNC as $v) {
+  	$sql_select .=" or (a.bk_id='".$v['bk_id']."' and to_days(a.b_open_date)+ ".$v['days']." > to_days(curdate()))";
+  }
+}	
 
 //假使未指定處室且要限定公告日期
 if(!$bk_id and $m_arr["display_limit"]) $sql_select .= " and to_days(a.b_open_date)<=to_days(curdate())";
 	
-$sql_select .= " and a.bk_id = b.bk_id order by ".$B_SORT."a.b_open_date desc ,a.b_post_time desc ";
+$sql_select .= (($bk_id!="")?")":"")." and a.bk_id = b.bk_id order by ".$B_SORT."a.b_open_date desc ,a.b_post_time desc ";
 $sql_select .= " limit ".($page * $page_count).", $page_count";
 $result = $CONN->Execute($sql_select)or die ($sql_select);
 
@@ -210,6 +236,9 @@ thetable.bgColor=TheColor
 
 	
 	echo "</select>";
+	if ($bk_id=='ev6') {
+	 echo "【<a href='board_teachers_id.php'>檢視繳交情況</a>】";
+	}
 ?>
 </td>
 </tr>

@@ -286,7 +286,7 @@ ORDER  BY b.year, b.semester, b.class_year, b.sort";
 				 $score_semester_list_arr[]=$res_score->fields['seme_year_seme'];
 				 $res_score->MoveNext();
 			}
-			$current_student_score=cal_fin_score(array($current_student_sn),$score_semester_list_arr,"",2);
+			$current_student_score=cal_fin_score(array($current_student_sn),$score_semester_list_arr,"","",2);
 			$this->out_arr[$current_student_sn][semester_score]=$current_student_score[$current_student_sn];
 		}
 		
@@ -309,7 +309,7 @@ ORDER  BY b.year, b.semester, b.class_year, b.sort";
 				 $score_semester_list_arr[]=$res_score->fields['seme_year_seme'];
 				 $res_score->MoveNext();
 			}
-			$current_student_score=cal_fin_score(array($current_student_sn),$score_semester_list_arr,"",2);
+			$current_student_score=cal_fin_score(array($current_student_sn),$score_semester_list_arr,"","",2);
 			$this->out_arr[$current_student_sn][semester_score]=$current_student_score[$current_student_sn];
 		}
 		

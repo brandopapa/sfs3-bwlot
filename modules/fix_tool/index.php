@@ -1,5 +1,5 @@
 <?php
-//$Id: index.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: index.php 8584 2015-11-06 02:24:26Z chiming $
 
 require_once "config.php";
 //認證
@@ -26,8 +26,8 @@ print_menu($school_menu_p);
     </font></p>
     <p><font color="maroon" size="4">對sfs學籍系統</font><font color="blue" size="4"><b>資料表結構</b></font><font color="maroon" size="4">與</font><font color="blue" size="4"><b>相關性</b></font><font color="maroon" size="4">不瞭解者，
     </font></p>
-    <p><font color="maroon" size="4">請勿任意操作本模組，否則恐造成資料混亂錯置。</font>
-    </p>
+    <p><font color="maroon" size="4">請勿任意操作本模組，否則恐造成資料混亂錯置。</font></p>
+    <p><font color="maroon" size="4">【<a href='fix_teacher_ID.php'>全校身份證字號檢查</a>】</font></p>
 </ul>
 <p>
 <?foot();

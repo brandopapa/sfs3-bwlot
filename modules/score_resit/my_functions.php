@@ -30,7 +30,9 @@ function get_year_seme_scope($year,$semester,$class_year) {
 		//讀取學期課程設定
  		$query="select * from score_ss where year='$year' and semester='$semester' and class_year='$class_year' and enable='1' and need_exam='1' order by link_ss,sort,sub_sort";
 		$res=$CONN->Execute($query) or die("讀取課程設定發生錯誤, SQL=".$query);
+        //2015.11.18 因應班級課程的使用修改  把各分科的設定定義為 ALL 或 class_id 的子陣列
 		while ($row=$res->fetchRow()) {
+            $class_id=($row['class_id']=='')?"ALL":$row['class_id'];
 			$link_ss=$row['link_ss'];   //領域中文名
 			$SCOPE=$ss_link[$link_ss];	//轉換成英文
 			
@@ -39,10 +41,11 @@ function get_year_seme_scope($year,$semester,$class_year) {
 			$subject_id=($row['subject_id']>0)?$row['subject_id']:$row['scope_id']; //分科名稱的id，若為0，以領域id顯示
 			
 			//開始記錄
-			$scope_main[$SCOPE][$subject_id]['subject']=$subject[$subject_id];
-			$scope_main[$SCOPE][$subject_id]['link_ss']=$SCOPE;
-			$scope_main[$SCOPE][$subject_id]['rate']=$row['rate'];
-			$scope_main[$SCOPE][$subject_id]['ss_id']=$row['ss_id'];
+			$scope_main[$class_id][$SCOPE][$subject_id]['subject']=$subject[$subject_id];
+			$scope_main[$class_id][$SCOPE][$subject_id]['link_ss']=$SCOPE;
+			$scope_main[$class_id][$SCOPE][$subject_id]['rate']=$row['rate'];
+			$scope_main[$class_id][$SCOPE][$subject_id]['ss_id']=$row['ss_id'];
+            //$scope_main[$SCOPE][$i][$subject_id]['class_id']=;
 			
 		} // end while
 		

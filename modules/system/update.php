@@ -1,5 +1,5 @@
 <?php
-//$Id: update.php 6994 2012-11-02 07:51:35Z smallduh $
+//$Id: update.php 8598 2015-11-19 06:42:56Z infodaes $
 include "config.php";
 
 //認證
@@ -40,6 +40,7 @@ if ($_POST['uptemp']) fputs($fp,"TEMPORARY=".sprintf("%02d",$_POST['uptemp'])."\
 fclose($fp);
 
 for($i=0;$i<12;$i++) $temp_arr[]=sprintf("%02d",$i);
+$smarty->assign("cron",$temp_path."/cron");
 $smarty->assign("SFS_TEMPLATE",$SFS_TEMPLATE);
 $smarty->assign("module_name","更新時間設定");
 $smarty->assign("SFS_MENU",$school_menu_p);

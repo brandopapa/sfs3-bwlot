@@ -1,6 +1,6 @@
 <?php
 
-// $Id: show.php 7751 2013-11-08 08:39:16Z infodaes $
+// $Id: show.php 8592 2015-11-12 08:22:32Z qfon $
 
 include "config.php";
 $stud_id = $_GET['stud_id'];
@@ -13,8 +13,17 @@ if($der=="") $der="up_date desc";
     $sqlstr =" select stud_name  from stud_base where stud_id = '$stud_id' and ($cita_year-stud_study_year<9)" ;
     $result = $CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
     $row = $result->FetchRow() ;          
-      $stud_name = $row["stud_name"];     
- 
+    $stud_name = $row["stud_name"];   
+	/*
+		if($viewfullname==1)
+		{
+		//$stud_name_replace=mb_substr($stud_name,1,1,"BIG5");
+		$stud_name_replace=substr($stud_name,2,2);
+        $stud_name=str_replace($stud_name_replace,"○",$stud_name);
+		}
+   */
+   
+   
 echo " <p align=center><font size=5 color=red>$stud_name 的榮譽榜</font>　　<a href='list.php'>回目錄</a></p>";
       //標題行
     
@@ -43,11 +52,23 @@ echo " <p align=center><font size=5 color=red>$stud_name 的榮譽榜</font>　　<a h
 	 $gra = $row["grada"] ;  
 
 	$class_name=class_id_to_full_class_name($class_id);
-    
-        echo "<tr> 
+	
+	$tempx = explode("_",$class_id);
+	 if ($viewyn ==2)
+	 {
+	 
+     $class_name=$tempx[1]."年級";
+     }
+	 if ($viewyn ==1)
+	 {
+     $class_name=$tempx[3]."班";
+     }
+        
+		
+		echo "<tr> 
   		<td ><a href='view.php?id=$did'>$doc</a><font size=2>---$grada[$gra]</font></td>
             <td >$data_get</td>
-            <td >$class_name</td>          
+		     <td >$class_name</td>          
 	          <td >$up_date</td>
          </tr>" ;
    

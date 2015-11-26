@@ -5,7 +5,8 @@ include "config.php";
 sfs_check();
 
 //引入換頁物件(學務系統用法)
-// include_once "../../include/chi_page2.php";
+//include_once "../../include/chi_page2.php";
+//include_once "../../include/sfs_case_PLlib.php";
 //程式使用的Smarty樣本檔
 $template_file = dirname (__file__)."/templates/teacher_chi.htm";
 
@@ -45,7 +46,7 @@ class teacher_absent_course{
 	//初始化
 	function init() {
 		$this->SN=(int)$_SESSION['session_tea_sn'];//教師
-		// $this->SN='300';測試用
+		//$this->SN='300';//測試用
 		$this->Sch=get_school_base();//學校資料
 		$this->getTeach();//教師資料
 		}
@@ -111,6 +112,7 @@ class teacher_absent_course{
 			if ($ary['Num']==0) continue;
 			$tmp[]=$ary['id'];
 			}
+		if (count($tmp)==0) backe('選擇的月份沒有資料');
 		$A_ID=join(" , ",$tmp);
 		$SQL="select b.* from teacher_absent a,teacher_absent_course b 
 		where b.teacher_sn='{$this->SN}'  and b.travel='1' 
@@ -146,10 +148,26 @@ function getTeach() {
 	$this->Tea=$arys;
 }
 
-
+/*轉數字為國字*/
+function CNum($num) {
+	return Num2CNum($num);
 }
 
 
+}
 // 結尾符號可略
 
 
+function backe($value= "BACK"){
+	echo "<html><head>
+<meta http-equiv='content-type' content='text/html; charset=Big5'>
+<title>！！錯誤訊息！！</title>
+<META NAME='ROBOTS' CONTENT='NOARCHIVE'>
+<META NAME='ROBOTS' CONTENT='NOINDEX, NOFOLLOW'>
+<META HTTP-EQUIV='Pargma' CONTENT='no-cache'>
+<center style='margin-top: 120px'>
+<b style='color:red'>！！錯誤訊息！！</b><br>
+<h1 onclick='window.close();' title='按下後關閉視窗'>$value</h1><br><br>
+</center></body></html>";
+exit;
+}

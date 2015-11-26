@@ -47,6 +47,7 @@ $now_cy=3-$sy_circle;
 if ($_POST['act']=='output_resit_score') {
  	//領域別
  	// $Cyesr : 年級
+ 	$i=0;
 	$scope=$_POST['scope'];
 	$seme_year_seme=$SETUP['now_year_seme'];
   //抓取班級設定裡的班級名稱
@@ -54,6 +55,7 @@ if ($_POST['act']=='output_resit_score') {
 	$sql="select a.*,c.stud_id,c.stud_name,c.curr_class_num from resit_exam_score a,resit_paper_setup b,stud_base c where a.paper_sn=b.sn and b.seme_year_seme='$seme_year_seme' and b.class_year='$Cyear' and b.scope='$scope' and a.student_sn=c.student_sn and complete='1' order by curr_class_num";
 	$res=$CONN->Execute($sql) or die($sql);
 	while ($row=$res->FetchRow()) {
+		$i++;
 		$student_sn=$row['student_sn'];
 		$curr_class_num=$row['curr_class_num'];
 		$seme_class=substr($curr_class_num,0,3);
@@ -66,7 +68,7 @@ if ($_POST['act']=='output_resit_score') {
 	     <td style='font-size:10pt' align='center'>".$seme_num."</td>
 	     <td style='font-size:10pt' align='center'>".$row['stud_name']."</td>
 	     <td style='font-size:10pt' align='center'>".$row['org_score']."</td>
-	     <td style='font-size:10pt' align='center'>".$row['score']."</td>
+	     <td style='font-size:10pt".(($row['score']<60)?";color:red":"")."' align='center'>".$row['score']."</td>
 	     <td style='font-size:9pt'>".$row['entrance_time']."</td>		
 	     <td style='font-size:9pt'>".$row['complete_time']."</td>		
 			</tr>
@@ -77,7 +79,7 @@ if ($_POST['act']=='output_resit_score') {
 	 <input type='hidden' name='scope' value='$scope'>
 	 <table border=\"0\" width=\"100%\" cellspacing=\"3\" cellpadding=\"2\">
   	<tr>
-   	  <td colspan='5' style='color:#800000'><b>".$link_ss[$scope]."領域</b> - [<font color=blue>已補考</font>]名單</td>
+   	  <td colspan='5' style='color:#800000'><b>".$link_ss[$scope]."領域</b> - [<font color=blue>已補考</font>]名單 , 共計 $i 位</td>
    	</tr>
 	   <tr bgcolor=\"#FFCCCC\">
 	   	 <td style='font-size:10pt'>勾選</td>
@@ -117,7 +119,7 @@ if ($_POST['act']=='output_resit_score_submit') {
 			$query="insert into makeup_exam_scope (seme_year_seme,student_sn,scope_ename,class_year,oscore) values ('".$seme_year_seme."','".$student_sn."','".$scope."','".$Cyear."','$org_score')";
 			$res_insert=$CONN->Execute($query) or die("自動於 makeup_exam 模組建立評量名冊失敗！SQL=".$query);
 		}
-    $data_arr[$student_sn][$seme_year_seme][$scope]=$row['score'];
+    $data_arr[$student_sn][$seme_year_seme][$scope]=($row['score']>100)?100:$row['score'];
 	 } // end while
 	} // end foreach
 	

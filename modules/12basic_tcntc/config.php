@@ -33,7 +33,8 @@ $disadvantage_level=array(0=>'無 ',1=>'中低收入戶',2=>'低收入戶');
 $balance_score=4;
 $balance_score_max=12;
 //$balance_semester=array('1011','1012');  //試探系統
-$balance_semester=array('1021','1022','1031','1032');  //實際報名
+//$balance_semester=array('1021','1022','1031','1032');  //實際報名
+$balance_semester=array('1031','1032','1041','1042');  //實際報名
 
 $balance_area=array('health','art','complex');
 
@@ -49,13 +50,15 @@ $service_semester_score=1;
 $service_score_max=3;
 
 //無記過紀錄
-$fault_semester=array('1011','1012','1021','1022','1031');
+//$fault_semester=array('1011','1012','1021','1022','1031');
+$fault_semester=array('1021','1022','1031','1032','1041');
 $fault_none=6;
 $fault_warning=3;
 $fault_peccadillo=3;
 
 //獎勵紀錄
-$reward_semester=array('1011','1012','1021','1022','1031');
+//$reward_semester=array('1011','1012','1021','1022','1031');
+$reward_semester=array('1021','1022','1031','1032','1041');
 $reward_score[1]=0.5;
 $reward_score[3]=1;
 $reward_score[9]=3;

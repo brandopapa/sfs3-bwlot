@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 6563 2011-09-28 15:59:19Z infodaes $
+// $Id: module-cfg.php 8592 2015-11-12 08:22:32Z qfon $
 
 //---------------------------------------------------
 //
@@ -120,10 +120,10 @@ $SFS_MODULE_SETUP[7]=array('var'=>"title_default", 'msg'=>"預設印表標題", 'value
 
 // 第2,3,4....個，依此類推：
 
-// $SFS_MODULE_SETUP[1] =
-//	array('var'=>"xxxx", 'msg'=>"yyyy", 'value'=>0);
+ $SFS_MODULE_SETUP[8] =
+	array('var'=>"viewfullname", 'msg'=>"是否顯示學生姓名", 'value'=>array("0"=>"顯示","1"=>"不顯示"));
 
-// $SFS_MODULE_SETUP[2] =
-//	array('var'=>"ssss", 'msg'=>"tttt", 'value'=>1);
+ $SFS_MODULE_SETUP[9] =
+	array('var'=>"viewyn", 'msg'=>"是否顯示學生年級班級座號學號", 'value'=>array("0"=>"年級班級座號學號均顯示","1"=>"僅顯示班級座號學號","2"=>"僅顯示年級和學號"));
 
 ?>

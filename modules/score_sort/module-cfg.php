@@ -91,6 +91,6 @@ $SYS_MODULE=1;
 //
 // 這區的 "變數名稱 $SFS_MODULE_SETUP" 請勿改變!!!
 //---------------------------------------------------
-$SFS_MODULE_SETUP[0]=array('var'=>"sort_enable", 'msg'=>"列印名次功能", 'value'=>array("0"=>"不啟用","1"=>"啟用"));
-$SFS_MODULE_SETUP[0]=array('var'=>"ranks", 'msg'=>"預設排名人數", 'value'=>100);
+//$SFS_MODULE_SETUP[0]=array('var'=>"sort_enable", 'msg'=>"列印名次功能", 'value'=>array("0"=>"不啟用","1"=>"啟用"));
+//$SFS_MODULE_SETUP[0]=array('var'=>"ranks", 'msg'=>"預設排名人數", 'value'=>100);
 ?>

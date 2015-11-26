@@ -152,3 +152,37 @@ if (!is_file($up_file_name)) {
 	fwrite($fp, $temp_query);
 	fclose($fp);
 }
+
+
+//增加分類區同步顯示設定
+$up_file_name = $upgrade_str . "2015-11-20.txt";
+if (!is_file($up_file_name)) {
+	$SQL[0]="ALTER TABLE `jboard_kind` add `synchronize` VARCHAR(36) NOT NULL DEFAULT '';";
+	$SQL[1]="ALTER TABLE `jboard_kind` add `synchronize_days` int(2) NOT NULL DEFAULT '30';";
+
+  $temp_query="";
+ 
+  foreach ($SQL as $sql) {
+		$res=$CONN->Execute($sql) or die($sql);
+		$temp_query=$temp_query.$sql."\n";
+  }
+	$fp = fopen($up_file_name, "w");
+	$temp_query=$temp_query."增加分類區同步顯示於另一板區的設定 -- by smallduh (2015-11-20)\n";
+	fwrite($fp, $temp_query);
+	fclose($fp);
+}
+
+//增加置頂設定
+$up_file_name = $upgrade_str . "2015-11-24.txt";
+if (!is_file($up_file_name)) {
+	$SQL[0]="ALTER TABLE `jboard_p` add `top_days` tinyint(2) NOT NULL DEFAULT '0';";
+  $temp_query="";
+  foreach ($SQL as $sql) {
+		$res=$CONN->Execute($sql) or die($sql);
+		$temp_query=$temp_query.$sql."\n";
+  }
+	$fp = fopen($up_file_name, "w");
+	$temp_query=$temp_query."增加文章置頂設定 -- by smallduh (2015-11-24)\n";
+	fwrite($fp, $temp_query);
+	fclose($fp);
+}

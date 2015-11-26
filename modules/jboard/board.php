@@ -53,13 +53,14 @@ $row = $result->fetchRow();
 	$board_admin = $row["board_admin"];
 if ($_POST['key'] == "½T©wÀx¦s"){
 	$b_post_time = mysql_date();
+	$b_sort=($_POST['top_days']==0)?"100":"99";
 		
-	$sql_insert = "insert into jboard_p(bk_id,b_open_date,b_days,b_unit,b_title,b_name," .
-			"b_sub,b_con,b_url,b_own_id,b_post_time,b_is_intranet,teacher_sn,b_is_sign,b_is_marquee)values " .
+$sql_insert = "insert into jboard_p(bk_id,b_open_date,b_days,b_unit,b_title,b_name," .
+			"b_sub,b_con,b_url,b_own_id,b_post_time,b_is_intranet,teacher_sn,b_is_sign,b_is_marquee,b_sort,top_days) values " .
 			"('{$_POST['bk_id']}','{$_POST['b_open_date']}','{$_POST['b_days']}'," .
 			"'$b_unit','$b_title','$b_name','{$_POST['b_sub']}','{$_POST['b_con']}'," .
 			"'{$_POST['b_url']}','{$_SESSION['session_log_id']}',now()," .
-			"'{$_POST['b_is_intranet']}','{$_SESSION['session_tea_sn']}','{$_POST['b_is_sign']}','{$_POST['b_is_marquee']}')";
+			"'{$_POST['b_is_intranet']}','{$_SESSION['session_tea_sn']}','{$_POST['b_is_sign']}','{$_POST['b_is_marquee']}','$b_sort','{$_POST['top_days']}')";
 
 	$CONN->Execute($sql_insert) or die ($sql_insert);
 	//echo $sql_insert;

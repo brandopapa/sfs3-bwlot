@@ -1,6 +1,6 @@
 <?php
 
-//$Id: sfs_upgrade_list.php 8563 2015-10-15 05:44:17Z qfon $
+//$Id: sfs_upgrade_list.php 8602 2015-11-20 14:48:02Z qfon $
 
 if(!$CONN){
         echo "go away !!";
@@ -887,6 +887,19 @@ if (!is_file($up_file_name)){
 $dstr="2015-10-15";
 $dsstr=str_replace("-","",$dstr);
 $temp_str = "校正畢業生流水號避免學號十年重複問題: ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+$up_file_name =$upgrade_str.$dstr.".txt";
+if (!is_file($up_file_name)){
+	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_str);
+	fclose ($fp);
+}
+
+
+
+$dstr="2015-11-21";
+$dsstr=str_replace("-","",$dstr);
+$temp_str = "校正校園報名系統有些學生姓名無法顯示的問題: ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
 $up_file_name =$upgrade_str.$dstr.".txt";
 if (!is_file($up_file_name)){
 	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";

@@ -1,5 +1,5 @@
 <?php
-// $Id: make.php 7700 2013-10-23 08:09:06Z smallduh $
+// $Id: make.php 8599 2015-11-20 02:27:38Z qfon $
 
 include "config.php";
 sfs_check();
@@ -410,7 +410,8 @@ function make_ooo($sel_year,$sel_seme,$class_id,$sp_sn,$data_arr){
 	
 		$temp = array();
 		//取得學校資料
-                $temp_arr = get_school_base_array();
+            $temp_arr = get_school_base_array();
+		 
 		//班級個人資料
 		$temp[]=get_stud_base_arrayB($class_id,$stud_id,$student_sn);
 		//出缺席資料

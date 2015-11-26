@@ -1,5 +1,5 @@
 <?php
-// $Id: index.php 8232 2014-12-10 08:12:04Z brucelyc $
+// $Id: index.php 8605 2015-11-23 12:48:03Z qfon $
 /* 取得設定檔 */
 include "config.php";
 
@@ -9,12 +9,25 @@ $year_seme=($_POST[year_seme])?$_POST[year_seme]:$_GET[year_seme];
 $class_id=($_POST[class_id])?$_POST[class_id]: $_GET[class_id];
 $student_sn=($_POST[student_sn])?$_POST[student_sn]:$_GET[student_sn];
 $act=($_POST[act])?$_POST[act]:$_GET[act];
+$act1=($_POST[act1])?$_POST[act1]:$_GET[act1];
 $stu_num=($_POST[stu_num])?$_POST[stu_num]:$_GET[stu_num];
 $stage = ($_POST[stage])?$_POST[stage]:$_GET[stage]; //階段
 $yorn = findyorn();  //是否有平時成績
 $start_date=($_POST[start_date])?$_POST[start_date]: $_GET[start_date];
 $end_date=($_POST[end_date])?$_POST[end_date]: $_GET[end_date];
 $avg=$_REQUEST['avg'];
+
+
+
+$inputstyle=$_REQUEST['inputstyle'];
+
+$inputdata=nl2br($_REQUEST['inputdata']);
+
+$inputdatah=($_REQUEST['inputdata']);
+
+$inputdata=str_replace("\r\n","<text:line-break/>",$inputdata);
+
+
 if ($stage=="") $stage=1;
 
 $M_SETUP=get_module_setup('score_stage_chart');
@@ -49,6 +62,7 @@ $exam_setup=&get_all_setup("",$sel_year,$sel_seme,$class_all[year]);
 $interface_sn=$exam_setup[interface_sn];
 
 //執行動作判斷
+
 if($act=="dlar"){
 	//echo $stage.$start_date.$end_date;exit;
 	downlod_ar($student_sn,$class_id,$interface_sn,$stu_num,$sel_year,$sel_seme,"",$stage,$start_date,$end_date,$avg);
@@ -61,6 +75,7 @@ if($act=="dlar"){
 	$main=&main_form($interface_sn,$sel_year,$sel_seme,$class_id,$student_sn,$stage);
 }
 
+
 //秀出網頁
 head("定期考查通知書");
 // 您的程式碼由此開始
@@ -71,8 +86,28 @@ foot();
 //觀看模板
 function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$student_sn="",$stage){
 
-	global $CONN,$input_kind,$school_menu_p,$cq,$comm,$chknext,$nav_next,$edit_mode,$submit,$stage,$start_date,$end_date,$year_seme;
+	global $CONN,$input_kind,$school_menu_p,$cq,$comm,$chknext,$nav_next,$edit_mode,$submit,$stage,$start_date,$end_date,$year_seme,$inputstyle,$inputdata,$style_ss_num;
 
+	if (empty($style_ss_num))
+	{
+	$a1="checked";
+	$a2="";
+	$a3="";
+	}
+	if ($style_ss_num==1)
+	{	
+	$a1="";
+	$a2="checked";
+	$a3="";
+	}
+	
+	if ($style_ss_num==2)
+	{	
+	$a1="";
+	$a2="";
+	$a3="checked";
+	}
+	
 	$year_seme=sprintf("%03s%1s",$sel_year,$sel_seme);
 	$c=explode("_",$class_id);
 	$seme_class=$c[2].$c[3];
@@ -174,16 +209,108 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 	$s=get_school_base();
 
 	 if($grid1->count_row!=0)
-		 $dlstr ="<hr><p align='center'>●有加權平均●</p>
-			<p><a href='{$_SERVER['SCRIPT_NAME']}?act=dlar&student_sn=$student_sn&stu_num=$stu_class_num&class_id=$class_id&stage=$stage&start_date=$start_date&end_date=$end_date&avg=1'>下載".$stu[stud_name]."的成績單</a></p>
-			<p><a href='{$_SERVER['SCRIPT_NAME']}?act=dlar_all&class_id=$class_id&stage=$stage&start_date=$start_date&end_date=$end_date&avg=1'>下載全班的成績單</a></p>
+		 
+		 $dlstr ="<hr>
+	        
+	        <p align='center'>●有加權平均●</p>
+			<p>
+
+			<form action=\"{$_SERVER['SCRIPT_NAME']}\" name=\"myForm\"method=post >
+			<input type='hidden' name='act' value='$act' />
+			<input type='hidden' name='student_sn' value='$student_sn' />
+			<input type='hidden' name='stu_num' value='$stu_class_num' />
+			<input type='hidden' name='class_id' value='$class_id' />
+			<input type='hidden' name='stage' value='$stage' />
+			<input type='hidden' name='start_date' value='$start_date' />
+			<input type='hidden' name='end_date' value='$end_date' />
+			<input type='hidden' name='sel_year' value='$sel_year' />
+			<input type='hidden' name='sel_seme' value='$sel_seme' />
+			<input type='hidden' name='inputstyle' value='$inputstyle' />
+			<input type='hidden' name='inputdata' value='$inputdata' />
+            <input type='hidden' name='style_ss_num' value='$style_ss_num' />
+			<input type='hidden' name='avg' value='1' />
+	
+			<input type='BUTTON' value=\"下載 $stu[stud_name] 的成績單\" name=\"mySubmit\" 
+			onclick='document.myForm.act.value=\"dlar\";
+			document.myForm.student_sn.value=\"$student_sn\";
+			document.myForm.stu_num.value=\"$stu_class_num\";
+			document.myForm.class_id.value=\"$class_id\";
+		    document.myForm.stage.value=\"$stage\";
+			document.myForm.start_date.value=\"$start_date\";
+			document.myForm.end_date.value=\"$end_date\";
+			document.myForm.inputstyle.value=\"$inputstyle\";
+			document.myForm.inputdata.value=\"$inputdata\";
+			document.myForm.style_ss_num.value=\"$style_ss_num\";
+			document.myForm.avg=\"1\";
+			document.myForm.submit();
+			'>
+		
+			<p>
+			
+			<input type='BUTTON' value=\"下載全班的成績單\" name=\"mySubmit\" 
+			onclick='document.myForm.act.value=\"dlar_all\";
+			document.myForm.class_id.value=\"$class_id\";
+		    document.myForm.stage.value=\"$stage\";
+			document.myForm.start_date.value=\"$start_date\";
+			document.myForm.end_date.value=\"$end_date\";
+			document.myForm.inputstyle.value=\"$inputstyle\";
+			document.myForm.inputdata.value=\"$inputdata\";
+			document.myForm.avg=\"1\";
+            document.myForm.submit();			
+			'></form>
+			
+			
+			
 			<hr><p align='center'>○無加權平均○</p>
-			<p><a href='{$_SERVER['SCRIPT_NAME']}?act=dlar&student_sn=$student_sn&stu_num=$stu_class_num&class_id=$class_id&stage=$stage&start_date=$start_date&end_date=$end_date&avg=0'>下載".$stu[stud_name]."的成績單</a></p>
-			<p><a href='{$_SERVER['SCRIPT_NAME']}?act=dlar_all&class_id=$class_id&stage=$stage&start_date=$start_date&end_date=$end_date&avg=0'>下載全班的成績單</a></p>";
+			<form action=\"{$_SERVER['SCRIPT_NAME']}\" name=\"myForm1\"method=post >
+			<input type='hidden' name='act' value='$act' />
+			<input type='hidden' name='student_sn' value='$student_sn' />
+			<input type='hidden' name='stu_num' value='$stu_class_num' />
+			<input type='hidden' name='class_id' value='$class_id' />
+			<input type='hidden' name='stage' value='$stage' />
+			<input type='hidden' name='start_date' value='$start_date' />
+			<input type='hidden' name='end_date' value='$end_date' />
+			<input type='hidden' name='sel_year' value='$sel_year' />
+			<input type='hidden' name='sel_seme' value='$sel_seme' />
+			<input type='hidden' name='inputstyle' value='$inputstyle' />
+			<input type='hidden' name='inputdata' value='$inputdata' />
+            <input type='hidden' name='style_ss_num' value='$style_ss_num' />
+			<input type='hidden' name='avg' value='0' />
+			
+		    <input type='BUTTON' value=\"下載 $stu[stud_name] 的成績單\" name=\"mySubmit\" 
+			onclick='document.myForm1.act.value=\"dlar\";
+			document.myForm1.student_sn.value=\"$student_sn\";
+			document.myForm1.stu_num.value=\"$stu_class_num\";
+			document.myForm1.class_id.value=\"$class_id\";
+		    document.myForm1.stage.value=\"$stage\";
+			document.myForm1.start_date.value=\"$start_date\";
+			document.myForm1.end_date.value=\"$end_date\";
+			document.myForm1.inputstyle.value=\"$inputstyle\";
+			document.myForm1.inputdata.value=\"$inputdata\";
+
+			document.myForm1.avg=\"0\";
+			document.myForm1.submit();
+			'>
+		
+			<p>
+			
+			<input type='BUTTON' value=\"下載全班的成績單\" name=\"mySubmit\" 
+			onclick='document.myForm1.act.value=\"dlar_all\";
+			document.myForm1.class_id.value=\"$class_id\";
+		    document.myForm1.stage.value=\"$stage\";
+			document.myForm1.start_date.value=\"$start_date\";
+			document.myForm1.end_date.value=\"$end_date\";	
+			document.myForm1.inputstyle.value=\"$inputstyle\";
+			document.myForm1.inputdata.value=\"$inputdata\";
+			document.myForm1.avg=\"0\";
+            document.myForm1.submit();			
+			'><hr>
+			
+			</form>";
 
 	
 
-	$main="
+	$main=" 
 	$tool_bar
 	<table bgcolor='#DFDFDF' cellspacing=1 cellpadding=4>
 	<tr class='small'><td valign='top'>$stud_select $dlstr
@@ -191,15 +318,28 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 	
 	</td><td bgcolor='#FFFFFF' valign='top'>
 	<p align='center'>
+	
 	<form name=\"myform\" method=post >
+	
+	<input type=\"radio\" name=\"style_ss_num\" value=\"\" $a1 onclick=\"this.form.submit()\";>以課表的每週節數 | 
+	<input type=\"radio\" name=\"style_ss_num\" value=\"1\" $a2 onclick=\"this.form.submit()\";>以課程設定的每週節數 | 
+	<input type=\"radio\" name=\"style_ss_num\" value=\"2\" $a3 onclick=\"this.form.submit()\";>以課程設定的加權數作為每週節數<p>
+
+	
 	<font size=3>".$s[sch_cname]." ".$sel_year."學年度第".$sel_seme."學期".$stagestr."定期評量成績.</p>
 	<table align=center cellspacing=4>
-	<tr><td colspan=3>日常生活表現統計時間：
+	<tr><td colspan=3>日常生活表現統計時間
 		<input type=text name=\"start_date\" value=\"$start_date\" size='8'>
 		~<input type=text name=\"end_date\" value=\"$end_date\" size='8'>
 		<input type=hidden name=\"class_id\" value=\"$class_id\">
 		
 		<input type=hidden name=\"year_seme\" value=\"$year_seme\">
+		
+		<input type=hidden name=\"student_sn\" value=\"$student_sn\">
+
+		
+		<input type=hidden name=\"selstage\" value=\"2\">
+		
 		<input type=submit value=\"修改時間\"></td></tr>
 	<tr>
 	
@@ -208,20 +348,34 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 	<td>姓名：<font color='red'>$stu[stud_name]</font></td>
 	</tr></table></font>
 	$html
-	</td></tr></form></table>
-	";
+	</td></tr></form></table>";
 
 	return $main;
 }
 
 // 取得成績檔XML
 function &get_score_xml_value($stud_id,$student_sn,$class_id,$sel_year,$sel_seme,$stage,$avg) {
-	global $CONN;
+	global $CONN,$style_ss_num;
 	$class=class_id_2_old($class_id);
 	// 取得本年級的課程陣列
 	$ss_name_arr = &get_ss_name_arr($class);
+	
+	
 	// 取得課程每週時數
 	$ss_num_arr = get_ss_num_arr($class_id);
+	
+	if ($style_ss_num==1)//以課程設定每周節數為主
+	{
+	$ss_num_arr =get_ss_num_arr_from_score_ss($class_id);
+	}
+	
+	if ($style_ss_num==2)//以課程設的加權數作為節數
+	{
+	$ss_num_arr =get_ss_num_arr_from_score_ss_rate($class_id);
+	}
+	
+	
+	
 	// 取得學習成就
 
 	$ss_score_arr =get_ss_score($student_sn,$sel_year,$sel_seme,$stage);
@@ -265,8 +419,10 @@ $ss_score_avg['平均']['平時成績']=$ss_score_sum['平時成績'];
 // $reward_data -- 將懲記錄
 // $score_data -- 成績記錄
 function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$score_data,$student_sn) {
-	global $SFS_PATH_HTML,$CONN,$REWARD_KIND,$year_seme,$IS_JHORES;
+	global $SFS_PATH_HTML,$CONN,$REWARD_KIND,$year_seme,$IS_JHORES,$dlstr,$inputstyle,$inputdatah;
 
+	if (empty($inputstyle))$inputstyle="導師評語及建議";
+	
 	//假別
 	$abs_kind_arr = stud_abs_kind();
 
@@ -319,6 +475,15 @@ function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$sc
 	<tr><td>
 	$score_data
 	</td></tr>
+	<tr><td colspan=4>
+	<form name=\"myForm\" method=post >
+	成績單備註抬頭:<input type='text' name='inputstyle' value='$inputstyle'><br>
+	<textarea name='inputdata' rows='5' style='width:100%'>$inputdatah</textarea>
+	<input type=submit value=\"確定\">
+	</form>
+	</td></tr>
+	
+	
 	</table>
 	</td>
 	</tr>
@@ -329,7 +494,7 @@ function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$sc
 
 //下載成績單
 function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$sel_year="",$sel_seme="",$mode="",$stage,$start_date,$end_date,$avg){
-	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,$M_SETUP,$REWARD_KIND,$year_seme;
+	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,$M_SETUP,$REWARD_KIND,$year_seme,$inputstyle,$inputdata;
   
   global $IS_JHORES;
 
@@ -433,6 +598,11 @@ function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$se
 		$temp_arr["start_date"] = $start_date;
 		$temp_arr["end_date"] = $end_date;		
 		$temp_arr["avg"] = $avg;	
+		
+		$temp_arr["inputstyle"] = $inputstyle;
+		$temp_arr["inputdata"] = $inputdata;
+		
+		
 		$stud_id = student_sn2stud_id($sn_arr[$m]);
 
 		//取得學生缺席情況
@@ -458,6 +628,9 @@ function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$se
 		$temp_arr_score["ss_table"] = &get_score_xml_value($stud_id,$sn_arr[$m],$class_id,$sel_year,$sel_seme,$stage,$avg);
 		$temp_arr_score["SIGN_1"] = $sign_1;
 		$temp_arr_score["SIGN_2"] = $sign_2;
+		
+		
+		
 		
 		if ($IS_JHORES>0) {
 		 $ALL_SERV=getService_allmin($sn_arr[$m],$year_seme);

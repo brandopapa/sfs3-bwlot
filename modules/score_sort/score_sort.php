@@ -24,7 +24,7 @@ if ($me && strlen($year_name)==1) $year_name.=sprintf("%02d",$me);
 $stage=$_REQUEST['stage'];
 $subject=$_REQUEST['subject'];
 
-$kind=$_REQUEST['kind'];
+$kind=$_REQUEST['kind'];  //1定期,2平時,3定期+平時
 
 $percent=$_REQUEST['percent'];
 //if (empty($percent))$percent=100;
@@ -32,18 +32,25 @@ $friendly_print=$_REQUEST['friendly_print'];
 $print_asign=$_REQUEST['print_asign'];
 //$yorn=findyorn();
 $save_csv=$_POST['save_csv'];
+$save_csv1=$_POST['save_csv1'];
+
+$excel=$_POST['excel'];
+$excel2=$_POST['excel2'];
+
 $sort_num=$_REQUEST['sort_num'];
 $move_out=$_REQUEST['move_out'];
 $print_special=$_REQUEST['print_special'];
 $chk=$_REQUEST[chk];
-$is_show_ss_id=$_POST['show_ss_id']?'checked':'';
-/*
-echo "\$year_seme:$year_seme";
-echo "\$use_rate(加權):$use_rate";
-echo "\$show_avg:$show_avg";
-echo "\$show_tol_avg:$show_tol_avg";
-*/
+$rate=$_REQUEST['rate'];
 
+$subject1=$_REQUEST['subject1'];
+$is_show_ss_id=$_POST['show_ss_id']?'checked':'';
+$is_show_rate=$_POST['rate']?'checked':'';
+
+//print_r($subject1);
+
+
+//print_r($subject1);
 
 if ($friendly_print==0) {
         $border="0";
@@ -66,10 +73,10 @@ if ($friendly_print==0) {
 $score_part=array(1=>'定期',2=>'平時');
 
 //秀出網頁
-if (empty($friendly_print) && empty($save_csv)) head("補救教學名單");
+if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2) && empty($save_csv1)) head("補救教學名單");
 //列出橫向的連結選單模組
-if (empty($friendly_print) && empty($save_csv)) print_menu($menu_p);
-if (empty($friendly_print) && empty($save_csv)) echo "<table border=0 cellspacing=0 cellpadding=2 width=100% bgcolor=#cccccc><tr><td>";
+if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2) && empty($save_csv1)) print_menu($menu_p);
+if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2) && empty($save_csv1)) echo "<table border=0 cellspacing=0 cellpadding=2 width=100% bgcolor=#cccccc><tr><td>";
 
 //傳回學期陣列
 
@@ -138,7 +145,38 @@ $score_semester="score_semester_".intval($sel_year)."_".$sel_seme;
 
 $teacher_id=$_SESSION['session_log_id'];//取得登入老師的id
 
+//取得年級班級數
+function get_class_sum($k,$curr_seme="",$sel_year_arr = array()) {
+        global $CONN,$school_kind_name;
+        if (!$CONN) user_error("資料庫連線不存在！請檢查相關設定！",256);
 
+        if($curr_seme<>''){
+                $curr_year= intval(substr($curr_seme,0,3));
+                $curr_seme=substr($curr_seme,-1);
+        }
+        else {
+                $curr_year = curr_year();
+                $curr_seme = curr_seme();
+        }
+
+          if (count($sel_year_arr) == 0)
+                    $sel_year_arr = array_keys ($school_kind_name); //預設全部學年
+
+        if (empty($curr_year))
+                user_error("未設定學年學期,請先執行<a href='../every_year_setup/'>學期初設定</a>",256);
+        //$query = "select c_year,c_sort,c_name from school_class where enable=1 and year=$curr_year and semester=$curr_seme order by c_year,c_sort";
+        $query = "select c_year from school_class where enable=1 and year='$curr_year' and semester='$curr_seme' and c_year='$k' ";
+
+        $res = $CONN->Execute($query) or user_error("讀取失敗！<br>$query",256);
+
+		$ClassSum=0;
+        while(!$res->EOF) {
+                $ClassSum++;
+                $res->MoveNext();
+        }
+        return $ClassSum;
+
+}
 
 //列出目前班級
 function class_base2($curr_seme="",$sel_year_arr = array()) {
@@ -177,15 +215,26 @@ function class_base2($curr_seme="",$sel_year_arr = array()) {
             while (!$rs2->EOF)
             {
              $class_year=$rs2->fields["class_year"];
-            if ($class_year==1)$class_name["c1"]="國小一年級";
-            if ($class_year==2)$class_name["c2"]="國小二年級";
-            if ($class_year==3)$class_name["c3"]="國小三年級";
-            if ($class_year==4)$class_name["c4"]="國小四年級";
-            if ($class_year==5)$class_name["c5"]="國小五年級";
-            if ($class_year==6)$class_name["c6"]="國小六年級";
-            if ($class_year==7)$class_name["c7"]="國中一年級";
-            if ($class_year==8)$class_name["c8"]="國中二年級";
-            if ($class_year==9)$class_name["c9"]="國中三年級";
+            if ($class_year==1)$class_name["c1"]="國小一年級(全年級排序)";
+            if ($class_year==2)$class_name["c2"]="國小二年級(全年級排序)";
+            if ($class_year==3)$class_name["c3"]="國小三年級(全年級排序)";
+            if ($class_year==4)$class_name["c4"]="國小四年級(全年級排序)";
+            if ($class_year==5)$class_name["c5"]="國小五年級(全年級排序)";
+            if ($class_year==6)$class_name["c6"]="國小六年級(全年級排序)";
+            if ($class_year==7)$class_name["c7"]="國中一年級(全年級排序)";
+            if ($class_year==8)$class_name["c8"]="國中二年級(全年級排序)";
+            if ($class_year==9)$class_name["c9"]="國中三年級(全年級排序)";
+			
+			if ($class_year==1)$class_name["p1"]="國小一年級(各班排序)";
+            if ($class_year==2)$class_name["p2"]="國小二年級(各班排序)";
+            if ($class_year==3)$class_name["p3"]="國小三年級(各班排序)";
+            if ($class_year==4)$class_name["p4"]="國小四年級(各班排序)";
+            if ($class_year==5)$class_name["p5"]="國小五年級(各班排序)";
+            if ($class_year==6)$class_name["p6"]="國小六年級(各班排序)";
+            if ($class_year==7)$class_name["p7"]="國中一年級(各班排序)";
+            if ($class_year==8)$class_name["p8"]="國中二年級(各班排序)";
+            if ($class_year==9)$class_name["p9"]="國中三年級(各班排序)";
+			
 
 
              $rs2->MoveNext();
@@ -199,6 +248,7 @@ function class_base2($curr_seme="",$sel_year_arr = array()) {
                    if ($res->fields[c_year]==0)$class_name[$class_name_id]=$school_kind_name[$res->fields[c_year]].$res->fields[c_name]."班";
                    if ($res->fields[c_year]<=6 && $res->fields[c_year]>=1)$class_name[$class_name_id]="國小".$school_kind_name[$res->fields[c_year]].$res->fields[c_name]."班";
                    if ($res->fields[c_year]>6)$class_name[$class_name_id]="國中".$school_kind_name[$res->fields[c_year]].$res->fields[c_name]."班";
+	
                 }
                 $res->MoveNext();
         }
@@ -257,6 +307,7 @@ $kind_menu=kind_menu2($sel_year,$sel_seme,$c_year,$c_name,$stage,$kind);
 //echo "\$chart_kind:$chart_kind";
 
 //}
+
 $class_id=$sel_year."_".$sel_seme."_0".$c_year."_".$c_name;
 
 if (empty($c_year) && empty($c_name))$class_id="";
@@ -274,39 +325,119 @@ if ($c_name=="c6")$class_id="c_06_";
 if ($c_name=="c7")$class_id="c_07_";
 if ($c_name=="c8")$class_id="c_08_";
 if ($c_name=="c9")$class_id="c_09_";
+
+if ($c_name=="p1")$class_id="c_01_";
+if ($c_name=="p2")$class_id="c_02_";
+if ($c_name=="p3")$class_id="c_03_";
+if ($c_name=="p4")$class_id="c_04_";
+if ($c_name=="p5")$class_id="c_05_";
+if ($c_name=="p6")$class_id="c_06_";
+if ($c_name=="p7")$class_id="c_07_";
+if ($c_name=="p8")$class_id="c_08_";
+if ($c_name=="p9")$class_id="c_09_";
+
+
 }
 
-$subject_menu=subject_menu($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$subject);
+//$subject_menu=subject_menu($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$subject);
 $percent_menu=percent_menu($percent);
 
 
-//echo "yy:".same_name_ss_id($subject);
+$subject_menu_checkbox=subject_menu_checkbox($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,1);  
+//echo "yy:".same_name_ss_id($subject1);
 
 
-//$asign_checked=($print_asign)?"checked":"";
-//$special_checked=($print_special)?"checked":"";
+$print_msg=($c_name)?"<input type='submit' name='friendly_print' value='友善列印'> <input type='submit' name='excel' value='匯出xls檔'><input type='submit' name='excel2' value='匯出xls檔'><br><input type='submit' name='save_csv' value='匯出csv檔(big5)'><input type='submit' name='save_csv1' value='匯出csv檔(utf-8)'>":"";
 
-$print_msg=($c_name)?"<input type='submit' name='friendly_print' value='友善列印'> <input type='submit' name='save_csv' value='匯出csv檔'><br>":"";
+//$main0=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,0,$rate);	
 
 
-$menu="<form name=\"myform\" method=\"post\" action=\"$_SERVER[SCRIPT_NAME]\">
-        <table>
-        <tr>
-        <td>$year_seme_menu</td><td>$class_year_menu</td><td>$stage_menu</td><td>$kind_menu</td><td>$subject_menu</td><td>$percent_menu</td>
+//echo "\$class_id:".$class_id."\$c_name:".$c_name;
+
+
+
+
+
+if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2) && empty($save_csv1)) 
+{
+	echo "<form name=\"myform\" method=\"post\" action=\"$_SERVER[SCRIPT_NAME]\">";
+	echo "<table><tr>
+        <td>$year_seme_menu</td><td>$class_year_menu</td><td>$stage_menu</td><td>$kind_menu</td><td>$subject_menu</td><td>$percent_menu</td><td><input type='checkbox' name='rate' value='1' $is_show_rate >分數加權</td>
         </tr>
         </table>";
+	echo "<table>
+		<tr>
+		<td valign=top>
+		<table>";
+    if($year_name)echo $subject_menu_checkbox; 
+	echo "</table>
+		 $print_msg
+		</form></td><td valign=top>&nbsp;</td><td valign=top>";
+		
+	$t = microtime();	
+	 
+	 if (substr($c_name,0,1)=="p")
+	 {
+     
+     $nowyear=substr($c_name,1);
+	 if(empty($sel_seme))$year_seme=$sel_year."2";
+	 $sum=get_class_sum($nowyear,$year_seme);
+	 $class_idx=$class_id;
+	 $c_year=$nowyear;
 
+	 
+      for ($i=1;$i<=$sum;$i++)
+	  {   
+       
+      $c_name=$i;
+	  if ($i<10)$c_name="0".$i;
+  	  $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+	   if (isset($_POST['run']))echo "<hr><b>$school_title</b>";
+  
+         $ig=$i;
+		 if ($i<10)$ig="0".$i;
+		 $class_id=$class_idx."_".$ig;
+		 if(empty($sel_seme))$class_id=$class_idx.$ig;
+
+	   
+        if (isset($_POST['run']))
+		{
+			$main0=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,0,$rate,$scopeall);	
+            echo "$main0";
+		}
+	  }
+	 
+	 
+	 
+	 }
+	 else
+	 {
+		 if (isset($_POST['run']))
+		 {
+	      $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+          $main0=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,0,$rate,$scopeall);	
+	 
+          echo "<hr><b>$school_title</b>$main0";
+		 }
+	 }
+	 
+	 
+	 echo "</td></tr></table>";
+	 
+	 
+	 	
+		 $t1 = microtime();
+	 
+        list($m0,$s0) = split(" ",$t);
+        list($m1,$s1) = split(" ",$t1);
 		
-		
-		
-		
-		
-		
-		
-		
+       echo "執行花費時間:".sprintf("%.3f s",($s1+$m1-$s0-$m0));	
+	
+}
 
 
-if (empty($friendly_print) && empty($save_csv)) echo $menu;
+
+
 
 //echo "\$score_semester:$score_semester";
 
@@ -318,17 +449,51 @@ if (empty($friendly_print) && empty($save_csv)) echo $menu;
 //echo "\$subject".$subject;
 
 
+ if ($friendly_print) 
+ {
+	
+	 $today=date("Y-m-d",mktime (0,0,0,date("m"),date("d"),date("Y")));
+	
+	if (substr($c_name,0,1)=="p")
+	{     	 
+	 $nowyear=substr($c_name,1);
+	 if(empty($sel_seme))$year_seme=$sel_year."2";
+	 $sum=get_class_sum($nowyear,$year_seme);
+	 $class_idx=$class_id;
+	 $c_year=$nowyear;
+	 	
+	 $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+     //echo "<hr><b>$school_title</b>";
+      for ($i=1;$i<=$sum;$i++)
+	  {   
+       //$c_name=$i;
+	   //if ($i<10)$c_name="0".$i;
 
-$main0=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,0);
+		 $ig=$i;
+		 if ($i<10)$ig="0".$i;
+		 $class_id=$class_idx."_".$ig;
+		 if(empty($sel_seme))$class_id=$class_idx.$ig;
+	   
+       $main.=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,1,$rate);	
+       $main.="<p>";
+		 
+	  }
+	 
+	 
+	 }
+	 else{
+			    //$main=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,1,$rate);
+				$main=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,1,$rate,$scopeall);	
+				$school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+                //$school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject);
+               
+ 
+	 
+	 }
+				
+			   
 
-
-        if ($friendly_print) 
-		{
-			$main=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,1);
-
-			
-                $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject);
-                $today=date("Y-m-d",mktime (0,0,0,date("m"),date("d"),date("Y")));
+				
                 echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=big5\"><title>補救教學名單</title></head>
                         <SCRIPT LANGUAGE=\"JavaScript\">
                         <!--
@@ -345,14 +510,54 @@ $main0=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$perce
                         <p class=MsoNormal align=center style='text-align:center'><b>".$school_title."</b><span style=\"font-family: 新細明體; mso-ascii-font-family: Times New Roman; mso-hansi-font-family: Times New Roman\">&nbsp;&nbsp;&nbsp; </span></p>
                         <p class=MsoNormal align=right><span style=\"font-family: 新細明體; mso-ascii-font-family: Times New Roman; mso-hansi-font-family: Times New Roman\">
                         <font size=\"1\">列印日期：$today</font></span></p>".$main."</table></td></tr></table></body></html>";
-        }elseif($save_csv){
-			
-			$main=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,2);
-			
-			//echo "ccc=".$friendly_print;
+        
+	 
+		
+		
+		
+ }
+ elseif($save_csv)
+ {
 	
-                $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject);
-                $filename = $year_seme."_".$c_year."_".$c_name."_scoresort.csv";
+	if (substr($c_name,0,1)=="p")
+	{     
+	 $nowyear=substr($c_name,1);
+	 if(empty($sel_seme))$year_seme=$sel_year."2";
+	 $sum=get_class_sum($nowyear,$year_seme);
+	 $class_idx=$class_id;
+	 $c_year=$nowyear;
+	 
+  	 $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+	 
+	 //echo "<hr><b>$school_title</b>";
+      for ($i=1;$i<=$sum;$i++)
+	  { 
+      // $c_name=$i;
+	  // if ($i<10)$c_name="0".$i;  
+
+         $ig=$i;
+		 if ($i<10)$ig="0".$i;
+		 $class_id=$class_idx."_".$ig;
+		 if(empty($sel_seme))$class_id=$class_idx.$ig;
+	   
+       $main.=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,2,$rate,$scopeall);	
+       $main.="\r\n";
+		 
+	  }
+	 
+	 
+	 }
+	 else{
+			
+			    $main=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,2,$rate,$scopeall);
+			   //$main=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,2,$rate);
+			
+			   //echo "ccc=".$friendly_print;
+	
+                $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+                //$school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject);
+     }
+				$filename = $year_seme."_".$c_year."_".$c_name."_scoresort.csv";
 
                 header("Content-type: text/x-csv ; Charset=Big5");
                 header("Content-disposition:attachment ; filename=$filename");
@@ -361,23 +566,235 @@ $main0=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$perce
                                 header("Cache-Control: max-age=0");
                                 header("Pragma: public");
                 header("Expires: 0");
-                echo $school_title."\r\n".$main;
-				exit;
-        }
+				echo $school_title."\r\n".$main;
+
+				
+			   exit;
+				
+				
+		
+				
+ }
+ elseif($save_csv1)
+ {
+	
+	if (substr($c_name,0,1)=="p")
+	{     
+	 $nowyear=substr($c_name,1);
+	 if(empty($sel_seme))$year_seme=$sel_year."2";
+	 $sum=get_class_sum($nowyear,$year_seme);
+	 $class_idx=$class_id;
+	 $c_year=$nowyear;
+	 
+  	 $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+	 
+	 //echo "<hr><b>$school_title</b>";
+      for ($i=1;$i<=$sum;$i++)
+	  { 
+      // $c_name=$i;
+	  // if ($i<10)$c_name="0".$i;  
+
+         $ig=$i;
+		 if ($i<10)$ig="0".$i;
+		 $class_id=$class_idx."_".$ig;
+		 if(empty($sel_seme))$class_id=$class_idx.$ig;
+	   
+       $main.=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,2,$rate,$scopeall);	
+       $main.="\r\n";
+		 
+	  }
+	 
+	 
+	 }
+	 else{
+			
+			    $main=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,2,$rate,$scopeall);
+			   //$main=sortview($sel_year,$sel_seme,$class_id,$subject,$stage,$chart_kind,$percent,2,$rate);
+			
+			   //echo "ccc=".$friendly_print;
+	
+                $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+                //$school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject);
+     }
+				$filename = $year_seme."_".$c_year."_".$c_name."_scoresort.csv";
+
+                header("Content-type: text/x-csv ; Charset=Big5");
+                header("Content-disposition:attachment ; filename=$filename");
+                //header("Pragma: no-cache");
+                                //配合 SSL連線時，IE 6,7,8下載有問題，進行修改
+                                header("Cache-Control: max-age=0");
+                                header("Pragma: public");
+                header("Expires: 0");
+				//echo $school_title."\r\n".$main;
+				
+				
+				$ddd=$school_title."\r\n".$main;
+		        $ddd=iconv("BIG5","UTF-8",$ddd);
+
+                preg_match_all("/&#([0-9]{5});/", $ddd, $matches, PREG_SET_ORDER);
+ 
+                foreach ($matches as $val) {            
+			    $ddd = preg_replace("/$val[0]/", mb_convert_encoding($val[0],"utf-8","HTML-ENTITIES"),$ddd);
+                }
+			    echo $ddd;
+				
+				
+			   exit;
+				
+				
+		
+				
+ }
+ elseif($excel)
+ {
+			
+	if (substr($c_name,0,1)=="p")
+	{     
+	 $nowyear=substr($c_name,1);
+	 if(empty($sel_seme))$year_seme=$sel_year."2";
+	 $sum=get_class_sum($nowyear,$year_seme);
+	 $class_idx=$class_id;
+	 $c_year=$nowyear;
+	 
+	 $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+	 
+	 //echo "<hr><b>$school_title</b>";
+      for ($i=1;$i<=$sum;$i++)
+	  {   
+         $ig=$i;
+		 if ($i<10)$ig="0".$i;
+		 $class_id=$class_idx."_".$ig;
+		 if(empty($sel_seme))$class_id=$class_idx.$ig;
+		 
+       $main.=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,3,$rate,$scopeall);	
+       $main.="補救順位,身分證字號,年級,班級,座號,姓名,成績,名次,PR值,備註\n";
+		 
+	  }
+	 
+	 
+	 }
+	 else{			
+		
+        $school_title=score_head2($sel_year,$sel_seme,$c_year,$c_name,$stage,$chart_kind,$subject1);
+        $main=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,3,$rate,$scopeall);
+        
+	 } 
+
+
+
+
+	 
+	 
+ $filename = $year_seme."_".$c_year."_".$c_name."_scoresort.xls";
+
+//讀入HEAD
+$fd = fopen("excelsample/forT_head.txt", "r");
+while (!feof($fd)) {
+    $buffer = fgets($fd, 4096);
+    $m_strHead.=$buffer;
+}
+
+//讀入HEAD2
+$fd = fopen("excelsample/forT_head2.txt", "r");
+while (!feof($fd)) {
+    $buffer = fgets($fd, 4096);
+    $m_strHead2.=$buffer;
+}
+
+$m_strHead2=iconv("UTF-8","BIG5",$m_strHead2);
+$m_strHead=iconv("UTF-8","BIG5",$m_strHead);
+
+
+$m_strHead=str_replace("{TITLE}", $school_title,$m_strHead);
+//讀入BODY
+$fd = fopen("excelsample/forT_body.txt", "r");
+while (!feof($fd)) {
+    $buffer = fgets($fd, 4096);
+    $m_strBody.=$buffer;
+}
+
+//讀入FOOT
+$fd = fopen("excelsample/forT_foot.txt", "r");
+while (!feof($fd)) {
+    $buffer = fgets($fd, 4096);
+    $m_strFoot.=$buffer;
+}
+
+$da=explode("\n",$main);
+
+for ($i = 0; $i < count($da)-1; $i++) {
+	$ba=explode(",",$da[$i]);
+	
+    $m_strBodytemp = $m_strBody; 
+    $m_strBodytemp = str_replace("{brank}", $ba[0], $m_strBodytemp);
+    $m_strBodytemp = str_replace("{nm}", $ba[1], $m_strBodytemp);	
+    $m_strBodytemp = str_replace("{year}", $ba[2], $m_strBodytemp);
+    $m_strBodytemp = str_replace("{class}", $ba[3], $m_strBodytemp);
+    $m_strBodytemp = str_replace("{number}", $ba[4], $m_strBodytemp);
+	$m_strBodytemp = str_replace("{name}", $ba[5], $m_strBodytemp);
+	$m_strBodytemp = str_replace("{score}", $ba[6], $m_strBodytemp);
+	$m_strBodytemp = str_replace("{rank}", $ba[7], $m_strBodytemp);
+	$m_strBodytemp = str_replace("{pr}", $ba[8], $m_strBodytemp);
+	$m_strBodytemp = str_replace("{ud}", $ba[9], $m_strBodytemp);
+	
+    $m_strBodyMix .= $m_strBodytemp; 
+}
+
+
+
+header("Content-type:application/vnd.ms-excel");
+header("Content-Disposition: attachment; filename=" . $filename);
+
+
+		echo $m_strHead . $m_strHead2 . $m_strBodyMix . $m_strFoot; 
+
+           
+ exit;
+
+}
+elseif($excel2)
+{
+		$main=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,3,$rate,$scopeall);
+
+		
+		require_once "../../include/sfs_case_excel.php";
+		$x=new sfs_xls();
+		$x->setUTF8();
+		$x->filename=$year_seme."_".$c_year."_".$c_name."_scoresort.xls";
+		$x->setBorderStyle(1);
+		$x->addSheet('ScoreSort');
+		$x->items[0]=array('補救順位','身分證字號','年級','班級','座號','姓名','成績','名次','PR值','備註');
+		
+		$da=explode("\n",$main);
+
+         for ($i = 0; $i < count($da)-1; $i++) {
+	     $ba=explode(",",$da[$i]);
+         $x->items[]=array($ba[0],$ba[1],$ba[2],$ba[3],$ba[4],$ba[5],$ba[6],$ba[7],$ba[8],$ba[9]);
+         }
 		
 		
+		
+	    
+		$x->writeSheet();
+		$x->process();
 
 
+           
+ exit;
+
+}
+
+		
 
 
-  if (empty($friendly_print) && empty($save_csv)) echo $main0;
+  //if (empty($friendly_print) && empty($save_csv)) echo $main0;
 
-  if (empty($friendly_print) && empty($save_csv))echo $print_msg;
+ // if (empty($friendly_print) && empty($save_csv))echo $print_msg;
 
-if (empty($friendly_print) && empty($save_csv)) echo "</td></tr></table></form></tr></table>";
+if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2) && empty($save_csv1)) echo "</td></tr></table></tr></table>";
 
 //程式檔尾
-if (empty($friendly_print) && empty($save_csv)) foot();
+if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2) && empty($save_csv1)) foot();
 
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: view.php 7751 2013-11-08 08:39:16Z infodaes $
+// $Id: view.php 8592 2015-11-12 08:22:32Z qfon $
 
 include "config.php";
 // 不需要 register_globals
@@ -43,12 +43,14 @@ echo "</td></tr></table>";
     
 	echo "<table cellSpacing=0 cellPadding=4 width='100%' align=center border=1 bordercolor='#33CCFF' bgcolor='#CCFFFF'>
           <tr bgcolor='#66CCFF' align=center> 
-            <td ><a href=$PHP_SELF?id=$id&der=order_pos,class_id,num>▲</a>成績<a href=$PHP_SELF?id=$id&der=order_pos%20desc,class_id,num>▼</a></td>
-			<td ><a href=$PHP_SELF?id=$id&der=class_id,order_pos,num>▲</a>班級<a href=$PHP_SELF?id=$id&der=class_id%20desc,order_pos,num>▼</a></td>
-			<td >座號</td>
-			<td >學號</td>
-		<td ><a href=$PHP_SELF?id=$id&der=stud_name,order_pos>▲</a>姓名<a href=$PHP_SELF?id=$id&der=stud_name%20desc,order_pos>▼</a></td>
-		<td ><a href=$PHP_SELF?id=$id&der=guidance_name,order_pos>▲</a>指導者<a href=$PHP_SELF?id=$id&der=guidance_name%20desc,order_pos>▼</a></td>
+            <td ><a href=$PHP_SELF?id=$id&der=order_pos,class_id,num>▲</a>成績<a href=$PHP_SELF?id=$id&der=order_pos%20desc,class_id,num>▼</a></td>";
+	if ($viewyn !=1 && $viewyn !=2)echo "<td ><a href=$PHP_SELF?id=$id&der=class_id,order_pos,num>▲</a>班級<a href=$PHP_SELF?id=$id&der=class_id%20desc,order_pos,num>▼</a></td>";
+	if ($viewyn ==2)echo "<td ><a href=$PHP_SELF?id=$id&der=class_id,order_pos,num>▲</a>年級<a href=$PHP_SELF?id=$id&der=class_id%20desc,order_pos,num>▼</a></td>";
+    if ($viewyn ==1)echo "<td ><a href=$PHP_SELF?id=$id&der=class_id,order_pos,num>▲</a>班級<a href=$PHP_SELF?id=$id&der=class_id%20desc,order_pos,num>▼</a></td>";
+	if ($viewyn !=2)echo "<td >座號</td>";
+	echo "<td >學號</td>";
+	if ($viewfullname !=1)echo "<td ><a href=$PHP_SELF?id=$id&der=stud_name,order_pos>▲</a>姓名<a href=$PHP_SELF?id=$id&der=stud_name%20desc,order_pos>▼</a></td>";
+	echo "<td ><a href=$PHP_SELF?id=$id&der=guidance_name,order_pos>▲</a>指導者<a href=$PHP_SELF?id=$id&der=guidance_name%20desc,order_pos>▼</a></td>
 		<td><a href=$PHP_SELF?id=$id&der=up_date,order_pos,class_id,num>▲</a>日期<a href=$PHP_SELF?id=$id&der=up_date%20desc,order_pos,class_id,num>▼</a>　<a href=$PHP_SELF?id=$id&der=order_pos,class_id,num&date=no>隱藏日期</a></td></tr>";              
 
     //班上報名資料
@@ -60,7 +62,18 @@ echo "</td></tr></table>";
         $did = $row["id"] ;	
         $item = $row["item"] ;
         $order_pos = $row["order_pos"]+1 ;
+		
         $stud_name = $row["stud_name"] ;
+		
+		/*
+		if($viewfullname==1)
+		{
+		//$stud_name_replace=mb_substr($stud_name,1,1,"BIG5");
+		$stud_name_replace=substr($stud_name,2,2);
+        $stud_name=str_replace($stud_name_replace,"○",$stud_name);
+		}
+		*/
+		
 		$guidance_name = $row["guidance_name"] ;
 		$stud_num = $row["num"] ;
         $data_get = $row["data_get"] ;
@@ -77,11 +90,15 @@ echo "</td></tr></table>";
         $cti_class_id = sprintf("%d%02d",$temp[2],$temp[3]);
         $num = $row["cc"] ;
         echo "<tr align='center'> 
-            <td >$data_get</td>
-       	    <td><a href='show_class.php?seme_year_seme=$seme_year_seme&class_id=$cti_class_id'>$class_name</td>
-			<td>$stud_num</td><td>$stud_id</td>
-            <td ><a href='show.php?cita_year=$cita_year&stud_id=$stud_id'>$stud_name</a></td>
-			<td >$guidance_name</td>
+            <td >$data_get</td>";
+       	if ($viewyn !=1 && $viewyn !=2)echo "<td><a href='show_class.php?seme_year_seme=$seme_year_seme&class_id=$cti_class_id'>$class_name</td>";
+      	if ($viewyn ==2)echo "<td>$temp[1]</td>";
+      	if ($viewyn ==1)echo "<td>$temp[3]</td>";
+			
+		if ($viewyn !=2)echo "<td>$stud_num</td>";
+		echo "<td>$stud_id</td>";
+        if ($viewfullname !=1) echo "<td ><a href='show.php?cita_year=$cita_year&stud_id=$stud_id'>$stud_name</a></td>";
+		echo "<td >$guidance_name</td>
 	          <td >$up_date</td>
          </tr>" ;
    
@@ -91,7 +108,11 @@ echo "</td></tr></table>";
    //統計 -------------------------------------------------------
    //學校、組數統計	
    echo  "<br><table cellSpacing=0 cellPadding=4 width='50%' align=center border=1 bordercolor='#33CCFF' bgcolor='#CCFFFF'>
-             <tr bgcolor='#66CCFF'><td>班級</td><td>人數</td></tr>\n" ;   
+             <tr bgcolor='#66CCFF'>";
+   if ($viewyn ==2)echo "<td>年級</td>";
+   if ($viewyn !=2)echo "<td>班級</td>";
+   echo "<td>人數</td></tr>\n";
+   
    $sqlstr = " select class_id , count(*) as cc  from  cita_data where (kind = '$id'  and order_pos>-1) group by class_id   " ;
    $result =  $CONN->Execute($sqlstr) ;      
    while ($row = $result->FetchRow() ) {
@@ -101,7 +122,29 @@ echo "</td></tr></table>";
      $seme_year_seme = $temp[0].$temp[1];
      $cti_class_id = sprintf("%d%02d",$temp[2],$temp[3]);
      $num = $row["cc"] ;
-     echo  "<tr><td><a href='show_class.php?seme_year_seme=$seme_year_seme&class_id=$cti_class_id'>$class_name</td><td>$num </td></tr>\n" ;   
+	 if ($viewyn ==2)
+	 {
+	  $class_name=$temp[1];
+      echo  "<tr><td>$class_name</td><td>$num </td></tr>\n" ;  		 
+		 
+	 }
+	 
+	 if ($viewyn ==1)
+	 {
+		 $class_name=$temp[3];
+      echo  "<tr><td>$class_name</td><td>$num </td></tr>\n" ;   
+
+	 }
+	
+	
+	  if ($viewyn !=1 && $viewyn !=2)
+	  {
+      echo  "<tr><td><a href='show_class.php?seme_year_seme=$seme_year_seme&class_id=$cti_class_id'>$class_name</td><td>$num </td></tr>\n" ;   
+	  }	 
+	 
+	 
+
+	 
      $school_num ++ ;
      $group_num += $num ;
    } 

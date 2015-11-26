@@ -11,7 +11,7 @@ include "./my_fun.php";
 
 
 //選單
-$menu_p = array("score_sort.php"=>"補救教學名單",
+$menu_p = array("score_sort.php"=>"補救教學名單","scope_pr.php"=>"各領域PR值趨勢",
 	);
 //取得模組設定
 $m_arr = get_sfs_module_set();

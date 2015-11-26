@@ -30,10 +30,26 @@ if ($_GET['act']=='GetPages') {
 	 
 	//檢查是否開放 jboard_kind 的 board_is_public=1
 	
+
+	
 	//開始組合 sql
    $sql_select = "select b_id from jboard_p  where bk_id='$bk_id' ";
-	 
 
+	//同步呈現板區資料
+	$sql_sync="select bk_id,synchronize_days from jboard_kind where synchronize='$bk_id' and bk_id<>'$bk_id'";
+  $res=$CONN->Execute($sql_sync) or die ($sql_sync);
+
+  if ($res->RecordCount()) {
+ 		while ($row=$res->fetchRow()) {
+   		$SYNC[]=array('bk_id'=>$row['bk_id'],'days'=>$row['synchronize_days']); //同步板區 id
+ 		}
+	}
+	 //同步呈現的板區
+	 if (count($SYNC)>0) {
+  	foreach ($SYNC as $v) {
+  		$sql_select .=" or (bk_id='".$v['bk_id']."' and to_days(b_open_date)+ ".$v['days']." > to_days(curdate()))";
+  	}
+	 }
 
 			$sql_select.=" order by b_sort,b_open_date desc ,b_post_time desc ";
 			$result = $CONN->Execute($sql_select) or die ($sql_select);
@@ -124,7 +140,7 @@ if ($_GET['act']=='GetMarquee') {
 
 		//跑馬燈 $html_link
         $query = "select b_id,b_sub,b_is_intranet,b_title from jboard_p where bk_id='$bk_id' and";        
-        $query.=" b_is_marquee = '1' and ((to_days(b_open_date)+b_days > to_days(current_date())) or b_days=0);";
+        $query.=" b_is_marquee = '1' and ((to_days(b_open_date)+b_days > to_days(current_date())) or (to_days(b_open_date)+".$max_marquee_days." > to_days(current_date())));";
         $result = $CONN->Execute($query) or die($query);
         
         $ROW=$result->GetRows();
@@ -132,6 +148,7 @@ if ($_GET['act']=='GetMarquee') {
         //轉碼
        $row=array();
        foreach ($ROW as $k=>$v) {
+       	  $v['b_title']=$TEACHER_TITLE[$v['b_title']];
           $row[$k]=array_base64_encode($v);
         }
 
@@ -146,17 +163,37 @@ if ($_GET['act']=='GetList' ) {
 	 $search_key=$_GET['search_key'];  //有沒有索引條件
 	 
 	//檢查是否開放 jboard_kind 的 board_is_public=1
+	$sql_boardname="select board_name from jboard_kind where bk_id='$bk_id'";
+	$res=$CONN->Execute($sql_boardname);
+	$board_name=$res->fields['board_name'];
 	
 	//開始組合 sql
-   $sql_select = "select a.*,b.board_name from jboard_p a,jboard_kind b where a.bk_id=b.bk_id and a.bk_id='$bk_id' ";
+   $sql_select = "select a.*,b.board_name from jboard_p a,jboard_kind b where a.bk_id=b.bk_id and ( a.bk_id='$bk_id' ";
+	 
+	 	//同步呈現板區資料
+	$sql_sync="select bk_id,synchronize_days from jboard_kind where synchronize='$bk_id' and bk_id<>'$bk_id'";
+  $res=$CONN->Execute($sql_sync) or die ($sql_sync);
+
+  if ($res->RecordCount()) {
+ 		while ($row=$res->fetchRow()) {
+   		$SYNC[]=array('bk_id'=>$row['bk_id'],'days'=>$row['synchronize_days']); //同步板區 id
+ 		}
+	}
+	 //同步呈現的板區
+	 if (count($SYNC)>0) {
+  	foreach ($SYNC as $v) {
+  		$sql_select .=" or (a.bk_id='".$v['bk_id']."' and to_days(a.b_open_date)+ ".$v['days']." > to_days(curdate()))";
+  	}
+	 }
+
 	 
 	//有輸入條件	
 			if ($search_key!="") {
 			 $search_key=iconv("UTF-8","BIG5//IGNORE",$search_key);
-			 $sql_select.=" and b_sub like '%".addslashes($search_key)."%'";
+			 $sql_select.=") and a.b_sub like '%".addslashes($search_key)."%'";
 			}
 			
-			$sql_select.=" order by b_sort,b_open_date desc ,b_post_time desc ";
+			$sql_select.=(($search_key=="")?")":"")." order by a.b_sort,a.b_open_date desc ,a.b_post_time desc ";
 
 		//取出資料
 			$sql_select .= " limit ".($post_page * $page_count).", $page_count";
@@ -166,6 +203,7 @@ if ($_GET['act']=='GetList' ) {
       //轉碼
       $row=array();
         foreach ($ROW as $k=>$v) {
+        	$v['board_name']=$board_name;
           $row[$k]=array_base64_encode($v);
         }
             

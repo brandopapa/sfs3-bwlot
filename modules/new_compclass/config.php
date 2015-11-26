@@ -1,5 +1,5 @@
 <?php
-// $Id: config.php 6116 2010-09-10 01:50:15Z hami $
+// $Id: config.php 8581 2015-11-02 15:06:52Z chiming $
 
 /* 取得學務系統設定檔 */
 require_once "./module-cfg.php";
@@ -25,6 +25,7 @@ $today=date("Y-m-d");
 //目錄內程式
 $school_menu_p = array(
 "index.php"=>"空堂預約",
-"query.php"=>"查詢舊記錄"
+"query.php"=>"查詢舊記錄",
+"query_today.php"=>"今日各節次所有專科教室使用列表"
 );
 ?>

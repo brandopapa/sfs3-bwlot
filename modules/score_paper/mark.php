@@ -1,5 +1,5 @@
 <?php
-// $Id: mark.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: mark.php 8599 2015-11-20 02:27:38Z qfon $
 
 include "config.php";
 sfs_check();
@@ -31,6 +31,8 @@ function &get_all_mark($sel_year,$sel_seme){
 	
 	//取得學校資料
 	$school=get_school_base_array();
+	
+	
 	$mark_all.=make_list($school,"學校","","",false);
 	$mark_list=get_mark($school);
 	

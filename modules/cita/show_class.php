@@ -1,6 +1,6 @@
 <?php
 
-// $Id: show_class.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: show_class.php 8592 2015-11-12 08:22:32Z qfon $
 
 include "config.php";
 $class_id = $_GET['class_id'];
@@ -48,8 +48,9 @@ echo "<form method='get' action='{$_SERVER['php_SELF']}'> <p align=center><font 
 	echo "<table cellSpacing=0 cellPadding=4 width='100%' align=center border=1 bordercolor='#33CCFF' bgcolor='#CCFFFF'>
           <tr bgcolor='#66CCFF' align=center> 
             <td ><a href=$PHP_SELF?class_id=$class_id&seme_year_seme=$seme_year_seam&der=grada,up_date>▲</a>項目<a href=$PHP_SEL?class_id=$class_id&seme_year_seme=$seme_year_seam&der=grada%20desc,up_date>▼</a></td>
-		<td >成績</td><td >姓名</td>
-		<td ><a href=$PHP_SELF?class_id=$class_id&seme_year_seme=$seme_year_seam&der=up_date>▲</a>日期<a href=$PHP_SELFclass_id=$class_id&seme_year_seme=$seme_year_seme&der=up_date%20desc>▼</a></td></tr>";              
+		<td >成績</td>";
+	if ($viewfullname !=1)echo "<td >姓名</td>";
+		echo "<td ><a href=$PHP_SELF?class_id=$class_id&seme_year_seme=$seme_year_seam&der=up_date>▲</a>日期<a href=$PHP_SELFclass_id=$class_id&seme_year_seme=$seme_year_seme&der=up_date%20desc>▼</a></td></tr>";              
 
      
      $cti_class_id = sprintf("%03d_%d_%02d_%02d",substr($seme_year_seme,0,3),substr($seme_year_seme,-1),substr($class_id,0,1),substr($class_id,-2));
@@ -71,9 +72,10 @@ echo "<form method='get' action='{$_SERVER['php_SELF']}'> <p align=center><font 
 
         echo "<tr> 
   		<td ><a href='view.php?id=$did'>$doc</a><font size=2>---$grada[$gra]</font></td>
-            <td >$data_get</td>
-            <td >$stud_name</td>          
-	          <td >$up_date</td>
+            <td >$data_get</td>";
+			
+         if ($viewfullname !=1)echo "<td >$stud_name</td>";          
+	     echo "<td >$up_date</td>
          </tr>" ;
    
    }           

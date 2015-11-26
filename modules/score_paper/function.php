@@ -1,5 +1,5 @@
 <?php
-//$Id: function.php 7018 2012-11-30 02:11:40Z chiming $
+//$Id: function.php 8599 2015-11-20 02:27:38Z qfon $
 
 //標籤格式化
 function make_list($array=array(),$txt="",$other_title="",$other=array(),$table=true){
@@ -67,9 +67,27 @@ function get_school_base_array(){
         $school['學校地址']=$school_data["sch_addr"];
         $school['學校電話']=$school_data["sch_phone"];
         $school['學校傳真']=$school_data["sch_fax"];
+		
+		//取得校長名稱
+		$sql_select = "select name from teacher_base as a,teacher_post as b where b.teach_title_id=1 and a.teacher_sn=b.teacher_sn order by b.update_time desc Limit 1";
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+
+        $school['校長']=$school_data["name"];
+		
+		
+		//取得教務主任名稱
+		$sql_select = "select name from teacher_base as a,teacher_post as b where b.teach_title_id=2 and a.teacher_sn=b.teacher_sn order by b.update_time desc Limit 1";
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+		
+		$school['教務主任']=$school_data["name"];
 
         return $school;
 }
+
+
+
 
 //取得課程陣列
 function ss_array($year="",$seme="",$cyear="",$class_id=""){

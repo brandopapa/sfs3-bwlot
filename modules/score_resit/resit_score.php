@@ -102,7 +102,7 @@ if ($_POST['act']=='html_resit_list') {
 	  	$main.="   
 	     <td style='font-size:9pt'>".$row['entrance_time']."</td>		
 	  	 <td style='font-size:9pt'>".$row['complete_time']."</td>
-	     <td style='font-size:10pt' align='center'>".$row['score'];
+	     <td style='font-size:10pt".(($row['score']<60)?";color:red":"")."' align='center'>".$row['score'];
 		 }
 
 		if ($row['complete']==1) {
@@ -419,7 +419,7 @@ if ($_POST['act']=='output_resit_name') {
 	$x->items[0]=array('學號','目前班級','目前座號','姓名');
 	//讀取分科
 	$data_length=3;
-	foreach ($scope_subject[$scope] as $V) {
+	foreach ($scope_subject['ALL'][$scope] as $V) {
 	 $data_length++;
 	 $x->items[0][$data_length]=$V['subject'];
  	 $data_length++;
@@ -440,6 +440,9 @@ if ($_POST['act']=='output_resit_name') {
  	  $res_class_num=$CONN->Execute($sql_class_num);
  	  if ($res_class_num->RecordCount()==1) {
  	    $seme_class=$res_class_num->fields['seme_class'];
+          $class_year=substr($seme_class,0,1);
+          $class_num=substr($seme_class,1,2);
+          $class_id=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,$class_year,$class_num);
  	  } else {
  	    $seme_class="";
  	  }
@@ -459,21 +462,20 @@ if ($_POST['act']=='output_resit_name') {
 			$x->items[$add_data_id]=array($student_data[$student_sn]['stud_id'],$student_data[$student_sn]['class_name'],$student_data[$student_sn]['seme_num'],$student_data[$student_sn]['stud_name']);
 			$data_length=3;
 			//放入分科成績
-			foreach ($scope_subject[$scope] as $V) {    
+            //2015.11.18 檢查是否該班級有班級課程
+            $target_id=($scope_subject[$class_id][$scope]=='')?"ALL":$class_id;
+			foreach ($scope_subject[$target_id][$scope] as $V) {
 	     	  $now_subject_ss_id=$V['ss_id'];
 					$score=$ss_score[$now_subject_ss_id];  //分科分數
-					  //讀取老師任課老師
-		        if ($seme_class) {
-		        	$class_year=substr($seme_class,0,1);
-		        	$class_num=substr($seme_class,1,2);			  
-					    $class_id=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,$class_year,$class_num);
+					//讀取老師任課老師
+		            if ($seme_class) {
 					    $sql_subject_teacher="select teacher_sn from score_course where class_id='$class_id' and ss_id='$now_subject_ss_id'";
-							$res_subject_teacher=$CONN->Execute($sql_subject_teacher);
-							$teacher_sn=$res_subject_teacher->fields['teacher_sn'];
-							$subject_teacher=get_teacher_name($teacher_sn);
-					  } else {
+						$res_subject_teacher=$CONN->Execute($sql_subject_teacher);
+						$teacher_sn=$res_subject_teacher->fields['teacher_sn'];
+						$subject_teacher=get_teacher_name($teacher_sn);
+				    } else {
 					    $subject_teacher="轉入生";   //轉學生，無科任老師
-					  }
+				    } // end if ($seme_class)
 	 			$data_length++;
 	 			$x->items[$add_data_id][$data_length]=$score;
  	 			$data_length++;

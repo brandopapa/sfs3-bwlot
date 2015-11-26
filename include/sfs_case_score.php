@@ -1,5 +1,5 @@
 <?php
-// $Id: sfs_case_score.php 8335 2015-03-03 08:08:08Z smallduh $
+// $Id: sfs_case_score.php 8596 2015-11-19 02:21:51Z qfon $
 
 //給student_sn和ss_id算出該生此科的學期總成績
 function seme_score($student_sn,$ss_id,$sel_year="",$sel_seme=""){
@@ -830,17 +830,29 @@ function subj_wet($ss_id=""){
 
 // 取得成績檔
 function &get_score_value($stud_id,$student_sn,$class_id,$oth_data,$sel_year,$sel_seme,$stage="") {
-	global $CONN,$oth_arr_score,$oth_arr_score_2;
+	global $CONN,$oth_arr_score,$oth_arr_score_2,$style_ss_num;
 	$class=class_id_2_old($class_id);
 	// 取得努力程度文字敘述
 //	$arr_1 = sfs_text("努力程度");
+
 	// 取得課程每週時數
 	$ss_num_arr = get_ss_num_arr($class_id);
-
+	
+	if ($style_ss_num==1)//以課程設定每周節數為主
+	{
+	$ss_num_arr =get_ss_num_arr_from_score_ss($class_id);
+	}
+	
+	if ($style_ss_num==2)//以課程設的加權數作為節數
+	{
+	$ss_num_arr =get_ss_num_arr_from_score_ss_rate($class_id);
+	}
+	
 	if ($stage=="") {
 		// 學期成績
 		// 取得本年級的課程陣列
 		$ss_name_arr = &get_ss_name_arr($class,"短");
+		
 		// 取得學習成就
 		$ss_score_arr =get_ss_score_arr($class,$student_sn);
 	} else {
@@ -856,7 +868,9 @@ $sectors=0;
 foreach($ss_score_arr as $key=>$value){
 	$ss_score_sum['定期評量']+=$value['定期評量']*$ss_num_arr[$key];
 	$ss_score_sum['平時成績']+=$value['平時成績']*$ss_num_arr[$key];
+	
 	$sectors+=$ss_num_arr[$key];	
+
 }
 $ss_score_sum['定期評量']=$ss_score_sum['定期評量']/$sectors;
 $ss_score_sum['平時成績']=$ss_score_sum['平時成績']/$sectors;
@@ -1061,7 +1075,7 @@ function &html2code2($class,$sel_year,$sel_seme,$oth_data,$nor_data,$abs_data,$r
 		</td>";
 		if ($IS_JHORES==0&&$_SESSION[session_who]=="教師") {
 			$temp_str.="
-				<td rowspan=\"3\" colspan=\"8\"><img src='$SFS_PATH_HTML/images/comment.png' width=16 height=16 border=0 title='詞庫輸入' align='left' name='nor_score_memo' value='nor_score_memo_s' onClick=\"return OpenWindow('nor_score_memo')\"><textarea name='nor_score_memo' id='nor_score_memo' cols=30 rows=5>$nor_data[ss_score_memo]</textarea></td>
+				<td rowspan=\"3\" colspan=\"8\"><img src='$SFS_PATH_HTML/images/comment.png' width=16 height=16 border=0 title='詞庫輸入' align='left' name='nor_score_memo' value='nor_score_memo_s' onClick=\"return OpenWindow('nor_score_memo')\"><textarea name='nor_score_memo' id='nor_score_memo' cols=30 rows=5>mmmmm$nor_data[ss_score_memo]</textarea></td>
 				<td rowspan=\"3\" colspan=\"1\">$nor_score_sel</td>";
 		} else {
 			$temp_str.="
@@ -1658,7 +1672,7 @@ function cal_fin_score($student_sn=array(),$seme=array(),$succ="",$strs="",$prec
 //echo $sn."---".$fin_score[$sn][total][score]." --- ".$fin_score[$sn][$ls][avg][score]."---".$fin_score[$sn][total][rate]."<BR>";
 					}
 					//判斷及格領域數
-					if ($fin_score[$sn][$ls][avg][score] >= 60) $fin_score[$sn][succ]++;
+					if ($fin_score[$sn][$ls][avg][score] >= 60) $fin_score[$sn][succ]++; else  $fin_score[$sn][fail]++;
 				}
 			}
 
@@ -1720,7 +1734,7 @@ function cal_fin_score($student_sn=array(),$seme=array(),$succ="",$strs="",$prec
 				$rank_score[$sn]=$fin_score[$sn]['total']['score'];
 
 
-				if ($fin_score[$sn][language][avg][score] >= 60) $fin_score[$sn][succ]++;
+				if ($fin_score[$sn][language][avg][score] >= 60) $fin_score[$sn][succ]++;else $fin_score[$sn][fail]++;
 			}
 
 			if ($succ) {
