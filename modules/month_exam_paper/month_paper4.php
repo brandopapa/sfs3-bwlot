@@ -1,5 +1,5 @@
 <?php
-// $Id: month_paper4.php 8568 2015-10-19 16:15:13Z qfon $
+// $Id: month_paper4.php 8654 2015-12-19 16:37:10Z qfon $
 // 引入 SFS3 的函式庫
 //include "../../include/config.php";
 
@@ -37,11 +37,12 @@ if($act=="dl_pdf_one"){
 		}
 		//成績單標題
 		$title=$school_short_name.$curr_year."學年度第".$curr_seme."學期第".$test_sort."次定期考查\n";
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		if(sizeof($curr_year)==2) $curr_year="0".$curr_year;
 		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		$st_arr=student_sn_to_name_num($student_sn);
+		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 		$cla_arr=class_id_to_full_class_name($class_id);
-		$title.="班級：".$cla_arr."\n姓名：".$st_arr[1]." 座號：".$st_arr[2];
+		$title.="班級：".$cla_arr."\n姓名：".$st_arr[1]." 座號：".$st[2];
 		if($add_nor) $header=array("科目","月考*$R0%","平時*$R1%","成績");
 		else $header=array("科目","成績");
 		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
@@ -369,11 +370,12 @@ else{
 		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet'>下載全班PDF</a></font></td></tr>";
 		//成績單標題
 		$title=$school_short_name."<br>".$curr_year."學年度第".$curr_seme."學期第".$test_sort."次定期考查<br>";
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		if(sizeof($curr_year)==2) $curr_year="0".$curr_year;
 		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		$st_arr=student_sn_to_name_num($student_sn);
+		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 		$cla_arr=class_id_to_full_class_name($class_id);
-		$title.="班級：".$cla_arr."<br>姓名：".$st_arr[1]." 座號：".$st_arr[2];
+		$title.="班級：".$cla_arr."<br>姓名：".$st_arr[1]." 座號：".$st[2];
 		if($add_nor){
 			$paper="<table  cellspacing=1 cellpadding=6 border=0 bgcolor='#A7A7A7' width='100%' >
 			<tr bgcolor='#EFFFFF'>
@@ -528,7 +530,13 @@ function ooo_one($test_sort,$class_num,$student_sn){
 	$filename=$class_num."_".$test_sort."_".$student_sn.".sxw";
 
     //新增一個 zipfile 實例
-	$ttt = new zipfile;
+	//$ttt = new zipfile;
+	$ttt = new EasyZip;
+	$ttt->setPath($oo_path);
+	$ttt->addDir('META-INF');
+	$ttt->addfile('settings.xml');
+	$ttt->addfile('styles.xml');
+	$ttt->addfile('meta.xml');
 
 	//讀出 xml 檔案
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/META-INF/manifest.xml");
@@ -552,12 +560,12 @@ function ooo_one($test_sort,$class_num,$student_sn){
 	//將 content.xml 的 tag 取代
 	$curr_year = curr_year();
 	$curr_seme = curr_seme();
-	if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+	if(sizeof($curr_year)==2) $curr_year="0".$curr_year;
 	$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 	$year_seme_sort=curr_year()."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查";
 	$class=class_id_to_full_class_name($class_id);
 	$school_name=$school_short_name;
-	$st=student_sn_to_id_name_num($student_sn,$curr_year="",$curr_seme="");
+	$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 	$name=$st[1];
 	$num=$st[2];
 	//echo $school_name.$year_seme_sort.$class_info.$name.$num;
@@ -602,7 +610,7 @@ function ooo_one($test_sort,$class_num,$student_sn){
 	$temp_arr["teacher"] = $teacher;
 	
 	// change_temp 會將陣列中的 big5 轉為 UTF-8 讓 openoffice 可以讀出
-	$replace_data = $ttt->change_temp($temp_arr,$data);
+	$replace_data = $ttt->change_temp($temp_arr,$data,0);
 
 	// 加入 content.xml 到zip 中
 	$ttt->add_file($replace_data,"content.xml");
@@ -636,7 +644,13 @@ function ooo_class($test_sort,$class_num){
 	$break ="<text:p text:style-name=\"break_page\"/>";
 
 	//新增一個 zipfile 實例
-	$ttt = new zipfile;
+	//$ttt = new zipfile;
+	$ttt = new EasyZip;
+	$ttt->setPath($oo_path);
+	$ttt->addDir('META-INF');
+	$ttt->addfile('settings.xml');
+	$ttt->addfile('styles.xml');
+	$ttt->addfile('meta.xml');
 
 	//讀出 xml 檔案
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/META-INF/manifest.xml");
@@ -668,7 +682,7 @@ function ooo_class($test_sort,$class_num){
 		$year_seme_sort=curr_year()."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查";
 		$class=class_id_to_full_class_name($class_id);
 		$school_name=$school_short_name;
-		$st=student_sn_to_id_name_num($student_sn,$curr_year="",$curr_seme="");
+		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 		$name=$st[1];
 		$num=$st[2];
 		//echo $school_name.$year_seme_sort.$class_info.$name.$num;
@@ -716,7 +730,7 @@ function ooo_class($test_sort,$class_num){
 		$content_body .= $break;
 
 		//change_temp 會將陣列中的 big5 轉為 UTF-8 讓 openoffice 可以讀出
-		$replace_data.= $ttt->change_temp($temp_arr,$content_body);
+		$replace_data.= $ttt->change_temp($temp_arr,$content_body,0);
 	}
 
 	//讀出 XML 檔頭

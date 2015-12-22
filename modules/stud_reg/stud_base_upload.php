@@ -41,7 +41,7 @@ if ($_POST['getkey'] == 'true') {
     $curr_year = curr_year();
     //$str ="";
     //先抓取stud_base資料表取得在籍生資料
-    $sql = "Select stud_name as student_name, stud_sex as student_gender,stud_birthday as birthday,stud_country as nationality,stud_person_id as PID, stud_addr_1 as address, stud_study_year as enroll_year,substring(curr_class_num,1,1) as grade,enroll_school, obtain,safeguard from stud_base where stud_study_cond = 0";
+    $sql = "Select stud_name as student_name, stud_sex as student_gender,stud_birthday as birthday,stud_country as nationality,stud_person_id as PID, stud_addr_1 as address, stud_study_year as enroll_year,substring(curr_class_num,1,1) as grade,enroll_school, obtain,safeguard from stud_base where stud_study_cond = 0 or stud_study_cond = 15";
     $rs = $CONN->Execute($sql) or user_error("讀取失敗！<br>$sql", 256);
 
 

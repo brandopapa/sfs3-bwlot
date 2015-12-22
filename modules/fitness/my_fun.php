@@ -1,5 +1,5 @@
 <?php
-// $Id: my_fun.php 8065 2014-06-13 06:18:06Z smallduh $
+// $Id: my_fun.php 8618 2015-12-02 03:17:04Z chiming $
 
 function year_seme_menu($sel_year,$sel_seme) {
 
@@ -7,6 +7,19 @@ function year_seme_menu($sel_year,$sel_seme) {
 	$scys->s_name ="year_seme";
 	$scys->top_option = "選擇學期";
 	$scys->id = sprintf("%03d",$sel_year).$sel_seme;
+	$scys->arr = get_class_seme();
+	$scys->is_submit = true;
+	$scys->other_script="this.form.act.value=''";
+	return $scys->get_select();
+}
+
+//多一個同一班指定學期的選單20151202 wang 修改
+function year_seme_menu2($sel_year_seme) {
+
+	$scys = new drop_select();
+	$scys->s_name ="year_seme2";
+	$scys->top_option = "選擇學期";
+	$scys->id = $sel_year_seme;
 	$scys->arr = get_class_seme();
 	$scys->is_submit = true;
 	$scys->other_script="this.form.act.value=''";

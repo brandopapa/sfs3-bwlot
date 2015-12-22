@@ -56,7 +56,7 @@
 班級：{class} 姓名：{name} 座號：{num}
 </text:p>
 <table:table table:name="table1" table:style-name="table1">
-<table:table-column table:style-name="table1.A" table:number-columns-repeated="2"/>
+<table:table-column table:style-name="table1.A" table:number-columns-repeated="{view_num}"/>
 <table:table-header-rows>
 <table:table-row>
 <table:table-cell table:style-name="table1.A1" table:value-type="string">
@@ -66,9 +66,10 @@
 </table:table-cell>
 <table:table-cell table:style-name="table1.B1" table:value-type="string">
 <text:p text:style-name="Table Heading">
-分數
+月考{pe1}
 </text:p>
 </table:table-cell>
+{nor_view}
 </table:table-row>
 </table:table-header-rows>
 {sj_sc}
@@ -78,22 +79,15 @@
 總分
 </text:p>
 </table:table-cell>
-<table:table-cell table:style-name="table1.B2" table:value-type="string">
-<text:p text:style-name="P3">
 {total}
-</text:p>
-</table:table-cell>
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="table1.A2" table:value-type="string">
-<text:p text:style-name="P3">平均
-</text:p>
-</table:table-cell>
-<table:table-cell table:style-name="table1.B2" table:value-type="string">
 <text:p text:style-name="P3">
-{aver}
+平均
 </text:p>
 </table:table-cell>
+{aver}
 </table:table-row>
 </table:table>
 <text:p text:style-name="P4"/>

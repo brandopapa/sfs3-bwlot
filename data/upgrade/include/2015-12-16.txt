@@ -1,0 +1,1 @@
+修改學生英文姓名欄位長度為50個字元 /home/sfs6/dev3.sfs3.bwsh.kindn.es/include/upgrade_files/up20151216.php

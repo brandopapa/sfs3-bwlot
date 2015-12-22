@@ -1,6 +1,6 @@
 <?php
 
-// $Id: show_class.php 8592 2015-11-12 08:22:32Z qfon $
+// $Id: show_class.php 8650 2015-12-18 03:58:09Z qfon $
 
 include "config.php";
 $class_id = $_GET['class_id'];
@@ -54,9 +54,59 @@ echo "<form method='get' action='{$_SERVER['php_SELF']}'> <p align=center><font 
 
      
      $cti_class_id = sprintf("%03d_%d_%02d_%02d",substr($seme_year_seme,0,3),substr($seme_year_seme,-1),substr($class_id,0,1),substr($class_id,-2));
-    //班上報名資料
-     $sqlstr =" select *  from cita_data a,cita_kind b    where (a.kind=b.id and a.class_id='$cti_class_id'  and a.order_pos>-1) order by $der ,num " ;
 
+	 //班上報名資料
+
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+if ($cti_class_id <> "") {
+    $stmt = $mysqliconn->prepare("select a.id,b.title,a.order_pos,a.data_get,a.data_input,a.up_date,a.stud_name,b.doc,b.grada from cita_data a,cita_kind b where (a.kind=b.id and a.class_id=? and a.order_pos>-1) order by $der ,num");
+    $stmt->bind_param('s', $cti_class_id);
+} 
+$stmt->execute();
+$stmt->bind_result($did, $item, $order_pos, $data_get, $data_input, $up_date, $stud_name, $doc, $gra);
+
+while ($stmt->fetch()) {
+	$order_pos=$order_pos+1;
+	echo "<tr> 
+  		<td ><a href='view.php?id=$did'>$doc</a><font size=2>---$grada[$gra]</font></td>
+            <td >$data_get</td>";
+			
+         if ($viewfullname !=1)echo "<td >$stud_name</td>";          
+	     echo "<td >$up_date</td>
+         </tr>" ;
+   
+   }           
+   echo "</table>" ;  
+   
+    //統計 -------------------------------------------------------
+   //學校、組數統計	
+  
+   echo  "<br><table cellSpacing=0 cellPadding=4 width='50%' align=center border=1 bordercolor='#33CCFF' bgcolor='#CCFFFF'>
+             <tr bgcolor='#66CCFF'><td>項目</td><td>次數</td></tr>\n" ;   
+   
+if ($cti_class_id <> "") {
+    $stmt = $mysqliconn->prepare("select b.grada , count(*) as cc  from  cita_data a,cita_kind b where (a.kind = b.id and a.class_id=?  and a.order_pos>-1) group by b.grada ");
+    $stmt->bind_param('s', $cti_class_id);
+} 
+
+$stmt->execute();
+$stmt->bind_result($data_get,$num);
+while ($stmt->fetch()) {
+
+     echo  "<tr><td>$grada[$data_get]</td><td>$num </td></tr>\n" ;   
+     $school_num_g ++ ;
+     $group_num_g += $num ;
+   } 
+	         
+   echo "<tr><td>共 $school_num_g 項</td><td>共 $group_num_g 次</td></tr></table>\n<br>" ;  
+
+   
+   
+   
+	/*
+    $sqlstr =" select *  from cita_data a,cita_kind b where (a.kind=b.id and a.class_id='$cti_class_id'  and a.order_pos>-1) order by $der ,num " ;
 	//echo $query ;
     $result = $CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
     while ($row = $result->FetchRow() ) {
@@ -65,10 +115,10 @@ echo "<form method='get' action='{$_SERVER['php_SELF']}'> <p align=center><font 
         $order_pos = $row["order_pos"]+1 ;      
         $data_get = $row["data_get"] ;
         $data_input = $row["data_input"] ;   
-	 $up_date = $row["up_date"] ;    
+	    $up_date = $row["up_date"] ;    
         $stud_name = $row["stud_name"] ;              
         $doc = $row["doc"] ;  
-	 $gra = $row["grada"] ;  
+	    $gra = $row["grada"] ;  
 
         echo "<tr> 
   		<td ><a href='view.php?id=$did'>$doc</a><font size=2>---$grada[$gra]</font></td>
@@ -98,5 +148,5 @@ echo "<form method='get' action='{$_SERVER['php_SELF']}'> <p align=center><font 
 	         
    echo "<tr><td>共 $school_num_g 項</td><td>共 $group_num_g 次</td></tr></table>\n<br>" ;  
 
-              
+  */      
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: month_paper4.php 8568 2015-10-19 16:15:13Z qfon $
+// $Id: month_paper4.php 8653 2015-12-19 16:30:42Z qfon $
 // 引入 SFS3 的函式庫
 //include "../../include/config.php";
 
@@ -21,8 +21,13 @@ $add_wet=($_POST['add_wet'])?"{$_POST['add_wet']}":"{$_GET['add_wet']}";
 $class_seme=($_POST['class_seme'])?"{$_POST['class_seme']}":"{$_GET['class_seme']}";
 $class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base']}";
 
-if(!$curr_year) $curr_year = curr_year();
-if(!$curr_seme) $curr_seme = curr_seme();
+$curr_year=($_POST['curr_year'])?"{$_POST['curr_year']}":"{$_GET['curr_year']}";
+$curr_seme=($_POST['curr_seme'])?"{$_POST['curr_seme']}":"{$_GET['curr_seme']}";
+
+//if(!$curr_year) $curr_year = curr_year();
+//if(!$curr_seme) $curr_seme = curr_seme();
+
+
 
 if($act=="dl_pdf_one"){
 		if($add_nor){
@@ -39,11 +44,13 @@ if($act=="dl_pdf_one"){
 		}
 		//成績單標題
 		$title=$school_short_name.$curr_year."學年度第".$curr_seme."學期第".$test_sort."次定期考查\n";
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		if(sizeof($curr_year)==2) $curr_year="0".$curr_year;	
 		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		$st_arr=student_sn_to_name_num($student_sn);
+		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
+
 		$cla_arr=class_id_to_full_class_name($class_id);
-		$title.="班級：".$cla_arr."\n姓名：".$st_arr[1]." 座號：".$st_arr[2];
+		$title.="班級：".$cla_arr."\n姓名：".$st_arr[1]." 座號：".$st[2];		
 		if($add_nor) $header=array("科目","月考*$R0%","平時*$R1%","成績");
 		else $header=array("科目","成績");
 		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
@@ -172,9 +179,12 @@ if($act=="dl_pdf_one"){
 }
 elseif($act=="dl_pdf_class"){
 	if($add_nor){
-		$checked=" checked";$class_seme=($_POST['class_seme'])?"{$_POST['class_seme']}":"{$_GET['class_seme']}";
-$class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base']}";
-		$ratio=test_ratio($curr_year,$curr_seme);//本學期的成績設定
+		
+		$checked=" checked";
+		$class_seme=($_POST['class_seme'])?"{$_POST['class_seme']}":"{$_GET['class_seme']}";
+        $class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base']}";
+		
+		$ratio=test_ratio($curr_year,$curr_seme);//本學期的成績設定		
 		$R0=($ratio[substr($class_num,0,-2)][$test_sort-1][0])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 		$R1=($ratio[substr($class_num,0,-2)][$test_sort-1][1])*100/($ratio[substr($class_num,0,-2)][$test_sort-1][0] + $ratio[substr($class_num,0,-2)][$test_sort-1][1]);
 		
@@ -189,7 +199,7 @@ $class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base'
 	$class_id=sprintf("%03d",$curr_year)."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 	$student_sn_arr=class_id_to_seme_student_sn($class_id,$yn='0');
 	$class=class_id_to_full_class_name($class_id);
-	$title=$school_short_name.curr_year()."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查\n".$class;
+	$title=$school_short_name.$curr_year."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查\n".$class;
 
 	if($add_nor) $header=array("科目","月考*$R0%","平時*$R1%","成績");
 	else $header=array("科目","成績");
@@ -198,7 +208,7 @@ $class_base=($_POST['class_base'])?"{$_POST['class_base']}":"{$_GET['class_base'
 	$m=0;
 	foreach($student_sn_arr as $student_sn){
 		$data[$m]=array();
-		$st=student_sn_to_id_name_num($student_sn,$curr_year="",$curr_seme="");
+		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 		$name=$st[1];
 		$num=$st[2];
 		$comment1[]="姓名：".$name." 座號：".$num;
@@ -337,27 +347,35 @@ else{
 	$i=0;
 	foreach($class_seme_array as $k => $v){
 		if(!$class_seme) $class_seme=sprintf("%03d%d",curr_year(),curr_seme());
-		$selected[$i]=($class_seme==$k)?" selected":" ";
+		$selected[$i]=($class_seme==$k)?" selected":" ";	
 		$class_seme_select.="<option value='$k'$selected[$i] >$v</option> \n";
 		$i++;
-	}
-	$class_seme_select.="</select></form>\n";
-
+	}		
+	$class_seme_select.="</select></form>";
+	
+	
 	$class_base_array=class_base($class_seme);
 	$class_base_select.="<form action='{$_SERVER['PHP_SELF']}' method='POST' name='form2'>\n<select  name='class_base' onchange='this.form.submit()'>\n";
 	$j=0;
 	foreach($class_base_array as $k2 => $v2){
 		if(!$class_base) $class_base=$k2;
-		$selected2[$j]=($class_base==$k2)?" selected":" ";
+		$selected2[$j]=($class_base==$k2)?" selected":" ";	
 		$class_base_select.="<option value='$k2'$selected2[$j] >$v2</option> \n";
 		$j++;
 	}
 	$class_base_select.="</select><input type='hidden' name='class_seme' value='$class_seme'></form>\n";
-	$menu="<td nowrap width='1%' align='left'> $class_seme_select </td><td nowrap width='99%' align='left'> $class_base_select </td>";
+	$menu="<td nowrap width='1%' align='left'> $class_seme_select </td><td nowrap width='1%' align='left'> $class_base_select </td>";
 	$class_num=$class_base;
+	
+	$curr_year = intval(substr($class_seme,0,-1));
+	$curr_seme =  substr($class_seme,-1);	
+	
+	
 	if($class_num){
 		//階段選單
 		$option=test_sort_select($curr_year,$curr_seme,$class_num);
+		//if($test_sort)	$download="<td nowrap  align='left' width='96%'><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo&test_sort=$test_sort&class_num=$class_num&class_seme=$class_seme'>下載成績總表</a></font></td>";
+		$menu.="<td nowrap  align='left'><form action='{$_SERVER['PHP_SELF']}' method='POST'><select name='test_sort' onchange='this.form.submit()'>$option</select><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='class_base' value='$class_base'></form></td>";
 		if($test_sort)	{
 			$student_select=logn_stud_sel($curr_year,$curr_seme,$class_num);
 			$student_select="<tr><td>
@@ -365,11 +383,10 @@ else{
 			<select name='student_sn' style='background-color:#DDDDDC;font-size: 13px' size='16' onchange='this.form.submit()'>\n
 			$student_select
 			</select>
+			<input type='hidden' name='class_seme' value='$class_seme'>
+			<input type='hidden' name='class_base' value='$class_base'>			
 			<input type='hidden' name='class_num' value='$class_num'>
-			<input type='hidden' name='test_sort' value='$test_sort'>
-			<input type='hidden' name='add_nor' value='$add_nor'>
-			<input type='hidden' name='add_wet' value='$add_wet'>
-			<input type='hidden' name='class_base' value='$class_base'>
+			<input type='hidden' name='test_sort' value='$test_sort'>		
 			</form>\n
 			</td></tr>";
 		}
@@ -391,17 +408,19 @@ else{
 		if($add_wet){
 			$wchecked=" checked";
 		}
-		$nor_form="<tr><td><form><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_nor'$checked value='1' onclick='this.form.submit()'>包含平時成績</form></td></tr>";
-		$wet_form="<tr><td><form><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_wet'$wchecked value='1' onclick='this.form.submit()'>包含各科加權</form></td></tr>";
-		$download="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_one&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet'>下載個人PDF</a></font></td></tr>";
-		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet'>下載全班PDF</a></font></td></tr>";
+		$nor_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_nor'$checked value='1' onclick='this.form.submit()'>包含平時成績</form></td></tr>";
+		$wet_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_wet'$wchecked value='1' onclick='this.form.submit()'>包含各科加權</form></td></tr>";
+		$download="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_one&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&curr_seme=$curr_seme&curr_year=$curr_year'>下載個人PDF</a></font></td></tr>";
+		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&curr_seme=$curr_seme&curr_year=$curr_year'>下載全班PDF</a></font></td></tr>";
 		//成績單標題
 		$title=$school_short_name."<br>".$curr_year."學年度第".$curr_seme."學期第".$test_sort."次定期考查<br>";
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		if(sizeof($curr_year)==2) $curr_year="0".$curr_year;	
 		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
-		$st_arr=student_sn_to_name_num($student_sn);
+		$st_arr=student_sn_to_name_num($student_sn);	
+        $st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);		
 		$cla_arr=class_id_to_full_class_name($class_id);
-		$title.="班級：".$cla_arr."<br>姓名：".$st_arr[1]." 座號：".$st_arr[2];
+		$title.="班級：".$cla_arr."<br>姓名：".$st_arr[1]." 座號：".$st[2];		
+		if($add_nor) $header=array("科目","月考*$R0%","平時*$R1%","成績");
 		if($add_nor){
 			$paper="<table  cellspacing=1 cellpadding=6 border=0 bgcolor='#A7A7A7' width='100%' >
 			<tr bgcolor='#EFFFFF'>
@@ -520,7 +539,7 @@ else{
 		$paper.="</table>";
 
 	}
-	$list="<table><tr><td><form action='{$_SERVER['PHP_SELF']}' method='POST'><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='class_base' value='$class_base'><select name='test_sort' onchange='this.form.submit()'>$option</select><input type='hidden' name='student_sn' value='$student_sn'></form></td></tr>$student_select $nor_form $wet_form $download $download2 </table>";
+	$list="<table><tr><td><form action='{$_SERVER['PHP_SELF']}' method='POST'><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='class_base' value='$class_base'><input type='hidden' name='student_sn' value='$student_sn'></form></td></tr>$student_select $nor_form $wet_form $download $download2 </table>";
 	$main="<table><tr><td valign='top'>$list</td><td valign='top'>$paper</td></tr></table>";
 
 	//設定主網頁顯示區的背景顏色
@@ -549,9 +568,9 @@ else{
 	foot();
 }
 
-
+/*
 function ooo_one($test_sort,$class_num,$student_sn){
-	global $CONN,$school_short_name;
+	global $CONN,$school_short_name,$class_seme;
 
 	$oo_path = "ooo_one";
 
@@ -568,18 +587,24 @@ function ooo_one($test_sort,$class_num,$student_sn){
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/content.xml");
 
 	//將 content.xml 的 tag 取代
-	$curr_year = curr_year();
-	$curr_seme = curr_seme();
-	if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
-	$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
-	$year_seme_sort=curr_year()."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查";
+	if($class_seme) {
+		$curr_year = intval(substr($class_seme,0,-1));
+		$curr_seme =  substr($class_seme,-1);				
+	} 
+	else{
+		$curr_year = curr_year();
+		$curr_seme = curr_seme();	
+	}
+	if(sizeof($curr_year)==2) $curr_year="0".$curr_year;
+	$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));	
+	$year_seme_sort=$curr_year."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查";
 	$class=class_id_to_full_class_name($class_id);
 	$school_name=$school_short_name;
-	$st=student_sn_to_id_name_num($student_sn,$curr_year="",$curr_seme="");
+	$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 	$name=$st[1];
 	$num=$st[2];
 	//echo $school_name.$year_seme_sort.$class_info.$name.$num;
-
+	
 
 	//科目
 	$count=0;
@@ -589,7 +614,7 @@ function ooo_one($test_sort,$class_num,$student_sn){
 		$score_b[$ss_id]=score_base($curr_year,$curr_seme,$student_sn,$ss_id,$test_kind="定期評量",$test_sort);
 		if($score_b[$ss_id]==-100) $score_b[$ss_id]="";
 		if($score_b[$ss_id]!="") {$count++; $total=$total+$score_b[$ss_id];}
-
+			
 		$sj_sc.="
 			<table:table-row>
 			<table:table-cell table:style-name='table1.A2' table:value-type='string'>
@@ -604,29 +629,41 @@ function ooo_one($test_sort,$class_num,$student_sn){
 			</table:table-cell>
 			</table:table-row>
 			";
+			
+			
+			
+
 	}
+	
 	if($count>0) $aver=round($total/$count,2);
 	$teacher=$_SESSION['session_tea_name'];
-
+		
+		
 	//變數替換
     $temp_arr["school_name"] = $school_name;
 	$temp_arr["year_seme_sort"] = $year_seme_sort;
-	$temp_arr["class"] = $class;
+	$temp_arr["class"] = $class;	
 	$temp_arr["name"] = $name;	
-	$temp_arr["num"] = $num;
+	$temp_arr["num"] = $num;	
 	$temp_arr["sj_sc"] = $sj_sc;
-	$temp_arr["total"] = $total;
+	$temp_arr["total"] = $total;	
 	$temp_arr["aver"] = $aver;
 	$temp_arr["teacher"] = $teacher;
 	
+	
+	
 	// change_temp 會將陣列中的 big5 轉為 UTF-8 讓 openoffice 可以讀出
-	$replace_data = $ttt->change_temp($temp_arr,$data);
+	$replace_data = $ttt->change_temp($temp_arr,$data,0);
+	
+	
 
 	// 加入 content.xml 到zip 中
 	$ttt->add_file($replace_data,"content.xml");
 
+	
+	
 	//產生 zip 檔
-	$sss = $ttt->file();
+	$sss = & $ttt->file();
 
 	//以串流方式送出 ooo.sxw
 	header("Content-disposition: attachment; filename=$filename");
@@ -644,17 +681,26 @@ function ooo_one($test_sort,$class_num,$student_sn){
 }
 
 function ooo_class($test_sort,$class_num){
-	global $CONN,$school_short_name;
+	global $CONN,$school_short_name,$class_seme;
 
 	$oo_path = "ooo_class";
 
-	$filename=$class_num."_".$test_sort.".sxw";
-
+	$filename=$class_seme."_".$class_num."_".$test_sort.".sxw";
+	
+	
 	//換頁 tag
 	$break ="<text:p text:style-name=\"break_page\"/>";
-
+	    
 	//新增一個 zipfile 實例
-	$ttt = new zipfile;
+	//$ttt = new zipfile;
+	
+	$ttt = new EasyZip;
+	$ttt->setPath($oo_path);
+	$ttt->addDir('META-INF');
+	$ttt->addfile('settings.xml');
+	$ttt->addfile('styles.xml');
+	$ttt->addfile('meta.xml');
+	
 
 	//讀出 xml 檔案
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/META-INF/manifest.xml");
@@ -668,25 +714,32 @@ function ooo_class($test_sort,$class_num){
 
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/styles.xml");
 	$ttt->add_file($data,"styles.xml");
-
+                                   
 	$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/meta.xml");
 	$ttt->add_file($data,"meta.xml");
 	
-	if($curr_year=="") $curr_year = curr_year();
-	if($curr_seme=="") $curr_seme = curr_seme();	
-	$class_id=sprintf("%03d",$curr_year)."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
+	if($class_seme) {
+		$curr_year = intval(substr($class_seme,0,-1));
+		$curr_seme =  substr($class_seme,-1);				
+	} 
+	else{
+		$curr_year = curr_year();
+		$curr_seme = curr_seme();	
+	}
+	if(sizeof($curr_year)==2) $curr_year="0".$curr_year;
+	$class_id=sprintf("%03d",$curr_year)."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));			
 	$student_sn_arr=class_id_to_seme_student_sn($class_id,$yn='0');
-
-	foreach($student_sn_arr as $student_sn){
+	
+	foreach($student_sn_arr as $student_sn){	
 		//讀出 content.xml
 		$content_body = $ttt->read_file(dirname(__FILE__)."/$oo_path/content_body.xml");
 
-		//將 content_body.xml 的 tag 取代
+		//將 content_body.xml 的 tag 取代	
 
-		$year_seme_sort=curr_year()."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查";
+		$year_seme_sort=$curr_year."學年度第".$curr_seme."學期"."第".$test_sort."次定期考查";
 		$class=class_id_to_full_class_name($class_id);
 		$school_name=$school_short_name;
-		$st=student_sn_to_id_name_num($student_sn,$curr_year="",$curr_seme="");
+		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);
 		$name=$st[1];
 		$num=$st[2];
 		//echo $school_name.$year_seme_sort.$class_info.$name.$num;
@@ -694,8 +747,8 @@ function ooo_class($test_sort,$class_num){
 
 		//科目
 		$count[$student_sn]=0;
-		$SS=class_id2subject($class_id);
-		foreach($SS as $ss_id => $subject_name){
+		$SS=class_id2subject($class_id);		
+		foreach($SS as $ss_id => $subject_name){	
 			//成績
 			$score_b[$student_sn][$ss_id]=score_base($curr_year,$curr_seme,$student_sn,$ss_id,$test_kind="定期評量",$test_sort);
 			if($score_b[$student_sn][$ss_id]==-100) $score_b[$student_sn][$ss_id]="";
@@ -722,21 +775,21 @@ function ooo_class($test_sort,$class_num){
 		//變數替換
 		$temp_arr["school_name"] = $school_name;
 		$temp_arr["year_seme_sort"] = $year_seme_sort;
-		$temp_arr["class"] = $class;
-		$temp_arr["name"] = $name;
-		$temp_arr["num"] = $num;
+		$temp_arr["class"] = $class;	
+		$temp_arr["name"] = $name;	
+		$temp_arr["num"] = $num;	
 		$temp_arr["sj_sc"] = $sj_sc[$student_sn];
-		$temp_arr["total"] = $total[$student_sn];
+		$temp_arr["total"] = $total[$student_sn];	
 		$temp_arr["aver"] = $aver[$student_sn];
 		$temp_arr["teacher"] = $teacher;
-
+		
 		//換行
 		$content_body .= $break;
-
+		
 		//change_temp 會將陣列中的 big5 轉為 UTF-8 讓 openoffice 可以讀出
-		$replace_data.= $ttt->change_temp($temp_arr,$content_body);
+		$replace_data.= $ttt->change_temp($temp_arr,$content_body,0);
 	}
-
+	
 	//讀出 XML 檔頭
 	$doc_head = $ttt->read_file(dirname(__FILE__)."/$oo_path/content_head.xml");
 	//讀出 XML 檔尾
@@ -747,7 +800,7 @@ function ooo_class($test_sort,$class_num){
 	$ttt->add_file($replace_data,"content.xml");
 
 	//產生 zip 檔
-	$sss = $ttt->file();
+	$sss = & $ttt->file();
 
 	//以串流方式送出 ooo.sxw
 	header("Content-disposition: attachment; filename=$filename");
@@ -763,5 +816,5 @@ function ooo_class($test_sort,$class_num){
 	exit;
 	return;
 }
-
+*/
 ?>

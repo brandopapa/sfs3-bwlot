@@ -1,6 +1,6 @@
 <?php
 
-//$Id: sfs_upgrade_list.php 8602 2015-11-20 14:48:02Z qfon $
+//$Id: sfs_upgrade_list.php 8640 2015-12-16 01:35:05Z infodaes $
 
 if(!$CONN){
         echo "go away !!";
@@ -909,6 +909,15 @@ if (!is_file($up_file_name)){
 }
 
 
-
+$dstr="2015-12-16";
+$dsstr=str_replace("-","",$dstr);
+$temp_str = "修改學生英文姓名欄位長度為50個字元 ".dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+$up_file_name =$upgrade_str.$dstr.".txt";
+if (!is_file($up_file_name)){
+	require dirname(__FILE__)."/upgrade_files/up".$dsstr.".php";
+	$fp = fopen ($up_file_name, "w");
+	fwrite($fp,$temp_str);
+	fclose ($fp);
+}
 
 ?>

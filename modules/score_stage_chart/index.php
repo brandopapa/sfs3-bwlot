@@ -1,5 +1,5 @@
 <?php
-// $Id: index.php 8605 2015-11-23 12:48:03Z qfon $
+// $Id: index.php 8648 2015-12-17 13:19:01Z qfon $
 /* 取得設定檔 */
 include "config.php";
 
@@ -18,13 +18,12 @@ $end_date=($_POST[end_date])?$_POST[end_date]: $_GET[end_date];
 $avg=$_REQUEST['avg'];
 
 
-
+$style_ss_num=$_REQUEST['style_ss_num'];
 $inputstyle=$_REQUEST['inputstyle'];
-
+$inputdata=($_REQUEST['inputdata']);
+$inputdata=str_replace("<br /><text:line-break/>","\r\n",$inputdata);
+$inputdatah=($inputdata);
 $inputdata=nl2br($_REQUEST['inputdata']);
-
-$inputdatah=($_REQUEST['inputdata']);
-
 $inputdata=str_replace("\r\n","<text:line-break/>",$inputdata);
 
 
@@ -163,6 +162,11 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 	$upstr .= "</select><br>\n<input type='hidden' name='start_date' value='$start_date'>\n<input type='hidden' name='end_date' value='$end_date'>\n"; 
 			
 	$upstr .= "<input type='hidden' name='stage' value='$stage'>\n";
+	$upstr .= "<input type='hidden' name='inputstyle' value='$inputstyle'>";
+	$upstr .= "<input type='hidden' name='inputdata' value='$inputdata'>";
+	
+	$upstr .= "<input type='hidden' name='style_ss_num' value='$style_ss_num'>";
+	
 	//班級選單
 	$tmp=&get_class_select($sel_year,$sel_seme,"","class_id","this.form.submit",$class_id);
 	
@@ -333,13 +337,10 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 		~<input type=text name=\"end_date\" value=\"$end_date\" size='8'>
 		<input type=hidden name=\"class_id\" value=\"$class_id\">
 		
-		<input type=hidden name=\"year_seme\" value=\"$year_seme\">
-		
+		<input type=hidden name=\"year_seme\" value=\"$year_seme\">		
 		<input type=hidden name=\"student_sn\" value=\"$student_sn\">
-
 		
-		<input type=hidden name=\"selstage\" value=\"2\">
-		
+		<input type=hidden name=\"selstage\" value=\"2\">		
 		<input type=submit value=\"修改時間\"></td></tr>
 	<tr>
 	
@@ -363,6 +364,7 @@ function &get_score_xml_value($stud_id,$student_sn,$class_id,$sel_year,$sel_seme
 	
 	// 取得課程每週時數
 	$ss_num_arr = get_ss_num_arr($class_id);
+
 	
 	if ($style_ss_num==1)//以課程設定每周節數為主
 	{

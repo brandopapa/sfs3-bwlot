@@ -1,5 +1,5 @@
 <?php
-//$Id: list.php 8104 2014-09-01 05:56:02Z hami $
+//$Id: list.php 8633 2015-12-10 08:36:24Z qfon $
 include "config.php";
 include "../../include/sfs_class_absent.php";
 
@@ -73,10 +73,11 @@ $query1 .=" and month='$_POST[month]'";
 
 if ($_POST[d_check4]==1) {
 	$query1 .=" and check4_sn >0 ";
-}else{
-	$query1 .=" and check4_sn =0 ";
-
 }
+//else{
+//	$query1 .=" and check4_sn =0 ";
+
+//}
 
 //­pºâ¦X­p
 

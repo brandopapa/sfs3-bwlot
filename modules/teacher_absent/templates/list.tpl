@@ -1,4 +1,4 @@
-{{* $Id: list.tpl 8104 2014-09-01 05:56:02Z hami $ *}}
+{{* $Id: list.tpl 8626 2015-12-07 01:03:00Z chiming $ *}}
 
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 
@@ -60,7 +60,7 @@
 	{{/if}}
 	<br><font color=blue>{{$a.note}}</font></td>
 <td>{{$a.reason}}<br><font color=blue>{{$a.locale}}</font>
-{{if $a.note_file}}<a href="{{$upload_url}}school/teacher_absent/{{$a.note_file}}">下載證明文件</a>{{/if}}
+{{if $a.note_file}}<a href="{{$upload_url}}school/teacher_absent/{{$a.note_file}}" target=_blank>下載證明文件</a>{{/if}}
 </td>
 <td><font size=3>{{$a.start_date|date_format:"%Y-%m-%d %H:%M"}}<br>
 

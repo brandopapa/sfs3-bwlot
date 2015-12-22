@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 7745 2013-11-01 04:18:10Z infodaes $
+// $Id: module-cfg.php 8638 2015-12-15 15:36:01Z qfon $
 
 //---------------------------------------------------
 //
@@ -132,6 +132,7 @@ $SFS_MODULE_SETUP[] =	array('var'=>'stud_eduh_editable', 'msg'=>'±Ò¥Î¾Ç¥Í¶ñ¼g»²¾
 $SFS_MODULE_SETUP[] =	array('var'=>'password_changed', 'msg'=>'¤¹³\¾Ç¥Í¦Û¦æ­×§ï±K½X', 'value'=>array('0'=>'§_','1'=>'¬O'));	
 $SFS_MODULE_SETUP[] =	array('var'=>'stage_score', 'msg'=>'¤¹³\¾Ç¥ÍÀËµø¶¥¬q¦¨ÁZ', 'value'=>array('0'=>'§_','1'=>'¬O'));
 $SFS_MODULE_SETUP[] =	array('var'=>'stage_teacher', 'msg'=>'¶¥¬q¦¨ÁZÅã¥ÜÂµ¥´¦¨ÁZ±Ð®v', 'value'=>array('0'=>'§_','1'=>'¬O'));
+$SFS_MODULE_SETUP[] =	array('var'=>'stud_view_self_absent', 'msg'=>'¤¹³\¾Ç¥Í¬d¸ß¯ÊÃm½Ò', 'value'=>array('0'=>'§_','1'=>'¬O'));
 
 
 

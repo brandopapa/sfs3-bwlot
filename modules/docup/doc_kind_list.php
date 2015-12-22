@@ -1,14 +1,14 @@
 <?php
 
-//$Id: doc_kind_list.php 8145 2014-09-23 08:21:31Z smallduh $
+//$Id: doc_kind_list.php 8621 2015-12-04 01:44:25Z hami $
 
 include "docup_config.php";
 if ($is_standalone!="1") head("文件資料庫");
 
-$doc_kind_id = $_POST[doc_kind_id];
+$doc_kind_id = (int)$_POST[doc_kind_id];
 if ($doc_kind_id=='')
-	$doc_kind_id = $_GET[doc_kind_id];
-
+	$doc_kind_id = (int)$_GET[doc_kind_id];
+/*
 if ($_POST[key] == "修改"){
 	$sql_update = "update docup_p set doc_kind_id='$_POST[doc_kind_id]',docup_p_id='$_POST[docup_p_id]',docup_p_date='$now',docup_p_name='$_POST[docup_p_name]',docup_p_memo='$_POST[docup_p_memo]',docup_p_owner='$_SESSION[session_tea_name]' where docup_p_id = '$_POST[docup_p_id]'";
 	$CONN->Execute($sql_update) or trigger_error ("語法錯誤",E_USER_ERROR);
@@ -30,7 +30,7 @@ else if ($_POST[key] == "確定刪除"){
 else if (isset($_POST[newkey])){
 	$sql_insert = "insert into docup_p (doc_kind_id,docup_p_id,docup_p_date,docup_p_name,docup_p_memo,docup_p_owner,teacher_sn) values ('$_POST[doc_kind_id]','$_POST[docup_p_id]','$now','$_POST[docup_p_name]','$_POST[docup_p_memo]','$_SESSION[session_tea_name]','$_SESSION[session_tea_sn]')";
 	$CONN->Execute($sql_insert) or trigger_error ("語法錯誤",E_USER_ERROR);
-}
+}*/
 
 $state_kind = "<select name=\"doc_kind_id\"  size=1 onchange=\"document.kindform.submit()\"> ";
 $post_office_p = room_kind();

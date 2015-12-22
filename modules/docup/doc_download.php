@@ -1,6 +1,6 @@
 <?php
 
-//$Id: doc_download.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: doc_download.php 8613 2015-11-27 06:24:31Z smallduh $
 
 include "docup_config.php";
 //°e¥XÀÉ®×
@@ -25,7 +25,8 @@ if (!empty($_GET[profile])){
 
 if ($_GET[docup_id]=='')
 	header ("Location: index.php");
-$sql_select = "select a.docup_owerid,a.docup_share,a.teacher_sn ,a.docup_id,a.docup_store,b.doc_kind_id from docup a,docup_p b where a.docup_p_id = b.docup_p_id and a.docup_id=$_GET[docup_id]";
+	$int_docup_id=(int)$_GET[docup_id];
+$sql_select = "select a.docup_owerid,a.docup_share,a.teacher_sn ,a.docup_id,a.docup_store,b.doc_kind_id from docup a,docup_p b where a.docup_p_id = b.docup_p_id and a.docup_id='$int_docup_id'";
 $result = $CONN->Execute ($sql_select) or trigger_error("  SQL ¿ù»~! $sql_select",E_USER_ERROR);
 $docup_store = $result->fields["docup_store"];
 $docup_share = $result->fields["docup_share"];

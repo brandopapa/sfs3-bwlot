@@ -1,4 +1,4 @@
-{{* $Id: fitness_print.tpl 8404 2015-05-01 08:56:27Z smallduh $ *}}
+{{* $Id: fitness_print.tpl 8618 2015-12-02 03:17:04Z chiming $ *}}
 {{include file="$SFS_TEMPLATE/header.tpl"}}
 {{include file="$SFS_TEMPLATE/menu.tpl"}}
 
@@ -30,7 +30,7 @@ function check_years_click() {
 <input type="hidden" name="cal_age" value="">
 <tr>
 <td bgcolor="#FFFFFF" valign="top">
-{{$seme_menu}} {{$class_menu}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="button" value="計算年齡" title="注意！僅計算有勾選的學生!! (全班若尚未輸入無任何資料，將無法計算年齡！)" onclick="check_years()"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>
+{{$seme_menu}}{{if $admin}} 時 {{/if}}{{$class_menu}} 的學生於 {{$seme_menu2}} <input type="submit" name="cal_per" value="換算百分等級"> <font size="3" color="blue">測驗日期：<input type="text" name="test_y" size="3" value="{{$smarty.post.test_y}}">年<input type="text" name="test_m" size="3" value="{{$smarty.post.test_m}}">月 <input type="button" value="計算年齡" title="注意！僅計算有勾選的學生!! (全班若尚未輸入無任何資料，將無法計算年齡！)" onclick="check_years()"> <input type="submit" name="print_html" value="列印"> | {{$all_students}} <input type="submit" name="export" value="匯出CSV檔"><input type="submit" name="export2" value="匯出套印成績證明CSV檔"></font><br>
 <font color="gold">■</font>85％以上 <font color="silver">■</font>75％以上 <font color="bronze">■</font>50％以上 <font color="red">■</font>24％以下
 <table bgcolor="#9ebcdd" cellspacing="1" cellpadding="4" width="100%">
 <tr bgcolor="#c4d9ff">

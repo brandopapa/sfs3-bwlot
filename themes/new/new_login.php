@@ -1,5 +1,5 @@
 <body <?php if (!$_REQUEST['cdc']) {?>onload="setfocus()"<?php } ?>>
-<!-- $Id: new_login.php 8080 2014-06-25 01:52:50Z hsiao $ -->
+<!-- $Id: new_login.php 8630 2015-12-09 02:41:08Z hsiao $ -->
 <script language="JavaScript">
 <!--
 function setfocus() {
@@ -414,7 +414,7 @@ function login_form3(){
 	<input type='hidden' name='pk' id='pk' />
 	<input type='hidden' name='cdc' value='1' />
 	<input type='hidden' name='go_back' value='$go_back'>
-	<span class='small'> &nbsp; &nbsp; 要使用自然人憑證登入, 您須先 :<br> &nbsp; 1.  安裝<a href='http://gca.nat.gov.tw/download/HiCOSClient_v2.1.9.zip' target='new'>HiCOS憑證管理程式 v2.1.9</a>及<a href='http://www.sfs.project.edu.tw/modules/mydownloads/visit.php?cid=2&lid=47'>臺中市政府教育局憑證登入元件v0.4版</a><br> &nbsp; 
+	<span class='small'> &nbsp; &nbsp; 要使用自然人憑證登入, 您須先 :<br> &nbsp; 1.  安裝<a href='http://gca.nat.gov.tw/download/HiCOSClient_v2.1.9.zip' target='new'>HiCOS憑證管理程式 v2.1.9</a>及<a href='http://www.sfs.project.edu.tw/modules/mydownloads/visit.php?cid=2&lid=47'>臺中市政府教育局憑證登入元件v0.5版</a><br> &nbsp; 
 	2. <a href='{$SFS_PATH_HTML}modules/teacher_self/'>註冊自然人憑證</a></span>
 	</td></tr></table>
 	</form>

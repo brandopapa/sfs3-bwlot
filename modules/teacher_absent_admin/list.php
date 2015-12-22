@@ -113,7 +113,10 @@ else {
 		$teacher_sn=$result->fields["teacher_sn"];
 		$class_dis=$result->fields["class_dis"];
 		$post_k=$result->fields["post_k"];
-
+		
+        $note_file=$result->fields["note_file"];
+		$downloadurl=(empty($note_file))?"":"<a href='../../data/school/teacher_absent/$note_file' target='_new'><img border=0 src='./images/fopen.gif'></a>";		
+		
 		$t_name=get_teacher_name($result->fields["teacher_sn"]);
 		$reason=$result->fields["reason"];
 		$abs_kind_arr=tea_abs_kind();
@@ -175,7 +178,7 @@ else {
 			<td>$post_kind[$post_k]</font></td>
 			
 			<td>$abs_kind</font></td>	
-			<td>$reason</td>
+			<td align=left>$downloadurl $reason</td>
 			<td width=120 align=center><font size=3>$start_date  $end_date</font></td>
 			<td><font size=3>$day_hour</font></td>
 			<td>$n_class_dis</td>	

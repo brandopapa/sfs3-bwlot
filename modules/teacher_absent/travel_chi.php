@@ -89,6 +89,11 @@ class teacher_absent_course{
 
 		foreach ($_POST['pMonth'] as $pMon){ 
 			$MM[]=" a.start_date like '{$pMon}%' ";}
+			//12る,笆 12る
+			if (date("m")=='12') {
+				$this->add12=date("Y-m");
+				$MM[]=" a.start_date like '{$this->add12}%' ";
+			}
 		$SQL="select a.*,count(c_id) as Num from teacher_absent a
 		left join teacher_absent_course b  
 		ON a.id=b.a_id and  b.travel='1' 
@@ -151,6 +156,44 @@ function getTeach() {
 /*锣计瓣*/
 function CNum($num) {
 	return Num2CNum($num);
+}
+
+/*锣计肂*/
+function MoneyNum($money){
+    $ar = array("箂", "滁", "禠", "把", "竩", "ヮ", "嘲", "琺", "", "╤") ;
+    $cName = array("", "", "珺", "ㄕ", "", "窾", "珺", "ㄕ", "", "货", "珺", "ㄕ", "");
+    $conver = "";
+    $cLast = "" ;
+    $cZero = 0;
+    $i = 0;
+    for ($j = strlen($money) ; $j >=1 ; $j--){  
+      $cNum = intval(substr($money, $i, 1));
+      $cunit = $cName[$j]; //计
+      if ($cNum == 0) { //耞计琌0,狦琌0,玥癘魁Τ碭0
+         $cZero++;
+         if (strpos($cunit,"窾货") >0 && ($cLast == "")){ // '狦琌窾,货,玥计窾货ㄓ干
+          $cLast = $cunit ;
+         }      
+      }else {
+        if ($cZero > 0) {// '狦计0Τn,玥箂蠢┮Τ0
+          if (strpos("窾货", substr($conver, strlen($conver)-2)) >0) {
+             $conver .= $cLast; //'狦程ぃ琌货,窾,玥程干"货窾"
+          }
+          $conver .=  "箂" ;
+          $cZero = 0;
+          $cLast = "" ;
+        }
+         $conver = $conver.$ar[$cNum].$cunit; // '狦计⊿Τ0,玥琌いゅ计+虫          
+      }
+      $i++;
+    }  
+  //'耞计程琌0,狦程0,玥р窾货干
+     if (strpos("窾货", substr($conver, strlen($conver)-2)) >0) {
+       $conver .=$cLast; // '狦程ぃ琌货,窾,玥程干"货窾"
+    }
+    return $conver;	
+
+
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: sfs_case_score.php 8596 2015-11-19 02:21:51Z qfon $
+// $Id: sfs_case_score.php 8617 2015-12-02 02:22:46Z chiming $
 
 //給student_sn和ss_id算出該生此科的學期總成績
 function seme_score($student_sn,$ss_id,$sel_year="",$sel_seme=""){
@@ -1075,7 +1075,7 @@ function &html2code2($class,$sel_year,$sel_seme,$oth_data,$nor_data,$abs_data,$r
 		</td>";
 		if ($IS_JHORES==0&&$_SESSION[session_who]=="教師") {
 			$temp_str.="
-				<td rowspan=\"3\" colspan=\"8\"><img src='$SFS_PATH_HTML/images/comment.png' width=16 height=16 border=0 title='詞庫輸入' align='left' name='nor_score_memo' value='nor_score_memo_s' onClick=\"return OpenWindow('nor_score_memo')\"><textarea name='nor_score_memo' id='nor_score_memo' cols=30 rows=5>mmmmm$nor_data[ss_score_memo]</textarea></td>
+				<td rowspan=\"3\" colspan=\"8\"><img src='$SFS_PATH_HTML/images/comment.png' width=16 height=16 border=0 title='詞庫輸入' align='left' name='nor_score_memo' value='nor_score_memo_s' onClick=\"return OpenWindow('nor_score_memo')\"><textarea name='nor_score_memo' id='nor_score_memo' cols=30 rows=5>$nor_data[ss_score_memo]</textarea></td>
 				<td rowspan=\"3\" colspan=\"1\">$nor_score_sel</td>";
 		} else {
 			$temp_str.="

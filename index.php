@@ -1,6 +1,6 @@
 <?php
 
-// $Id: index.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: index.php 8627 2015-12-07 15:52:49Z qfon $
 
 //啟動 session
 //session_start();
@@ -30,8 +30,18 @@ sys_check();
 
 print_module($_REQUEST['_Msn'],"",$nocols);
 
+//找出管理者姓名
+$str=get_admin_name();
+$ax=get_module_setup("chang_root");
+if ($ax["root_homeview"]==1)$str="";
+
+
+//去除彰化縣顯示網管姓名
+if ($SCHOOL_BASE['sch_sheng']=='彰化縣') $str='';
+
 //  --程式檔尾
-foot();
+foot($str);
+
 
 function sys_check(){
 	global $SFS_PATH;

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: config.php 7670 2013-10-11 08:45:41Z infodaes $
+// $Id: config.php 8645 2015-12-17 02:22:47Z qfon $
 
 //系統設定檔
 include_once "../../include/config.php";
@@ -17,11 +17,13 @@ require_once "./module-upgrade.php";
 $m_arr = get_sfs_module_set("stud_eduh_self");
 extract($m_arr, EXTR_OVERWRITE);
 
+
 //判斷登入者是否為學生
 if ($_SESSION['session_who']!="學生") {
 	echo "抱歉，本模組只限學生操作！";
 	exit;
 }
+
 
 if($base_edit) $menu_p["stud_list_self.php"]="基本資料";
 if($dom_edit) $menu_p["stud_dom1_self.php"]="戶口資料";
@@ -37,6 +39,7 @@ if($career_view) $menu_p["career_view.php"]="生涯統整面面觀";
 if($career_evaluate) $menu_p["career_evaluate.php"]="生涯發展規劃書";
 if($career_guidance) $menu_p["career_guidance.php"]="生涯輔導諮詢建議";
 if($stage_score) $menu_p["stage_score.php"]="領域階段成績";
+if($stud_view_self_absent) $menu_p["report1.php"]="缺曠課查詢";
 $menu_p["stud_cpass.php"]="更改登入密碼";
 
 $curr_month=','.date('m').',';
@@ -86,5 +89,7 @@ function ha_check(){
 			return true;
 		}
 }
+
+
 
 ?>

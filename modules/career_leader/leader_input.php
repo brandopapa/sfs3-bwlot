@@ -49,7 +49,7 @@ if ($_POST['act']=="save") {
 		$ponder_array[$seme_key][2][2]=$v[$seme_key][2][2];
 		//備註
 		$ponder_array[$seme_key][memo]=$v[$seme_key][memo];
-		
+		//echo $ponder_array[$seme_key][1][1];
 		//重建新陣列
     $new_ponder_array=array();
 		foreach ($ponder_array as $K=>$V) {
@@ -65,7 +65,7 @@ if ($_POST['act']=="save") {
 		  }
 		}		
 		
-		$content=serialize($new_ponder_array);			
+		$content=addslashes(serialize($new_ponder_array));
 		$query="update career_self_ponder set id='3-2',content='$content' where sn=$sn";
 		$res=$CONN->Execute($query) or die("SQL錯誤:$query");
 	} else {
@@ -118,10 +118,10 @@ if ($_POST['act']=="output") {
   		foreach ($select_seme as $the_seme=>$V) {
   		  if ($the_seme==$c_curr_seme) {
 			    $data_output.="
-					<td>".$ponder_array[$select_seme_key[$c_curr_seme]][1][1]."</td>
-					<td>".$ponder_array[$select_seme_key[$c_curr_seme]][1][2]."</td>
-		  		<td>".$ponder_array[$select_seme_key[$c_curr_seme]][2][1]."</td>
-		  		<td>".$ponder_array[$select_seme_key[$c_curr_seme]][2][2]."</td>";		  		
+					<td>".stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][1][1])."</td>
+					<td>".stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][1][2])."</td>
+		  		<td>".stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][2][1])."</td>
+		  		<td>".stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][2][2])."</td>";		  		
    		  } // end if
   		} // end foreach
   		
@@ -244,11 +244,11 @@ echo $tool_bar;
 				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][memo];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][memo]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
  					<td align='left'><?php echo $ponder_array[$select_seme_key[$c_curr_seme]][data];?></td>
 			<?php } else { ?>
-					<td align='left'>1. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][1][1]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][1][1];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][1][1]) echo " STYLE=\"background-color:#FFFF00\"";?>>&nbsp;／&nbsp;
-													 2. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][1][2]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][1][2];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][1][2]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
-		  		<td align='left'>1. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][2][1]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][2][1];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][1]) echo " STYLE=\"background-color:#FFFF00\"";?>>&nbsp;／&nbsp;
-		  										 2. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][2][2]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][2][2];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][2]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
- 				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo $ponder_array[$select_seme_key[$c_curr_seme]][memo];?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][memo]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
+					<td align='left'>1. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][1][1]" value="<?php echo stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][1][1]);?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][1][1]) echo " STYLE=\"background-color:#FFFF00\"";?>>&nbsp;／&nbsp;
+													 2. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][1][2]" value="<?php echo stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][1][2]);?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][1][2]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
+		  		<td align='left'>1. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][2][1]" value="<?php echo stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][2][1]);?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][1]) echo " STYLE=\"background-color:#FFFF00\"";?>>&nbsp;／&nbsp;
+		  										 2. <input type="text" size="10" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][2][2]" value="<?php echo stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][2][2]);?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][2][2]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
+ 				<td align='center'><input type="text" size="12" name="ponder_array[<?php echo $student_sn;?>][<?php echo $select_seme_key[$c_curr_seme];?>][memo]" value="<?php echo stripslashes($ponder_array[$select_seme_key[$c_curr_seme]][memo]);?>"<?php if ($ponder_array[$select_seme_key[$c_curr_seme]][memo]) echo " STYLE=\"background-color:#FFFF00\"";?>></td>
 					<td align='left'><?php echo $ponder_array[$select_seme_key[$c_curr_seme]][data];?></td>
   		  <?php }
   		  } 

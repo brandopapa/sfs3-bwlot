@@ -170,7 +170,7 @@ echo $tool_bar;
   			  <input type="radio" name="year_name" value="<?php echo $Y;?>"<?php if ($_POST['year_name']==$Y) echo " checked";?> onclick="document.myform.act.value='';document.myform.option1.value='';document.myform.submit();"><?php echo $school_kind_name[$Y]."級"; ?>
   			  (統計就學 <?php echo $Year_scan[$Y];?> 學期的平均)
   			  <br>
-  			  <?
+  			  <?php
   			  }
   		  } // end for
 

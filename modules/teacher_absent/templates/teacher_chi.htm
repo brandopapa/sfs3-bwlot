@@ -9,7 +9,8 @@
 {{$this->SelMonth('pMonth')}}
 <INPUT TYPE="reset"  value='重設' class=bur2 >
 <INPUT TYPE=button  value='選好送出' onclick="if (window.confirm('選好月份了？確定送出？')){this.form.form_act.value='OK';this.form.submit();}" class=bur2>
-<INPUT TYPE='hidden' NAME='form_act'  value=''>
+<INPUT TYPE='hidden' NAME='form_act'  value=''><br>
+※當目前所在月份是12月時，不用鉤選，按下選好送出，就會自動帶出12月份記錄。
 </TD></TR>
 </form>
 </TABLE>

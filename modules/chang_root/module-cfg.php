@@ -1,6 +1,6 @@
 <?php
 
-// $Id: module-cfg.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: module-cfg.php 8627 2015-12-07 15:52:49Z qfon $
 
 //---------------------------------------------------
 //
@@ -103,8 +103,8 @@ $school_menu_p = array(
 
 // 第2,3,4....個，依此類推： 
 
-// $SFS_MODULE_SETUP[1] =
-//	array('var'=>"xxxx", 'msg'=>"yyyy", 'value'=>0);
+ $SFS_MODULE_SETUP[1] =
+	array('var'=>"root_homeview", 'msg'=>"首頁是否顯示網管人員", 'value'=>array("0"=>"顯示","1"=>"不顯示"));
 
 // $SFS_MODULE_SETUP[2] =
 //	array('var'=>"ssss", 'msg'=>"tttt", 'value'=>1);

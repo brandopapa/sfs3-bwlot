@@ -17,6 +17,9 @@ $help_doc="<br><br>
 		<p>
 		<li>屏東區104免試入學超額比序資料匯出模組操作說明：<a href='./104_ptc_1.0.pdf' target='_BLANK'><img src='./images/on.png' border=0>1.0版</a> <a href='./104_ptc_1.1.pdf' target='_BLANK'><img src='./images/on.png' border=0>1.1版(2015/01/03)</a></li>
 		</p>
+		<p>
+		<li>屏東區105免試入學超額比序資料匯出模組操作說明：<a href='./ptc_105_1.0.pdf' target='_BLANK'><img src='./images/on.png' border=0>1.0版</a> <a href='./ptc_105_appendix.pdf' target='_BLANK'><img src='./images/on.png' border=0>學務日常模組操作說明</a></li>
+		</p>
 ";
 
 echo $help_doc;

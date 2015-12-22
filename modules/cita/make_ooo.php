@@ -66,9 +66,27 @@ for($i=0;$i<$x;$i++){
 		$sign_v="";	
 	}
 
+	
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+if ($stud_id <> "") {
+    $stmt = $mysqliconn->prepare("select stud_study_year from stud_base where stud_id=? order by stud_study_year desc");
+    $stmt->bind_param('s', $stud_id);
+} 
+
+$stmt->execute();
+$stmt->bind_result($stud_study_year);
+$stmt->fetch();
+$stmt->close();
+///mysqli	
+	
+	/*
 	$sqlstr ="select stud_study_year from stud_base where stud_id='$stud_id' order by stud_study_year desc";
 	$result = $CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;
 	$stud_study_year=$result->fields[0];
+	*/
+	
 	$stud_ima="photo/student/$stud_study_year/". $stud_id;
 	
 	//學生照片
@@ -163,7 +181,7 @@ return $data_arr[$s];
 
 
 
-// $Id: make_ooo.php 7728 2013-10-28 09:02:05Z smallduh $
+// $Id: make_ooo.php 8650 2015-12-18 03:58:09Z qfon $
 // 取代 mzip.php
 
 /*

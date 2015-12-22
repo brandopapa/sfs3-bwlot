@@ -1,5 +1,5 @@
 <?php
-// $Id: print.php 8425 2015-05-18 00:55:01Z smallduh $
+// $Id: print.php 8618 2015-12-02 03:17:04Z chiming $
 // 取得設定檔
 include "config.php";
 
@@ -57,6 +57,10 @@ if ($admin==1){
 		$smarty->assign("class_menu",class_menu($sel_year,$sel_seme,$class_num));
 	}
 }
+//以下三行，同一班學生，於不同學期的選單//20151202 wang增修
+	$sel_year_seme = (empty($_POST['year_seme2']))?curr_year().curr_seme():$_POST['year_seme2'];
+	$smarty->assign("seme_menu2",year_seme_menu2($sel_year_seme));
+	$smarty->assign("admin",$admin); 
 
 if ($class_num) {
 	//取得學生資料
@@ -86,7 +90,10 @@ if ($class_num) {
 	}
 	$smarty->assign("rowdata",$r);
 	$stud_str="'".implode("','",$stud_arr)."'";
-	$fd=read_fitness($seme_year_seme,$stud_str);
+	
+	//$fd=read_fitness($seme_year_seme,$stud_str);
+	//從fitness_data抓的資料改成使用同一班學生指定學期20151202 wang修改
+	$fd=read_fitness($sel_year_seme,$stud_str);
  
 	//產生計算平均時的學生流水號字串
 	if (count($b_arr)>0) $avg_str[0]="'".implode("','",$b_arr)."'";

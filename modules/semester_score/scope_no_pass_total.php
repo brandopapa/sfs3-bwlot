@@ -8,10 +8,18 @@ sfs_check();
 
 //全校有幾個年級
 $all_years=($IS_JHORES==0)?6:3;
+$curr_year=curr_year();
 
-	$sel_year = curr_year(); //目前學年
-	$sel_seme = curr_seme(); //目前學期
-	$seme_year_seme=sprintf('%03d',$sel_year).$sel_seme;
+//取得所有學期資料, 每年有兩個學期
+$class_seme_p = get_class_seme(); //學年度	
+$class_seme_p=array_reverse($class_seme_p,1);
+$tool_bar=&make_menu($menu_p);
+
+//目前選定學期
+if (isset($_POST['c_curr_seme'])) {
+	$seme_year_seme=$_POST['c_curr_seme'];
+	$sel_year=substr($seme_year_seme,0,3);
+	$sel_seme=substr($seme_year_seme,-1);
 
 //取得學校日期設定
 $db_date=curr_year_seme_day($sel_year,$sel_seme);  //$db_date['start'] , $db_date['end'] , $db_date['st_start'] , $db_date['st_end']
@@ -26,7 +34,7 @@ for($i=1;$i<=$all_years;$i++) {
   	case '0':
   	    if ($Y>1) {
   	     for ($j=$Y-1;$j>=1;$j--) {
-  	      $chk_year=curr_year()-$j;
+  	      $chk_year=$sel_year-$j;
   	      $Year_scan[$Y].=",".$chk_year."1";
   	      $Year_scan[$Y].=",".$chk_year."2";
   	     }
@@ -35,7 +43,7 @@ for($i=1;$i<=$all_years;$i++) {
   	case '6':
   	    if ($Y>7) {
   	     for ($j=$Y-1;$j>=7;$j--) {
-  	      $chk_year=curr_year()-$j+6;
+  	      $chk_year=$sel_year-$j+6;
   	      $Year_scan[$Y].=",".$chk_year."1";
   	      $Year_scan[$Y].=",".$chk_year."2";
   	     }
@@ -44,9 +52,9 @@ for($i=1;$i<=$all_years;$i++) {
   	break;  
   }
   //如果是下學期，加1
- 				if (curr_seme()==2) $Year_scan[$Y].=",".curr_year()."1";
+ 				if ($sel_seme==2) $Year_scan[$Y].=",".$sel_year."1";
  	//如果已過結業式，加1
-				if ($now>$st_end_line) $Year_scan[$Y].=",".curr_year().curr_seme();
+				if ($now>$st_end_line) $Year_scan[$Y].=",".$sel_year.$sel_seme;
 	$Year_scan[$Y]=substr($Year_scan[$Y],1);
 }  				
 
@@ -73,11 +81,11 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
 //各年級要檢查的學期別 $Year_scan[1]~$Year_scan[9]
 
 //年級別, 國小一,二年級只有五個領域
- 		if($year_name>2 and (curr_seme()==2 or $now>$st_end_line)){
+ 		if($year_name>3 or ($year_name==3 and ($sel_seme==2 or $now>$st_end_line))){
 			//$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","自然與生活科技"=>"nature","社會"=>"social","健康與體育"=>"health","藝術與人文"=>"art","綜合活動"=>"complex");
 			//$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","nature"=>"自然與生活科技","social"=>"社會","health"=>"健康與體育","art"=>"藝術與人文","complex"=>"綜合活動");
 			//$area_rowspan=9;
-		  $ALL_areas=8;
+		  $ALL_areas=8;  //要把一、二年級時生活領域算進去, 所以是8 個
 		} else {
 			//$ss_link=array("語文-本國語文"=>"chinese","語文-鄉土語文"=>"local","語文-英語"=>"english","數學"=>"math","健康與體育"=>"health","生活"=>"life","綜合活動"=>"complex");
 			//$link_ss=array("chinese"=>"語文-本國語文","local"=>"語文-鄉土語文","english"=>"語文-英語","math"=>"數學","health"=>"健康與體育","life"=>"生活","complex"=>"綜合活動");
@@ -110,13 +118,15 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
 
 
   //取出名單
-  $query="select a.*,b.stud_name,b.stud_person_id,c.guardian_name from stud_seme a,stud_base b,stud_domicile c where a.student_sn=b.student_sn and b.student_sn=c.student_sn and a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','15') order by a.seme_class,a.seme_num";
+  $query="select a.*,b.stud_name,b.stud_person_id,c.guardian_name from stud_seme a,stud_base b,stud_domicile c where a.student_sn=b.student_sn and b.student_sn=c.student_sn and a.seme_year_seme='$seme_year_seme' and a.seme_class like '$year_name%' and b.stud_study_cond in ('0','5','15') order by a.seme_class,a.seme_num";
 	$res=$CONN->Execute($query);
 	
 	//學生人數
 	$Student_Num[$year_name]=$res->RecordCount();		
 	
 	if ($Year_scan[$year_name]!="") {
+	
+	$ALL_PASS[$year_name]=array(); //統過領域數的人數累計
 	$sn=array();
 	$student_data=array();
 	$fin_score=array();
@@ -135,7 +145,7 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
 	$semes=explode(',',$Year_scan[$year_name]);
   
 	//抓取領域成績
-	$fin_score=cal_fin_score($sn,$semes,"",array($sel_year,$sel_seme,$year_name),$percision);
+	$fin_score=cal_fin_score($sn,$semes,"","",2);  //2015.12.09改
   
 
   //檢查所有學生的每科成績
@@ -150,6 +160,10 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
 			if ($fin_score[$student_sn][succ]==$ALL_areas-5) $NO_PASS[$year_name][5]++; 
 		  if ($fin_score[$student_sn][succ]==$ALL_areas-6) $NO_PASS[$year_name][6]++; 
 		  if ($fin_score[$student_sn][succ]==$ALL_areas-7) $NO_PASS[$year_name][7]++; 
+		  if ($fin_score[$student_sn][succ]==$ALL_areas-8) $NO_PASS[$year_name][8]++;
+		  
+		  $SUCC=$fin_score[$student_sn][succ];
+		  $ALL_PASS[$year_name][$SUCC]++;
 		  
 			//語文不及格
 			if ($fin_score[$student_sn][language][avg][score]<60 and $fin_score[$student_sn][language][avg][score]>0) $NO_PASS[$year_name][language]++;
@@ -179,23 +193,40 @@ for ($year_name=$Start_Year_Class;$year_name<=$End_Year_Class;$year_name++) {
    } // end if $Year_scan
 
 } // end for year_name
-
+} // end if (isset($_POST['c_curr_seme']))
 //=======================================================================================================
 //秀出網頁
 head("各領域成績不及格人數統計表");
-
-$tool_bar=&make_menu($menu_p);
 
 //列出選單
 echo $tool_bar;
 
 ?>
+<form method="post" action="<?php $_SERVER['PHP_SELF'];?>" name="myform" id="myform" target="">
+	<select id="select_year" name="c_curr_seme">
+	<option style="color:#FF00FF">請選擇學期</option>
+	<?php
+	while (list($tid,$tname)=each($class_seme_p)){
+	  if (substr($tid,0,3)>$curr_year-3) {
+    ?>
+      		<option value="<?php echo $tid;?>" <?php if ($tid==$_POST['c_curr_seme']) echo "selected";?>><?php echo $tname;?></option>
+   <?php
+      }
+    } // end while
+    ?>
+</select>
+</form>
+
+<?php
+if ($_POST['c_curr_seme']) {
+?>
+ 
 <br>
 <table border='2' cellpadding='3' cellspacing='0' style='border-collapse:collapse; font-size:<?php echo $m_arr['text_size'];?>;' bordercolor='#111111' width='100%'>
 	<tr>
 		<td rowspan="2" align="center">年級</td>
 		<td colspan="9" align="center">各學習領域學生成績評量情形</td>
-		<td colspan="7" align="center">學生成績評量不及格領域數情形</td>
+		<td colspan="<?php echo (($IS_JHORES==6)?7:8);?>" align="center">學生成績評量不及格領域數情形</td>
 		<td rowspan="2" align="center">統計學期</td>
 	</tr>
 	  <td>該年級總學生人數</td>
@@ -214,6 +245,9 @@ echo $tool_bar;
 	  <td>5個學習領域不及格人數</td>
 	  <td>6個學習領域不及格人數</td>
 	  <td>7個學習領域不及格人數</td>
+	  <?php
+	  if ($IS_JHORES==0) echo "<td>8個學習領域不及格人數</td>";
+	  ?>
 	<tr>
  <?php
  //依年級列出人數
@@ -237,13 +271,18 @@ echo $tool_bar;
   <td align="center"><?php echo $NO_PASS[$year_name][5];?></td>
   <td align="center"><?php echo $NO_PASS[$year_name][6];?></td>
   <td align="center"><?php echo $NO_PASS[$year_name][7];?></td>
+  <?php
+	  if ($IS_JHORES==0) echo "<td align=\"center\">".$NO_PASS[$year_name][8]."</td>";
+	  ?>
   <td><?php echo $Year_scan[$year_name];?></td>
  </tr>
  <?php 
  } // end for
-
  ?>	
 </table>
+<?php
+} // end if
+?>
 <table border="0">
  <tr>
  	<td>說明：</td>
@@ -254,6 +293,20 @@ echo $tool_bar;
 </td>
  </tr>
 </table>
+<div id="wait" style="display:none">
+<p style="color:#FF0000">資料處理中，請稍候....</p>	
+</div>
+<script>
+	$("#select_year").change(function(){
+		  
+		  wait.style.display="block";
+		  
+		  document.myform.submit();
+		  
+		})
+	
+
+</script>
 
 
 

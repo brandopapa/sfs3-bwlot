@@ -268,7 +268,7 @@ if ($_POST['search_mode']==1) {
   				$Y=$i+$IS_JHORES;
   			 ?>
   			  <input type="radio" name="year_name" value="<?php echo $Y;?>"<?php if ($_POST['year_name']==$Y) echo " checked";?> onclick="document.myform.option1.value='';document.myform.submit();"><?php echo $school_kind_name[$Y]."¯Å"; ?>
-  			  <?
+  			  <?php
   		  } // end for
 
  if (!$year_name)  exit();
@@ -319,7 +319,7 @@ if ($_POST['search_mode']==2) {
   				$Y=$i+$IS_JHORES;
   			 ?>
   			  <input type="radio" name="year_name" value="<?php echo $Y;?>"<?php if ($_POST['year_name']==$Y) echo " checked";?> onclick="document.myform.option1.value='';document.myform.submit();"><?php echo $school_kind_name[$Y]."¯Å"; ?>
-  			  <?
+  			  <?php
   		  } // end for
   		?>
 <?php

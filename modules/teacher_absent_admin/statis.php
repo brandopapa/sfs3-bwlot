@@ -5,8 +5,9 @@ sfs_check();
 //取得假別陣列
 $abs_kind_arr=tea_abs_kind();
 
+
 // 判斷是否為管理權限
-$isAdmin = (int)checkid($_SERVER[SCRIPT_FILENAME],1);
+$isAdmin = (int)checkid($_SERVER['SCRIPT_FILENAME'],1);
 
 if ($_POST[d_check]==1) {
 	$query1=" a.year='$sel_year'";
@@ -87,6 +88,8 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 		$tempArr[] = '';
 		// 可補休時數
 		$tempArr[] = '';
+		//104.12.14 事由再向後推一欄
+		$tempArr[] = '';
 		//出差事由
 		$memo = str_replace(array(',',';'),'，',$row['reason']);
 		if ($row['deputy_sn'])
@@ -96,7 +99,7 @@ if ($isAdmin && isset($_POST['mode']) and $_POST['mode'] == 'export-csv') {
 
 	}
 
-	$filename = '請假本文檔.csv';
+	$filename =$SCHOOL_BASE['sch_id'].'_'.date("Ymd").'_請假本文檔.csv';
 	header("Content-disposition: attachment; filename=$filename");
 	header("Content-type: text/x-csv");
 	//header("Pragma: no-cache");

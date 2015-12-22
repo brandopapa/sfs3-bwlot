@@ -1,5 +1,5 @@
 <?php
-// $Id: manage2.php 8572 2015-10-24 09:14:01Z smallduh $
+// $Id: manage2.php 8629 2015-12-09 02:18:25Z hsiao $
 
 
 /*引入學務系統設定檔*/
@@ -301,6 +301,8 @@ $is_send = $res->fields[0];
 //取得班級及科目名稱
 $full_class_name = $course_arr[$teacher_course];
 
+
+
 if(($teacher_course)&&($curr_sort)){
 	if ($is_openWin && $_GET[edit]=='s1')
 		$url_str_1 = "a href=\"".$SFS_PATH_HTML.get_store_path()."/quick_input_m.php?edit=s1&class_id=$class_id&teacher_course=$teacher_course&ss_id=$ss_id&curr_sort=$curr_sort&KeepThis=true&TB_iframe=true&height=400&width=700\" class=\"thickbox\" id=\"openWin\"";
@@ -351,6 +353,9 @@ if(($teacher_course)&&($curr_sort)){
 		$main .="<td>本次平均</td>";
 		
 		$main .="<tr>\n";
+		
+		
+		
 		//評量成績
 		if ($yorn=='n'){
 			if(strstr ($teacher_course, 'g')) {
@@ -368,13 +373,18 @@ if(($teacher_course)&&($curr_sort)){
 			else $query = "select student_sn,test_kind,score from $score_semester where ss_id='$ss_id' and test_sort='$curr_sort' and student_sn in ($all_sn)";
 		}
 		$res = $CONN->Execute($query) or trigger_error($query,E_USER_ERROR);
+		$em=0;
 		while(!$res->EOF){
 			$tt =1;
 			if ($res->fields[test_kind] =="定期評量")
 				$tt = 0;
 			$score_arr[$tt][$res->fields[student_sn]] = $res->fields[score];
+			if ($res->fields[score]>-100)$em++;
 			$res->MoveNext();
 		}
+		
+		
+		
 		//載入前幾次評量成績 2015.01.23 by smallduh.=======================================
 		$score_arr_pre=array();
 		if ($curr_sort>1) {
@@ -523,9 +533,12 @@ if(($teacher_course)&&($curr_sort)){
 		else $query = "select student_sn,score from $score_semester where ss_id='$ss_id' and test_sort='255' and test_kind='全學期' and student_sn in ($all_sn)";
 		$res = $CONN->Execute($query) or trigger_error($query,E_USER_ERROR);
 		while(!$res->EOF){
-			$score_arr[$res->fields[student_sn]] = $res->fields[score];
+			$score_arr[$res->fields[student_sn]] = $res->fields[score];	
+                        if($res->fields[score]>-100)$em++;
 			$res->MoveNext();
 		}
+		
+		
 		if(strstr ($teacher_course, 'g')){
 			//分組課程的階段下拉選單 ------------
 			$teacher_course_arr=explode("g",$teacher_course);
@@ -584,6 +597,8 @@ if(($teacher_course)&&($curr_sort)){
 		}
 	}
 
+
+	
 	//平時成績
 	elseif($curr_sort == 254) {
 		$main .="<td>全學期平時成績";
@@ -650,6 +665,8 @@ if(($teacher_course)&&($curr_sort)){
 	$main .="</table>";
 }
 
+
+
 if ($is_print!=1) {
 	head("成績列表");
 	//列出橫向的連結選單模組
@@ -673,7 +690,7 @@ if ($is_print!=1) {
 		<input type=\"hidden\" name=\"teacher_course\" value=\"$teacher_course\">
 		<input type=\"hidden\" name=\"student_sn_hidden\" value=\"$temp_hidden\">
 		<input type=\"hidden\" name=\"performance_test_times\" value=\"$performance_test_times\">";
-
+		
 		echo $avg_temp_hidden;
 
 		if($_GET[edit]<>''){
@@ -688,7 +705,7 @@ if ($is_print!=1) {
 		        <input type=\"submit\" name=\"file_in\" value=匯入".$io_test_name.">
 		        <input type=\"submit\" name=\"file_out\" value=匯出".$io_test_name.">";
 		}
-		if ($teacher_course!='' && $curr_sort!=''){
+		if ($teacher_course!='' && $curr_sort!='' && $em){
 			if (!$is_send)
 				echo "<input type=\"submit\" name=\"dokey\" value=\"匯到教務處\" onclick=\"return confirmSubmit()\">";
 			else
@@ -960,7 +977,7 @@ if ($_GET[is_ok]==1) echo "alert ('平時成績匯入成功 !! ');\n";
 ?>
 
 function confirmSubmit(){
-	return confirm('確定要送到教務處？一旦送出之後您將無法在更改，如需更改請洽教務處');
+	return confirm('確定要送到教務處？一旦送出之後您將無法在更改，如需更改請洽教務處');	
 }
 
 function closeThickbox(){

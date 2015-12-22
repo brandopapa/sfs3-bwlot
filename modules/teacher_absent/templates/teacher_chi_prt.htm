@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; Charset=Big5">
-<title>二林國小 學務管理系統 -- 差旅費列印</title>
+<title>{{$this->Sch.sch_cname}} 學務管理系統 -- 差旅費列印</title>
 </head>
 <style type="text/css">
 <!--
@@ -23,7 +23,7 @@ margin-bottom: 1cm;
 </style>
 <body>
 <TABLE width='100%'  border='0' align='center' style="border:0px;">
-<TR><TD colspan=3 align='center' style="border:0px;"><b style="font-size:16pt;">{{$this->Sch.sch_cname}}出差旅費報告表</b></TD></TR>
+<TR><TD colspan=3 align='center' style="border:0px;"><b style="font-size:16pt;">{{$this->Sch.sch_cname}}出差請示單暨旅費報告表</b></TD></TR>
 <TR><TD width=40% style="border:0px;">
 <TABLE  align='left'>
 <TR><TD>憑證編號</TD><TD colspan=3 align='center'>預算科目</TD></TR>
@@ -50,7 +50,9 @@ margin-bottom: 1cm;
 <TD align=left colspan=2>&nbsp;&nbsp;如下列表。</TD>
 <TD><b>列印月份</b></TD>
 <TD align=left colspan=2>
-{{foreach from=$smarty.post.pMonth item=MM}}■{{$MM}} {{/foreach}}</TD>
+{{foreach from=$smarty.post.pMonth item=MM}}■{{$MM}} {{/foreach}}
+{{if $this->add12!=''}}&nbsp;■{{$this->add12}}{{/if}}
+</TD>
 </TR>
 </TABLE>
 
@@ -142,7 +144,7 @@ margin-bottom: 1cm;
 
 <table border='1' cellPadding='0' cellSpacing='0'　 width=100%>
 <tr><td colspan=5>請敘明交通工具種類：口客運　口捷運　口火車(復興)　口火車(莒光)　口火車(自強)</td></tr>
-<tr Height=50><td colspan=5>上列出差旅費合計： <ins><b> 新台幣{{$this->CNum($Tol)}}元整 </b></ins> ，
+<tr Height=50><td colspan=5>上列出差旅費合計： <ins><b> 新台幣{{$this->MoneyNum($Tol)}}元整 </b></ins> ，
 業經如數收訖。<div style="text-align: right;font-size:10pt;"><b>具領人</b>　　　　　　　　　　　　　　　　　　　(簽名或蓋章)</div></td></tr>
 <tr align='center'>
 <td width=20%>出差人</td>
