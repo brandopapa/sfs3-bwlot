@@ -1,14 +1,16 @@
 <?php
 
-// $Id: sfs_case_ado.php 8642 2015-12-16 05:08:52Z hsiao $
+// $Id: sfs_case_ado.php 8663 2015-12-22 03:57:37Z hsiao $
 //取得MySQLi連線
 function get_mysqli_conn() {
-    global $mysql_host, $mysql_user, $mysql_pass, $mysql_db;
+    global $mysql_host, $mysql_user, $mysql_pass, $mysql_db, $MYSQL_CHARSET;
     $mysqliconn = new mysqli($mysql_host, $mysql_user, $mysql_pass, $mysql_db);
     if ($mysqliconn->connect_errno) {
         echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
     }
-    //echo $mysqli->host_info . "\n";
+    // echo $mysqliconn->host_info . $charseta."\n";exit;
+    if (isset($MYSQL_CHARSET))
+        $mysqliconn->set_charset($MYSQL_CHARSET);
     return $mysqliconn;
 }
 

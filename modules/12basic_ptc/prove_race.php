@@ -1,5 +1,5 @@
 <?php
-
+//本程式應屏東縣要求，在career_race模組有相同複本
 include "config.php";
 
 sfs_check();

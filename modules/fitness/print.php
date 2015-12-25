@@ -1,5 +1,5 @@
 <?php
-// $Id: print.php 8618 2015-12-02 03:17:04Z chiming $
+// $Id: print.php 8655 2015-12-21 04:21:47Z chiming $
 // 取得設定檔
 include "config.php";
 
@@ -66,10 +66,10 @@ if ($class_num) {
 	//取得學生資料
 	if($_POST['all_students'] and $_POST['export']){
 		$query="select a.student_sn,a.stud_id,a.stud_name,a.stud_sex,a.stud_birthday,a.stud_person_id,b.seme_class,b.seme_num from stud_base a,stud_seme b where a.student_sn=b.student_sn and b.seme_year_seme='$seme_year_seme' and a.stud_study_cond in ($in_study) order by curr_class_num";
-		$file_name="$seme_year_seme 學生體適能匯出資料_全校.csv";
+		$file_name="{$seme_year_seme}_學生體適能匯出資料_全校.csv";
 	} else {
 		$query="select a.student_sn,a.stud_id,a.stud_name,a.stud_sex,a.stud_birthday,a.stud_person_id,b.seme_class,b.seme_num from stud_base a,stud_seme b where a.student_sn=b.student_sn and b.seme_year_seme='$seme_year_seme' and b.seme_class='$class_num' and a.stud_study_cond in ($in_study) order by curr_class_num";
-		$file_name="$seme_year_seme 學生體適能匯出資料_$class_num.csv";
+		$file_name="{$seme_year_seme}_學生體適能匯出資料_{$class_num}.csv";
 	}
 	
 	$res=$CONN->Execute($query) or die("SQL無法執行：$query");

@@ -55,7 +55,19 @@ if($_POST['act']){
 		case 'HTML_SCORE':
 			$main="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1'>
 				<tr bgcolor='#ffcccc'><td>學生姓名</td><td>身分證統一編號</td><td>出生年(民國年)</td><td>出生月</td><td>出生日</td><td>畢業資格</td><td>均衡學習</td><td>服務表現</td><td>品德表現</td><td>競賽表現</td><td>體適能</td><td>適性發展</td><td>經濟弱勢</td><td>就學國中代碼</td><td>班級</td><td>座號</td>";
-			break;	
+			break;
+		case 'HTML_105':
+			$main="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1'>
+				<tr bgcolor='#ffcccc' align='center'><td>考區代碼</td><td>集報單位代碼</td><td>序號</td><td>學號</td><td>班級</td><td>座號</td><td>學生姓名</td><td>身分證統一編號</td><td>性別</td><td>出生年(民國年)</td><td>出生月</td><td>出生日</td><td>畢業學校代碼</td><td>畢業年(民國年)</td><td>畢肄業</td><td>學生身分</td><td>身心障礙</td><td>就學區</td><td>低收入戶</td><td>中低收入戶</td><td>失業勞工子女</td><td>資料授權</td><td>家長姓名</td><td>市內電話</td><td>行動電話</td><td>郵遞區號</td><td>通訊地址</td><td>變更後就學區</td><td>非中華民國身分證號</td><td>學生報名身分</td><td>市內電話分機</td><td>均衡學習</td><td>服務表現</td><td>品德表現</td><td>競賽表現</td><td>體適能</td><td>適性發展_高中</td><td>適性發展_高職</td><td>適性發展_綜合高中</td><td>適性發展_五專</td>";
+			break;
+		case 'EXCEL_105':
+			$x=new sfs_xls();
+			$x->setUTF8();
+			$x->filename=$SCHOOL_BASE['sch_id'].'_'.$school_long_name.'_105招生系統基本資料與積分資料檔.xls';
+			$x->setBorderStyle(1);
+			$x->addSheet('student');  //原為$school_id
+			$x->items[0]=array('考區代碼','集報單位代碼','序號','學號','班級','座號','學生姓名','身分證統一編號','性別','出生年(民國年)','出生月','出生日','畢業學校代碼','畢業年(民國年)','畢肄業','學生身分','身心障礙','就學區','低收入戶','中低收入戶','失業勞工子女','資料授權','家長姓名','市內電話','行動電話','郵遞區號','通訊地址','變更後就學區','非中華民國身分證號','學生報名身分','市內電話分機','均衡學習','服務表現','品德表現','競賽表現','體適能','適性發展_高中','適性發展_高職','適性發展_綜合高中','適性發展_五專');
+			break;
 	}
 
 	//取得指定學年已經開列的學生清單
@@ -168,6 +180,12 @@ if($_POST['act']){
 				case 'HTML_SCORE':
 					$main.="<tr align='center'><td>$stud_name</td><td>$stud_person_id</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$score_graduate</td><td>$score_balance</td><td>$score_service</td><td>$score_fault</td><td>$score_competetion</td><td>$score_fitness</td><td>$score_personality</td><td>$score_disadvantage</td><td>$school_id</td><td>$seme_class</td><td>$seme_num</td>";
 					break;
+				case 'HTML_105':
+					$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>0</td><td>$guardian_name</td><td>$guardian_phone</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$guardian_address</td><td></td><td></td><td>0</td><td></td><td>$score_balance</td><td>$score_service</td><td>$score_fault</td><td>$score_competetion</td><td>$score_fitness</td><td>6</td><td>6</td><td>6</td><td>6</td></tr>";  //<td>$score_disadvantage</td>
+					break;
+				case 'EXCEL_105':
+					$x->items[]=array($area_code,$school_id,$no,$stud_id,$seme_class,$seme_num,$stud_name,$stud_person_id,$stud_sex,$birth_year,$birth_month,$birth_day,$school_id,$work_year,$graduate,$kind_id,$disability_id,'',$free_1,$free_2,$free_3,0,$guardian_name,$guardian_phone,$guardian_hand_phone,$addr_zip,$guardian_address,'','','0','',$score_balance,$score_service,$score_fault,$score_competetion,$score_fitness,6,6,6,6);
+					break;
 			}
 		}
 		$recordSet->MoveNext();
@@ -196,8 +214,11 @@ while(!$rs->EOF)
 	$rs->MoveNext();
 }
 
-$data="※學生基本資料檔：<input type='submit' name='act' value='HTML' onclick=\"document.myform.target='$academic_year'\"> <input type='submit' name='act' value='EXCEL' onclick=\"document.myform.target=''\">
-	<br><br>※比序項目積分資料檔：<input type='submit' name='act' value='HTML_SCORE' onclick=\"document.myform.target='$academic_year'\"> <input type='submit' name='act' value='EXCEL_SCORE' onclick=\"document.myform.target=''\">";
+$data="※試探系統-學生基本資料檔：<input type='submit' name='act' value='HTML' onclick=\"document.myform.target='$academic_year'\"> <input type='submit' name='act' value='EXCEL' onclick=\"document.myform.target=''\">
+	<br><br>※試探系統-比序項目積分資料檔：<input type='submit' name='act' value='HTML_SCORE' onclick=\"document.myform.target='$academic_year'\"> <input type='submit' name='act' value='EXCEL_SCORE' onclick=\"document.myform.target=''\">
+	<br><br><br><br><B>※105-招生系統基本資料與積分資料檔：<input type='submit' name='act' value='HTML_105' onclick=\"document.myform.target='$academic_year'\"> <input type='submit' name='act' value='EXCEL_105' onclick=\"document.myform.target=''\">
+	<br>　ＰＳ：[變更後就學區]、[非中華民國身分證號]、[市內電話分機]預設為「 留空 」；[學生報名身分]預設為「0 / 一般生」；[適性發展]各項預設為「 6 」。
+</B>";
 
 if($full_sealed_check) {
 	//檢查是否有可修改紀錄的參與免試學生

@@ -23,6 +23,8 @@ $curr_seme=($_POST['curr_seme'])?"{$_POST['curr_seme']}":"{$_GET['curr_seme']}";
 
 $add_nor=$_GET['add_nor'];
 $add_wet=$_GET['add_wet'];
+$add_teacher=$_GET['add_teacher'];
+$add_date=$_GET['add_date'];
 //if(!$curr_year) $curr_year = curr_year();
 //if(!$curr_seme) $curr_seme = curr_seme();
 
@@ -61,6 +63,15 @@ elseif($act=="dl_pdf_one"){
 		if($add_wet){
 			$wchecked=" checked";
 		}
+		
+		if($add_teacher){
+			$tchecked=" checked";
+		}
+		
+		if($add_date){
+			$dchecked=" checked";
+		}
+		
 		//成績單標題
 		$title=$school_short_name.$curr_year."學年度第".$curr_seme."學期第".$test_sort."次定期考查\n";
 		if(sizeof($curr_year)==2) $curr_year="0".$curr_year;	
@@ -191,8 +202,10 @@ elseif($act=="dl_pdf_one"){
 				array_push($data[$k],"平均","$aver");
 			}
 		}
-
-	$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+    
+	$comment2="";
+	if ($add_teacher)$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+	if ($add_date)$comment2.="\n      列印日期:".date("Y-m-d");
 	//print_r($data);
 	creat_pdf($title,$header,$data,$comment1,$comment2);
 }
@@ -214,6 +227,14 @@ elseif($act=="dl_pdf_class"){
 	if($add_wet){
 		$wchecked=" checked";
 	}
+	
+	if($add_teacher){
+			$tchecked=" checked";
+	}
+	
+	if($add_date){
+	        $dchecked=" checked";
+	 }
 
 	$class_id=sprintf("%03d",$curr_year)."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 	$student_sn_arr=class_id_to_seme_student_sn($class_id,$yn='0');
@@ -349,8 +370,9 @@ elseif($act=="dl_pdf_class"){
 		$m++;
 	}
 
-
-	$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+	$comment2="";
+	if ($add_teacher)$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+	if ($add_date)$comment2.="\n      列印日期:".date("Y-m-d");
 	//print_r($data);
 	creat_pdf($title,$header,$data,$comment1,$comment2);
 }
@@ -430,15 +452,26 @@ else{
 		if($add_wet){
 			$wchecked=" checked";
 		}
-		$nor_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_nor'$checked value='1' onclick='this.form.submit()'>包含平時成績</form></td></tr>";
-		$wet_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_wet'$wchecked value='1' onclick='this.form.submit()'>包含各科加權</form></td></tr>";
+		
+		if($add_teacher){
+			$tchecked=" checked";
+		}
+		
+		if($add_date){
+			$dchecked=" checked";
+		}
+		
+		$nor_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='add_teacher' value='$add_teacher'><input type='hidden' name='add_date' value='$add_date'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_nor'$checked value='1' onclick='this.form.submit()'>包含平時成績</form></td></tr>";
+		$wet_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='add_teacher' value='$add_teacher'><input type='hidden' name='add_date' value='$add_date'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_wet'$wchecked value='1' onclick='this.form.submit()'>包含各科加權</form></td></tr>";
+		$teacher_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='add_date' value='$add_date'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_teacher'$tchecked value='1' onclick='this.form.submit()'>導師及家長</form></td></tr>";
+		$date_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='add_teacher' value='$add_teacher'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_date'$dchecked value='1' onclick='this.form.submit()'>列印日期</form></td></tr>";
 	
 		
-		$download="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet'>下載個人SXW</a></font></td></tr>";
-		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet'>下載全班SXW</a></font></td></tr>";
+		$download="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載個人SXW</a></font></td></tr>";
+		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載全班SXW</a></font></td></tr>";
 		
-		$download3="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet'>下載個人PDF</a></font></td></tr>";
-		$download4="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet'>下載全班PDF</a></font></td></tr>";
+		$download3="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載個人PDF</a></font></td></tr>";
+		$download4="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載全班PDF</a></font></td></tr>";
 
 		//成績單標題
 
@@ -569,7 +602,7 @@ else{
 		$paper.="</table>";
 
 	}
-	$list="<table><tr><td><form action='{$_SERVER['PHP_SELF']}' method='POST'><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='class_base' value='$class_base'><input type='hidden' name='student_sn' value='$student_sn'></form></td></tr>$student_select $nor_form $wet_form $download $download2 $download3 $download4</table>";
+	$list="<table><tr><td><form action='{$_SERVER['PHP_SELF']}' method='POST'><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='class_base' value='$class_base'><input type='hidden' name='student_sn' value='$student_sn'></form></td></tr>$student_select $nor_form $wet_form $teacher_form $date_form $download $download2 $download3 $download4</table>";
 	$main="<table><tr><td valign='top'>$list</td><td valign='top'>$paper</td></tr></table>";
 
 	//設定主網頁顯示區的背景顏色
@@ -659,7 +692,7 @@ else{
 
 
 function ooo_one($test_sort,$class_num,$student_sn){
-	global $CONN,$school_short_name,$class_seme,$add_nor,$add_wet;
+	global $CONN,$school_short_name,$class_seme,$add_nor,$add_wet,$add_teacher,$add_date;
 
 	$oo_path = "ooo_one";
 
@@ -900,6 +933,27 @@ $view_num=4;
     </table:table-cell>";
     }
 	
+	if ($add_teacher)
+	{
+		$teacher_view="導師:";
+		$parent_view="家長:";
+	}
+	else
+	{
+		$teacher_view="";
+		$teacher="";
+		$parent_view="";
+	}
+
+	
+	if ($add_date)
+	{
+		$date_view="列印日期:".date("Y-m-d");
+	}
+	else
+	{
+		$date_view="";
+	}
 		
 	//變數替換
     $temp_arr["school_name"] = $school_name;
@@ -913,7 +967,10 @@ $view_num=4;
 	$temp_arr["sj_sc"] = $sj_sc;
 	$temp_arr["total"] = $totalx;	
 	$temp_arr["aver"] = $averx;
+	$temp_arr["teacher_view"] = $teacher_view;
 	$temp_arr["teacher"] = $teacher;
+	$temp_arr["parent_view"] = $parent_view;
+	$temp_arr["date_view"] = $date_view;
 	
 	// change_temp 會將陣列中的 big5 轉為 UTF-8 讓 openoffice 可以讀出
 	$replace_data = $ttt->change_temp($temp_arr,$data,0);
@@ -938,7 +995,7 @@ $view_num=4;
 }
 
 function ooo_class($test_sort,$class_num){
-	global $CONN,$school_short_name,$class_seme,$add_nor,$add_wet;
+	global $CONN,$school_short_name,$class_seme,$add_nor,$add_wet,$add_teacher,$add_date;
 
 	$oo_path = "ooo_class";
 	$filename=$class_seme."_".$class_num."_".$test_sort.".sxw";	
@@ -1224,7 +1281,26 @@ $view_num=4;
 		$teacher=$_SESSION['session_tea_name'];
         */
 		
-		
+	if ($add_teacher)
+	{
+		$teacher_view="導師:";
+		$parent_view="家長:";
+	}
+	else
+	{
+		$teacher_view="";
+		$teacher="";
+		$parent_view="";
+	}
+	
+	if ($add_date)
+	{
+		$date_view="列印日期:".date("Y-m-d");
+	}
+	else
+	{
+		$date_view="";
+	}
 		
 		//變數替換
 		$temp_arr["school_name"] = $school_name;
@@ -1238,7 +1314,10 @@ $view_num=4;
 	    $temp_arr["sj_sc"] = $sj_sc[$student_sn];
 	    $temp_arr["total"] = $totalx[$student_sn];	
 	    $temp_arr["aver"] = $averx[$student_sn];
-		$temp_arr["teacher"] = $teacher;
+		$temp_arr["teacher_view"] = $teacher_view;
+	    $temp_arr["teacher"] = $teacher;
+	    $temp_arr["parent_view"] = $parent_view;
+		$temp_arr["date_view"] = $date_view;
 		
 		//換行
 		$content_body .= $break;
@@ -1273,6 +1352,8 @@ $view_num=4;
 	exit;
 	return;
 }
+
+
 
 
 

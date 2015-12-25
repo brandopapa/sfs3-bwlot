@@ -62,7 +62,7 @@ $MODULE_UPDATE="2012-11-12";
 //---------------------------------------------------
 
 //目錄內程式  //
-$MENU_P = array("readme.php"=>"使用說明","student_list.php"=>"參與免試學生","kind_mirror.php"=>"身分對應設定","student_kind.php"=>"報名身分","basic_data.php"=>"基本資料","graduate.php"=>"1.畢業資格","aspiration.php"=>"2.志願序*","balance.php"=>"3.均衡學習","diversification.php"=>"4.多元學習表現","personality.php"=>"5.適性發展","disadvantage.php"=>"6.經濟弱勢","exam.php"=>"7.教育會考*","sealed.php"=>"資料封存","output_tmd_104.php"=>"試探系統電子檔輸出","adjust.php"=>"資料回校");
+$MENU_P = array("readme.php"=>"使用說明","student_list.php"=>"參與免試學生","kind_mirror.php"=>"身分對應設定","student_kind.php"=>"報名身分","basic_data.php"=>"基本資料","graduate.php"=>"1.畢業資格","aspiration.php"=>"2.志願序*","balance.php"=>"3.均衡學習","diversification.php"=>"4.多元學習表現","personality.php"=>"5.適性發展","disadvantage.php"=>"6.經濟弱勢","exam.php"=>"7.教育會考*","sealed.php"=>"資料封存","output_tmd_104.php"=>"電子檔輸出","adjust.php"=>"資料回校");
 //,"output.php"=>"招生系統報名電子檔輸出"
 
 

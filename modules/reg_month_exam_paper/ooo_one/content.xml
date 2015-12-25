@@ -92,10 +92,15 @@
 </table:table>
 <text:p text:style-name="P4"/>
 <text:p text:style-name="P4">
-導師：
+{teacher_view}
 {teacher} 
 <text:s text:c="4"/>
-家長：
+{parent_view}
 </text:p>
+<text:p text:style-name="P3">
+<text:s text:c="48"/>
+{date_view}
+</text:p>
+
 </office:body>
 </office:document-content>
