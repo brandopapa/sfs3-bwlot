@@ -1,5 +1,5 @@
 <?php
-//$Id: index.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: index.php 8668 2015-12-24 06:34:08Z qfon $
 
 include "config.php";
  
@@ -12,10 +12,29 @@ if(!isset($_REQUEST[tapem_id])){ //¹w³]­È
 	$_REQUEST[tapem_id] = $result->fields[0];
 }
 
-   
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+if ($_REQUEST[tapem_id] <> "") {
+$stmt = $mysqliconn->prepare("select count(*) as tolrow from $subtable where tapem_id=?");
+$stmt->bind_param('s', $_REQUEST[tapem_id]);
+}
+else
+{
+$stmt = $mysqliconn->prepare("select count(*) as tolrow from $subtable");
+}
+$stmt->execute();
+$stmt->bind_result($tolrow);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
+ /*
 $dbquery="select count(*) as tolrow from $subtable where tapem_id='$_REQUEST[tapem_id]'";
 $result = &$CONN->Execute($dbquery);     
 $tolrow = $result->fields["tolrow"];
+*/
+
 if (!isset($_REQUEST[pos])||($_REQUEST[pos]>$tolrow))
 	$pos = 0;
 else
@@ -76,7 +95,28 @@ $tbackground =" background=\"$table_background\" ";
 
 <?php
 
-   
+$dbquery = "select tapem_id,tape_id,tape_name,tape_grade,tape_memo from $subtable where tapem_id=? ";
+if (isset($_REQUEST[sort]))
+$dbquery .= "order by $_REQUEST[sort] ";      
+$dbquery .="LIMIT $pos,  $row_num    ";
+
+//if ($_REQUEST[tapem_id] <> "") {
+$stmt = $mysqliconn->prepare($dbquery);
+$stmt->bind_param('s', $_REQUEST[tapem_id]);
+//} 
+ 
+$stmt->execute();
+$stmt->bind_result($tapem_id,$tape_id,$tape_name,$tape_grade,$tape_memo);
+	
+	while ($stmt->fetch()) {
+	echo ($i++ %2)?"<tr bgcolor=\"$school_kind_color[3]\">":"<tr bgcolor=\"$school_kind_color[5]\">";
+	echo "<td align=center>".$tapem_id.$tape_id."</td><td>".$tape_name."</td><td><font color=green size=-1>".nl2br($tape_memo)."</font></td>";
+	echo "<td align=center>".$tape_grade."</td></tr>";  
+
+		
+	}
+
+/*
 $dbquery = "select tapem_id,tape_id,tape_name,tape_grade,tape_memo from $subtable where tapem_id='$_REQUEST[tapem_id]' ";
 if (isset($_REQUEST[sort]))
 $dbquery .= "order by $_REQUEST[sort]  ";    
@@ -92,6 +132,8 @@ while(!$result->EOF) {
 	echo "<td align=center>".$result->fields[tape_grade]."</td></tr>";  
   	$result->MoveNext();
 }
+*/
+
 
 echo "</table>";
 echo "<hr size=1>";

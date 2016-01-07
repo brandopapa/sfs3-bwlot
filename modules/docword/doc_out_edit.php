@@ -1,12 +1,13 @@
 <?php
 
-// $Id: doc_out_edit.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_out_edit.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
 // session 認證
 //session_start();
 //session_register("session_log_id");
+
 
 if(!checkid($PHP_SELF)){
 	$go_back=1; //回到自已的認證畫面
@@ -19,6 +20,7 @@ else
 	$ischecked = true;
 //-----------------------------------
 
+
 if ($key =="修改"){
 	$query = "update sch_doc1 set doc1_year_limit='$doc1_year_limit',doc1_kind='$doc1_kind',doc1_date='$doc1_date',doc1_date_sign='$doc1_date_sign',doc1_unit='$doc1_unit',doc1_word='$doc1_word',doc1_main='$doc1_main',doc1_unit_num1='$doc1_unit_num1',doc1_unit_num2='$doc1_unit_num2',teach_id='$session_log_id' where doc1_id='$doc1_id'";
 
@@ -30,6 +32,22 @@ if ($key == "刪除"){
 	mysql_query($query)or die ($query);
 	header ("Location: doc_out_list.php");
 }
+
+///mysqli	
+$sql_select = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1 where doc1_id=? ";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s',$doc1_id);
+$stmt->execute();
+$stmt->bind_result($doc1_id,$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_unit_num2,$teach_id,$doc1_k_id,$doc_stat,$doc1_end_date,$doc1_infile_date,$do_teacher );
+
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
+
+/*
 $sql_select = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id from sch_doc1 where doc1_id='$doc1_id'";
 $result = mysql_query ($sql_select,$conID);
 
@@ -48,6 +66,7 @@ while ($row = mysql_fetch_array($result)) {
 	$teach_id = $row["teach_id"];
 
 };
+*/
 
 include "header.php";
 prog(2); //上方menu (在 docword_config.php 中設定)

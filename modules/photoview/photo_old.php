@@ -1,6 +1,8 @@
 <?php
-// $Id: photo_old.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: photo_old.php 8711 2015-12-31 02:19:05Z qfon $
   require "config.php";
+  
+  sfs_check();
   
   $showpage = $_GET['showpage'] ;
   $query = $_GET['query'] ;
@@ -40,6 +42,58 @@
   if ($query) $do = "search" ;
   
   //讀取資料庫
+
+  ///mysqli
+  $sqlstr = "SELECT count(*) FROM $tbname  " ;
+  
+  if ($do == "search") 
+     $sqlstr =$sqlstr .  " where act_info like ? " ;
+  $sqlstr .= " order by act_ID  DESC " ;  
+  
+  if ($debug ) echo $sqlstr ;
+
+ 
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$query="%$query%";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('s',$query);
+$stmt->execute();
+$stmt->bind_result($totalnum);
+$stmt->fetch();
+$stmt->close();
+
+
+
+  if ($totalnum) {
+	
+	$totalpage = ceil( $totalnum / $pagesites) ;
+    
+    if (!$showpage)  $showpage =1 ; 
+	
+   $sqlstr = "SELECT act_ID,act_date,act_name,act_info,act_dir,act_postdate,act_auth,act_view FROM $tbname  " ;
+  
+  if ($do == "search") 
+     $sqlstr =$sqlstr .  " where act_info like ? " ;
+  $sqlstr .= " order by act_ID  DESC " ;  
+ 
+    $sqlstr .= ' LIMIT ' . ($showpage-1)*$pagesites . ', ' . $pagesites  ;  
+    //$result = $CONN->PageExecute("$sqlstr", $pagesites , $showpage );
+
+$query="%$query%";	
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('s', $query); 
+$stmt->execute();
+$stmt->bind_result($act_ID,$act_date,$act_name,$act_info,$act_dir,$act_postdate,$act_auth,$act_view);
+ 
+ 
+ 
+ 
+  }  
+
+///mysqli
+  
+  /*
   $sqlstr = "SELECT * FROM $tbname  " ;
   
   if ($do == "search") 
@@ -59,6 +113,8 @@
     $result = $CONN->PageExecute("$sqlstr", $pagesites , $showpage );
  
   }  
+  */
+  
   if (!$totalpage) $totalpage= 1 ;
   
   head("相片展")
@@ -151,26 +207,27 @@ function gotourl(id,selpage,dirstr) {
 </table>
   <hr noshade>
 <?php
-  if($result) 
-  	while ($nb=$result->FetchRow() ) {    
-
+  //if($result) 
+  	//while ($nb=$result->FetchRow() ) {    
+	  if ($totalnum)
+        while ($stmt->fetch()) {
 ?>
 <table width="95%" border="0" cellspacing="0" cellpadding="4"  align="center">
   <tr > 
       <td bgcolor="#CCCCFF" class="tdbody" width="80%">
-        <span class="daystyl"><?php echo  '第' . $nb[act_ID] .'則['. $nb[act_date] . ']' ?></span> 
-        <a href = "<?php echo "view.php?id=$nb[act_ID]" ?>">   
-          <?php echo $nb[act_name] ; ?>
+        <span class="daystyl"><?php echo  '第' . $act_ID .'則['. $act_date . ']' ?></span> 
+        <a href = "<?php echo "view.php?id=$act_ID" ?>">   
+          <?php echo $act_name ; ?>
         </a> 
-        [<?php echo  $nb[act_auth] ; ?>公佈]
+        [<?php echo  $act_auth ; ?>公佈]
       </td>  
     <td  nowrap bgcolor="#CCCCFF" class="auth" width="60"> 
-       <?php echo "點閱: $nb[act_view]" ;?>
+       <?php echo "點閱: $act_view" ;?>
     </td>      
     <td  width="100"> 
-      <a href="photoshow.php?id=<?php echo $nb[act_ID] ?>" target="photoshow"><img src="images/show_time.gif"   border="0" alt="展示"></a> 
-      <a href="photo_admin.php?do=edit&id=<?php echo $nb[act_ID] ?>"><img src="images/edit.gif"   border="0" alt="編修"></a> 
-      <a href="photo_admin.php?do=delete&id=<?php echo $nb[act_ID] ?>"><img src="images/delete.gif"   border="0" alt="刪除"></a> 
+      <a href="photoshow.php?id=<?php echo $act_ID ?>" target="photoshow"><img src="images/show_time.gif"   border="0" alt="展示"></a> 
+      <a href="photo_admin.php?do=edit&id=<?php echo $act_ID ?>"><img src="images/edit.gif"   border="0" alt="編修"></a> 
+      <a href="photo_admin.php?do=delete&id=<?php echo $act_ID ?>"><img src="images/delete.gif"   border="0" alt="刪除"></a> 
     </td>
 
   </tr>
@@ -179,7 +236,7 @@ function gotourl(id,selpage,dirstr) {
 <?php   
       echo "<blockquote> <p class=\"info\"> " ;   
       //出現小圖
-      $pic = geticon( $nb["act_dir"] ) ;
+      $pic = geticon( $act_dir ) ;
       //echo  $pic ;
       if ($pic) 
         if (WIN_PHP_OS()) {
@@ -191,7 +248,7 @@ function gotourl(id,selpage,dirstr) {
         }else         
           echo "<img src=\"$pic\"  align=\"left\" border=\"1\"> " ;
       
-      echo   nl2br($nb["act_info"]) . " </blockquote> </p>" ;
+      echo   nl2br($act_info) . " </blockquote> </p>" ;
 ?>      
 
     </td>

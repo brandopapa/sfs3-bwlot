@@ -69,7 +69,8 @@ $school_menu_p = array(
 'score_notification.php'=>'干σ硄虫',
 'score_list.php'=>'干σΘ罿',
 'score_identify.php'=>'干σΘ罿靡',
-'ungraduate_stu.php'=>'烩办ぃの縵匡'
+'ungraduate_stu.php'=>'烩办ぃの縵匡',
+'chc_mend_scope_tol.php'=>'烩办Θ罿ぃの计参璸'
 );
 
 

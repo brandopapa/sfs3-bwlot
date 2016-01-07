@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_print.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_print.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -28,7 +28,7 @@ if ($QueryEndDate == "")
 
 //取得承辦處室
 $doc_unit_p = doc_unit();
-if ($_POST[unit]!="") $unit_str=" and doc1_unit_num1 = '".$_POST[unit]."'";
+if ($_POST[unit]!="") $unit_str=" and doc1_unit_num1 = '".intval($_POST[unit])."'";
 if ($B1=="文號查詢" or $key=="文號列印")
         $query = "select * from sch_doc1 where  doc1_id >='$QueryBeginID' and  doc1_id <='$QueryEndID' $unit_str order by doc1_id";
 else

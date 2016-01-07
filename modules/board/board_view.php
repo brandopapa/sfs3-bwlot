@@ -1,5 +1,5 @@
 <?php
-// $Id: board_view.php 7280 2013-05-06 02:24:51Z hsiao $
+// $Id: board_view.php 8733 2016-01-05 07:20:23Z hsiao $
 // --╰参砞﹚郎
 include "board_config.php";
 
@@ -31,20 +31,83 @@ else
 
 if ($topage !="")
 	$page = $topage;
-$sql_select = "select  a.b_id from board_p a,board_kind b where ";
+//$sql_select = "select  a.b_id from board_p a,board_kind b where ";
+$sql_select = "select  count(*) from board_p a,board_kind b where ";
 if ($bk_id!="")
-	$sql_select .= " a.bk_id='$bk_id' ";
+	//$sql_select .= " a.bk_id='$bk_id' ";
+    $sql_select .= " a.bk_id=? ";
 else
 	$sql_select .= " to_days(a.b_open_date)+ a.b_days > to_days(curdate()) and b.board_is_public=1 ";
 
 $sql_select .= " and a.bk_id = b.bk_id order by a.b_open_date desc ,a.b_post_time desc ";
-$result = $CONN->Execute($sql_select)or die ($sql_select);
-$tol_num= $result->RecordCount();
+//$result = $CONN->Execute($sql_select)or die ($sql_select);
+
+///mysqli
+$mysqliconn = get_mysqli_conn("board_p");
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($tol_num);
+$stmt->fetch();
+$stmt->close();
+
+//$tol_num= $result->RecordCount();
 if ($tol_num % $page_count > 0 )
 	$tolpage = intval($tol_num / $page_count)+1;
 else
 	$tolpage = intval($tol_num / $page_count);
 
+
+$sql_select = "select a.bk_id,a.b_id,a.b_open_date,a.b_days,a.b_unit,a.b_title,a.b_name,a.b_sub,a.b_con,a.b_hints,a.b_upload,a.b_url,a.b_post_time,a.b_own_id,a.b_is_intranet,a.teacher_sn,a.b_is_sign,a.b_signs,a.b_is_marquee from board_p a,board_kind b where ";
+if ($bk_id != "")
+	$sql_select .= " a.bk_id=? ";
+else
+	$sql_select .= " to_days(a.b_open_date)+ a.b_days > to_days(curdate()) and b.board_is_public=1 ";
+
+//安ㄏゼ﹚矪璶﹚そら戳
+if(! $bk_id and $m_arr["display_limit"]) $sql_select .= " and to_days(a.b_open_date)<=to_days(curdate())";
+	
+$sql_select .= " and a.bk_id = b.bk_id order by a.b_open_date desc ,a.b_post_time desc ";
+$sql_select .= " limit ".($page * $page_count).", $page_count";
+///mysqli
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($bkk_id,$bb_id,$b_open_date,$b_days,$b_unit,$b_title,$b_name,$b_sub,$b_con,$b_hints,$b_upload,$b_url,$b_post_time,$b_own_id,$b_is_intranet,$teacher_sn,$b_is_sign,$b_signs,$b_is_marquee);
+$temp_con="";
+
+while ($stmt->fetch()) {
+	if ($b_is_intranet == "1") //ず场ゅン
+		$b_i_temp = "<img src=\"images/school.gif\" alt=\"ずゅン\" border=0>";
+	else
+		$b_i_temp ="";
+
+	if ($b_is_sign == "1") //帽Μゅン
+		$b_sign_temp = "<img src=\"images/sign.png\" alt=\"帽Μゅン\" border=0>";
+	else
+		$b_sign_temp ="";
+
+	$bgcolor =($i++ % 2)?$table_bg_color:"#".dechex((float) hexdec($table_bg_color)+$offset_color);
+	$temp_con .="<tr bgcolor='$bgcolor' onMouseOver=setBG('$record_bg_color',this) onMouseout=setBGOff('$bgcolor',this) onFocus=setBG('$record_bg_color',this) onBlur=setBGOff('$bgcolor',this) style='text-height:$record_height pt;text-align:center;color:$record_text_color;font-size:$font_size pt;'>";
+
+	//浪琩琌ず场ゅン(ミ╰参恨瞶ごǎず场ゅン)
+//	if (($b_is_intranet== 0 ) || ($b_own_id == $_SESSION[session_log_id] )|| (checkid($_SERVER[SCRIPT_FILENAME],1)) || ($b_is_intranet == '1' && check_home_ip())){
+	//if (($b_is_intranet== 0 ) || ($teacher_sn == $_SESSION[session_tea_sn] )|| (checkid($_SERVER[SCRIPT_FILENAME],1)) || ($b_is_intranet == '1' && $is_home_ip)){
+	if (($b_is_intranet== 0 ) || isset($_SESSION[session_tea_sn] )|| (checkid($_SERVER[SCRIPT_FILENAME],1)) || ($b_is_intranet == '1' && $is_home_ip)){
+		$temp_con .= sprintf("<td nowrap>%s</td><td style='text-align:left;'><a href=\"board_show.php?b_id=%d\">%s</a> $b_i_temp $b_sign_temp</td><td nowrap>%s</td>",$b_open_date,$bb_id,$b_sub,$b_unit);
+	} else {
+		$temp_con .= sprintf("<td nowrap>%s</td><td style='text-align:left;'>%s $b_i_temp $b_sign_temp</td><td nowrap>%s</td>",$b_open_date,$b_sub,$b_unit);
+	}
+	if ($enable_title!="0") $temp_con .= sprintf("<td nowrap>%s</td>",$b_title);
+	if ($enable_days!="0") $temp_con .= sprintf("<td nowrap>%3d</td>",$b_days);
+	if ($enable_point!="0") $temp_con .= sprintf("<td>%3d</td>",$b_hints);
+	$temp_con .= "</tr>\n";
+	
+}
+
+/*
 $sql_select = "select  a.* from board_p a,board_kind b where ";
 if ($bk_id != "")
 	$sql_select .= " a.bk_id='$bk_id' ";
@@ -56,6 +119,7 @@ if(! $bk_id and $m_arr["display_limit"]) $sql_select .= " and to_days(a.b_open_d
 	
 $sql_select .= " and a.bk_id = b.bk_id order by a.b_open_date desc ,a.b_post_time desc ";
 $sql_select .= " limit ".($page * $page_count).", $page_count";
+
 $result = $CONN->Execute($sql_select)or die ($sql_select);
 
 $temp_con="";
@@ -102,7 +166,7 @@ while ($row = $result->fetchRow()){
 	if ($enable_point!="0") $temp_con .= sprintf("<td>%3d</td>",$b_hints);
 	$temp_con .= "</tr>\n";
 }
-
+*/
 
 ?>
 <center>

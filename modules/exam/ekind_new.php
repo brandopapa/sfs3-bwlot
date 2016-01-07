@@ -1,7 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: ekind_new.php 5310 2009-01-10 07:57:56Z hami $
-
+<?php                                                                                                                             
+// $Id: ekind_new.php 8673 2015-12-25 02:23:33Z qfon $
 // --系統設定檔
 include "exam_config.php";
 
@@ -47,6 +45,7 @@ if($_POST[key] =='新增'){
   	
   	//新增學生作業檔
   	//if ($result->fields[0] == 0) {
+		$curr_class_id=intval($curr_class_id);
   		$query = "select stud_id ,curr_class_num from stud_base where curr_class_num like '$curr_class_id%' ";
   		$result = $CONN->Execute($query) or die($query);
   		while (!$result->EOF) {
@@ -97,6 +96,7 @@ include "header.php";
 
 	<select	name="curr_class_name[]" multiple>
 	<?php
+	$curr_class_id=intval($curr_class_id);
 	$sql="select c_sort,c_name from school_class where year=$curr_year and semester=$curr_seme and c_year=$curr_class_id";
 	$result = $CONN->Execute($sql) or die($sql);
 	while(!$result->EOF){

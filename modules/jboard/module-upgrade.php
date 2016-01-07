@@ -178,7 +178,7 @@ if (!is_file($up_file_name)) {
 	$SQL[0]="ALTER TABLE `jboard_p` add `top_days` tinyint(2) NOT NULL DEFAULT '0';";
   $temp_query="";
   foreach ($SQL as $sql) {
-		$res=$CONN->Execute($sql) or die($sql);
+		$res=$CONN->Execute($sql);
 		$temp_query=$temp_query.$sql."\n";
   }
 	$fp = fopen($up_file_name, "w");

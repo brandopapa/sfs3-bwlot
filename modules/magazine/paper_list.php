@@ -1,5 +1,5 @@
 <?php
-//$Id: paper_list.php 6809 2012-06-22 08:16:06Z smallduh $
+//$Id: paper_list.php 8670 2015-12-24 06:39:10Z qfon $
   include_once( "config.php" );
   //session_start();
   //session_register("session_log_id");
@@ -58,6 +58,7 @@ if (!ini_get('register_globals')) {
        exit ;
     }      
     
+	$id=intval($id);
     if ($is_editor) 
        $sqlstr =  "select * from magazine_chap where book_num=$id  and cmode<=5  order by chap_sort " ;   
     else 

@@ -1,5 +1,5 @@
 <?php
-// $Id: test_edit.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: test_edit.php 8705 2015-12-29 03:03:33Z qfon $
 // --系統設定檔
 include "config.php"; 
 session_start();
@@ -59,7 +59,7 @@ $page_count=20;
 if ($order =="")
 	$order = "curr_class_num"; 
 $page_count=20;
-
+$u_id=intval($u_id);
 $sql_select = "select  a.* ,b.u_id ,c.stud_name,c.curr_class_num,c.stud_study_cond from test_score a,unit_u b,stud_base c where ";
 $sql_select .= " a.u_id='$u_id'  and  ";   
 $sql_select .= " poke >0 and who='學生'  and  c.stud_study_cond='0' and ";   
@@ -130,7 +130,7 @@ if ($key == "del"){
 	mysql_query($sql_update) or die ($sql_update);
 }
 if ($key == "修改"){
-	
+	$qid=intval($qid);
 	$sqlstr = "select * from test_data   where  qid='$qid' " ;	
 	$result = mysql_query($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256);
 	$row = mysql_fetch_array($result);
@@ -221,6 +221,7 @@ if ($key == "修改"){
 	mysql_query($sql_update) or die ($sql_update);
 }
 //顯示題庫
+$u_id=intval($u_id);
 $sqlstr = "select * from test_data   where  u_id='$u_id' order by qid " ;
 $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;
 $s_unit="<table border='1' cellpadding='0' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' width='95%'  align='center'>";

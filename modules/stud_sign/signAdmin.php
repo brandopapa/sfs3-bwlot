@@ -1,10 +1,10 @@
 <?php
 
-// $Id: signAdmin.php 6999 2012-11-13 03:09:01Z infodaes $
+// $Id: signAdmin.php 8687 2015-12-25 03:05:45Z qfon $
 
 include "config.php";
 
-sfs_check();
+//sfs_check();
 
 $SCRIPT_FILENAME = $_SERVER['SCRIPT_FILENAME'] ;
 if ( !checkid($SCRIPT_FILENAME,1)){
@@ -43,6 +43,7 @@ $txtI_def = $_POST['txtI_def'] ;
 
 if ($Submit=="套用") {
   $history_id = $_POST['history_id'] ;
+  $_POST[history_id]=intval($_POST[history_id]);
   $sqlstr = " select *   from  sign_kind where id = '$_POST[history_id]' " ;
   //echo  $sqlstr ;
   $beg_date = $_POST['beg_date'] ;  
@@ -61,7 +62,7 @@ if ($Submit=="套用") {
         $sqlstr2 = " insert into  sign_kind 
              (title ,doc ,beg_date ,end_date ,input_classY ,kind_set ,data_item ,input_data_item , is_hide,admin) 
              values ( '$txtPaper','$doc' ,'$txtBeg' ,'$txtEnd' ,'$input_classY','$kind_set','$data_item' ,'$input_data_item','$is_hide','{$_SESSION['session_tea_sn']}') " ;
-       //echo $sqlstr2 ;
+       echo $sqlstr2 ;
        $CONN->Execute($sqlstr2) ;     
   }
     
@@ -102,8 +103,7 @@ if ($Submit=="新增") {
   header("Location:index.php") ;
 }	
 if ($Submit=="修改") {
-   $now_id = $_POST['now_id'] ; 
-   
+   $now_id = intval($_POST['now_id']) ;   
    $input_classY = implode(",", $chkClass);
    $data_item = implode(",", $chkData);
    
@@ -130,6 +130,7 @@ if ($Submit=="修改") {
 
 //刪除此張報名表
 if ($do =="delete" and ($id))  {
+	$id = intval($_POST['id']) ;
    $sqlstr = " delete from sign_kind   where id='$id' " ;
    
    $result = $CONN->Execute($sqlstr)	;
@@ -320,7 +321,7 @@ function AddNew() {
 //=================================================================================
 function Edit($id, $do) {
 	global $CONN , $PHP_SELF ,$class_year , $STUD_FIELD ,$MAX_ITEM , $MAX_INPUT_FIELD,$school_kind_name;
-	
+	$id=intval($id);
     $sqlstr =" select *  from sign_kind  where id = $id   " ;
 	//echo $query ;
     $result = $CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;

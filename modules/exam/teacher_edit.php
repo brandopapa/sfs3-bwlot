@@ -1,7 +1,5 @@
-<?php
-
-                                                                                                                             
-// $Id: teacher_edit.php 6807 2012-06-22 08:08:30Z smallduh $
+<?php                                                                                                                             
+// $Id: teacher_edit.php 8673 2015-12-25 02:23:33Z qfon $
 
 if (!$isload)
 {
@@ -44,6 +42,23 @@ if ($sel =="delete")
 	include "stud_base.php";
 	exit;
   }
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare("select stud_id,stud_name,stud_pass,tea_school,tea_img from stud_base where stud_id=?");
+$stmt->bind_param('s', $stud_id);
+$stmt->execute();
+$stmt->bind_result($stud_id,$stud_name,$stud_pass,$tea_school,$tea_imgx);
+while ($stmt->fetch()) {
+
+        if ($tea_imgx=='1') 
+	    $tea_img = " checked ";
+	    else 
+	    $tea_img = " ";
+}
+
+  
+ /*
   $sql_select = "select stud_id,stud_name,stud_pass,tea_school,tea_img from stud_base";
   $sql_select .= " where stud_id='$stud_id' ";
   $result = mysql_query ($sql_select,$conID);  
@@ -60,7 +75,9 @@ while ($row = mysql_fetch_array($result)) {
 	    $tea_img = " ";
 		
 
-};
+}
+
+*/
 ?>
 修改人員資料
 <form method="post" >

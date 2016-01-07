@@ -1,5 +1,5 @@
 <?php
-// $Id: index.php 8648 2015-12-17 13:19:01Z qfon $
+// $Id: index.php 8721 2016-01-01 23:09:52Z qfon $
 /* 取得設定檔 */
 include "config.php";
 
@@ -16,8 +16,8 @@ $yorn = findyorn();  //是否有平時成績
 $start_date=($_POST[start_date])?$_POST[start_date]: $_GET[start_date];
 $end_date=($_POST[end_date])?$_POST[end_date]: $_GET[end_date];
 $avg=$_REQUEST['avg'];
-
-
+$topmargin=$_REQUEST['topmargin'];
+$buttommargin=$_REQUEST['buttommargin'];
 $style_ss_num=$_REQUEST['style_ss_num'];
 $inputstyle=$_REQUEST['inputstyle'];
 $inputdata=($_REQUEST['inputdata']);
@@ -85,7 +85,7 @@ foot();
 //觀看模板
 function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$student_sn="",$stage){
 
-	global $CONN,$input_kind,$school_menu_p,$cq,$comm,$chknext,$nav_next,$edit_mode,$submit,$stage,$start_date,$end_date,$year_seme,$inputstyle,$inputdata,$style_ss_num;
+	global $CONN,$input_kind,$school_menu_p,$cq,$comm,$chknext,$nav_next,$edit_mode,$submit,$stage,$start_date,$end_date,$year_seme,$inputstyle,$inputdata,$style_ss_num,$topmargin,$buttommargin;
 
 	if (empty($style_ss_num))
 	{
@@ -166,6 +166,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 	$upstr .= "<input type='hidden' name='inputdata' value='$inputdata'>";
 	
 	$upstr .= "<input type='hidden' name='style_ss_num' value='$style_ss_num'>";
+	$upstr .= "<input type='hidden' name='topmargin' value='$topmargin'>";
+	$upstr .= "<input type='hidden' name='buttommargin' value='$buttommargin'>";
 	
 	//班級選單
 	$tmp=&get_class_select($sel_year,$sel_seme,"","class_id","this.form.submit",$class_id);
@@ -231,6 +233,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 			<input type='hidden' name='sel_seme' value='$sel_seme' />
 			<input type='hidden' name='inputstyle' value='$inputstyle' />
 			<input type='hidden' name='inputdata' value='$inputdata' />
+			<input type='hidden' name='topmargin' value='$topmargin' />
+			<input type='hidden' name='buttommargin' value='$buttommargin' />
             <input type='hidden' name='style_ss_num' value='$style_ss_num' />
 			<input type='hidden' name='avg' value='1' />
 	
@@ -244,6 +248,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 			document.myForm.end_date.value=\"$end_date\";
 			document.myForm.inputstyle.value=\"$inputstyle\";
 			document.myForm.inputdata.value=\"$inputdata\";
+			document.myForm.topmargin.value=\"$topmargin\";
+			document.myForm.buttommargin.value=\"$buttommargin\";
 			document.myForm.style_ss_num.value=\"$style_ss_num\";
 			document.myForm.avg=\"1\";
 			document.myForm.submit();
@@ -259,6 +265,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 			document.myForm.end_date.value=\"$end_date\";
 			document.myForm.inputstyle.value=\"$inputstyle\";
 			document.myForm.inputdata.value=\"$inputdata\";
+			document.myForm.topmargin.value=\"$topmargin\";
+			document.myForm.buttommargin.value=\"$buttommargin\";
 			document.myForm.avg=\"1\";
             document.myForm.submit();			
 			'></form>
@@ -278,6 +286,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 			<input type='hidden' name='sel_seme' value='$sel_seme' />
 			<input type='hidden' name='inputstyle' value='$inputstyle' />
 			<input type='hidden' name='inputdata' value='$inputdata' />
+			<input type='hidden' name='topmargin' value='$topmargin' />
+			<input type='hidden' name='buttommargin' value='$buttommargin' />
             <input type='hidden' name='style_ss_num' value='$style_ss_num' />
 			<input type='hidden' name='avg' value='0' />
 			
@@ -291,7 +301,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 			document.myForm1.end_date.value=\"$end_date\";
 			document.myForm1.inputstyle.value=\"$inputstyle\";
 			document.myForm1.inputdata.value=\"$inputdata\";
-
+            document.myForm1.topmargin.value=\"$topmargin\";
+			document.myForm1.buttommargin.value=\"$buttommargin\";
 			document.myForm1.avg=\"0\";
 			document.myForm1.submit();
 			'>
@@ -306,6 +317,8 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 			document.myForm1.end_date.value=\"$end_date\";	
 			document.myForm1.inputstyle.value=\"$inputstyle\";
 			document.myForm1.inputdata.value=\"$inputdata\";
+			document.myForm1.topmargin.value=\"$topmargin\";
+			document.myForm1.buttommargin.value=\"$buttommargin\";
 			document.myForm1.avg=\"0\";
             document.myForm1.submit();			
 			'><hr>
@@ -335,10 +348,11 @@ function &main_form($interface_sn="",$sel_year="",$sel_seme="",$class_id="",$stu
 	<tr><td colspan=3>日常生活表現統計時間
 		<input type=text name=\"start_date\" value=\"$start_date\" size='8'>
 		~<input type=text name=\"end_date\" value=\"$end_date\" size='8'>
-		<input type=hidden name=\"class_id\" value=\"$class_id\">
-		
+		<input type=hidden name=\"class_id\" value=\"$class_id\">		
 		<input type=hidden name=\"year_seme\" value=\"$year_seme\">		
 		<input type=hidden name=\"student_sn\" value=\"$student_sn\">
+		<input type=hidden name=\"topmargin\" value=\"$topmargin\">
+		<input type=hidden name=\"buttommargin\" value=\"$buttommargin\">
 		
 		<input type=hidden name=\"selstage\" value=\"2\">		
 		<input type=submit value=\"修改時間\"></td></tr>
@@ -421,8 +435,43 @@ $ss_score_avg['平均']['平時成績']=$ss_score_sum['平時成績'];
 // $reward_data -- 將懲記錄
 // $score_data -- 成績記錄
 function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$score_data,$student_sn) {
-	global $SFS_PATH_HTML,$CONN,$REWARD_KIND,$year_seme,$IS_JHORES,$dlstr,$inputstyle,$inputdatah;
-
+	global $SFS_PATH_HTML,$CONN,$REWARD_KIND,$year_seme,$IS_JHORES,$dlstr,$inputstyle,$inputdatah,$topmargin,$buttommargin;
+	
+	//列印上邊界選單
+	$select_topmargin = "";
+	$select_topmargin .= "上邊界:<select name=\"topmargin\">\n";
+	for($ti=1;$ti<=30;$ti=$ti+1)
+	{
+		$tii=($ti/10)."cm";
+		   if ($topmargin==$ti)
+		   {
+	      		$select_topmargin .= "<option value=\"$ti\" selected>$tii</option>\n";
+		   }
+			else
+			{
+	      		$select_topmargin .= "<option value=\"$ti\">$tii</option>\n";
+			}
+	}
+     $select_topmargin .= "</select>";
+	
+	//列印下邊界選單
+	$select_buttommargin = "";
+	$select_buttommargin .= "下邊界:<select name=\"buttommargin\">\n";
+	for($ti=1;$ti<=30;$ti=$ti+1)
+	{
+		$tii=($ti/10)."cm";
+		   if ($buttommargin==$ti)
+		   {
+	      		$select_buttommargin .= "<option value=\"$ti\" selected>$tii</option>\n";
+		   }
+			else
+			{
+	      		$select_buttommargin .= "<option value=\"$ti\">$tii</option>\n";
+			}
+	}
+     $select_buttommargin .= "</select>";	
+	
+	
 	if (empty($inputstyle))$inputstyle="導師評語及建議";
 	
 	//假別
@@ -481,7 +530,8 @@ function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$sc
 	<form name=\"myForm\" method=post >
 	成績單備註抬頭:<input type='text' name='inputstyle' value='$inputstyle'><br>
 	<textarea name='inputdata' rows='5' style='width:100%'>$inputdatah</textarea>
-	<input type=submit value=\"確定\">
+    $select_topmargin $select_buttommargin
+	<input type=submit value=\"設定確定\">
 	</form>
 	</td></tr>
 	
@@ -496,7 +546,7 @@ function &html2code2_stage($class,$sel_year,$sel_seme,$abs_data,$reward_data,$sc
 
 //下載成績單
 function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$sel_year="",$sel_seme="",$mode="",$stage,$start_date,$end_date,$avg){
-	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,$M_SETUP,$REWARD_KIND,$year_seme,$inputstyle,$inputdata;
+	global $CONN,$UPLOAD_PATH,$UPLOAD_URL,$SFS_PATH_HTML,$line_color,$line_width,$M_SETUP,$REWARD_KIND,$year_seme,$inputstyle,$inputdata,$topmargin,$buttommargin;
   
   global $IS_JHORES;
 
@@ -553,6 +603,14 @@ function downlod_ar($student_sn="",$class_id="",$interface_sn="",$stu_num="",$se
 	$ttt->setPath($oo_path);	
 	//讀出 xml 檔案
 	//$data = $ttt->read_file(dirname(__FILE__)."/$oo_path/META-INF/manifest.xml");
+
+	$styles = $ttt->read_file(dirname(__FILE__)."/$oo_path/styles.xml");
+    if (empty($topmargin))$topmargin=20;
+	if (empty($buttommargin))$buttommargin=20;
+	$styles_arr["topmargin"] = $topmargin/10;
+	$styles_arr["buttommargin"] = $buttommargin/10;
+	$styles = $ttt->change_temp($styles_arr,$styles,0);
+	$ttt->add_file($styles,"styles.xml");
 
 	$ttt->addDir("META-INF");
 	$ttt->addfile("settings.xml");

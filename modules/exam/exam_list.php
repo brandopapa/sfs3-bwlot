@@ -1,6 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: exam_list.php 6807 2012-06-22 08:08:30Z smallduh $
+<?php                                                                                                                             
+// $Id: exam_list.php 8673 2015-12-25 02:23:33Z qfon $
 
 //載入設定檔
 include "exam_config.php";
@@ -114,8 +113,10 @@ $sql_select  = "select exam.* ,exam_kind.e_upload_ok,exam_kind.class_id  from ex
 $sql_select .= " where exam.e_kind_id=exam_kind.e_kind_id \n";
 $sql_select .= " and exam_kind.e_kind_open=1 and exam.exam_isopen=1 and exam_kind.class_id like '$class_id%' ";
 if ($e_kind_id !="-1" and $e_kind_id<>'')
-	$sql_select .= " and exam.e_kind_id='$e_kind_id' ";
-	
+   {
+	$e_kind_id=intval($e_kind_id);
+    $sql_select .= " and exam.e_kind_id='$e_kind_id' ";
+   }
 $sql_select .= " order by exam_kind.class_id,exam.exam_id desc ";
 $result = $CONN->Execute ($sql_select)or die ($sql_select);
 //沒有作業

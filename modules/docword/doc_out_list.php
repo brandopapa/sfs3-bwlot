@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_out_list.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_out_list.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -31,15 +31,34 @@ if ($QueryBeginDate !="")
 	$query .= " and doc1_date >= '$QueryBeginDate' and doc1_date <= '$QueryEndDate' ";
 //關鍵字
 if ($QueryString!="")
-	$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%') ";
+	//$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%') ";
+	$query .= " and (doc1_unit like ? or doc1_main like ? or do_teacher like ?) ";
+
 //單位
 if ($doc1_unit_num1!= 0 )
-	$query .= " and doc1_unit_num1 ='$doc1_unit_num1' ";
-	
+{
+  $doc1_unit_num1=intval($doc1_unit_num1);
+  $query .= " and doc1_unit_num1 ='$doc1_unit_num1' ";
+}	
+
+  ///mysqli	
+$QueryString="%$QueryString%";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+if ($QueryString!="")$stmt->bind_param('sss',$QueryString,$QueryString,$QueryString);
+$stmt->execute();
+$stmt->bind_result($num_record);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
+/*
 $result = mysql_query($query)or die($query);
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 $num_record = $row[0];
+*/
 
 //計算最後一頁
 if ($num_record % $page_count > 0 )
@@ -133,22 +152,41 @@ else
 //取得承辦處室
 $doc_unit_p = doc_unit();
 
-$query = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id from sch_doc1  where doc1_k_id = 1 ";
+//$query = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id from sch_doc1  where doc1_k_id = 1 ";
+$query = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1  where doc1_k_id = 1 ";
+
 //開始與結束日期
 if ($QueryBeginDate !="")
 	$query .= " and doc1_date >= '$QueryBeginDate' and doc1_date <= '$QueryEndDate' ";
 //關鍵字
 if ($QueryString!="")
-	$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%') ";
+	//$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%') ";
+	$query .= " and (doc1_unit like ? or doc1_main like ? or do_teacher like ?) ";
+
 //單位
 if ($doc1_unit_num1 != 0)
+{
+	$doc1_unit_num1=intval($doc1_unit_num1);
 	$query .= " and doc1_unit_num1 ='$doc1_unit_num1' ";
+}
 
 $query .= " order by doc1_id desc  limit ".(($curr_page-1) * $page_count).", $page_count ";
 
-$result = mysql_query($query);
-while ($row = mysql_fetch_array($result)) {
+  ///mysqli	
+$QueryString="%$QueryString%";
+//$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+if ($QueryString!="")$stmt->bind_param('sss',$QueryString,$QueryString,$QueryString);
+$stmt->execute();
+$stmt->bind_result($doc1_id,$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_unit_num2,$teach_id,$doc1_k_id,$doc_stat,$doc1_end_date,$doc1_infile_date,$do_teacher );
+///mysqli
 
+
+//$result = mysql_query($query);
+//while ($row = mysql_fetch_array($result)) {
+while ($stmt->fetch()) {
+	/*
 	$doc1_id = $row["doc1_id"];
 	$doc1_year_limit = $row["doc1_year_limit"];
 	$doc1_kind = $row["doc1_kind"];
@@ -160,7 +198,8 @@ while ($row = mysql_fetch_array($result)) {
 	$doc1_unit_num1 = $row["doc1_unit_num1"];
 	$doc1_unit_num2 = $row["doc1_unit_num2"];
 	$teach_id = $row["teach_id"];
-              $unit_temp = $doc_unit_p[$row[doc1_unit_num1]]; //取得處室名稱
+	*/
+              $unit_temp = $doc_unit_p[$doc1_unit_num1]; //取得處室名稱
 	if ($i++ % 2 == 0)
 		echo  "<tr bgcolor=#FFFFCC>";
 	else

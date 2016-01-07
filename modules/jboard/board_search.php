@@ -48,6 +48,27 @@ if($s_str) {
 			$tempstr .= " (b_con like '%$tname%' or  b_sub like '%$tname%') and";
 	}
 	$tempstr = substr($tempstr,0,-3);
+	
+	
+	
+///mysqli	
+	
+	$sql_select = "select count(b_id) as cc from jboard_p  where ";
+	if ($bk_id!="") 
+		$sql_select .= " bk_id=? and ";
+	$sql_select .= "($tempstr) ";
+	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($tol_num);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
+	/*
 	$sql_select = "select count(b_id) as cc from jboard_p  where ";
 	if ($bk_id!="") 
 		$sql_select .= " bk_id='$bk_id' and ";
@@ -58,6 +79,8 @@ if($s_str) {
 	//查詢總數
 //	$page_count=5;
 	$tol_num = $row[0];
+	*/
+	
 	$totalpage= intval($tol_num/$page_count);
 	if($tol_num/$page_count <> 0)
 		$totalpage++;
@@ -75,12 +98,30 @@ if($s_str) {
 	while($row= $result->fetchRow())
 		$board_kind_p [$row[0]] = $row[1];	
 	
-	$start_row = (($page>0?$page-1:0))*$page_count;	
+	$start_row = (($page>0?$page-1:0))*$page_count;
+	
+	$sql_select = "select b_id,bk_id,b_open_date,  b_unit, b_title, b_name, b_sub, b_con  from jboard_p  where ";
+	if ($bk_id!="") 
+		$sql_select .= " bk_id=? and ";
+	$sql_select .= "($tempstr) order by b_open_date desc limit $start_row,$page_count ";
+
+	///mysqli	
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($b_id,$bk_id,$b_open_date,$b_unit,$b_title,$b_name,$b_sub,$b_con);
+///mysqli
+	
+	
+	/*
 	$sql_select = "select b_id,bk_id,b_open_date,  b_unit, b_title, b_name, b_sub, b_con  from jboard_p  where ";
 	if ($bk_id!="") 
 		$sql_select .= " bk_id='$bk_id' and ";
 	$sql_select .= "($tempstr) order by b_open_date desc limit $start_row,$page_count ";
 	$result = $CONN->execute ($sql_select)or  trigger_error('系統錯誤',E_USER_ERROR);
+	*/
+	
 	//最後一筆
 	$end_row = $page*$page_count;
 	if ($end_row > $tol_num)
@@ -90,9 +131,11 @@ if($s_str) {
 	$link_str = "bk_id=$bk_id&s_str=".urlencode($s_str);
 	echo "<tr><td colspan=2 align=right>分頁：".pagesplit($page,$totalpage,5,$link_str);
 	echo "</td></tr></table>";
-	while($row = $result->fetchRow()) {   		
-		echo sprintf("<p><a href=board_show.php?b_id=%d>%s</a> -- <font color=green>(%s <i>%s</i>)</font><br>",$row[b_id],chang_word_color($sstr,$row[b_sub]),$board_kind_p[$row["bk_id"]],$row["b_open_date"]); //改變顏色
-		echo sprintf("<font size=-1><b>...</b>%s<b>...</b></font></p>",chang_word_color($sstr,$row[b_con],100)); //改變顏色		
+	
+	while ($stmt->fetch()) {
+	//while($row = $result->fetchRow()) {   		
+		echo sprintf("<p><a href=board_show.php?b_id=%d>%s</a> -- <font color=green>(%s <i>%s</i>)</font><br>",$b_id,chang_word_color($sstr,$b_sub),$board_kind_p[$bk_id],$b_open_date); //改變顏色
+		echo sprintf("<font size=-1><b>...</b>%s<b>...</b></font></p>",chang_word_color($sstr,$b_con,100)); //改變顏色		
 		echo "</p>";
 	}	
 }

@@ -1,5 +1,5 @@
 <?php
-//$Id: upload.php 7766 2013-11-15 06:16:35Z smallduh $
+//$Id: upload.php 8670 2015-12-24 06:39:10Z qfon $
   include_once( "config.php") ;
   include_once( "../../include/PLlib.php") ;
   
@@ -10,7 +10,7 @@ if (!ini_get('register_globals')) {
 	extract( $_GET );
 	extract( $_SERVER );
 }
-  
+  $chap_num=intval($chap_num);
   if (!$chap_num)  header("location:paper_list.php") ;
   
   $nday = date("mdhi-") ;
@@ -188,6 +188,7 @@ function check() {
 
 <?php
   // ½s­×-----------------------------------------------------------
+  $paper_id=intval($paper_id);
   if ($paper_id) {
     $sqlstr =  "select * from magazine_paper  where  id = $paper_id  " ;   
     $result = $CONN->Execute($sqlstr);

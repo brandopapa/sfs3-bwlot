@@ -1,5 +1,5 @@
 <?php
-//$Id: book_say_up.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: book_say_up.php 8723 2016-01-02 06:00:38Z qfon $
 include "book_config.php";
 
 if (!checkid($_SERVER[SCRIPT_FILENAME],1)){
@@ -31,6 +31,7 @@ if ($_POST[do_key]==$postBtn){
 
 include "header.php";
 if ($_GET[do_key]=='edit'){
+	$_GET[bs_id]=intval($_GET[bs_id]);
 	$query = "select * from book_say where bs_id='$_GET[bs_id]'";
 	$recordSet = $CONN->Execute($query);
 	$bs_title = $recordSet->fields["bs_title"];

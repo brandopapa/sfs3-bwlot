@@ -1,7 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: ekind_edit.php 7765 2013-11-15 06:13:17Z smallduh $
-
+<?php                                                                                                                             
+// $Id: ekind_edit.php 8673 2015-12-25 02:23:33Z qfon $
 // --系統設定檔
 include "exam_config.php";
 
@@ -31,6 +29,7 @@ if ($_GET[sel] =="delete"){
 	include "header.php";
 	
 	//班級資料
+	$e_kind_id=intval($e_kind_id);
 	$query = "select class_id from exam_kind where e_kind_id = '$e_kind_id' ";
 	$result = $CONN->Execute($query);
 	$class_id = $result->fields[0];
@@ -59,6 +58,7 @@ if ($_GET[sel] =="delete"){
 }  
 if ($_POST[key] =="確定刪除"){
 	//刪除上傳目錄資料
+	$e_kind_id=intval($e_kind_id);
 	$query = "select exam_id from exam where e_kind_id ='$e_kind_id'";
 	$result = $CONN->Execute($query)or die($query);
 	while (!$result->EOF) {
@@ -75,7 +75,7 @@ if ($_POST[key] =="確定刪除"){
 		$result->MoveNext();
 	}
 	//刪除 班級資料
-        $sql_update = " delete from exam_kind ";
+    $sql_update = " delete from exam_kind ";
 	$sql_update .= " where e_kind_id='$e_kind_id' ";
 	$result = $CONN->Execute($sql_update)  or die ($sql_update);  
 	//刪除 班級作業資料
@@ -97,6 +97,7 @@ if ($_POST[key] =="修改"){
 }
 
 //取得班級版區資料
+$e_kind_id=intval($e_kind_id);
 $sql_select = "select e_kind_id,e_kind_memo,e_kind_open,e_upload_ok from exam_kind";
 $sql_select .= " where e_kind_id='$e_kind_id' ";
 $result = $CONN->Execute($sql_select);

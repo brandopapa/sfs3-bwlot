@@ -1,6 +1,6 @@
 <?php
 
-// $Id: teacher_web.php 7770 2013-11-15 06:28:45Z smallduh $
+// $Id: teacher_web.php 8691 2015-12-25 03:12:24Z qfon $
 
 /*
   教師網頁、email公佈
@@ -9,6 +9,9 @@
 
 // --系統設定檔
 include "teach_config.php";
+
+
+
 //選單類別再增加
 $modestr = array("0"=>"全部人員","x"=>"行政人員","y"=>"有網頁者" ,"z"=>"科任",);
 //處室選單
@@ -18,7 +21,7 @@ $selmode=$_POST['selmode'];
 
   //$debug = 1;
   
-  if (!isset($selmode) ) $selmode = '0' ;
+  if (!isset($selmode))$selmode = '0' ;
   switch ($selmode) {
     case '0':	//全部
       $wherestr = " and  email <>'' order by b.teach_title_id, b.class_num " ;
@@ -38,7 +41,7 @@ $selmode=$_POST['selmode'];
       break;       
             
     default:	//一至六年級、幼稚園、資源班
-      $wherestr = " and b.class_num LIKE '". $selmode ."%' order by b.class_num " ;  
+      $wherestr = " and b.class_num LIKE '". intval($selmode) ."%' order by b.class_num " ;  
       break ;
   }    
 
@@ -53,7 +56,7 @@ $result = $CONN->Execute($sqlstr) or die ($sqlstr);
 ?>  
 <html>
 <head>
-<title><?php echo $school_short_name ?>教職員帳號、網頁</title>
+<title><?php echo $school_short_name; ?>教職員帳號、網頁</title>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
 <style type="text/css">
 <!--
@@ -72,10 +75,11 @@ a:link {  text-decoration: none}
 	<!-- Begin
 
    	function jumpMenu(){
-    	  location="<?php echo basename({$_SERVER['PHP_SELF']})."?selmode="?>" +document.myform.selmode.options[document.myform.selmode.selectedIndex].value;
+     location="<?php echo basename({$_SERVER['PHP_SELF']})."?selmode="?>" +document.myform.selmode.options[document.myform.selmode.selectedIndex].value;
+
 	}
     //  End --> 
-    </script>
+</script>
 </head>
 
 <?php 
@@ -91,19 +95,22 @@ a:link {  text-decoration: none}
         <select name="selmode" onChange="jumpMenu()">
           <?php
           reset($modestr);
-            while(list($tkey,$tvalue)= each ($modestr)){
+          while(list($tkey,$tvalue)= each ($modestr))
+		  {
 	      if ($tkey == $selmode)
-		echo  sprintf ("<option value=\"%s\" selected>%s</option>\n",$tkey,$tvalue);
+		  echo  sprintf ("<option value=\"%s\" selected>%s</option>\n",$tkey,$tvalue);
 	      else
-		echo sprintf ("<option value=\"%s\">%s</option>\n",$tkey,$tvalue);
-            }              
+		  echo sprintf ("<option value=\"%s\">%s</option>\n",$tkey,$tvalue);
+          }              
             reset($class_year);
-            while(list($tkey,$tvalue)= each ($class_year)){
-	      if ($tkey == $selmode)
-		echo  sprintf ("<option value=\"%s\" selected>%s</option>\n",$tkey,$tvalue);
-	      else
-		echo sprintf ("<option value=\"%s\">%s</option>\n",$tkey,$tvalue);
-            }   
+            while(list($tkey,$tvalue)= each ($class_year))
+			{
+	       if ($tkey == $selmode)
+		   echo  sprintf ("<option value=\"%s\" selected>%s</option>\n",$tkey,$tvalue);
+	       else
+		   echo sprintf ("<option value=\"%s\">%s</option>\n",$tkey,$tvalue);
+            
+		    }   
           ?>
         </select>
 
@@ -129,11 +136,13 @@ a:link {  text-decoration: none}
       $s_unit= $result->fields["post_office"] ;
 
       //隔行變色
-      if ($rowi){
+      if ($rowi)
+	  {
         $rowi = 0  ;	
         echo '<tr class="tr2">' ;
       }  
-      else {
+      else 
+	  {
         $rowi = 1  ; 
         echo '<tr class="tr1">' ;
       } 
@@ -185,6 +194,8 @@ a:link {  text-decoration: none}
       
       $result->MoveNext();
      }
+	 
+	 
 ?>
   </table>
 </form>

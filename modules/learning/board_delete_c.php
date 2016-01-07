@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: board_delete_c.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: board_delete_c.php 8705 2015-12-29 03:03:33Z qfon $
 
 // --系統設定檔
 include	"config.php"; 
@@ -24,7 +24,7 @@ if ($key=="確定刪除"){
 }
 
 	include "header_u.php";
-
+$b_id=intval($b_id);
 $query = "select b_sub,b_con,b_upload,teacher_sn from unit_c where b_id='$b_id'";
 $result = mysql_query($query);
 $row= mysql_fetch_array($result);

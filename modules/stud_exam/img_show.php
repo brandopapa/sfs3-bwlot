@@ -5,7 +5,7 @@
 // 程式開始
 include_once('config.php');
 
-$sn=$_GET['sn'];
+$sn=intval($_GET['sn']);
 $query="select filetype,content from resit_images where sn='".$sn."'";
 $res=$CONN->Execute($query);
 $filetype=$res->fields['filetype'];

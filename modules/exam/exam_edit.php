@@ -1,6 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: exam_edit.php 5310 2009-01-10 07:57:56Z hami $
+<?php                                                                                                                             
+// $Id: exam_edit.php 8673 2015-12-25 02:23:33Z qfon $
 
 // --系統設定檔
 include "exam_config.php";
@@ -17,6 +16,7 @@ $exam_id=$_GET[exam_id];
 if($exam_id=='')
 	$exam_id = $_POST[exam_id];
 //檢查是否為作者
+$exam_id=intval($exam_id);
 $query = "select exam_id from exam where exam_id='$exam_id' and teach_id = '$_SESSION[session_log_id]'";
 $result = $CONN->Execute($query);
 if ($result->RecordCount() == 0 ) {
@@ -61,7 +61,7 @@ if ($_POST[key] =="修改"){
 	header ("Location: exam.php");
 	exit;
 }
-
+$_GET[exam_id]=intval($_GET[exam_id]);
 $sql_select = "select exam.*  from exam,exam_kind ";
 $sql_select .=" where exam.e_kind_id=exam_kind.e_kind_id and exam.exam_id='$_GET[exam_id]' ";  
 $result = $CONN->Execute($sql_select);

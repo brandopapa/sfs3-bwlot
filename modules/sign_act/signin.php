@@ -1,10 +1,7 @@
 <?php
-
-// $Id: signin.php 6813 2012-06-22 08:23:15Z smallduh $
+// $Id: signin.php 8681 2015-12-25 02:59:43Z qfon $
 
 include "config.php";
-
-
 
   //登入認証
   //session_start(); 
@@ -152,7 +149,7 @@ else
 function showdata($pid , $school_name) {
   	
   global $CONN, $team_set_arr ,$member_set_arr ,$fields_set_arr ,$PHP_SELF , $max_team ,$have_team ,$def_passwd , $set_passwd ,$max_each;      
-  
+  $pid=intval($pid);
   //報名單總類 ===============================
   $sqlstr = " select * from  sign_act_kind where  id ='$pid' " ;
 
@@ -288,6 +285,7 @@ function input_data($pid , $school_name , $did = 0 , $do="") {
    
   //該校的報名資料======================================================================
   if ($did>0  and $do =="edit" ){
+	  $did=intval($did);
       $sqlstr = " select * from  sign_act_data where  did ='$did' " ;
 
       $result = $CONN->Execute($sqlstr)  ;  

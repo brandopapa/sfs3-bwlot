@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_save.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_save.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -18,16 +18,29 @@ if(!checkid($PHP_SELF)){
 else
 	$ischecked = true;
 //-----------------------------------
+
 $year = date("Y")-1911;
 
 // 重新設定保存年限
 if ($resetkey != ""){
-	$query = "select doc1_id,doc1_year_limit from sch_doc1 where doc1_k_id=0 and doc1_infile_date = '$doc1_infile_date' ";
-	$result = mysql_query($query);
-	while($row = mysql_fetch_array($result)) {		
-		$temp = "doc1_year_limit_".$row[doc1_id];
+	//$query = "select doc1_id,doc1_year_limit from sch_doc1 where doc1_k_id=0 and doc1_infile_date = '$doc1_infile_date' ";
+	$query = "select doc1_id,doc1_year_limit from sch_doc1 where doc1_k_id=0 and doc1_infile_date = ? ";
+
+	///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$doc1_infile_date);
+$stmt->execute();
+$stmt->bind_result($doc1_id,$doc1_year_limit);
+
+///mysqli
+	//$result = mysql_query($query);
+	//while($row = mysql_fetch_array($result)) {	
+      while ($stmt->fetch()) {	
+		$temp = "doc1_year_limit_".$doc1_id;
 		$doc1_year_limit = $$temp;
-		$doc1_id = $row[doc1_id];
+		//$doc1_id = $row[doc1_id];
 		$query = "update sch_doc1 set doc1_year_limit ='$doc1_year_limit' where doc1_id='$doc1_id'"; 		
 		mysql_query ($query) or die($query);
 	}
@@ -118,9 +131,22 @@ function setfocus() {
 //取得承辦處室
 $doc_unit_p = doc_unit();
 
-$query = "select * from sch_doc1 where  doc1_infile_date='$doc1_infile_date' and doc_stat = '2' order by doc1_id";
-$result = mysql_query($query);
+
+///mysqli
+$query = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1 where  doc1_infile_date=? and doc_stat = '2' order by doc1_id";	
+//$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$doc1_infile_date);
+$stmt->execute();
+$stmt->bind_result($doc1_id,$doc1_year_limitx,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_unit_num2,$teach_id,$doc1_k_id,$doc_stat,$doc1_end_date,$doc1_infile_date,$do_teacher );
+
+///mysqli
+
+//$query = "select * from sch_doc1 where  doc1_infile_date='$doc1_infile_date' and doc_stat = '2' order by doc1_id";
+//$result = mysql_query($query);
 //echo $query;
+
 echo "<center><b>$doc1_infile_date 歸檔文件</b></center>";
 echo "<table width=100% ><tr bgcolor=#C0C0C0><td> </td><td>文號</td><td>來文單位</td><td>摘要</td><td>承辦處室</td><td>";
 if ($ckey == "1")
@@ -132,13 +158,14 @@ echo "</td></tr>";
 $doc_life_p = doc_life();
 //總筆數
 
-while($row = mysql_fetch_array($result)) {
-	$unit_temp = $doc_unit_p[$row[doc1_unit_num1]]; //取得處室名稱
+//while($row = mysql_fetch_array($result)) {
+  while ($stmt->fetch()) {
+	$unit_temp = $doc_unit_p[$doc1_unit_num1]; //取得處室名稱
 	reset ($doc_life_p);
 	if ($ckey == '1'){
-		$doc1_year_limit ="<select name=\"doc1_year_limit_$row[doc1_id]\" >";
+		$doc1_year_limit ="<select name=\"doc1_year_limit_$doc1_id\" >";
 		while(list($tkey,$tvalue)= each ($doc_life_p)){
-			if ($tkey == $row[doc1_year_limit])
+			if ($tkey == $doc1_year_limitx)
 				$doc1_year_limit .=  sprintf ("<option value=\"%d\" selected>%s</option>\n",$tkey,$tvalue);
 			else
 				$doc1_year_limit .=  sprintf ("<option value=\"%d\">%s</option>\n",$tkey,$tvalue);
@@ -146,13 +173,13 @@ while($row = mysql_fetch_array($result)) {
 		$doc1_year_limit .= "</select>";
 	}
 	else
-		$doc1_year_limit = $row[doc1_year_limit];
+		$doc1_year_limit = $doc1_year_limitx;
 		
 	if ($i++ % 2 == 0)
 		echo "<tr bgcolor=#AAEEAA>";
 	else
 		echo "<tr>";
-	echo "<td><a href=\"$PHP_SELF?do_kind=resign&doc1_id=$row[doc1_id]\">取消</a></td><td>$row[doc1_id]</td><td>$row[doc1_unit]</td><td>$row[doc1_main]</td><td>$unit_temp</td><td>$doc1_year_limit</td></tr>";
+	echo "<td><a href=\"$PHP_SELF?do_kind=resign&doc1_id=$doc1_id\">取消</a></td><td>$doc1_id</td><td>$doc1_unit</td><td>$doc1_main</td><td>$unit_temp</td><td>$doc1_year_limitx</td></tr>";
 }
 echo "</table>";
 ?>

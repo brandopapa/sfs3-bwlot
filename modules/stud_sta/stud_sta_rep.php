@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_sta_rep.php 7712 2013-10-23 13:31:11Z smallduh $
+// $Id: stud_sta_rep.php 8695 2015-12-25 04:05:53Z qfon $
 
 //¸ü¤J³]©wÀÉ
 
@@ -23,7 +23,7 @@ $data = $ttt->read_file(dirname(__FILE__)."/stud_sta_rep/content.xml");
 $stud_id = $_GET['stud_id'];
 $prove_id = $_GET['prove_id'];
 
-
+$_GET[prove_id]=intval($_GET[prove_id]);
 $query = "select a.*, b.stud_name, b.curr_class_num, b.student_sn, b.stud_birthday,year(b.stud_birthday) as years,month(b.stud_birthday) as months,day(b.stud_birthday) as days from stud_sta a, stud_base b where a.student_sn=b.student_sn and a.prove_id='$_GET[prove_id]'";
 $result = $CONN->Execute($query) or die ($query);
 

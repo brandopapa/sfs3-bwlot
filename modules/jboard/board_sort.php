@@ -40,6 +40,43 @@ if ($topage !="")
 	$page = $topage;
 
 //取得指定頁碼列表
+
+	///mysqli
+$sql_select = "select b_id,bk_id,b_open_date,b_days,b_unit,b_title,b_name,b_sub,b_con,b_hints,b_url,b_post_time,b_own_id,b_is_intranet,b_is_marquee,b_signs,b_is_sign,teacher_sn,b_sort,top_days from jboard_p where bk_id=? order by b_sort,b_open_date desc ,b_post_time desc ";	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($bb_id,$bkk_id,$b_open_date,$b_days,$b_unit,$b_title,$b_name,$b_sub,$b_con,$b_hints,$b_url,$b_post_time,$b_own_id,$b_is_intranet,$b_is_marquee,$b_signs,$b_is_sign,$teacher_sn,$b_sort,$top_days);
+//$stmt->fetch();
+//$stmt->close();
+
+while ($stmt->fetch()) {
+	if ($b_is_intranet == "1") //內部文件
+		$b_i_temp = "<img src=\"images/school.gif\" alt=\"校內文件\" border=0>";
+	else
+		$b_i_temp ="";
+
+	if ($b_is_sign == "1") //簽收文件
+		$b_sign_temp = "<img src=\"images/sign.png\" alt=\"簽收文件\" border=0>";
+	else
+		$b_sign_temp ="";
+
+	$bgcolor =($i++ % 2)?$table_bg_color:"#".dechex((float) hexdec($table_bg_color)+$offset_color);
+	$temp_con .="<tr bgcolor='$bgcolor' onMouseOver=setBG('$record_bg_color',this) onMouseout=setBGOff('$bgcolor',this) onFocus=setBG('$record_bg_color',this) onBlur=setBGOff('$bgcolor',this) style='text-height:$record_height pt;text-align:center;color:$record_text_color;font-size:$font_size pt;'>";
+	$temp_con .= sprintf("<td nowrap>%s</td><td nowrap>%s</td><td style='text-align:left;'>%s $b_i_temp $b_sign_temp</td>",$bb_id,$b_open_date,$b_sub);
+	if ($enable_title!="0") $temp_con .= sprintf("<td nowrap>%s</td>",$b_title);
+	if ($enable_days!="0") $temp_con .= sprintf("<td nowrap style='font-size:10pt'>%s</td>",$days[$b_days]);
+	if ($enable_point!="0") $temp_con .= sprintf("<td>%3d</td>",$b_hints);
+	$temp_con .= "<td><input type=\"text\" name=\"B_SORT[".$bb_id."]\" value=\"".$b_sort."\" size=\"5\"></td>";
+	$temp_con .= "</tr>\n";
+	
+}
+
+///mysqli
+
+/*
 $sql_select = "select  * from jboard_p where bk_id='$bk_id' order by b_sort,b_open_date desc ,b_post_time desc ";
 $result = $CONN->Execute($sql_select)or die ($sql_select);
 
@@ -81,6 +118,7 @@ while ($row = $result->fetchRow()){
 	$temp_con .= "<td><input type=\"text\" name=\"B_SORT[".$bb_id."]\" value=\"".$b_sort."\" size=\"5\"></td>";
 	$temp_con .= "</tr>\n";
 }
+*/
 
 
 ?>

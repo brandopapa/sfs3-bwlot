@@ -1,5 +1,5 @@
 <?php
-// $Id: show_ss.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: show_ss.php 8682 2015-12-25 03:00:21Z qfon $
 require "config.php";
 
 // ¤£»Ý­n register_globals
@@ -12,8 +12,7 @@ if (!ini_get('register_globals')) {
 }
 */
 
-$ss_id=$_GET['ss_id'];
-
+$ss_id=intval($_GET['ss_id']);
 $sql="select * from score_ss where ss_id='$ss_id'";
 $rs=&$CONN->Execute($sql) or die($sql);
 $scope_id=$rs->fields['scope_id'];

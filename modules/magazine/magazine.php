@@ -1,14 +1,16 @@
 <?php
-//$Id: magazine.php 5456 2009-04-23 08:32:09Z infodaes $
+//$Id: magazine.php 8670 2015-12-24 06:39:10Z qfon $
   include "config.php" ;
   include "../../include/sfs_case_PLlib.php" ;
   include "function.php" ;
 
   $self_php = $_SERVER["PHP_SELF"] ;  
-  $book_num =$_POST["book_num"] ?$_POST["book_num"] : $_GET["book_num"]  ;
+  $book_num =(int)$_POST["book_num"] ?(int)$_POST["book_num"] : (int)$_GET["book_num"]  ;
   $chap= $_GET["chap"] ;
   $paper= $_GET["paper"] ;
   $new_win= $_GET["new_win"] ;
+  
+
   
   if (!isset($book_num)) {
       //取得最新完成期別

@@ -5,14 +5,29 @@
 // 程式開始
 include_once('board_config.php');
 $name=$_POST['filename'];
-$b_id=$_POST['b_id'];
+$b_id=intval($_POST['b_id']);
+
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+if ($name <> "") {
+    $stmt = $mysqliconn->prepare("select org_filename,filetype from jboard_files where b_id='$b_id' and new_filename=?");
+    $stmt->bind_param('s', $name);
+}
+$stmt->execute();
+$stmt->bind_result($org_filename,$filetype);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
 //2014.09.30 改為檔案方式, 不再讀取 content
 //$query="select org_filename,filetype,content from jboard_files where b_id='".$b_id."' and new_filename='".$name."'";
+/*
 $query="select org_filename,filetype from jboard_files where b_id='".$b_id."' and new_filename='".$name."'";
 $res=$CONN->Execute($query);
 $org_filename=$res->fields['org_filename'];
 $filetype=$res->fields['filetype'];
-
+*/
 //$content=$res->fields['content'];
 //$content=stripslashes(base64_decode($content));
 

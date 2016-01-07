@@ -2,6 +2,7 @@
 // $Id:  
 require "config.php";
   //Åª¦¹µ§°O¿ý
+  $_GET[id]=intval($_GET[id]);
   $sqlstr = " select * from $tbname where act_ID='$_GET[id]' " ;
   $result =$CONN->Execute( $sqlstr) ; 	
   $nb=$result->FetchRow()  ;  

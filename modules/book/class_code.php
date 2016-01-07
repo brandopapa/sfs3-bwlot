@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: class_code.php 6803 2012-06-22 07:56:42Z smallduh $
+// $Id: class_code.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔
 include "book_config.php";
@@ -18,6 +18,7 @@ if(!checkid(substr($_SERVER['PHP_SELF'],1))){
 }
 if ($_POST['key'] =="製作圖書證"){
 	echo "<html><body><table border=1 cellPadding=5 cellSpacing=10 ><tr>";
+	$_POST[class_id]=intval($_POST[class_id]);
 	$query = "select stud_id,stud_name from stud_base  where curr_class_num like '$_POST[class_id]%' and stud_study_cond =0 order by curr_class_num";
 	$result = mysql_query ($query,$conID) or die ($query);             
 	while ($row= mysql_fetch_array($result)){
@@ -43,7 +44,7 @@ $code_p =$_SERVER['PHP_SELF'];
 <?php
 	$class_base = class_base();
 	$sel = new drop_select();
-	 $sel->id=$_POST['class_id'];
+	$sel->id=$_POST['class_id'];
 	$sel->arr =$class_base;
 	$sel->s_name = "class_id";
 	$sel->top_option="選擇班級";

@@ -9,6 +9,7 @@ include_once "../../include/sfs_case_dataarray.php";
 // 回簽處理
 if ($_GET['act']=='Sign'){
 	if ($_SESSION['session_tea_sn']<>''){
+		$_GET['b_id']=intval($_GET['b_id']);
 		$query = "SELECT b_signs FROM jboard_p WHERE b_id='{$_GET['b_id']}'";
 		$res = & $CONN->Execute($query);
 		$b_signs = $res->fields['b_signs'];
@@ -28,6 +29,7 @@ exit;
 // 查詢回簽狀況
 if ($_GET['act'] == 'show_sign'){
 		if ($_SESSION['session_tea_sn']<>''){
+			$_GET['b_id']=intval($_GET['b_id']);
 			$query = "SELECT b_signs FROM jboard_p WHERE b_id='{$_GET['b_id']}'";
 			$res = & $CONN->Execute($query);
 		 $b_signs = $res->fields['b_signs'];
@@ -86,7 +88,7 @@ else
 	head("Joomla!文章編輯");
 
 
-$b_id= $_GET['b_id'];
+$b_id= intval($_GET['b_id']);
 $query="update jboard_p set b_hints = b_hints+1 where b_id='$b_id' ";
 $CONN->Execute($query);
 $query = "select  * from jboard_p  where b_id='$b_id' ";

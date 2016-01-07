@@ -28,6 +28,7 @@ if(!board_checkid($bk_id) and !checkid($_SERVER['SCRIPT_FILENAME'],1)){
 
 //檢查修改權
 //$query = "select b_id from board_p where b_id ='$b_id' and b_own_id='$session_log_id'";
+$b_id=intval($b_id);
 $query = "select b_id from jboard_p where b_id ='$b_id'";
 $result = $CONN->Execute($query) or die($query);
 if ($result->EOF && !checkid($_SERVER['SCRIPT_FILENAME'],1)){
@@ -41,6 +42,7 @@ if ($_GET['act'] == 'del_file'){
 	//$sFile = $USR_DESTINATION.'/'.$_GET['b_id'].'/'.$fArr[$_GET['id']]['new_filename'];
 	//if (is_file($sFile)) {
 	//	unlink($sFile);
+	 $b_id=intval($b_id);
 	 $query= "delete from jboard_files where b_id = '$b_id' and new_filename='".$fArr[$_GET['id']]['new_filename']."'";
 	 $CONN->Execute($query);
 	 
@@ -70,6 +72,17 @@ $b_unit=$row['room_id'];		//發文者所在處室
 //$b_title = addslashes($row["title_name"]); //職稱  2014.04.23 後以 teach_title_id 取代
 $b_title=$row['teach_title_id'];
 
+///mysqli
+$query = "select bk_id,board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public from jboard_kind where bk_id =? ";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($bk_id,$board_name,$board_date,$board_k_id,$board_last_date,$board_is_upload,$board_is_public);
+$stmt->fetch();
+$stmt->close();
+/*
 $query = "select * from jboard_kind where bk_id ='$bk_id' ";
 $result= $CONN->execute($query) or die ($query);
 $row = $result->fetchRow();
@@ -81,6 +94,8 @@ $board_k_id = $row["board_k_id"];
 $board_last_date = $row["board_last_date"];
 $board_is_upload = $row["board_is_upload"];
 $board_is_public = $row["board_is_public"];
+*/
+
 
 if ($_POST['key'] == "確定修改"){
 	$b_post_time = mysql_date();
@@ -111,6 +126,7 @@ if ($_POST['key'] == "確定修改"){
 		Header ("Location: board_show.php?bk_id=$bk_id&b_id=$b_id");
 }
 
+$b_id=intval($b_id);
 $query = "select * from jboard_p where b_id ='$b_id' ";
 $result = $CONN->Execute($query);
 

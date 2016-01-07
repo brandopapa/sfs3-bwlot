@@ -4,9 +4,8 @@
 // 這樣才能應用在其他網頁上
 // 程式開始
 include_once('config.php');
-
-$kind_id=$_GET['kind_id'];
-$id=$_GET['id'];
+$kind_id=intval($_GET['kind_id']);
+$id=intval($_GET['id']);
 
 	$query="select * from jshow_pic where id='".$id."'";
 	$res=$CONN->Execute($query) or die($query);

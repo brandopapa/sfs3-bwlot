@@ -1,5 +1,5 @@
 <?php
-//$Id: showpaper.php 5456 2009-04-23 08:32:09Z infodaes $
+//$Id: showpaper.php 8670 2015-12-24 06:39:10Z qfon $
   include "config.php" ;
 
 // ¤£»Ý­n register_globals
@@ -9,7 +9,7 @@ if (!ini_get('register_globals')) {
 	extract( $_GET );
 	extract( $_SERVER );
 }
-  
+  $paper_id=intval($paper_id);
   if (!$paper_id)  header("location:paper_list.php") ;
   
   

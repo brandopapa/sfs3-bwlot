@@ -2,6 +2,7 @@
 
 // 引入 SFS3 的函式庫
 include "../../include/config.php";
+include "../../include/sfs_case_dataarray.php";
 
 // 引入您自己的 config.php 檔
 require "config.php";
@@ -36,6 +37,9 @@ $add_date=$_GET['add_date'];
 		$curr_year = curr_year();
 		$curr_seme = curr_seme();	
 	}
+
+
+
 
 
 if($act=="dl_oo_one"){
@@ -74,7 +78,7 @@ elseif($act=="dl_pdf_one"){
 		
 		//成績單標題
 		$title=$school_short_name.$curr_year."學年度第".$curr_seme."學期第".$test_sort."次定期考查\n";
-		if(sizeof($curr_year)==2) $curr_year="0".$curr_year;	
+		if(sizeof($curr_year)==2)$curr_year="0".$curr_year;	
 		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		$st_arr=student_sn_to_name_num($student_sn);
 		$st=student_sn_to_id_name_num($student_sn,$curr_year,$curr_seme);        
@@ -83,8 +87,8 @@ elseif($act=="dl_pdf_one"){
 		$title.="班級：".$cla_arr."\n姓名：".$st_arr[1]." 座號：".$st[2];		
 		if($add_nor) $header=array("科目","月考*$R0%","平時*$R1%","成績");
 		else $header=array("科目","成績");
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
-		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
+		//if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		//$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		//科目
 		$SS=class_id2subject($class_id);
 		$i=0;
@@ -204,9 +208,17 @@ elseif($act=="dl_pdf_one"){
 		}
     
 	$comment2="";
-	if ($add_teacher)$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+	
+	if ($add_teacher)
+	{
+	   //取得某學期某班導師姓名	
+      
+        $class_teacher_all=class_teacher();
+        $teacher=$class_teacher_all[$class_id];
+		
+		$comment2="導師：$teacher \n家長：";
+	}
 	if ($add_date)$comment2.="\n      列印日期:".date("Y-m-d");
-	//print_r($data);
 	creat_pdf($title,$header,$data,$comment1,$comment2);
 }
 elseif($act=="dl_pdf_class"){
@@ -371,7 +383,14 @@ elseif($act=="dl_pdf_class"){
 	}
 
 	$comment2="";
-	if ($add_teacher)$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+	if ($add_teacher)
+	{
+	   //取得某學期某班導師姓名	
+       $class_teacher_all=class_teacher();
+       $teacher=$class_teacher_all[$class_id];
+		
+		$comment2="導師：$teacher \n家長：";
+	}
 	if ($add_date)$comment2.="\n      列印日期:".date("Y-m-d");
 	//print_r($data);
 	creat_pdf($title,$header,$data,$comment1,$comment2);
@@ -467,11 +486,11 @@ else{
 		$date_form="<tr><td><form><input type='hidden' name='class_seme' value='$class_seme'><input type='hidden' name='student_sn' value='$student_sn'><input type='hidden' name='class_num' value='$class_num'><input type='hidden' name='test_sort' value='$test_sort'><input type='hidden' name='add_nor' value='$add_nor'><input type='hidden' name='add_wet' value='$add_wet'><input type='hidden' name='add_teacher' value='$add_teacher'><input type='hidden' name='class_base' value='$class_base'><input type='checkbox' name='add_date'$dchecked value='1' onclick='this.form.submit()'>列印日期</form></td></tr>";
 	
 		
-		$download="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載個人SXW</a></font></td></tr>";
-		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載全班SXW</a></font></td></tr>";
+		$download="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&class_base=$class_base&add_date=$add_date'>下載個人SXW</a></font></td></tr>";
+		$download2="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_oo_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&class_base=$class_base&add_date=$add_date'>下載全班SXW</a></font></td></tr>";
 		
-		$download3="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載個人PDF</a></font></td></tr>";
-		$download4="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&add_date=$add_date'>下載全班PDF</a></font></td></tr>";
+		$download3="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_one&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&student_sn=$student_sn&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&class_base=$class_base&add_date=$add_date'>下載個人PDF</a></font></td></tr>";
+		$download4="<tr><td><font style='border: 2px outset #EAF6FF'><a href='{$_SERVER['PHP_SELF']}?act=dl_pdf_class&class_seme=$class_seme&test_sort=$test_sort&class_num=$class_num&add_nor=$add_nor&add_wet=$add_wet&add_teacher=$add_teacher&class_base=$class_base&add_date=$add_date'>下載全班PDF</a></font></td></tr>";
 
 		//成績單標題
 
@@ -493,8 +512,8 @@ else{
 			<tr bgcolor='#EFFFFF'>
 			<td colspan='2'>".$title."</td></tr>";
 		}
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
-		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
+		//if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		//$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		//科目
 		$SS=class_id2subject($class_id);
 		$i=0;
@@ -887,7 +906,7 @@ $view_num=4;
 	}
 	
 	
-	$teacher=$_SESSION['session_tea_name'];
+	//$teacher=$_SESSION['session_tea_name'];
 	
 	$totalx="
 	<table:table-cell table:style-name='table1.B2' table:value-type='string'>
@@ -935,6 +954,11 @@ $view_num=4;
 	
 	if ($add_teacher)
 	{
+		
+	   //取得某學期某班導師姓名	
+       $class_teacher_all=class_teacher();
+       $teacher=$class_teacher_all[$class_id];
+		
 		$teacher_view="導師:";
 		$parent_view="家長:";
 	}
@@ -1211,7 +1235,7 @@ $view_num=4;
 	}
 	
 	
-	$teacher=$_SESSION['session_tea_name'];
+	//$teacher=$_SESSION['session_tea_name'];
 	
 	$totalx[$student_sn]="
 	<table:table-cell table:style-name='table1.B2' table:value-type='string'>
@@ -1283,6 +1307,10 @@ $view_num=4;
 		
 	if ($add_teacher)
 	{
+	   //取得某學期某班導師姓名	
+       $class_teacher_all=class_teacher();
+       $teacher=$class_teacher_all[$class_id];
+		
 		$teacher_view="導師:";
 		$parent_view="家長:";
 	}

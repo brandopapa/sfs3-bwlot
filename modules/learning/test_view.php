@@ -1,5 +1,5 @@
 <?php
-// $Id: test_view.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: test_view.php 8705 2015-12-29 03:03:33Z qfon $
 // --系統設定檔
 include "config.php"; 
 session_start();
@@ -30,7 +30,7 @@ if($key=="下一題>>"){
 if($key=="<<上一題"){	
 	$qid=$qid-1;
 }
-
+$qid=intval($qid);
 $sqlstr = "select * from test_data   where  qid='$qid' " ;
 $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;
 $s_unit="<form  method='post' action=$PHP_SELF >" ;

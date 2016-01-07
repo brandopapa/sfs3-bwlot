@@ -216,6 +216,7 @@ $sel1->arr = $class_arr;
 $sel1->do_select();
 
 if($class_id<>'') {
+	$class_id=intval($class_id);
 	$query = "select stud_id,stud_name,curr_class_num from stud_base where stud_study_cond=0 and curr_class_num like '$class_id%' order by curr_class_num";
 	$result = $CONN->Execute($query) or die ($query);
 	if (!$result->EOF) {

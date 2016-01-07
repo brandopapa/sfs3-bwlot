@@ -1,8 +1,8 @@
 <?php 
-// $Id: view.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: view.php 8711 2015-12-31 02:19:05Z qfon $
   include "config.php" ;
 
-  $id = $_GET['id'] ;
+  $id = intval($_GET['id']) ;
   //¥[¤@¦¸	 
   $tsqlstr =  " update $tbname set act_view = act_view+1 where act_ID='$id' " ; 	
   $result = $CONN->Execute( $tsqlstr) ; 

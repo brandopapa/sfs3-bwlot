@@ -1,15 +1,11 @@
 <?php
-
 // $Id: board_show.php 7779 2013-11-20 16:09:00Z smallduh $
-
 // --系統設定檔
 ini_set('memory_limit', '-1');
-
 include	"config.php";
 include_once "../../include/sfs_case_dataarray.php";
 
 //echo $_GET['api_key'].";".$_GET['act'];;
-
 
 if ($_GET['api_key']!=$api_key) {
   $row[1]="API Key 錯誤!";
@@ -23,7 +19,7 @@ if ($_GET['act']=='test') {
 
 //取得令日的圖id值
 if ($_GET['act']=='GetDayPicID') {
-  $kind_id=$_GET['kind_id'];  //指定分類區
+  $kind_id=intval($_GET['kind_id']);  //指定分類區
   $day=date("m-d");
   //取得預設圖片與今日圖片
   $sql="select init_pic_set,day_pic_set from jshow_setup where kind_id='$kind_id'";
@@ -46,7 +42,7 @@ if ($_GET['act']=='GetDayPicID') {
 
 //取得某kind_id的所有圖id
 if ($_GET['act']=='GetPicByKindID') {
-  $kind_id=$_GET['kind_id'];  //指定分類區
+  $kind_id=intval($_GET['kind_id']);  //指定分類區
   //取得預設圖片與今日圖片
   $sql="select * from jshow_pic where kind_id='$kind_id' and display='1' order by sort";
   if ($_GET['visible']>0) $sql.=" limit ".$_GET['visible']; 
@@ -61,7 +57,7 @@ if ($_GET['act']=='GetPicByKindID') {
 
 //取得某kind_id的所有圖id依隨機
 if ($_GET['act']=='GetPicByKindIDorderByRand') {
-  $kind_id=$_GET['kind_id'];  //指定分類區
+  $kind_id=intval($_GET['kind_id']);  //指定分類區
   //若有指定必選圖片
   if ($_GET['visible_must']!="") {
     $must="and id not in (".$_GET['visible_must'].")";
@@ -94,7 +90,7 @@ if ($_GET['act']=='GetPicByKindIDorderByRand') {
 
 //取得kind_id的設定值
 if ($_GET['act']=='GetSetup') {
-  $kind_id=$_GET['kind_id'];  //指定分類區
+  $kind_id=intval($_GET['kind_id']);  //指定分類區
   
   //取得預設圖片與今日圖片
   $sql="select * from jshow_setup where kind_id='$kind_id'";
@@ -109,7 +105,7 @@ if ($_GET['act']=='GetSetup') {
 
 //讀取圖 , 不用轉碼
 if ($_GET['act']=='GetImage' and $_GET['id']!="") {	
-	$id=$_GET['id'];
+	$id=intval($_GET['id']);
 	$query="select * from jshow_pic where id='".$id."'";
 	$res=$CONN->Execute($query) or die($query);
 	$row= $res->fetchRow();	
@@ -134,7 +130,7 @@ if ($_GET['act']=='GetImage' and $_GET['id']!="") {
 
 //計數加1
 if ($_GET['act']=='Url_Click') {
-  $id=$_GET['id'];  //指定分類區
+  $id=intval($_GET['id']);  //指定分類區
   
   //取得預設圖片與今日圖片
   $sql="select url,url_click from jshow_pic where id='$id'";

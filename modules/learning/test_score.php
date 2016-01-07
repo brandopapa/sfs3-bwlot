@@ -1,5 +1,5 @@
 <?php
-// $Id: test_score.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: test_score.php 8705 2015-12-29 03:03:33Z qfon $
 // --系統設定檔
 include "config.php"; 
 session_start();
@@ -25,10 +25,16 @@ if($order=='')
 $sql_select = "select count(badge) as sco ,a.*   ,c.stud_name,c.curr_class_num,c.stud_study_cond from test_badge a,stud_base c  where  ";
 $sql_select .= "  badge >0 and who='學生' and c.stud_study_cond='0'   and a.teacher_sn = c.student_sn ";   
 if($class!='')
+    {
+	 $class=intval($class);	
 	 $sql_select .= " and c.curr_class_num like '$class%' ";
+	}
 if($e_date!='')
+    {
+	 
 	 $sql_select .= " and a.up_date >'$e_date' ";
-
+	}
+	 
 $sql_select .= "group by curr_class_num order by $order  ";
 
 $result = mysql_query ($sql_select,$conID)or die ($sql_select);
@@ -82,6 +88,7 @@ if($order=='')
 	$order="up_date desc";
 
 if($stud_clnu!=''){
+	$stud_clnu=intval($stud_clnu);
 	$query = "select stud_id from stud_base where curr_class_num ='$stud_clnu' and  stud_study_cond='0'";
 	$result	= mysql_query($query);
 	$row = mysql_fetch_array($result);
@@ -93,8 +100,10 @@ $sql_select = "select  a.* ,c.stud_name,c.curr_class_num,c.stud_study_cond from 
 $sql_select .= "  badge >0 and who='學生' and c.stud_study_cond='0' and a.teacher_sn = c.student_sn  ";   
 
 if($stud_id!='')
-	 $sql_select .= " and a.stud_id = '$stud_id' ";
-
+{
+	$stud_id=substr($stud_id,0,7);
+	$sql_select .= " and a.stud_id = '$stud_id' ";
+}
 
 $sql_select .= "  order by $order"; 
 
@@ -204,8 +213,10 @@ if($order=='')
 $sql_select = "select count(poke) as sco ,a.*  ,b.* ,c.stud_name,c.curr_class_num,c.stud_study_cond from test_score a,unit_u b,stud_base c   ";
 $sql_select .= "where poke >0 and who='學生' and c.stud_study_cond='0' and a.u_id=b.u_id and a.teacher_sn = c.student_sn   ";
 if($class!='')
-	 $sql_select .= " and c.curr_class_num like '$class%' ";
-
+ {	 
+ $class=intval($class);
+ $sql_select .= " and c.curr_class_num like '$class%' ";
+ }
 if($e_date=='' and $e_date1!='')
 	$e_date=$e_date1;
 
@@ -271,6 +282,7 @@ if($order=='')
 	$order="up_date desc";
 
 if($stud_clnu!=''){
+	$stud_clnu=intval($stud_clnu);
 	$query = "select stud_id from stud_base where curr_class_num ='$stud_clnu' and  stud_study_cond='0'";
 	$result	= mysql_query($query);
 	$row = mysql_fetch_array($result);
@@ -283,8 +295,10 @@ $sql_select = "select  a.* ,b.unit_m,b.unit_t,b.u_s,b.unit_name ,c.stud_name,c.c
 $sql_select .= "  poke >0 and who='學生' and c.stud_study_cond='0'  ";   
 
 if($stud_id!='')
+    {
+	 $stud_id=substr($stud_id,0,7);
 	 $sql_select .= " and a.stud_id = '$stud_id' ";
-
+	}
 $sql_select .= " and a.u_id=b.u_id and a.teacher_sn = c.student_sn order by $order"; 
 
 $result = mysql_query ($sql_select,$conID)or die ($sql_select);

@@ -27,14 +27,29 @@ if ($_POST['act'] == '匯出 xls') {
 	$x->addSheet('圖書資料表');
 	$x->setRowText($rowtext);
 	$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
+	/*
 	$query = "SELECT a.*,b.bookch1_name,b.bookch2_name FROM book a, bookch1 b WHERE
 	   a.bookch1_id=b.bookch1_id AND a.bookch1_id='$bookch1_id'  ORDER BY bookch1_id, book_id ";
 	$res = $CONN->Execute($query) or die($query);
+	*/
+	
+	$query = "SELECT a.bookch1_id,a.book_id,a.book_name,a.book_num,a.book_author,a.book_maker,a.book_myear,a.book_bind,a.book_dollar,a.book_price,a.book_gid,a.book_content,a.book_isborrow,a.book_isbn,a.book_isout,a.book_buy_date,a.ISBN,a.book_sprice,a.create_time,a.update_time,b.bookch1_name,b.bookch2_name FROM book a, bookch1 b WHERE
+	   a.bookch1_id=b.bookch1_id AND a.bookch1_id=?  ORDER BY bookch1_id, book_id ";
+
+	$mysqliconn = get_mysqli_conn();   
+	$stmt = "";
+    $stmt = $mysqliconn->prepare($query);
+    $stmt->bind_param('s',$bookch1_id);
+    $stmt->execute();
+    $stmt->bind_result($bookch1_id,$book_id,$book_name,$book_num,$book_author,$book_maker,$book_myear,$book_bind,$book_dollar,$book_price,$book_gid,$book_content,$book_isborrow,$book_isbn,$book_isout,$book_buy_date,$ISBN,$book_sprice,$create_time,$update_time,$bookch1_name,$bookch2_name);
+   
+	   
 	$arr = array();
-	while ($row = $res->fetchRow()) {
-		$arr[] = array($row['book_id'], $row['bookch1_name'],$row['bookch2_name'],$row['book_name'],
-		$row['book_author'], $row['book_maker'], $row['book_myear'], $row['book_bind'],
-		$row['book_price'], $row['ISBN']);
+	//while ($row = $res->fetchRow()) {
+	  while ($stmt->fetch()) {
+		$arr[] = array($book_id, $bookch1_name,$bookch2_name,$book_name,
+		$book_author, $book_maker, $book_myear, $book_bind,
+		$book_price, $ISBN);
 	}
 	$x->items=$arr;
 	$x->writeSheet();

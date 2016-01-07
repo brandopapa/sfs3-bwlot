@@ -1,7 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: checkid.php 6807 2012-06-22 08:08:30Z smallduh $
-
+<?php                                                                                                                             
+// $Id: checkid.php 8702 2015-12-28 06:43:07Z qfon $
 //載入設定檔
 if ($isload != 1)
 	include "exam_config.php";
@@ -23,10 +21,34 @@ if ($_GET[logout] == 1) {
 
 //登入  
 if ($_POST[B1] == "登入") {
+///mysqli	
+	$sql_select = "select count(*),a.stud_id,a.stud_name ,a.curr_class_num,b.stud_pass from stud_base a ,exam_stud_data b  ";
+	$sql_select .= "where a.stud_study_cond= 0 and a.stud_id = b.stud_id and a.stud_id = ? and b.stud_pass = ? and a.stud_id <>'' ";
+
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('ss', $_POST[stud_id],$_POST[stud_pass]);
+$stmt->execute();
+$stmt->bind_result($Rcount,$stud_id,$stud_name,$curr_class_num,$stud_pass);
+$stmt->fetch();
+$stmt->close();
+	if ($Rcount>0 || $_SESSION[session_log_id] !='') {
+		$_SESSION[session_stud_id]=$stud_id;
+		$_SESSION[session_stud_name]= $stud_name;		
+		$_SESSION[session_curr_class_num] = $curr_class_num;
+		$exam = "http://".$_SERVER[HTTP_HOST].$_POST[exename];
+		header("Location: $exam");
+	}
+
+
+///mysqli
+	/*
 	$sql_select = "select a.stud_id,a.stud_name ,a.curr_class_num,b.stud_pass from stud_base a ,exam_stud_data b \n";
 	$sql_select .= "where a.stud_study_cond= 0 and a.stud_id = b.stud_id and a.stud_id = '".$_POST[stud_id]."' and b.stud_pass = '".$_POST[stud_pass]."' and a.stud_id <>'' ";
 //	echo $sql_select;exit;
 	$result = $CONN->Execute ($sql_select) or die($sql_select);
+	
 	if ($result->RecordCount()>0 || $_SESSION[session_log_id] !='') {
 		$_SESSION[session_stud_id]=$result->fields["stud_id"];
 		$_SESSION[session_stud_name]= $result->fields["stud_name"];		
@@ -34,7 +56,7 @@ if ($_POST[B1] == "登入") {
 		$exam = "http://".$_SERVER[HTTP_HOST].$_POST[exename];
 		header("Location: $exam");
 	}
-	
+	*/
 }
 
 $exename = $_GET[exename] ;

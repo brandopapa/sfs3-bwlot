@@ -1,5 +1,5 @@
 <?php
-//$Id: query.php 6804 2012-06-22 07:57:21Z smallduh $
+//$Id: query.php 8667 2015-12-24 06:31:23Z qfon $
 include "config.php";
 
 $smarty->assign("book_status_arr",array("0"=>"¬[¤W","1"=>"¥X­É"));
@@ -7,10 +7,45 @@ if ($_POST[next])
 	$_POST[start_num]+=$_POST[num];
 
 if ($_GET[act]=="display") {
+
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+if ($_GET[book_id] <> "") {
+    $stmt = $mysqliconn->prepare("select bookch1_id,book_id,book_name,book_num,book_author,book_maker,book_myear,book_bind,book_dollar,book_price,book_gid,book_content,book_isborrow,book_isbn,book_isout,book_buy_date from book where book_id=?");
+    $stmt->bind_param('s', $_GET[book_id]);
+}
+
+$stmt->execute();
+$stmt->bind_result($bookch1_id,$book_id,$book_name,$book_num,$book_author,$book_maker,$book_myear,$book_bind,$book_dollar,$book_price,$book_gid,$book_content,$book_isborrow,$book_isbn,$book_isout,$book_buy_date);
+/*
+$stmt->fetch();
+$arr[]=array('bookch1_id'=>$bookch1_id,'book_id'=>$book_id,'book_name'=>$book_name,'book_num'=>$book_num,'book_author'=>$book_author,'book_maker'=>$book_maker,'book_myear'=>$book_myear,'book_bind'=>$book_bind,'book_dollar'=>$book_dollar,'book_price'=>$book_price,'book_gid'=>$book_gid,'book_content'=>$book_content,'book_isborrow'=>$book_isborrow,'book_isbn'=>$book_isbn,'book_isout'=>$book_isout,'book_buy_date'=>$book_buy_date);
+*/
+
+$meta = $stmt->result_metadata(); 
+while ($field = $meta->fetch_field()) { 
+    $params[] = &$row[$field->name];	
+} 
+call_user_func_array(array($stmt, 'bind_result'), $params);            
+while ($stmt->fetch()) { 
+    foreach($row as $key => $val) { 
+        $c[$key] = $val; 
+    } 
+	$book_name=$c[book_name];
+    $arr[] = $c; 
+} 
+$stmt->close(); 
+///mysqli
+
+	/*
 	$query="select * from book where book_id='$_GET[book_id]'";
-	$res=$CONN->Execute($query);
-	$book_name=$res->fields[book_name];
+	$res=$CONN->Execute($query);	
+	$book_name=$res->fields[book_name];	
 	$smarty->assign("data_arr",$res->GetRows());
+     */
+		
+	$smarty->assign("data_arr",$arr);
 	$query="select * from book where TRIM(book_name)='$book_name'";
 	$res=$CONN->Execute($query);
 	$smarty->assign("oth_data_arr",$res->GetRows());

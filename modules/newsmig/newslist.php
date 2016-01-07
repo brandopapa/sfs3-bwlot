@@ -1,5 +1,5 @@
 <?php
-// $Id: newslist.php 8079 2014-06-24 07:51:09Z smallduh $
+// $Id: newslist.php 8715 2015-12-31 07:01:55Z qfon $
 
 ob_start();
 //session_start();
@@ -59,12 +59,28 @@ function setBGOff(TheColor,thetable) {
 
 
 //先找出共幾筆資料, 分成幾頁
-$sql_totalnews = "SELECT * FROM newsmig";
+//$sql_totalnews = "SELECT * FROM newsmig";
+$sql_totalnews = "SELECT count(*) FROM newsmig";
 if ($search_key!='') {
-$sql_totalnews .= " where title like '%".$search_key."%' or news like '%".$search_key."%' ";
+//$sql_totalnews .= " where title like '%".$search_key."%' or news like '%".$search_key."%' ";
+$sql_totalnews .= " where title like ? or news like ? ";
 }
-$rs1 = $CONN->Execute($sql_totalnews);
-$numbers = $rs1->RecordCount();
+
+    ///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$search_key="%$search_key%";
+$stmt = $mysqliconn->prepare($sql_totalnews);
+$stmt->bind_param('ss',$search_key,$search_key);
+$stmt->execute();
+$stmt->bind_result($numbers);
+$stmt->fetch();
+$stmt->close();
+
+///mysqli
+
+//$rs1 = $CONN->Execute($sql_totalnews);
+//$numbers = $rs1->RecordCount();
 
 if ($m_arr["nums_perpage"] != ""){
 	$nums_perpage = $m_arr["nums_perpage"];
@@ -110,7 +126,8 @@ if ($_SESSION["nm_pagenow"]>$pages) { $_SESSION["nm_pagenow"]=$pages; }
 
 $sql_listnews = "SELECT news_sno,title,posterid,news,postdate,newslink FROM newsmig ";
 if ($search_key!='') {
-$sql_listnews .= "where title like '%".$search_key."%' or news like '%".$search_key."%' ";
+//$sql_listnews .= "where title like '%".$search_key."%' or news like '%".$search_key."%' ";
+$sql_listnews .= "where title like ? or news like ? ";
 }
 $sql_listnews .= "ORDER BY postdate DESC \n\r";
 
@@ -121,7 +138,21 @@ $rdstart = ($_SESSION["nm_pagenow"]-1) * $nums_perpage;
 
 // SQL語法加上 LIMIT 子句, 限定本頁該出現的資料
 $sql_listnews .= " LIMIT $rdstart , $rdend\n\r";
-$rs = $CONN->Execute($sql_listnews);
+
+
+    ///mysqli	
+$stmt = "";
+$search_key="%$search_key%";
+$stmt = $mysqliconn->prepare($sql_listnews);
+$stmt->bind_param('ss',$search_key,$search_key);
+$stmt->execute();
+$stmt->bind_result($news_sno,$title,$posterid,$news,$postdate,$newslink);
+//$stmt->fetch();
+//$stmt->close();
+
+///mysqli
+
+//$rs = $CONN->Execute($sql_listnews);
 ?>
 <form method="post" name="myform" action="<?php echo $_SERVER['php_self'];?>">
 	<input type="hidden" name="cp" value="">
@@ -151,8 +182,11 @@ echo "	<td><a href='postnews.php?act=add'>新增新聞</a></td>\n\r";
 echo "</tr>";
 echo "</table>\n\r";
 echo "<table align='center' width='700'>\n\r";
-if ($rs){
-	while ($ar=$rs->FetchRow()) {
+//if ($rs){
+if ($numbers){	
+	//while ($ar=$rs->FetchRow()) {
+	  while ($stmt->fetch()) {
+		$ar=array($news_sno,$title,$posterid,$news,$postdate,$newslink);
 		list($news_sno,$title,$posterid,$news,$postdate,$newslink)=$ar;
 		userdata($posterid);
 		//先把 檔名(含路徑) 處理出來

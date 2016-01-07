@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board_edit.php 7779 2013-11-20 16:09:00Z smallduh $
+// $Id: board_edit.php 8714 2015-12-31 05:14:22Z qfon $
 
 // --系統設定檔
 include "board_config.php";
@@ -9,6 +9,7 @@ include "board_config.php";
 //session_register("session_log_id");
 $bk_id = $_REQUEST['bk_id'];
 $b_id = $_REQUEST['b_id'];
+
 if(!board_checkid($bk_id)){
 
 	$go_back=1; //回到自已的認證畫面
@@ -27,6 +28,7 @@ if(!board_checkid($bk_id)){
 
 //檢查修改權
 //$query = "select b_id from board_p where b_id ='$b_id' and b_own_id='$session_log_id'";
+$b_id=intval($b_id);
 $query = "select b_id from board_p where b_id ='$b_id' and teacher_sn ='$_SESSION[session_tea_sn]'";
 $result = $CONN->Execute($query) or die($query);
 if ($result->EOF && !checkid($_SERVER['SCRIPT_FILENAME'],1)){
@@ -62,6 +64,18 @@ $b_name = $row["name"]; //張貼人姓名
 $b_unit = $_POST['board_name']; //所在處室
 $b_title = $row["title_name"]; //職稱
 
+///mysqli         	
+$query = "select bk_id,board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public from board_kind where bk_id =? ";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($bk_id,$board_name,$board_date,$board_k_id,$board_last_date,$board_is_upload,$board_is_public);
+$stmt->fetch();
+$stmt->close();
+
+/*
 $query = "select * from board_kind ";
 $query .= "where bk_id ='$bk_id' ";
 $result= $CONN->execute($query) or die ($query);
@@ -74,6 +88,7 @@ $board_k_id = $row["board_k_id"];
 $board_last_date = $row["board_last_date"];
 $board_is_upload = $row["board_is_upload"];
 $board_is_public = $row["board_is_public"];
+*/
 if ($_POST['key'] == "確定修改"){
 
 	$b_post_time = mysql_date();
@@ -120,7 +135,7 @@ if ($_POST['key'] == "確定修改"){
 	if (!$error_flag)
 		Header ("Location: board_show.php?bk_id=$bk_id&b_id=$b_id");
 }
-
+$b_id=intval($b_id);
 $query = "select * from board_p where b_id ='$b_id' ";
 $result = $CONN->Execute($query);
 

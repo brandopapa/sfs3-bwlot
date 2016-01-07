@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: bro_book.php 7794 2013-12-03 03:39:50Z infodaes $
+// $Id: bro_book.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔  
 include "book_config.php";
@@ -44,6 +44,7 @@ if ($sel == "del")
 $reader_flag = 0;
 //謮者登入
 if ($stud_id !=""){
+	$stud_id=substr($stud_id,0,7);
 	$query = "select stud_name,curr_class_num,stud_study_cond,stud_study_year from stud_base where stud_id = '$stud_id' and stud_study_cond=0";
 	$result = mysql_query($query)or die ($query);
 	if ( mysql_num_rows($result) >0){
@@ -64,6 +65,7 @@ if ($stud_id !=""){
 //借書處理
 if ($book_id != ""){
 	//檢查是否超出借閱本數
+	$stud_id=substr($stud_id,0,7);
 	$amount_limit_s=$amount_limit_s?$amount_limit_s:7;
 	$query = "SELECT count(*) AS counter FROM borrow WHERE stud_id='$stud_id' and ISNULL(in_date)";
 	$result = mysql_query($query)or die ($query);
@@ -129,6 +131,7 @@ function setfocus() {
 ?>
 
 <?php
+$stud_id=substr($stud_id,0,7);
 $query = "SELECT book.bookch1_id, book.book_id, book.book_name, book.book_num, borrow.stud_id,borrow.b_num,book.book_author,borrow.out_date, borrow.in_date FROM book , borrow where  book.book_id = borrow.book_id  and borrow.stud_id= '$stud_id' order by borrow.out_date desc ,borrow.in_date LIMIT 0, 10 ";
 $result = mysql_query($query)or die ($query);
 echo "<center><table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse;' bordercolor='#111111' id='AutoNumber1'>";

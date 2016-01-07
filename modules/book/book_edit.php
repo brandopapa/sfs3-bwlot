@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: book_edit.php 7757 2013-11-11 07:53:57Z infodaes $
+// $Id: book_edit.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔
 include "book_config.php";
@@ -46,6 +46,21 @@ if ($_POST['key'] == "確定修改"){
 	$sql_update = "update book set  bookch1_id='$_POST[bookch1_id]',book_name='$_POST[book_name] ',book_author='$_POST[book_author]',book_maker='$_POST[book_maker] ',book_myear='$_POST[book_myear]',book_bind='$_POST[book_bind]',book_price='$_POST[book_price]',book_content='$_POST[book_content] ',book_isborrow='$_POST[book_isborrow]',book_isbn='$_POST[book_isbn]' where book_id='$_POST[book_id]' ";
 	mysql_query($sql_update,$conID) or die ($sql_update);
 }
+
+ ///mysqli
+$sql_select = "select bookch1_id,book_id,book_name,book_author,book_maker,book_myear,book_bind,book_price,book_content,book_isborrow,book_isbn,book_isout,book_buy_date from book where book_id =?"; 
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->bind_result($bookch1_id,$book_id,$book_name,$book_author,$book_maker,$book_myear,$book_bind,$book_price,$book_content,$book_isborrow,$book_isbn,$book_isout,$book_buy_date);
+$stmt->fetch();
+$stmt->close();
+
+///mysqli
+
+/*
 $sql_select = "select bookch1_id,book_id,book_name,book_author,book_maker,book_myear,book_bind,book_price,book_content,book_isborrow,book_isbn,book_isout,book_buy_date from book where book_id ='$book_id'";
 $result = mysql_query ($sql_select,$conID);
 $row = mysql_fetch_array($result);
@@ -61,6 +76,8 @@ $book_content = $row["book_content"];
 $book_isborrow = $row["book_isborrow"];
 $book_isbn = $row["book_isbn"];
 $book_isout = $row["book_isout"];
+*/
+
 
 include "header.php";
 

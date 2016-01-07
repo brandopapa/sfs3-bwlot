@@ -1,8 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: exam.php 6807 2012-06-22 08:08:30Z smallduh $
-
-
+<?php                                                                                                                             
+// $Id: exam.php 8673 2015-12-25 02:23:33Z qfon $
 // --系統設定檔
 include "exam_config.php";
 // --認證 session
@@ -29,6 +26,8 @@ if(!checkid($_SERVER[PHP_SELF])){
 	include "footer.php"; 
 	exit;
 }
+
+$_GET[exam_id]=intval($_GET[exam_id]);
 
 //更改展示設定
 if ($_GET[sel_open] !="") {
@@ -120,10 +119,12 @@ $sel1->do_select();
   <tbody>
 
 <?php
+
 $sql_select = "select exam.*,exam_kind.class_id  from exam,exam_kind ";
 $sql_select .=" where exam.e_kind_id=exam_kind.e_kind_id and exam.teach_id ='$_SESSION[session_log_id]' and exam_kind.class_id like '$curr_year_seme%' ";
 if ($e_kind_id !="-1")
-	$sql_select .= " and exam.e_kind_id='$e_kind_id' ";
+$e_kind_id=intval($e_kind_id);
+$sql_select .= " and exam.e_kind_id='$e_kind_id' ";
 $sql_select .=" order by exam_kind.class_id ";
 $result = $CONN->Execute($sql_select)or die ($sql_select);
 $i=0;

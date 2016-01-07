@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board.php 7779 2013-11-20 16:09:00Z smallduh $
+// $Id: board.php 8734 2016-01-05 07:40:39Z hsiao $
 
 // --系統設定檔
 include	"board_config.php";
@@ -35,6 +35,21 @@ $row = $result->fetchRow();
 $b_name	= addslashes($row["name"]); //張貼人姓名
 $b_unit	= addslashes($_POST['board_name']); //所在處室
 $b_title = addslashes($row["title_name"]); //職稱
+
+///mysqli
+$query = "select board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin from board_kind ";
+$query .= "where bk_id =? ";
+
+$mysqliconn = get_mysqli_conn("board_kind");
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($board_name,$board_date,$board_k_id,$board_last_date,$board_is_upload,$board_is_public,$board_admin);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+/*
 $query = "select * from board_kind ";
 $query .= "where bk_id ='$bk_id' ";
 $result= $CONN->Execute($query) or die ($query);
@@ -46,6 +61,8 @@ $row = $result->fetchRow();
 	$board_is_upload = $row["board_is_upload"];
 	$board_is_public = $row["board_is_public"];
 	$board_admin = $row["board_admin"];
+*/	
+	
 if ($_POST['key'] == "確定公告"){
 	$b_post_time = mysql_date();
 	$b_upload_name = $_FILES['b_upload']['name'];

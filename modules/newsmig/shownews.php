@@ -1,5 +1,5 @@
 <?php
-// $Id: shownews.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: shownews.php 8715 2015-12-31 07:01:55Z qfon $
 
 ob_start();
 session_start();
@@ -90,7 +90,7 @@ function showpics($sn_rdsno){
   `newslink` varchar(70) default NULL
 ******/
 
-$whichnews = $_GET["rdsno"];
+$whichnews = intval($_GET["rdsno"]);
 $sql = "SELECT title,posterid,news,postdate,newslink \n\r";
 $sql.= "FROM newsmig \n\r";
 $sql.= "WHERE news_sno= '$whichnews' \n\r";

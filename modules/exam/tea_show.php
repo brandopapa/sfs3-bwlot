@@ -1,7 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: tea_show.php 6807 2012-06-22 08:08:30Z smallduh $
-
+<?php                                                                                                                             
+// $Id: tea_show.php 8673 2015-12-25 02:23:33Z qfon $
 //載入設定檔
 include "exam_config.php";
 //session_start();
@@ -9,7 +7,7 @@ include "header.php";
 $grade_img = array("face_1.gif","face_2.gif","face_3.gif","face_4.gif","face_5.gif");
 $exam_id = $_GET[exam_id];
 if ($exam_id=='')
-	$exam_id=$_POST[exam_id];
+	$exam_id=intval($_POST[exam_id]);
 $stud_id = $_GET[stud_id];
 if ($stud_id=='')
 	$stud_id = $_POST[stud_id];
@@ -17,6 +15,7 @@ if ($stud_id=='')
 include "header.php";
 if($_SESSION[session_log_id]<>'') {
 	if($_POST[key] == '按下評量') {
+		$_POST[exam_id]=intval($_POST[exam_id]);
 		$query = "select stud_id from exam_stud where exam_id= '$_POST[exam_id]' ";
 		$result = $CONN->Execute($query);
 		while (!$result->EOF) {
@@ -24,7 +23,7 @@ if($_SESSION[session_log_id]<>'') {
 			$temp = "tea_comment_".$stud_id;
 			$tea_comment = $_POST[$temp];
 			$temp = "tea_grade_".$stud_id;
-			$tea_grade = $_POST[$temp];
+			$tea_grade = intval($_POST[$temp]);
 		
 			$query2 = "update exam_stud set tea_comment='$tea_comment' ";
 			if ($tea_grade !="")
@@ -39,10 +38,27 @@ if($_SESSION[session_log_id]<>'') {
 	}
 	
 	if($_GET[key] == 'del'){
+		
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+if ($stud_id <> "") {
+    $stmt = $mysqliconn->prepare("select f_name from exam_stud where stud_id=? and exam_id='$exam_id'");
+    $stmt->bind_param('s', $stud_id);
+}
+$stmt->execute();
+$stmt->bind_result($f_namex);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+		$f_name= $upload_path."e_".$exam_id."/".$stud_id."_".$f_namex;
+
+		/*
 		$query = "select f_name from exam_stud where stud_id='$stud_id' and exam_id='$exam_id'";
 		$res = $CONN->Execute($query);
 		$f_name= $upload_path."e_".$exam_id."/".$stud_id."_".$res->fields[0];
-//		echo $f_name;exit;
+		//echo $f_name;exit;
+		*/
 		$query = "delete from exam_stud where stud_id='$stud_id' and exam_id='$exam_id'";
 		$CONN->Execute($query);
 		if(file_exists ($f_name))
@@ -58,6 +74,7 @@ if (isset($_GET[cool])){
 }
 
 //作業名稱處理
+$exam_id=intval($exam_id);
 $query = "select exam.exam_name,exam.exam_memo ,exam.teach_id,exam.teach_name,exam.exam_isupload,exam_kind.class_id,exam_kind.e_upload_ok from exam,exam_kind where exam.e_kind_id = exam_kind.e_kind_id and exam.exam_id='$exam_id' ";
 $result = $CONN->Execute($query) or die($query);
 $teach_id = $result->fields["teach_id"]; //教師代號
@@ -81,7 +98,7 @@ echo "<center>";
 
 $temp_class = sprintf("%03d%d%d",curr_year(),curr_seme(),substr($_SESSION[session_curr_class_num],0,3));
 if ($exam_isupload == '1' && (($e_upload_ok == '1' && $class_id == $temp_class)||($teach_id == $_SESSION[session_log_id])) )
-	echo "<a href=\"tea_upload.php?exam_id=$exam_id&exam_name=$exam_name\">上傳作業</a>&nbsp;&nbsp;";
+echo "<a href=\"tea_upload.php?exam_id=$exam_id&exam_name=$exam_name\">上傳作業</a>&nbsp;&nbsp;";
 echo "<a href=\"$_SERVER[PHP_SELF]?e_kind_id=$e_kind_id&exam_id=$exam_id\">重新整理</a>&nbsp;&nbsp;";
 echo "<a href=\"exam_list.php\">回作業列表區</a></center>";
 echo "<form method=\"post\" action=\"tea_show.php\">";
@@ -99,6 +116,7 @@ echo "</tr>\n";
 
 
 //作品展示
+$exam_id=intval($exam_id);
 $sql_select = "select exam_stud.*,exam.exam_id,exam.exam_name,exam.exam_memo,exam.exam_source_isopen,exam.e_kind_id
                from exam_stud,exam where exam.exam_id = exam_stud.exam_id              
                and exam_stud.exam_id= '$exam_id' order by exam_stud.stud_num";

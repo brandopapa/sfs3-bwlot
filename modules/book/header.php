@@ -1,6 +1,6 @@
 <?php
 
-// $Id: header.php 5762 2009-11-16 07:44:02Z hami $
+// $Id: header.php 8732 2016-01-05 07:01:17Z hsiao $
 
 
 $book_path= updir($_SERVER[PHP_SELF]);
@@ -70,6 +70,7 @@ head("圖書管理");
 <OPTION VALUE="yetreturn.php">逾期查詢
 <OPTION VALUE="qbookout.php">學生借閱狀況表
 <OPTION VALUE="bookcode.php">條碼列印
+<OPTION VALUE="bookcode_new.php">條碼列印(無分類號)
 <OPTION VALUE="bro_book.php">學生借還書作業*
 <OPTION VALUE="bro_tea_book.php">教師借還書作業*
 <OPTION VALUE="class_code.php">班級條碼列印*

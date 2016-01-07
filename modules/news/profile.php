@@ -1,8 +1,8 @@
 <?
-  //$Id: profile.php 5310 2009-01-10 07:57:56Z hami $
+  //$Id: profile.php 8694 2015-12-25 04:00:43Z qfon $
   include "config.php";
   
-  $msg_id = $_GET['msg_id'] ;
+  $msg_id = intval($_GET['msg_id']) ;
   
   $tsqlstr =  " SELECT * FROM $tbname where msg_id = $msg_id " ; 
   $result = $CONN->Execute( $tsqlstr) ;   

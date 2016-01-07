@@ -1,6 +1,5 @@
-<?php
-                                                                                                                             
-// $Id: exam_score.php 7705 2013-10-23 08:58:49Z smallduh $
+<?php                                                                                                                             
+// $Id: exam_score.php 8673 2015-12-25 02:23:33Z qfon $
 
 //載入設定檔
 include "exam_config.php";
@@ -39,6 +38,7 @@ else {
 $class_name = class_base();
 	
 //目前有作業的班級
+$e_kind_id=intval($e_kind_id);
 $sql_select  = "select exam.exam_id ,exam.exam_name from exam,exam_kind ";
 $sql_select .= " where exam.e_kind_id=exam_kind.e_kind_id ";
 $sql_select .= " and exam_kind.class_id like '$curr_class_id%' ";
@@ -116,6 +116,7 @@ for($i=0 ; $i< count($exam_array[0]); $i++)
 echo "</tr>\n";
 
 //取得學生姓名
+$e_kind_id=intval($e_kind_id);
 $sql_select = "select exam_stud.stud_num,exam_stud.stud_name from exam_kind,exam,exam_stud where exam.e_kind_id = exam_kind.e_kind_id and exam.exam_id=exam_stud.exam_id and exam.e_kind_id='$e_kind_id' and exam_stud.stud_id not like 'demo%'  group by exam_stud.stud_num order by exam_stud.stud_num ";
 $result = $CONN->Execute($sql_select); //學生
 //echo $sql_select ;

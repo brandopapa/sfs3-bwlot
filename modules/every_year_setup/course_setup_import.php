@@ -1,5 +1,5 @@
 <?php
-//$Id: course_setup_import.php 7879 2014-02-20 06:28:02Z hsiao $
+//$Id: course_setup_import.php 8669 2015-12-24 06:37:40Z qfon $
 if (!is_object($CONN)) header("location:course_setup3.php");
 
 if (defined('MYSQL_CHARACTER_CODE')) 
@@ -58,13 +58,16 @@ switch ($_POST['act']) {
 		$ifile="every_year_setup_course_setup_import_mapping_teacher.tpl";
 		if ($_POST['in_sel'] && $_POST['map_sel']){
 			//寫入教師對應資料
+			$_POST['map_sel']=intval($_POST['map_sel']);
 			$query="update tmp_score_course set teacher_sn='0' where teacher_sn='".$_POST['map_sel']."'";
 			$CONN->Execute($query);
+			$_POST['in_sel']=intval($_POST['in_sel']);
 			$query="update tmp_score_course set teacher_sn='".$_POST['map_sel']."' where ot_id='".$_POST['in_sel']."'";
 			$CONN->Execute($query);
 		}elseif (count($_POST['clean_one'])>0) {
 			//清除單一教師對應資料
 			while(list($ot_id,$v)=each($_POST['clean_one'])) {
+				$ot_id=intval($ot_id);
 				$query="update tmp_score_course set teacher_sn='0' where ot_id='$ot_id'";
 				$CONN->Execute($query);
 			}
@@ -145,21 +148,25 @@ switch ($_POST['act']) {
 		} elseif (count($_POST['clean_os_id'])>0) {
 			//清除匯入對應課程
 			while(list($os_id,$v)=each($_POST['clean_os_id'])) {
+				$os_id=intval($os_id);
 				$query="update tmp_score_course set ss_id='0' where os_id='$os_id'";
 				$CONN->Execute($query);
 			}
 		} elseif (count($_POST['clean_ss_id'])>0) {
 			//清除系統對應課程
 			while(list($ss_id,$v)=each($_POST['clean_ss_id'])) {
+				$ss_id=intval($ss_id);
 				$query="update tmp_score_course set ss_id='0' where ss_id='$ss_id'";
 				$CONN->Execute($query);
 			}
 		} elseif ($_POST['in_sel'] && $_POST['map_sel']){
 			//寫入對應課程
+			$_POST['map_sel']=intval($_POST['map_sel']);
 			$query="select class_id from score_ss where ss_id='".$_POST['map_sel']."'";
 			$res=$CONN->Execute($query);
 			if ($res->fields['class_id']=="") {
 				//如果是年級課程, 則排除有班級課程之班級
+				$_POST['c_year']=intval($_POST['c_year']);
 				$query="select distinct class_id from score_ss where enable='1' and year='$sel_year' and semester='$sel_seme' and class_year='".$_POST['c_year']."' and class_id<>''";
 				$res=$CONN->Execute($query);
 				while(!$res->EOF) {
@@ -172,10 +179,14 @@ switch ($_POST['act']) {
 				$class_id_str="and class_id='".$res->fields['class_id']."'";
 			}
 			//寫入對應班級之課程
+			$_POST['map_sel']=intval($_POST['map_sel']);
+			$_POST['in_sel']=intval($_POST['in_sel']);
+			$_POST['c_year']=intval($_POST['c_year']);
 			$query="update tmp_score_course set ss_id='".$_POST['map_sel']."' where os_id='".$_POST['in_sel']."' and class_year='".$_POST['c_year']."' $class_id_str";
 			$res=$CONN->Execute($query);
 		}
 		//取出匯入課程
+		$_POST['c_year']=intval($_POST['c_year']);
 		$query="select distinct os_id,os_name from tmp_score_course where class_year='".$_POST['c_year']."' and os_name!='' order by os_id";
 		$res=$CONN->Execute($query);
 		while(!$res->EOF) {

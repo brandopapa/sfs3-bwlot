@@ -1,8 +1,7 @@
 <?php
-// $Id: model.php 7799 2013-12-10 07:16:17Z smallduh $
+// $Id: model.php 8674 2015-12-25 02:45:35Z qfon $
 // 取得設定檔
 include "config.php";
-
 if ($_POST[model_id]=="") $_POST[model_id]="0";
 for($i=1;$i<20;$i++) {
 	$p=$i*5;
@@ -16,7 +15,7 @@ for($i=1;$i<20;$i++) {
 }
 $smarty->assign("p_arr",$p_arr);
 
-$query="select * from fitness_mod where grade='".$_POST[model_id]."' order by sex,age";
+$query="select * from fitness_mod where grade='".intval($_POST[model_id])."' order by sex,age";
 $res=$CONN->Execute($query);
 while(!$res->EOF) {
 	$r[$res->fields[sex]][]=$res->FetchRow();

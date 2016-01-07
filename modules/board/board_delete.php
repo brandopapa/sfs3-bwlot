@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board_delete.php 7779 2013-11-20 16:09:00Z smallduh $
+// $Id: board_delete.php 8709 2015-12-30 15:17:02Z qfon $
 
 // --系統設定檔
 include	"board_config.php";
@@ -30,6 +30,7 @@ if(!board_checkid($bk_id)){
 
 //檢查修改權
 //$query = "select b_id from board_p where b_id ='$b_id' and b_own_id='$session_log_id'";
+$b_id=intval($b_id);
 $query = "select b_id from board_p where b_id ='$b_id' and teacher_sn ='$_SESSION[session_tea_sn]'";
 $result = $CONN->Execute($query) or die($query);
 if ($result->EOF && !checkid($_SERVER[SCRIPT_FILENAME],1)){
@@ -50,7 +51,7 @@ if ($_POST['key']=="確定刪除"){
 		}
 		rmdir($USR_DESTINATION.$b_id);
 	}
-
+    $b_id=intval($b_id);
 	$query= "delete from board_p where b_id = '$b_id'";
 	$CONN->Execute($query);
 	$query= "delete from board_files where b_id = '$b_id'";
@@ -63,7 +64,7 @@ if ($is_standalone)
 	include "header.php";
 else
 	head("校務佈告欄");
-
+$b_id=intval($b_id);
 $query = "select b_sub,b_upload from board_p where b_id='$b_id'";
 $result = $CONN->Execute($query);
 $row= $result->fetchRow();

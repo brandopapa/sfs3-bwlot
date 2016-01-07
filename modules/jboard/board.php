@@ -40,6 +40,21 @@ $b_unit=$row['room_id'];		//發文者所在處室
 //$b_title = addslashes($row["title_name"]); //職稱  2014.04.23 後以 teach_title_id 取代
 $b_title=$row['teach_title_id'];
 
+///mysqli
+$query = "select board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin from jboard_kind ";
+$query .= "where bk_id =? ";
+
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $bk_id);
+$stmt->execute();
+$stmt->bind_result($board_name,$board_date,$board_k_id,$board_last_date,$board_is_upload,$board_is_public,$board_admin);
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
+/*
 $query = "select * from jboard_kind ";
 $query .= "where bk_id ='$bk_id' ";
 $result= $CONN->Execute($query) or die ($query);
@@ -51,6 +66,8 @@ $row = $result->fetchRow();
 	$board_is_upload = $row["board_is_upload"];
 	$board_is_public = $row["board_is_public"];
 	$board_admin = $row["board_admin"];
+*/	
+	
 if ($_POST['key'] == "確定儲存"){
 	$b_post_time = mysql_date();
 	$b_sort=($_POST['top_days']==0)?"100":"99";

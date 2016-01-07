@@ -10,6 +10,7 @@ if($key=="確定ok"){  //核對答案
 
 }else{    //出題
 	// 以單元為範圍
+	$s_id=intval($s_id);
 	$sqlstr = "select * from test_score where s_id='$s_id' " ;
 	$result = mysql_query($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256);
 	$row= mysql_fetch_array($result);
@@ -17,6 +18,8 @@ if($key=="確定ok"){  //核對答案
 
 
 	$time ++;
+	
+	$u_id=intval($u_id);
 	if( $righ!=""){		
 		$righ2=substr($righ,0,strlen($righ)-1);  // 答對的題目不重複,答案為空白即不出現
 		$sqlstr= "select * from test_data   where  (u_id='$u_id') and ! ( qid in ($righ2)) and ( answer !='') " ;
@@ -186,6 +189,7 @@ while ($row = $result->FetchRow() ) {
 }
 if($key=="確定ok"){	
 	//答對回應
+	$s_id=intval($s_id);
 	$msg_g = array("請加油！","不理想！","還可以！","真不錯！","厲害喔！","太棒了！","超級讚！"); 
 	$sqlstr = "select * from test_score where s_id='$s_id' " ;
 	$result = mysql_query($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256);

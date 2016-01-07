@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc1_list.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc1_list.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -26,24 +26,45 @@ $query ="select count(doc1_id) as cc from sch_doc1 where doc1_k_id = 0  ";
 
 //查詢狀態
 if ($doc_stat != 0)
-	$query .= " and  doc_stat ='$doc_stat' ";
+	//$query .= " and  doc_stat ='$doc_stat' ";
+    $query .= " and  doc_stat =? ";
 
 //開始與結束日期
 if ($QueryBeginDate !="")
 	$query .= " and doc1_date >= '$QueryBeginDate' and doc1_date <= '$QueryEndDate' ";
 //關鍵字
 if ($QueryString!="")
-	$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%') ";
+	//$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%') ";
+	$query .= " and (doc1_unit like ? or doc1_main like ? or do_teacher like ?) ";
+
 //單位
 if ($doc1_unit_num1!= 0 )
+{
+	$doc1_unit_num1=intval($doc1_unit_num1);
 	$query .= " and doc1_unit_num1 ='$doc1_unit_num1' ";
+}
 
-$result = mysql_query($query)or die($query);
+$QueryString="%$QueryString%";
 
-$row = mysql_fetch_row($result);
+  ///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+if ($doc_stat != 0)$stmt->bind_param('s',$doc_stat);
+if ($QueryString!="")$stmt->bind_param('sss',$QueryString,$QueryString,$QueryString);
+$stmt->execute();
+$stmt->bind_result($num_record);
+
+$stmt->fetch();
+$stmt->close();
+
+///mysqli
+
+//$result = mysql_query($query)or die($query);
+//$row = mysql_fetch_row($result);
 
 //總筆數
-$num_record = $row[0];
+//$num_record = $row[0];
 
 //計算最後一頁
 if ($num_record % $page_count > 0 )
@@ -166,51 +187,65 @@ else {
 //取得承辦處室
 $doc_unit_p = doc_unit();
 
-$query ="select * from sch_doc1 where doc1_k_id = 0  ";
+//$query ="select * from sch_doc1 where doc1_k_id = 0  ";
+$query ="select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1 where doc1_k_id = 0  ";
 
 //查詢狀態
 if ($doc_stat != 0)
-	$query .= " and  doc_stat ='$doc_stat' ";
-
+	//$query .= " and  doc_stat ='$doc_stat' ";
+    $query .= " and  doc_stat =? ";
 //開始與結束日期
 if ($QueryBeginDate !="")
 	$query .= " and doc1_date >= '$QueryBeginDate' and doc1_date <= '$QueryEndDate' ";
 //關鍵字
 if ($QueryString!="")
-	$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%')";
+	//$query .= " and (doc1_unit like'%$QueryString%' or doc1_main like '%$QueryString%' or do_teacher like '%$QueryString%')";
+	$query .= " and (doc1_unit like ? or doc1_main like ? or do_teacher like ?)";
+
 //單位
 if ($doc1_unit_num1 != 0 )
+{
+	$doc1_unit_num1=intval($doc1_unit_num1);
 	$query .= " and doc1_unit_num1 ='$doc1_unit_num1' ";		
+}
 
 if ($doc_stat==0 && $QueryBeginDate=='' and $doc1_unit_num1=='')
 	$query = " and doc1_date>'$this_year-1-1' and doc1_date <'".($this_year+1)."-1-1' ";
 
 $query .= "order by abs(doc1_id) desc  limit ".(($curr_page-1) * $page_count).", $page_count ";
-$result = mysql_query($query);
-while ($row = mysql_fetch_array($result)) {
 
-	$doc1_id = $row["doc1_id"];
-	$doc1_year_limit = $row["doc1_year_limit"];
-	$doc1_kind = $row["doc1_kind"];
-	$doc1_date = $row["doc1_date"];
-	$doc1_date_sign = $row["doc1_date_sign"];
-	$doc1_unit = $row["doc1_unit"];
+$stmt = $mysqliconn->prepare($query);
+if ($doc_stat != 0)$stmt->bind_param('s',$doc_stat);
+if ($QueryString!="")$stmt->bind_param('sss',$QueryString,$QueryString,$QueryString);
+$stmt->execute();
+$stmt->bind_result($doc1_id,$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_unit_num2,$teach_id,$doc1_k_id,$doc_stat,$doc1_end_date,$doc1_infile_date,$do_teacher );
+
+//$result = mysql_query($query);
+//while ($row = mysql_fetch_array($result)) {
+	while ($stmt->fetch()) {
+
+	//$doc1_id = $row["doc1_id"];
+	//$doc1_year_limit = $row["doc1_year_limit"];
+	//$doc1_kind = $row["doc1_kind"];
+	//$doc1_date = $row["doc1_date"];
+	//$doc1_date_sign = $row["doc1_date_sign"];
+	//$doc1_unit = $row["doc1_unit"];
 	
-	if ($row["doc1_infile_date"] ==0 )
+	if ($doc1_infile_date ==0 )
 		$doc1_infile_date="&nbsp;"; //尚未歸檔
 	else
-		$doc1_infile_date = $row["doc1_infile_date"];	
+		$doc1_infile_date = $doc1_infile_date;	
 	if ($QueryString !="")
 		$doc1_unit = str_replace($QueryString,"<font color=red>$QueryString</font>",$doc1_unit);
-	$doc1_word = $row["doc1_word"];
-	$doc1_main = $row["doc1_main"];
+	$doc1_word = $doc1_word;
+	$doc1_main = $doc1_main;
 	if ($QueryString !="")
 		$doc1_main = str_replace($QueryString,"<font color=red>$QueryString</font>",$doc1_main);
-	$doc1_unit_num1 = $row["doc1_unit_num1"];
-	$doc1_unit_num2 = $row["doc1_unit_num2"];
-	$teach_id = $row["teach_id"];
-	$doc_stat = $row["doc_stat"];
-	$unit_temp = $doc_unit_p[$row[doc1_unit_num1]]; //取得處室名稱
+	//$doc1_unit_num1 = $row["doc1_unit_num1"];
+	//$doc1_unit_num2 = $row["doc1_unit_num2"];
+	//$teach_id = $row["teach_id"];
+	//$doc_stat = $row["doc_stat"];
+	$unit_temp = $doc_unit_p[$doc1_unit_num1]; //取得處室名稱
 
 	if ($i++ % 2 == 0)
 		echo  "<tr bgcolor=#FFFFCC>";

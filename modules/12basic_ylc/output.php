@@ -38,11 +38,11 @@ if($_POST['act']){
 			$x->filename=$SCHOOL_BASE['sch_id'].'_student.xls';
 			$x->setBorderStyle(1);
 			$x->addSheet('student');
-			$x->items[0]=array('考區代碼','集報單位代碼','序號','學號','班級','座號','學生姓名','身分證統一編號','性別','出生年(民國年)','出生月','出生日','畢業學校代碼','畢業年(民國年)','畢肄業','學生身分','身心障礙','就學區','低收入戶','中低收入戶','失業勞工子女','資料授權','家長姓名','市內電話','行動電話','郵遞區號','通訊地址','經濟弱勢','偏遠小校','就近入學','獎勵紀錄','出缺席紀錄','無記過紀錄','均衡學習','競賽成績','體適能','原住民是否含母語認證','非中華民國身分證號');
+			$x->items[0]=array('考區代碼','集報單位代碼','序號','學號','班級','座號','學生姓名','身分證統一編號','非中華民國身分證號','性別','出生年(民國年)','出生月','出生日','畢業學校代碼','畢業年(民國年)','畢肄業','學生身分','學生報名身分','身心障礙','就學區','低收入戶','中低收入戶','失業勞工子女','資料授權','家長姓名','市內電話','市內電話分機','行動電話','郵遞區號','通訊地址','經濟弱勢','偏遠小校','就近入學','獎勵紀錄','出缺席紀錄','無記過紀錄','均衡學習','競賽成績','體適能');
 			break;
 		case 'HTML':
 			$main="<table border='2' cellpadding='3' cellspacing='0' style='border-collapse: collapse' bordercolor='#111111' id='AutoNumber1'>
-				<tr bgcolor='#ffcccc' align='center'><td>考區代碼</td><td>集報單位代碼</td><td>序號</td><td>學號</td><td>班級</td><td>座號</td><td>學生姓名</td><td>身分證統一編號</td><td>性別</td><td>出生年(民國年)</td><td>出生月</td><td>出生日</td><td>畢業學校代碼</td><td>畢業年(民國年)</td><td>畢肄業</td><td>學生身分</td><td>身心障礙</td><td>就學區</td><td>低收入戶</td><td>中低收入戶</td><td>失業勞工子女</td><td>資料授權</td><td>家長姓名</td><td>市內電話</td><td>行動電話</td><td>郵遞區號</td><td>通訊地址</td><td>經濟弱勢</td><td>偏遠小校</td><td>就近入學</td><td>獎勵紀錄</td><td>出缺席紀錄</td><td>無記過紀錄</td><td>均衡學習</td><td>競賽成績</td><td>體適能</td><td>原住民是否含母語認證</td><td>非中華民國身分證號</td>";
+				<tr bgcolor='#ffcccc' align='center'><td>考區代碼</td><td>集報單位代碼</td><td>序號</td><td>學號</td><td>班級</td><td>座號</td><td>學生姓名</td><td>身分證統一編號</td><td>非中華民國身分證號</td><td>性別</td><td>出生年(民國年)</td><td>出生月</td><td>出生日</td><td>畢業學校代碼</td><td>畢業年(民國年)</td><td>畢肄業</td><td>學生身分</td><td>學生報名身分</td><td>身心障礙</td><td>就學區</td><td>低收入戶</td><td>中低收入戶</td><td>失業勞工子女</td><td>資料授權</td><td>家長姓名</td><td>市內電話</td><td>市內電話分機</td><td>行動電話</td><td>郵遞區號</td><td>通訊地址</td><td>經濟弱勢</td><td>偏遠小校</td><td>就近入學</td><td>獎勵紀錄</td><td>出缺席紀錄</td><td>無記過紀錄</td><td>均衡學習</td><td>競賽成績</td><td>體適能</td>";
 			break;	
 	}
 
@@ -102,10 +102,12 @@ if($_POST['act']){
 		$search  = array('-', '(', ')',' ');
 		$replace = array('', '', '','');
 		$guardian_phone=str_replace($search, $replace,$guardian_phone);
+		$authorize = "";		//電話分機
 		$guardian_hand_phone=str_replace($search, $replace,$guardian_hand_phone);	
 		
 		//計算12basic_ylc紀錄資料
-		$kind_id=$final_data[$student_sn]['kind_id'];
+		$kind_id=$final_data[$student_sn]['kind_id'];	//學生身分
+		$apply_id=($final_data[$student_sn]['kind_id']>0)?'':'0';		//報名身分
 		$disability_id=$final_data[$student_sn]['disability_id'];	
 		$free_id=$final_data[$student_sn]['free_id'];
 		
@@ -142,10 +144,10 @@ if($_POST['act']){
 		//輸出資料
 		switch($_POST['act']){
 			case 'EXCEL':
-				$x->items[]=array($area_code,$school_id,$no,$stud_id,$seme_class,$seme_num,$stud_name,$stud_person_id,$stud_sex,$birth_year,$birth_month,$birth_day,$school_id,$work_year,$graduate,$kind_id,$disability_id,'',$free_1,$free_2,$free_3,$authorize,$guardian_name,$guardian_phone,$guardian_hand_phone,$addr_zip,$stud_addr_2,$score_disadvantage,$score_remote,$school_nature,$score_reward,$score_absence,$score_fault,$score_balance,$score_competetion,$score_fitness,$native_certification,$stud_country_kind);
+				$x->items[]=array($area_code,$school_id,$no,$stud_id,$seme_class,$seme_num,$stud_name,$stud_person_id,$stud_country_kind,$stud_sex,$birth_year,$birth_month,$birth_day,$school_id,$work_year,$graduate,$kind_id,$apply_id,$disability_id,'',$free_1,$free_2,$free_3,$authorize,$guardian_name,$guardian_phone,$phone_extension,$guardian_hand_phone,$addr_zip,$stud_addr_2,$score_disadvantage,$score_remote,$school_nature,$score_reward,$score_absence,$score_fault,$score_balance,$score_competetion,$score_fitness);
 				break;
 			case 'HTML':
-				$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>$authorize</td><td>$guardian_name</td><td>$guardian_phone</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$stud_addr_2</td><td>$score_disadvantage</td><td>$score_remote</td><td>$school_nature</td><td>$score_reward</td><td>$score_absence</td><td>$score_fault</td><td>$score_balance</td><td>$score_competetion</td><td>$score_fitness</td><td>$native_certification</td><td>$stud_country_kind</td></tr>";
+				$main.="<tr align='center'><td>$area_code</td><td>$school_id</td><td>$no</td><td>$stud_id</td><td>$seme_class</td><td>$seme_num</td><td>$stud_name</td><td>$stud_person_id</td><td>$stud_country_kind</td><td>$stud_sex</td><td>$birth_year</td><td>$birth_month</td><td>$birth_day</td><td>$school_id</td><td>$work_year</td><td>$graduate</td><td>$kind_id</td><td>$apply_id</td><td>$disability_id</td><td></td><td>$free_1</td><td>$free_2</td><td>$free_3</td><td>$authorize</td><td>$guardian_name</td><td>$guardian_phone</td><td>$phone_extension</td><td>$guardian_hand_phone</td><td>$addr_zip</td><td>$stud_addr_2</td><td>$score_disadvantage</td><td>$score_remote</td><td>$school_nature</td><td>$score_reward</td><td>$score_absence</td><td>$score_fault</td><td>$score_balance</td><td>$score_competetion</td><td>$score_fitness</td></tr>";
 				break;
 		}
 		$recordSet->MoveNext();

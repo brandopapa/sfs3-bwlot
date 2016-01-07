@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: ret_tea_book.php 6803 2012-06-22 07:56:42Z smallduh $
+// $Id: ret_tea_book.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔  
 include "book_config.php";  
@@ -38,19 +38,41 @@ $book_id=$_POST['book_id'];
 $teach_id = $_POST['teach_id'];
 
 if($book_id != ""){
+	/*
 	$query = "SELECT borrow.bookch1_id, borrow.book_id, borrow.out_date, borrow.in_date,borrow.b_num,
 		teacher_base.teach_id, teacher_base.name,  book.book_name, book.book_author
 		FROM borrow ,teacher_base ,book
 		where  borrow.stud_id = teacher_base.teach_id and  borrow.book_id = book.book_id
 		and in_date IS NULL and  borrow.book_id= '$book_id'";
-	$result = mysql_query($query);
+    */
+	$query = "SELECT borrow.bookch1_id, borrow.book_id, borrow.out_date, borrow.in_date,borrow.b_num,
+		teacher_base.teach_id, teacher_base.name,  book.book_name, book.book_author
+		FROM borrow ,teacher_base ,book
+		where  borrow.stud_id = teacher_base.teach_id and  borrow.book_id = book.book_id
+		and in_date IS NULL and  borrow.book_id= ?";
+
+		
+	///mysqli
+
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+if($book_id != "")$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->bind_result($bookch1_id, $book_id, $out_date, $in_date,$b_num,$teach_id, $name, $book_name, $book_author);
+$stmt->fetch();
+$stmt->close();
+
+///mysqli	
+		//$result = mysql_query($query);
 	
-	if (mysql_num_rows($result) >0 ){
-		$row = mysql_fetch_array($result);
-		$teach_id = $row["teach_id"];
-		$name = $row["name"];
-		$book_name = $row["book_name"];	
-		$b_num = $row["b_num"];	
+	//if (mysql_num_rows($result) >0 ){
+	if ($b_num >0 ){
+		//$row = mysql_fetch_array($result);
+		//$teach_id = $row["teach_id"];
+		//$name = $row["name"];
+		//$book_name = $row["book_name"];	
+		//$b_num = $row["b_num"];	
 		$query = "update borrow set in_date='".$now."'where b_num='$b_num'";
 		mysql_query($query);
 

@@ -18,7 +18,8 @@ $d_check4_menu=d_make_menu("是否確定",$_POST[d_check4] , $check_arr,"d_check4",1
 //條件
 $query1.=" and year='$sel_year' and semester='$sel_seme' ";
 
-if ($_POST[teacher_sn]) {
+if ($_POST[teacher_sn]){	
+$_POST[teacher_sn]=intval($_POST[teacher_sn]);	
 $query1 .=" and b.teacher_sn='$_POST[teacher_sn]'";
 $abs_name=get_teacher_name($_POST[teacher_sn])."請假　";
 }
@@ -30,6 +31,7 @@ if ($_POST[d_check4]=='1') {
 }
 
 if ($_POST[month] ) {
+$_POST[month]=intval($_POST[month]);
 $query1 .=" and month='$_POST[month]'";
 }
 

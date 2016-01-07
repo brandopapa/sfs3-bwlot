@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: bro_tea_book.php 6803 2012-06-22 07:56:42Z smallduh $
+// $Id: bro_tea_book.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔  
 include "book_config.php";
@@ -36,6 +36,7 @@ if(!checkid(substr($_SERVER['PHP_SELF'],1))){
 	include "footer.php";
 	exit;
 }
+
 include "header.php";
 /*
 //刪除
@@ -50,28 +51,52 @@ if ($sel == "del"){
 
 $reader_flag = 0;
 //謮者登入
+
+$mysqliconn = get_mysqli_conn();
+
 if ($teach_id !=""){
-	$query = "select teach_id,name from teacher_base  where teach_id = '$teach_id' and teach_condition=0 ";
-	$result = mysql_query($query)or die ($query); 
-	if ( mysql_num_rows($result) >0){
-		$row= mysql_fetch_array($result);
-		$name = $row["name"];
+///mysqli
+$query = "select teach_id,name from teacher_base  where teach_id = ? and teach_condition=0 ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$teach_id);
+$stmt->execute();
+$stmt->bind_result($teach_id,$name);
+$stmt->fetch();
+$stmt->close();
+
+///mysqli	
+	
+	//$query = "select teach_id,name from teacher_base  where teach_id = '$teach_id' and teach_condition=0 ";
+	//$result = mysql_query($query)or die ($query); 
+	//if ( mysql_num_rows($result) >0){
+	//	$row= mysql_fetch_array($result);
+	//	$name = $row["name"];
 		$reader_flag = 1 ;
-	}
+	//}
 	
 }
 //借書處理
 if ($book_id != ""){
-	$query = "select book_id,bookch1_id,book_name,book_author from book where book_id='$book_id' and book_isout=0 and book_isborrow=0";
-	$result = mysql_query($query)or die ($query); 
+$query = "select book_id,bookch1_id,book_name,book_author from book where book_id=? and book_isout=0 and book_isborrow=0";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->bind_result($book_id,$bookch1_id,$book_name,$book_author);
+$stmt->fetch();
+$stmt->close();
+	
+	//$query = "select book_id,bookch1_id,book_name,book_author from book where book_id='$book_id' and book_isout=0 and book_isborrow=0";
+	//$result = mysql_query($query)or die ($query); 
 	$temp_bb = "<font color=red><b>找不到這本書或已被借出</b></font>";
-	if ( mysql_num_rows($result) >0){
-		$row= mysql_fetch_array($result);
-		$bookch1_id = $row["bookch1_id"];
-		$book_id = $row["book_id"];
-		$book_name = $row["book_name"];
-		$book_author = $row["book_author"];
-		$temp_bb ="<table><tr><td>$book_id</td><td>$book_name</td><td>$book_authod</td></tr></table>";
+	//if ( mysql_num_rows($result) >0){
+		//$row= mysql_fetch_array($result);
+		//$bookch1_id = $row["bookch1_id"];
+		//$book_id = $row["book_id"];
+		//$book_name = $row["book_name"];
+		//$book_author = $row["book_author"];
+		$temp_bb ="<table><tr><td>$book_id</td><td>$book_name</td><td>$book_author</td></tr></table>";
 
 		//借書登記
 		$query = "insert into borrow (stud_id, bookch1_id, book_id, out_date) values ('$teach_id', '$bookch1_id', '$book_id', '".$now."')";
@@ -80,7 +105,7 @@ if ($book_id != ""){
 		$query = "update book set book_isout=1 where book_id='$book_id'";
 		$result = mysql_query($query)or die ($query);
 		$reader_flag = 1 ;
-	}
+	//}
 }
 if ($reader_flag == 0){
 ?>
@@ -120,11 +145,21 @@ function setfocus() {
 
 
 <?php
-$query = "SELECT book.bookch1_id, book.book_id, book.book_name, book.book_num, borrow.stud_id,borrow.b_num,book.book_author,borrow.out_date, borrow.in_date FROM book , borrow where  book.book_id = borrow.book_id  and borrow.stud_id= '$teach_id' order by borrow.out_date desc ,borrow.in_date LIMIT 0, 10 ";
-$result = mysql_query($query)or die ($query); 
+//$query = "SELECT book.bookch1_id, book.book_id, book.book_name, book.book_num, borrow.stud_id,borrow.b_num,book.book_author,borrow.out_date, borrow.in_date FROM book , borrow where  book.book_id = borrow.book_id  and borrow.stud_id= '$teach_id' order by borrow.out_date desc ,borrow.in_date LIMIT 0, 10 ";
+//$result = mysql_query($query)or die ($query); 
+
+$query = "SELECT book.bookch1_id, book.book_id, book.book_name, book.book_num, borrow.stud_id,borrow.b_num,book.book_author,borrow.out_date, borrow.in_date FROM book , borrow where  book.book_id = borrow.book_id  and borrow.stud_id= ? order by borrow.out_date desc ,borrow.in_date LIMIT 0, 10 ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$teach_id);
+$stmt->execute();
+$stmt->bind_result($bookch1_id, $book_id, $book_name, $book_num, $stud_id,$b_num,$book_author,$out_date, $in_date);
+
 echo "<center><table border=1>";
 echo "<tr bgcolor=#8080FF><td>總號</td><td>書號</td><td>書名</td><td>借閱日期</td><td>歸還日期</td></tr>";
-while ($row = mysql_fetch_array($result)){
+//while ($row = mysql_fetch_array($result)){
+  while ($stmt->fetch()) {
+	/*
 	$bookch1_id = $row["bookch1_id"];
 	$book_id = $row["book_id"];
 	$book_name = $row["book_name"];
@@ -132,6 +167,7 @@ while ($row = mysql_fetch_array($result)){
 	$out_date = $row["out_date"];
 	$in_date = $row["in_date"];
 	$b_num = $row["b_num"];
+	*/
 	if ($in_date == 0){
 		echo "<tr bgcolor=yellow >";
 		$in_date = "尚未歸還";

@@ -1578,7 +1578,7 @@ else
 		$prr=round($test_percent*$count*0.01);	
 		
 		
-		 if (isset($_POST['subject1']))$go="getchart.php";
+		 $go="getchart.php";
 		 if (is_array($scopeall))$go="chart1.php";
 
 		
@@ -1641,7 +1641,7 @@ else
   
   
    
-  $main0.="<input type='submit' value='Æ[¹î $ttr[$k]'/>			
+  $main0.="<input type='submit' value='Æ[¹î'/>			
 			
    </form>			
 

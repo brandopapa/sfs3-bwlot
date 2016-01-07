@@ -1,10 +1,10 @@
-# // $Id: module.sql 8152 2014-09-30 01:15:55Z smallduh $
+# // $Id: module.sql 8687 2015-12-25 03:05:45Z qfon $
 CREATE TABLE sign_data (
   id bigint(20) NOT NULL auto_increment,
   kind bigint(20) NOT NULL default '0',
   item varchar(10) NOT NULL default '',
   order_pos tinyint(4) NOT NULL default '0',
-  stud_name varchar(10) NOT NULL default '',
+  stud_name varchar(20) NOT NULL default '',
   data_get tinytext,
   data_input tinytext NOT NULL,
   teach_id varchar(20) default NULL,

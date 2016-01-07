@@ -1,6 +1,6 @@
 <?php
 
-// $Id: reward_rep.php 7709 2013-10-23 12:24:27Z smallduh $
+// $Id: reward_rep.php 8680 2015-12-25 02:57:21Z qfon $
 
 //載入設定檔
 include "config.php";
@@ -40,7 +40,7 @@ $sql="select * from school_room where room_id='3'";
 $rs=$CONN->Execute($sql);
 $temp_arr["room_name"] = $rs->fields['room_name'];
 
-$query = "select * from reward where reward_id='".$_GET['reward_id']."'";
+$query = "select * from reward where reward_id='".intval($_GET['reward_id'])."'";
 $result = $CONN->Execute($query) or die ($query);
 //取出獎懲資料
 $rew_date=$result->fields["reward_date"];
@@ -54,6 +54,8 @@ $rew_kind= $result->fields["reward_kind"];
 $temp_arr["rew_kind"]=$reward_arr[$rew_kind];
 $temp_arr["date"] =(date("Y")-1911).".".date("m").".".date("d");
 $temp_arr["cancel_date"]=$rew_ndate;
+
+$reward_id=intval($reward_id);
 if ($result->fields[dep_id]=="0") {
 	$query="select a.*,b.stud_name,b.curr_class_num,b.student_sn,b.stud_addr_2,b.addr_zip,c.guardian_name from reward a ,stud_base b ,stud_domicile c where a.student_sn=b.student_sn and b.student_sn=c.student_sn and a.dep_id='$reward_id'";
 } else {
@@ -91,6 +93,7 @@ $ttt->add_file($replace_data,"content.xml");
 $sss = & $ttt->file();
 
 //以串流方式送出 sxw
+
 $fl="reward_".$oo_path."_".$reward_id;
 header("Content-disposition: attachment; filename=$fl.sxw");
 header("Content-type: application/vnd.sun.xml.writer");

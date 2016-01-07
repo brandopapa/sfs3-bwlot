@@ -28,20 +28,22 @@ $d_class_dis_menu=d_make_menu("選擇方式",$_POST[class_dis] , $c_course_kind,"cla
 //選擇是否確定
 $d_check4_menu=d_make_menu("是否確定",$_POST[d_check4] , $check_arr,"d_check4",1); 
 
-
 //條件
 $query1.=" and year='$sel_year' and semester='$sel_seme' ";
 
 if ($_POST[teacher_sn]) {
+$_POST[teacher_sn]=intval($_POST[teacher_sn]);
 $query1 .=" and b.teacher_sn='$_POST[teacher_sn]'";
 $abs_name=get_teacher_name($_POST[teacher_sn])."請假　";
 }
 if ($_POST[deputy_sn]) {
+$_POST[deputy_sn]=intval($_POST[deputy_sn]);
 $query1 .=" and b.deputy_sn='$_POST[deputy_sn]'";
 $dep_name=get_teacher_name($_POST[deputy_sn])."代課　" ;
 }
 
 if ($_POST[class_dis]) {
+$_POST[class_dis]=intval($_POST[class_dis]);
 $query1 .=" and b.class_dis='$_POST[class_dis]'";
 }
 
@@ -56,9 +58,11 @@ if ($_POST[d_check4]=='1') {
 }
 
 if ($_POST[abs_kind]) {
+$_POST[abs_kind]=intval($_POST[abs_kind]);
 $query1 .=" and abs_kind='$_POST[abs_kind]'";
 }
 if ($_POST[month] ) {
+$_POST[month]=intval($_POST[month]);
 $query1 .=" and month='$_POST[month]'";
 }
 

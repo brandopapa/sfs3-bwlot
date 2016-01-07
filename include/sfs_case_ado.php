@@ -1,17 +1,36 @@
 <?php
 
-// $Id: sfs_case_ado.php 8663 2015-12-22 03:57:37Z hsiao $
+// $Id: sfs_case_ado.php 8729 2016-01-05 02:50:05Z hsiao $
 //取得MySQLi連線
-function get_mysqli_conn() {
-    global $mysql_host, $mysql_user, $mysql_pass, $mysql_db, $MYSQL_CHARSET;
-    $mysqliconn = new mysqli($mysql_host, $mysql_user, $mysql_pass, $mysql_db);
-    if ($mysqliconn->connect_errno) {
-        echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+//取得MySQLi連線，擴展mbind_param方法
+require "mysqlimbind.php"; //引入擴展類別
+
+function get_mysqli_conn($tablename = "stud_base") {
+    global $CONN, $mysql_host, $mysql_user, $mysql_pass, $mysql_db, $MYSQL_CHARSET;
+    if (!function_exists('mysqli_connect')) {
+        echo '貴系統的PHP套件庫MySQLi尚未安裝！<br/>請安裝後重啟服務。';
+        exit;
     }
-    // echo $mysqliconn->host_info . $charseta."\n";exit;
-    if (isset($MYSQL_CHARSET))
-        $mysqliconn->set_charset($MYSQL_CHARSET);
-    return $mysqliconn;
+    if ($CONN) {
+        $mysqliconn = new mysqlimbind($mysql_host, $mysql_user, $mysql_pass, $mysql_db);
+        if ($mysqliconn->connect_errno) {
+            echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+        }
+
+        if (isset($MYSQL_CHARSET)) {
+            $mysqliconn->set_charset($MYSQL_CHARSET);
+        } else {
+            $sql_charset = "SELECT SUBSTR(A.TABLE_COLLATION,1,LOCATE('_',A.TABLE_COLLATION)-1)  From information_schema.TABLES as A where TABLE_SCHEMA ='" . $mysql_db . "' and TABLE_NAME ='" . $tablename . "'";
+            $res = $CONN->Execute($sql_charset) or user_error("讀取失敗！<br>$query", 256);
+            while (!$res->EOF) {
+                $MYSQL_CHARSET = $res->fields[0];
+                $res->MoveNext();
+            }
+            $mysqliconn->set_charset($MYSQL_CHARSET);
+        }
+        return $mysqliconn;
+    } else
+        user_error("資料庫連線不存在！請檢查相關設定！", 256);
 }
 
 //取得 mysql 系統變數

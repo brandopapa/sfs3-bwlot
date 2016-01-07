@@ -1,6 +1,7 @@
 <?php
-  // $Id: fixed.php 8082 2014-06-30 11:50:10Z kwcmath $
+  // $Id: fixed.php 8726 2016-01-05 01:07:37Z qfon $
   require "config.php" ;
+ 
 
   //sfs2 升級 sfs3 欄位調整
   $rs01=$CONN->Execute("select userid from fixedtb where 1");
@@ -24,7 +25,95 @@
   if (!isset($showunit)) $showunit= "" ; //全部單位
   if (!isset($showmode)) $showmode= -1 ;  //顯示全部
   
+  
+  
   //計算頁數
+    //$sqlstr = "SELECT ID,even_T,even_doc,unitId,user,even_date,even_mode,rep_date,rep_user,rep_doc,rep_mode,userid FROM $tbname  " ;
+    $sqlstr = "SELECT count(*) FROM $tbname  " ;
+ if ($showunit) {		//有指定顯示單位  
+    //$showunit=intval($showunit);  
+    //$sqlstr .=  " where unitId = '$showunit' " ;
+    $sqlstr .=  " where unitId = ? " ;	
+    //if ($showmode>=0){$showmode=intval($showmode);$sqlstr .=  " and rep_mode = '$showmode' " ;}
+	if ($showmode>=0) $sqlstr .=  "  and rep_mode = ? " ;
+  }
+  else 				//有指定顯示特定資料(尚待處理、處理中、已修復)
+  {
+    //if ($showmode>=0) {$showmode=intval($showmode);$sqlstr .=  " where rep_mode = '$showmode' " ;}
+	if ($showmode>=0) $sqlstr .=  " where rep_mode = ? " ;
+  }	
+		//增加教師過濾
+	if($user_limited) $sqlstr .=  (strpos($sqlstr, ' where ')?' and':' where')." user = ? " ;
+    
+  //$result1 = $CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
+  
+ ///mysqli		  
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+
+ if ($showunit) { 
+ 	$stmt->mbind_param('s',$showunit);
+    if ($showmode>=0)$stmt->mbind_param('i',$showmode);
+  }
+  else 
+  {
+    if ($showmode>=0)$stmt->mbind_param('i',$showmode);
+  }
+if($user_limited)$stmt->mbind_param('s',$user_limited);
+$stmt->execute();
+$stmt->bind_result($totalnum);
+
+$stmt->fetch();
+$stmt->close();
+
+///mysqli
+
+  if ($totalnum) {
+    $totalpage =ceil( $totalnum / $msgs_per_page) ;	//總頁數
+	
+  }  
+  if (!$totalpage) $totalpage= 1 ;  //無資料，總頁數1，顯示第一頁
+  if (!$showpage)  $showpage = 1 ;  
+  
+  //讀取資料
+    $sqlstr = "SELECT ID,even_T,even_doc,unitId,user,even_date,even_mode,rep_date,rep_user,rep_doc,rep_mode,userid FROM $tbname  " ;
+ if ($showunit) {		//有指定顯示單位  
+    //$showunit=intval($showunit);  
+    //$sqlstr .=  " where unitId = '$showunit' " ;
+    $sqlstr .=  " where unitId = ? " ;	
+    //if ($showmode>=0){$showmode=intval($showmode);$sqlstr .=  " and rep_mode = '$showmode' " ;}
+	if ($showmode>=0) $sqlstr .=  "  and rep_mode = ? " ;
+  }
+  else 				//有指定顯示特定資料(尚待處理、處理中、已修復)
+  {
+    //if ($showmode>=0) {$showmode=intval($showmode);$sqlstr .=  " where rep_mode = '$showmode' " ;}
+	if ($showmode>=0) $sqlstr .=  " where rep_mode = ? " ;
+  }	
+	//增加教師過濾
+	if($user_limited) $sqlstr .=  (strpos($sqlstr, ' where ')?' and':' where')." user = ? " ;
+
+  
+  $sqlstr .= ' order By ID DESC ' ;
+  $sqlstr .= ' LIMIT ' . ($showpage-1)*$msgs_per_page . ', ' . $msgs_per_page  ;  
+  //echo $sqlstr ;
+  //$result =  $CONN->PageExecute("$sqlstr", $msgs_per_page , $showpage );
+
+$stmt = $mysqliconn->prepare($sqlstr);
+ if ($showunit) { 
+ 	$stmt->mbind_param('s',$showunit);
+    if ($showmode>=0)$stmt->mbind_param('i',$showmode);
+  }
+  else 
+  {
+    if ($showmode>=0)$stmt->mbind_param('i',$showmode);
+  }
+if($user_limited)$stmt->mbind_param('s',$user_limited); 
+$stmt->execute();
+$stmt->bind_result($ID,$even_T,$even_doc,$unitId,$user,$even_date,$even_mode,$rep_date,$rep_user,$rep_doc,$rep_mode,$userid);
+ 
+
+  /*
   $sqlstr = "SELECT * FROM $tbname  " ;
   if ($showunit) {		//有指定顯示單位
     $sqlstr .=  " where unitId = '$showunit' " ;
@@ -39,17 +128,22 @@
     
   $result1 = $CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ; 
   if ($result1) {
+	  
+	 
     $totalnum = $result1->RecordCount() ;		//總筆數
     $totalpage =ceil( $totalnum / $msgs_per_page) ;	//總頁數
+	//echo $totalnum;
   }  
   if (!$totalpage) $totalpage= 1 ;  //無資料，總頁數1，顯示第一頁
   if (!$showpage)  $showpage = 1 ;  
+  
   
   //讀取資料
   $sqlstr .= ' order By ID DESC ' ;
   //$sqlstr .= ' LIMIT ' . ($showpage-1)*$msgs_per_page . ', ' . $msgs_per_page  ;  
   if ($debug) echo $sqlstr ;
   $result =  $CONN->PageExecute("$sqlstr", $msgs_per_page , $showpage );
+  */
   
   $date_diff=$date_diff?$date_diff:120;
   $user_list="SELECT user,count(*) AS amount FROM fixedtb WHERE datediff(CURDATE(),even_date)<=$date_diff GROUP BY user ORDER BY amount DESC";
@@ -151,11 +245,15 @@
 <?php
 
   //列出各筆資料
-  if ($result) 
-    while ($nb = $result->FetchRow() ) {  
+  
+  
+  //if ($result)	
+  //while ($nb = $result->FetchRow() ) {  
+	if ($totalnum)
+	while ($stmt->fetch()) {	  
 
-       $user = $nb[user] ;
-       $rep_mode= $nb[rep_mode];
+       //$user = $nb[user] ;
+       //$rep_mode= $nb[rep_mode];
         
       if ($rowi) {	//隔行分色判斷
         echo '<tr class="tr2"> ' ; 
@@ -166,22 +264,28 @@
       echo "<td>" ; 
       
       echo "<img src='$chk_image[$rep_mode]' alt='事件類別圖示'>" ;
-      echo " $nb[ID] </td> \n" ;
+      //echo " $nb[ID] </td> \n" ;
+	  echo " $ID </td> \n" ;
       //填表日期
-	
 
-      echo "<td> $nb[even_date]</td> \n" ;	
+      //echo "<td> $nb[even_date]</td> \n" ;
+      echo "<td> $even_date</td> \n" ;	  
       //事主旨
-      echo "<td ><a href=\"fixedview.php?id=$nb[ID]\">$nb[even_T]</a></td> \n" ;
-      //嚴重情形
-      $ti  =$nb[even_mode] ;
+	  
+      //echo "<td ><a href=\"fixedview.php?id=$nb[ID]\">$nb[even_T]</a></td> \n" ;
+      echo "<td ><a href=\"fixedview.php?id=$ID\">$even_T</a></td> \n" ;
+     
+	 //嚴重情形
+      //$ti  =$nb[even_mode] ;
+	  $ti  =$even_mode;
       echo "<td ><img src='$mode_image[$ti]' alt='事件等級圖示'>$evenmode[$ti]</td> \n" ;      
       
       $edit_link ='' ;
       //編修連結
       if ($_SESSION['session_log_id'] ) 
-         if (!strnatcasecmp($nb[userid] , $_SESSION['session_log_id']) and ($rep_mode <> 2))
-           $edit_link = "<a href=\"fixedadmin.php?do=edit&id=$nb[ID]\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ; 
+         //if (!strnatcasecmp($nb[userid] , $_SESSION['session_log_id']) and ($rep_mode <> 2))
+           if (!strnatcasecmp($userid , $_SESSION['session_log_id']) and ($rep_mode <> 2))          
+	        $edit_link = "<a href=\"fixedadmin.php?do=edit&id=$ID]\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ; 
            
       /*
       else     
@@ -195,24 +299,31 @@
       
 			$u_edit_link ='' ;
       //負責單位
-      $ti = $nb[unitId] ;
+      //$ti = $nb[unitId] ;
+	  $ti = $unitId ;
       if ((board_checkid($ti)) and ($rep_mode <> 2))
-      	$u_edit_link = "<a href=\"fixedadmin.php?do=edit&id=$nb[ID]\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ;
-      echo "<td >$unitstr[$ti] $u_edit_link</td> \n " ;
+      	//$u_edit_link = "<a href=\"fixedadmin.php?do=edit&id=$nb[ID]\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ;
+      	  $u_edit_link = "<a href=\"fixedadmin.php?do=edit&id=$ID\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ;    
+	 echo "<td >$unitstr[$ti] $u_edit_link</td> \n " ;
 
       //回覆者
-      echo "<td >$nb[rep_user] &nbsp;</td> \n" ;
+      //echo "<td >$nb[rep_user] &nbsp;</td> \n" ;
+	  echo "<td >$rep_user &nbsp;</td> \n" ;
       //回覆日期
-      echo "<td >$nb[rep_date] &nbsp;</td> \n" ;
+      //echo "<td >$nb[rep_date] &nbsp;</td> \n" ;
+	  echo "<td >$rep_date &nbsp;</td> \n" ;
       //處理情形
-      $ti  =$nb[rep_mode] ;
+      //$ti  =$nb[rep_mode] ;
+	  $ti  =$rep_mode ;
       if ($ti<>2)
-         echo "<td ><a href=\"fixedadmin.php?do=reply&id=$nb[ID]\">$checkmode[$ti]</a></td> \n" ;
-      else 
+         //echo "<td ><a href=\"fixedadmin.php?do=reply&id=$nb[ID]\">$checkmode[$ti]</a></td> \n" ;
+         echo "<td ><a href=\"fixedadmin.php?do=reply&id=$ID\">$checkmode[$ti]</a></td> \n" ;
+	 else 
          echo "<td >$checkmode[$ti]</td> \n" ;  
          
       echo "</tr>\n" ;
    }  
+   
 ?> 
   </table>
  

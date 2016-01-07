@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_unit.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_unit.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -63,12 +63,23 @@ prog(3); //主menu (在 docword_config.php 中設定)
 <?php
 	$doc1_unit_name ="";
 	if ($sel == "edit") {
-		$sql_select = "select doc1_unit_num1,doc1_unit_name from sch_doc1_unit where doc1_unit_num1='$doc1_unit_num1'";
-		$result = mysql_query ($sql_select);
-		while ($row = mysql_fetch_array($result)) {
-			$doc1_unit_num1 = $row["doc1_unit_num1"];
-			$doc1_unit_name = $row["doc1_unit_name"];
-		}
+
+		//$sql_select = "select doc1_unit_num1,doc1_unit_name from sch_doc1_unit where doc1_unit_num1='$doc1_unit_num1'";
+		$sql_select = "select doc1_unit_num1,doc1_unit_name from sch_doc1_unit where doc1_unit_num1=? ";
+        ///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s',$doc1_unit_num1);
+$stmt->execute();
+$stmt->bind_result($doc1_unit_num1,$doc1_unit_name);
+$stmt->fetch();
+$stmt->close();
+
+///mysqli
+		//$result = mysql_query ($sql_select);
+		//while ($row = mysql_fetch_array($result)) {
+
 	?>
 	<tr>
 	<td align="right" valign="middle" bgColor="#ffffff">編號</td>

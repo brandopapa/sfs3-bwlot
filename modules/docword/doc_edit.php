@@ -1,12 +1,13 @@
 <?php
 
-// $Id: doc_edit.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_edit.php 8716 2015-12-31 08:46:04Z qfon $
 
 //載入設定檔
 include "docword_config.php";
 // session 認證
 //session_start();
 //session_register("session_log_id");
+
 
 if(!checkid($PHP_SELF)){
 	$go_back=1; //回到自已的認證畫面
@@ -39,6 +40,21 @@ if ($key == "刪除"){
 	redir( "doc1_list.php" , 1);
 	exit;			
 }
+
+ ///mysqli	
+$sql_select = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1 where doc1_id=? ";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s',$doc1_id);
+$stmt->execute();
+$stmt->bind_result($doc1_id,$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_unit_num2,$teach_id,$doc1_k_id,$doc_stat,$doc1_end_date,$doc1_infile_date,$do_teacher );
+
+$stmt->fetch();
+$stmt->close();
+///mysqli
+
+/*
 $sql_select = "select * from sch_doc1 where doc1_id='$doc1_id'";
 $result = mysql_query ($sql_select,$conID);
 
@@ -60,6 +76,7 @@ while ($row = mysql_fetch_array($result)) {
 	$doc1_end_date = $row["doc1_end_date"];
 
 };
+*/
 
 
 prog(1); //上方menu (在 docword_config.php 中設定)

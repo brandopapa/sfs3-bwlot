@@ -30,6 +30,7 @@ if(!board_checkid($bk_id) && !checkid($_SERVER[SCRIPT_FILENAME],1)){
 
 //檢查修改權
 //$query = "select b_id from board_p where b_id ='$b_id' and b_own_id='$session_log_id'";
+$b_id=intval($b_id);
 $query = "select b_id from jboard_p where b_id ='$b_id' and teacher_sn ='$_SESSION[session_tea_sn]'";
 $result = $CONN->Execute($query) or die($query);
 if ($result->EOF && !checkid($_SERVER[SCRIPT_FILENAME],1)){
@@ -40,13 +41,14 @@ if ($result->EOF && !checkid($_SERVER[SCRIPT_FILENAME],1)){
 //-----------------------------------
 
 if ($_POST['key']=="確定刪除"){
-	
+	$b_id=intval($b_id);
 	$query= "delete from jboard_p where b_id = '$b_id'";
 	$CONN->Execute($query);
 	$query= "delete from jboard_images where b_id = '$b_id'";
 	$CONN->Execute($query);
 	
 	//把所有附檔刪除
+	$b_id=intval($b_id);
 	$query="select * from jboard_files where b_id='$b_id'";
 	$res=$CONN->Execute($query);
 	if ($res->RecordCount()>0) {
@@ -55,7 +57,7 @@ if ($_POST['key']=="確定刪除"){
 	    unlink($Download_Path.$sFile);
 	  }
 	}
-	
+	$b_id=intval($b_id);
 	$query= "delete from jboard_files where b_id = '$b_id'";
 	$CONN->Execute($query);
 	
@@ -66,7 +68,7 @@ if ($is_standalone)
 	include "header.php";
 else
 	head("joomla!文章編輯");
-
+$b_id=intval($b_id);
 $query = "select b_sub from jboard_p where b_id='$b_id'";
 $result = $CONN->Execute($query);
 $row= $result->fetchRow();

@@ -1,10 +1,11 @@
 <?php
-// $Id: month_paper4.php 8653 2015-12-19 16:30:42Z qfon $
+// $Id: month_paper4.php 8698 2015-12-25 11:32:26Z qfon $
 // 引入 SFS3 的函式庫
 //include "../../include/config.php";
 
 // 引入您自己的 config.php 檔
 require "config.php";
+include "../../include/sfs_case_dataarray.php";
 
 // 認證
 sfs_check();
@@ -53,8 +54,8 @@ if($act=="dl_pdf_one"){
 		$title.="班級：".$cla_arr."\n姓名：".$st_arr[1]." 座號：".$st[2];		
 		if($add_nor) $header=array("科目","月考*$R0%","平時*$R1%","成績");
 		else $header=array("科目","成績");
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
-		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
+		//if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		//$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		//科目
 		$SS=class_id2subject($class_id);
 		$i=0;
@@ -173,7 +174,11 @@ if($act=="dl_pdf_one"){
 			}
 		}
 
-	$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+		   //取得某學期某班導師姓名	
+       $class_teacher_all=class_teacher();
+	   $comment2="導師：{$class_teacher_all[$class_id]} \n家長：";
+
+	//$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
 	//print_r($data);
 	creat_pdf($title,$header,$data,$comment1,$comment2);
 }
@@ -330,8 +335,10 @@ elseif($act=="dl_pdf_class"){
 		$m++;
 	}
 
-
-	$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
+	   //取得某學期某班導師姓名	
+       $class_teacher_all=class_teacher();
+	   $comment2="導師：{$class_teacher_all[$class_id]} \n家長：";
+	//$comment2="導師：{$_SESSION['session_tea_name']} \n家長：";
 	//print_r($data);
 	creat_pdf($title,$header,$data,$comment1,$comment2);
 }
@@ -430,8 +437,8 @@ else{
 			<tr bgcolor='#EFFFFF'>
 			<td colspan='2'>".$title."</td></tr>";
 		}
-		if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
-		$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
+		//if(sizeof($curr_year)<3) $curr_year="0".$curr_year;
+		//$class_id=$curr_year."_".$curr_seme."_".sprintf("%02d_%02d",substr($class_num,0,-2),substr($class_num,-2,2));
 		//科目
 		$SS=class_id2subject($class_id);
 		$i=0;

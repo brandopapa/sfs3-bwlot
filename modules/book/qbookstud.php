@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: qbookstud.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: qbookstud.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔
 include "book_config.php";
@@ -29,6 +29,7 @@ function setfocus() {
 <table border=1 align=center>
 <?php
 if ($key == "查詢" || $stud_id != ""){
+	$stud_id=substr($stud_id,0,7);
 	$query = "select stud_name from stud_base  where stud_id ='$stud_id'";
 	$result = mysql_query($query,$conID)or die ($query); 
 	if ( mysql_num_rows($result) >0){

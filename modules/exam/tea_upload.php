@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: tea_upload.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: tea_upload.php 8673 2015-12-25 02:23:33Z qfon $
 
 //系統設定檔
 include "exam_config.php";
@@ -88,9 +88,10 @@ if ($_POST[key] == "上傳作業") {
 
 
 	//刪除舊檔案  
+	$exam_id=intval($exam_id);
 	$sql_update = "select * from  exam_stud \n";
 	$sql_update .= "where stud_id='$s_stud_id' and exam_id='$exam_id'";
-	$result = $CONN->Execute($sql_update)or die($sql_update);
+	$result = $CONN->Execute($sql_update)or die($sql_update);	
 	$alias = $e_path."/".$s_stud_id."_".$result->fields["f_name"];
 	$f_temp = explode(".", $alias);
 	if (file_exists($alias))
@@ -149,7 +150,7 @@ if ($_POST[key] == "上傳作業") {
 	include "footer.php";
 	exit;
 }
-
+$exam_id=intval($exam_id);
 $sql_select = "select exam_kind.e_upload_ok,exam_kind.class_id,exam.exam_id,exam.teach_id,exam.exam_isupload from exam_kind,exam \n";       
 $sql_select .= "where exam_kind.e_kind_id =exam.e_kind_id and  exam.exam_id='$exam_id'";
 $result = $CONN->Execute($sql_select)or die($sql_select);

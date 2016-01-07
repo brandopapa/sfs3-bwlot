@@ -1,6 +1,6 @@
 <?php
 
-// $Id: trans_main.php 7687 2013-10-22 07:05:59Z smallduh $
+// $Id: trans_main.php 8693 2015-12-25 03:53:51Z qfon $
 
         //新增一個 zipfile 實例
         $ttt = new EasyZIP;
@@ -26,7 +26,7 @@
 	$rs=$CONN->Execute($sql);
 	$temp_arr["school_name"] = $rs->fields['sch_cname'];
 	$temp_arr["school_ename"] = ucwords($rs->fields['sch_ename']);
-	
+	$student_sn=intval($student_sn);
 	$sql="select stud_id,stud_name,stud_name_eng,stud_birthday,stud_study_year,stud_study_cond from stud_base where student_sn='$student_sn'";
 	$rs=$CONN->Execute($sql);
 	$stud_id=$rs->fields['stud_id'];
@@ -226,6 +226,7 @@
 					$temp_arr["b".$k."_".$i.$j]="---";
 			}
 			//處理日常表現成績及文字描述
+			$student_sn=intval($student_sn);
 			$sql="select ss_score,ss_score_memo from stud_seme_score_nor where seme_year_seme='$year_seme' and student_sn='$student_sn'";
 			$rs=$CONN->Execute($sql);
 			$ss_score=$rs->fields['ss_score'];

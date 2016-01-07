@@ -1,5 +1,5 @@
 <?php
-// $Id: photo.php 6344 2011-02-23 06:20:39Z infodaes $
+// $Id: photo.php 8711 2015-12-31 02:19:05Z qfon $
   require "config.php";
   
   $showpage = $_GET['showpage'] ;
@@ -40,6 +40,56 @@
   if ($query) $do = "search" ;
   
   //Åª¨ú¸ê®Æ®w
+    ///mysqli
+  $sqlstr = "SELECT count(*) FROM $tbname  " ;
+  
+  if ($do == "search") 
+     $sqlstr =$sqlstr .  " where act_info like ? " ;
+  $sqlstr .= " order by act_ID  DESC " ;  
+  
+  if ($debug ) echo $sqlstr ;
+
+ 
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$query="%$query%";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('s',$query);
+$stmt->execute();
+$stmt->bind_result($totalnum);
+$stmt->fetch();
+$stmt->close();
+
+
+
+  if ($totalnum) {
+	
+	$totalpage = ceil( $totalnum / $pagesites) ;
+    
+    if (!$showpage)  $showpage =1 ; 
+	
+   $sqlstr = "SELECT act_ID,act_date,act_name,act_info,act_dir,act_postdate,act_auth,act_view FROM $tbname  " ;
+  
+  if ($do == "search") 
+     $sqlstr =$sqlstr .  " where act_info like ? " ;
+  $sqlstr .= " order by act_ID  DESC " ;  
+ 
+    $sqlstr .= ' LIMIT ' . ($showpage-1)*$pagesites . ', ' . $pagesites  ;  
+    //$result = $CONN->PageExecute("$sqlstr", $pagesites , $showpage );
+
+$query="%$query%";	
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('s', $query); 
+$stmt->execute();
+$stmt->bind_result($act_ID,$act_date,$act_name,$act_info,$act_dir,$act_postdate,$act_auth,$act_view);
+ 
+ 
+ 
+ 
+  }  
+
+///mysqli
+  /*
   $sqlstr = "SELECT * FROM $tbname  " ;
   
   if ($do == "search") 
@@ -59,14 +109,28 @@
     $result = $CONN->PageExecute("$sqlstr", $pagesites , $showpage );
  
   }  
+  */
+  
+  
   if (!$totalpage) $totalpage= 1 ;
   
   for ($i = 1; $i <= $totalpage ; $i++) 
        $paper_list[$i]=$i ;
  
- 	if($result) 
-  		while ($nb=$result->FetchRow() ) {     
-			$nb['pic'] = geticon( $nb["act_dir"] ) ;
+ 	//if($result) 
+  		//while ($nb=$result->FetchRow() ) { 
+	  if ($totalnum)
+        while ($stmt->fetch()) {    
+			//$nb['pic'] = geticon( $nb["act_dir"] ) ;
+			$nb['pic'] = geticon( $act_dir ) ;
+			$nb['act_ID'] =$act_ID;
+			$nb['act_date'] =$act_date;
+			$nb['act_name'] =$act_name;
+			$nb['act_info'] =$act_info;
+			$nb['act_dir'] =$act_dir;
+			$nb['act_postdate'] =$act_postdate;
+			$nb['act_auth'] =$act_auth;
+			$nb['act_view'] =$act_view;
 			$data_list[] = $nb ;
 		}	
 			

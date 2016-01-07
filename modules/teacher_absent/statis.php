@@ -5,7 +5,6 @@ head("差假統計");
 $tool_bar=make_menu($school_menu_p);
 echo $tool_bar;
 
-
 //選擇學期
 $year_seme_menu=year_seme_menu($sel_year,$sel_seme);
 
@@ -28,6 +27,7 @@ if ($_POST[d_check]==1) {
 }
 
 if ($_POST[month] ) {
+$_POST[month]=intval($_POST[month]);
 $query1 .=" and month='$_POST[month]'";
 }
 

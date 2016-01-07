@@ -1,9 +1,10 @@
 <?
-// $Id: sign_paper.php 7716 2013-10-25 08:40:18Z hami $
+// $Id: sign_paper.php 8681 2015-12-25 02:59:43Z qfon $
   include "config.php";
   //登入認証
   session_start();   
   //報名單總類 ===============================
+  $_GET[pid]=intval($_GET[pid]);
   $sqlstr = " select * from  sign_act_kind where  id ='$_GET[pid]' " ;
 
   $result =  $CONN->Execute($sqlstr) ; 
@@ -63,6 +64,7 @@
   // 先將學校名稱的空白刪除
   $schoolName = preg_replace('/\s+/', '',$_SESSION['schoolname']);
   //該校的報名資料======================================================================
+  $_GET[pid]=intval($_GET[pid]);
   $sqlstr = " select * from  sign_act_data where  pid ='$_GET[pid]'   and school_name ='$schoolName' order by did " ;
   $result = $CONN->Execute($sqlstr);  
   

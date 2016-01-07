@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: ekind.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: ekind.php 8673 2015-12-25 02:23:33Z qfon $
 
 /***********************
  每學期班級資料列表
@@ -112,6 +112,39 @@ echo "-- 班級管理</form></h3>";
     </tr>
  
 <?php
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$s_str = "$curr_year_seme%";
+$stmt = $mysqliconn->prepare("select e_kind_id,e_kind_memo,e_kind_open,e_upload_ok,class_id  from exam_kind where class_id like ? order by class_id");
+$stmt->bind_param('s', $s_str);
+$stmt->execute();
+$stmt->bind_result($e_kind_id,$e_kind_memo,$e_kind_openx,$e_upload_okx,$class_id);
+$i=0;
+while ($stmt->fetch()) {
+	$temp_class_name = get_class_name($class_id); //取得班級	
+	if ($e_kind_openx=='1') 
+		$e_kind_open = "<font color=red><b>是</b></font>&nbsp;｜&nbsp;<a href=\"$_SERVER[PHP_SELF]?e_kind_id=$e_kind_id&sel_o=no\">否</a>";
+	else 
+		$e_kind_open = "<a href=\"$_SERVER[PHP_SELF]?e_kind_id=$e_kind_id&sel_o=yes\">是</a>&nbsp;｜&nbsp;<font color=red><b>否</b></font>";
+		
+	if ($e_upload_okx=='1') 
+		$e_upload_ok = "<font color=red><b>是</b></font>&nbsp;｜&nbsp;<a href=\"$_SERVER[PHP_SELF]?e_kind_id=$e_kind_id&sel_u=no\">否</a>";
+	else 
+		$e_upload_ok = "<a href=\"$_SERVER[PHP_SELF]?e_kind_id=$e_kind_id&sel_u=yes\">是</a>&nbsp;｜&nbsp;<font color=red><b>否</b></font>";
+
+	if ($i % 2 == 0) 
+		$bg = "bgColor=\"#ffff80\"";
+	else
+		$bg = "";
+	echo "<tr $bg > <td>$temp_class_name</td> <td>$e_kind_memo</td> <td>$e_kind_open</td> <td>$e_upload_ok</td> <td><a href=\"ekind_edit.php?e_kind_id=$e_kind_id&class_id=$class_id\">修改</a></td> <td><a href=\"ekind_edit.php?sel=delete&e_kind_id=$e_kind_id&class_id=$class_id\">刪除</a></td> </tr>";
+	$i++; 
+
+}
+
+///mysqli
+
+/*
 $sql_select = "select e_kind_id,e_kind_memo,e_kind_open , e_upload_ok ,class_id  from exam_kind where  class_id like '$curr_year_seme%' order by class_id ";
 $result = mysql_query ($sql_select)or die ($sql_select);
 $i=0;
@@ -141,6 +174,8 @@ while ($row = mysql_fetch_array($result)) {
 	echo "<tr $bg > <td>$temp_class_name</td> <td>$e_kind_memo</td> <td>$e_kind_open</td> <td>$e_upload_ok</td> <td><a href=\"ekind_edit.php?e_kind_id=$e_kind_id&class_id=$class_id\">修改</a></td> <td><a href=\"ekind_edit.php?sel=delete&e_kind_id=$e_kind_id&class_id=$class_id\">刪除</a></td> </tr>";
 	$i++;
 }
+*/
+
 
 ?>
 </tbody>

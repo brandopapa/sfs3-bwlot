@@ -1,12 +1,11 @@
 <?php
-  // $Id: fixedview.php 8155 2014-09-30 07:53:16Z smallduh $
+  // $Id: fixedview.php 8675 2015-12-25 02:46:45Z qfon $
   //  維修通報系統 
   //  林朝敏的半點心工作坊
   //  http://sy3es.tnc.edu.tw/~prolin
-
   require "config.php" ;
 
-  $id = $_GET['id'] ;
+  $id = intval($_GET['id']) ;
   //$debug = 1;
   
   if (!$id)  {  //未指定編號

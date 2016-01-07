@@ -1,5 +1,5 @@
 <?php
-// $Id: spec_class_count.php 7711 2013-10-23 13:07:37Z smallduh $
+// $Id: spec_class_count.php 8683 2015-12-25 03:01:02Z qfon $
 
 include "config.php";
 
@@ -34,9 +34,9 @@ else{
 
 $find_spe="";
 if ($stud_spe_kind>0)
-   $find_spe.=" and stud_spe_kind='".$stud_spe_kind."'";
+   $find_spe.=" and stud_spe_kind='".intval($stud_spe_kind)."'";
 if ($stud_spe_class_kind>0)
-   $find_spe.=" and stud_spe_class_kind='".$stud_spe_class_kind."'";
+   $find_spe.=" and stud_spe_class_kind='".intval($stud_spe_class_kind)."'";
 /*
 if ($stud_spe_class_kind==0)//決定是否要尋找特殊班班別
    $find_spe="a.stud_spe_kind='$stud_spe_kind'";//不

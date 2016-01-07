@@ -28,7 +28,7 @@ $STUD=get_student($_SESSION['session_tea_sn'],$c_curr_seme);
 //按下儲存時的動作
 if ($_POST['mode']=='save' and $_POST['student_sn']==$_SESSION['session_tea_sn']) {
  foreach ($_POST['stud_feedback'] as $club_sn=>$stud_fb) {
-     $query="update association set stud_feedback='$stud_fb' where club_sn='$club_sn' and student_sn='".$_POST['student_sn']."' and seme_year_seme='$c_curr_seme'"; 
+     $query="update association set stud_feedback='$stud_fb' where club_sn='$club_sn' and student_sn='".intval($_POST['student_sn'])."' and seme_year_seme='$c_curr_seme'"; 
      if (mysql_query($query)) {
 			 $INFO="資料己於 ".date('Y-m-d H:i:s')."儲存完畢!";
      } else {

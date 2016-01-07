@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: tol_score.php 6807 2012-06-22 08:08:30Z smallduh $
+// $Id: tol_score.php 8673 2015-12-25 02:23:33Z qfon $
 
 //載入設定檔
 include "exam_config.php";
@@ -10,6 +10,7 @@ $grade_img = array("face_1.gif","face_2.gif","face_3.gif","face_4.gif","face_5.g
 //評量處理
 include "header.php";
 if($key =='按下評量') {
+	$exam_id=intval($exam_id);
 	$query = "select stud_id from exam_stud where exam_id= '$exam_id' ";
 	$result = mysql_query($query);
 	while ($row = mysql_fetch_array($result)) {
@@ -36,6 +37,7 @@ if (isset($cool)){
 }
 
 //作業名稱處理
+$exam_id=intval($exam_id);
 $query = "select exam.exam_name,exam.exam_memo ,exam.teach_id,exam.teach_name,exam.exam_isupload,exam_kind.class_id,exam_kind.e_upload_ok from exam,exam_kind where exam.e_kind_id = exam_kind.e_kind_id and exam.exam_id='$exam_id' ";
 $result = mysql_query ($query) or die($query);
 $row = mysql_fetch_array($result);
@@ -58,7 +60,7 @@ if (isset($session_curr_class_num))
 //判斷是否為該班學生或指導教師，再給予上傳權限		
 echo "<center>";
 if ($exam_isupload == '1' && (($e_upload_ok == '1' && substr($class_id,-2) == $curr_class)||($teach_id == $session_log_id)) )
-	echo "<a href=\"tea_upload.php?exam_id=$exam_id&exam_name=$exam_name\">上傳作業</a>&nbsp;&nbsp;";
+echo "<a href=\"tea_upload.php?exam_id=$exam_id&exam_name=$exam_name\">上傳作業</a>&nbsp;&nbsp;";
 echo "<a href=\"$PHP_SELF?e_kind_id=$e_kind_id&exam_id=$exam_id\">重新整理</a>&nbsp;&nbsp;";
 echo "<a href=\"exam_list.php\">回作業列表區</a></center>";
 echo "<form method=\"post\" action=\"tea_show.php\">";
@@ -69,6 +71,7 @@ echo "<tr><td colspan=4><font color=red size=3>作業名稱：$exam_name<hr size=1>說
 echo "<tr><td width=165 align=\"center\" >姓名</td><td width=65 align=\"center\" >成果</td><td width=220 align=\"center\" >評語</td><td width=70 align=\"center\" >得分</td></tr>\n";
 
 //作品展示
+$exam_id=intval($exam_id);
 $sql_select = "select exam_stud.*,exam.exam_id,exam.exam_name,exam.exam_memo,exam.exam_source_isopen
                from exam_stud,exam where exam.exam_id = exam_stud.exam_id              
                and exam_stud.exam_id= '$exam_id' order by exam_stud.stud_num";

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board_show.php 8453 2015-06-12 00:37:05Z smallduh $
+// $Id: board_show.php 8709 2015-12-30 15:17:02Z qfon $
 
 // --系統設定檔
 include	"board_config.php";
@@ -15,6 +15,7 @@ session_register("session_tea_sn");
  // 回簽處理
 if ($_GET['act']=='Sign'){
 	if ($_SESSION['session_tea_sn']<>''){
+		$_GET['b_id']=intval($_GET['b_id']);
 		$query = "SELECT b_signs FROM board_p WHERE b_id='{$_GET['b_id']}'";
 		$res = & $CONN->Execute($query);
 		$b_signs = $res->fields['b_signs'];
@@ -34,6 +35,7 @@ exit;
 // 查詢回簽狀況
 if ($_GET['act'] == 'show_sign'){
 		if ($_SESSION['session_tea_sn']<>''){
+			$_GET['b_id']=intval($_GET['b_id']);
 			$query = "SELECT b_signs FROM board_p WHERE b_id='{$_GET['b_id']}'";
 			$res = & $CONN->Execute($query);
 		 $b_signs = $res->fields['b_signs'];
@@ -92,7 +94,7 @@ else
 	head("校務佈告欄");
 
 
-$b_id= $_GET['b_id'];
+$b_id= intval($_GET['b_id']);
 $query="update board_p set b_hints = b_hints+1 where b_id='$b_id' ";
 $CONN->Execute($query);
 $query = "select  * from board_p  where b_id='$b_id' ";

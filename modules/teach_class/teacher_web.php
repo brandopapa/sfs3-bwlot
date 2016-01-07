@@ -1,6 +1,6 @@
 <?php
 
-// $Id: teacher_web.php 6417 2011-04-27 13:05:11Z hami $
+// $Id: teacher_web.php 8688 2015-12-25 03:07:10Z qfon $
 
 /*
   教師網頁、email公佈
@@ -42,7 +42,7 @@ $selmode=$_POST['selmode'];
       break;  
 
     default:	//一至六年級、幼稚園、資源班
-      $wherestr = " and b.class_num LIKE '". $selmode ."%' order by b.class_num " ;  
+      $wherestr = " and b.class_num LIKE '". intval($selmode) ."%' order by b.class_num " ;  
       break ;
   }    
 

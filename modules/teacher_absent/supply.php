@@ -1,5 +1,5 @@
 <?php
-//$Id: supply.php 7451 2013-08-29 23:51:34Z hami $
+//$Id: supply.php 8689 2015-12-25 03:09:57Z qfon $
 include "config.php";
 head("代課列表");
 $tool_bar=make_menu($school_menu_p);
@@ -43,11 +43,13 @@ $today=date("Y-m-d",mktime(date("m"),date("d"),date("Y")));
 $query1.=" and year='$sel_year' and semester='$sel_seme' ";
 
 if ($_POST[teacher_sn]) {
+$_POST[teacher_sn]=intval($_POST[teacher_sn]);			
 $query1 .=" and b.teacher_sn='$_POST[teacher_sn]'";
 $abs_name=get_teacher_name($_POST[teacher_sn])."請假　";
 }
 
 if ($_POST[class_dis]) {
+$_POST[class_dis]=intval($_POST[class_dis]);
 $query1 .=" and b.class_dis='$_POST[class_dis]'";
 }
 //教學組核章
@@ -61,9 +63,11 @@ if ($_POST[d_check4]=='1') {
 }
 
 if ($_POST[abs_kind]) {
+$_POST[abs_kind]=intval($_POST[abs_kind]);
 $query1 .=" and abs_kind='$_POST[abs_kind]'";
 }
 if ($_POST[month] ) {
+$_POST[month]=intval($_POST[month]);
 $query1 .=" and month='$_POST[month]'";
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: letter.php 7691 2013-10-23 07:58:03Z smallduh $
+// $Id: letter.php 8713 2015-12-31 03:25:24Z hsiao $
 
 	//新增一個 zipfile 實例
 	$ttt = new EasyZip;
@@ -24,6 +24,7 @@
 	$rs=$CONN->Execute($sql);
 	$temp_arr["room_name"] = $rs->fields['room_name'];
 
+	$student_sn=intval($student_sn);
   //基本資料改由 student_sn 為條件取得 by smallduh 2012.10.05
 	$sql="select * from stud_base where student_sn='$student_sn'";
 	
@@ -102,4 +103,6 @@
 	echo $sss;
 	
 	exit;	
+?>
+
 ?>

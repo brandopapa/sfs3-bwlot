@@ -1,5 +1,6 @@
 <?php
 include "config.php"; 
+$b_id=intval($b_id);
 $query = "select  * from unit_c  where b_id='$b_id' ";
 
 $result = mysql_query($query);

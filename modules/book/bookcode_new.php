@@ -1,5 +1,5 @@
 <?php
-// $Id: bookcode.php 8666 2015-12-24 03:18:34Z hsiao $
+// $Id: bookcode_new.php 8732 2016-01-05 07:01:17Z hsiao $
 
 include "book_config.php";
 // 不需要 register_globals
@@ -11,7 +11,7 @@ if (!ini_get('register_globals')) {
 }
 
 
-if ($key == "產生圖書條碼") {
+if ($key == "產生圖書條碼(無分類號)") {
     $len = strlen($b_num);
     $temp = 1;
     for ($i = 1; $i <= $len; $i++)
@@ -19,8 +19,8 @@ if ($key == "產生圖書條碼") {
     settype($b_num, double);
     echo "<html><body><table border=0 cellPadding=2 cellSpacing=5 ><tr>";
     for ($i = 0; $i < $code_num; $i++) {
-        $core = substr($bookch1_id,0,3).".".substr(($temp+$b_num),1,$len);
-        //$core = substr(($temp + $b_num), 1, $len);
+        //$core = substr($bookch1_id,0,3).".".substr(($temp+$b_num),1,$len);
+        $core = substr(($temp + $b_num), 1, $len);
         $topname = $lib_name . "---" . substr($bookch1_id, 3, strlen($bookch1_id) - 3);
         echo "<td align=center nowrap><font size=2>$topname<BR>";
         barcode($core);
@@ -34,54 +34,6 @@ if ($key == "產生圖書條碼") {
     exit;
 }
 
-if ($stukey == "產生借書條碼") {
-    echo "<html><body><table border=0 cellPadding=2 cellSpacing=5 ><tr>";
-    for ($i = 0; $i < 10; $i++) {
-        $s_no = "s_no_" . ($i + 1);
-        if ($$s_no != "") {
-            $query = "select stud_id,stud_name from stud_base where stud_id = '" . $$s_no . "'";
-            $result = mysql_query($query, $conID);
-            if (mysql_num_rows($result) > 0) {
-                $row = mysql_fetch_array($result);
-                //echo sprintf ("<img src=\"%s?code=%s&text=%s\">",$code_url,$row["stud_id"],$school_sshort_name."--".$row["stud_name"]);
-                $core = $row["stud_id"];
-                $topname = $school_sshort_name . "--" . $row["stud_name"];
-                echo "<td align=center nowrap><font size=2>$topname<BR>";
-                barcode($core);
-                echo "<br>$core</font></td>\n";
-            }
-        }
-        if ($i % $barcore_cols == $barcore_cols - 1)
-            echo"</tr><tr>";
-    }
-    echo "</tr></table>";
-    echo "</body></html>";
-    exit;
-}
-if ($teakey == "產生借書條碼") {
-    echo "<html><body><table border=0 cellPadding=2 cellSpacing=5 ><tr>";
-    for ($i = 0; $i < 10; $i++) {
-        $s_no = "s_no_" . ($i + 1);
-        if ($$s_no != "") {
-            $query = "select teach_id,name from teacher_base where teach_id = '" . $$s_no . "'";
-            $result = mysql_query($query, $conID);
-            if (mysql_num_rows($result) > 0) {
-                $row = mysql_fetch_array($result);
-//				echo sprintf ("<img src=\"%s?code=%s&text=%s\">",$code_url,$row["teach_id"],$school_sshort_name."--".$row["name"] );
-                $core = $row["teach_id"];
-                $topname = $school_sshort_name . "--" . $row["name"];
-                echo "<td align=center nowrap><font size=2>$topname<BR>";
-                barcode($core);
-                echo "<br>$core</font></td>\n";
-            }
-        }
-        if ($i % $barcore_cols == $barcore_cols - 1)
-            echo"</tr><tr>";
-    }
-    echo "</tr></table>";
-    echo "</body></html>";
-    exit;
-}
 include "header.php";
 $code_p = "$PHP_SELF";
 $query = "select * from bookch1  order by bookch1_id";
@@ -174,36 +126,7 @@ while ($row = mysql_fetch_array($result)) {
                 ?>
             </select></td>
         </tr>
-        <tr><td  colspan="3" align=center><input type=submit name=key value="產生圖書條碼"></td></tr>
-    </table>
-</form>
-<hr>
-<form method="post" name="spost2" action="<?php echo $code_p ?>" >
-    <table border=1 width=90% align=center bgcolor=#aaff00>
-        <caption><font size=+2>學生借書證條碼列印</font></caption>
-        <td bgcolor="#8080FF" width=45% align=center><strong>輸入學號</strong></td>
-        </tr>
-        <?php
-        for ($i = 1; $i <= 10; $i++) {
-            echo "<tr><td align=center>$i .<input type=text name=\"s_no_$i\" size=20 ></td></tr>";
-        }
-        ?>
-        <tr><td  colspan="3" align=center><input type=submit name=stukey value="產生借書條碼"></td></tr>
-    </table>
-</form>
-<hr>
-<form method="post" name="spost3" action="<?php echo $code_p ?>"  >
-    <table border=1 width=90% align=center bgcolor=#aaff00>
-        <caption><font size=+2>教師借書證條碼列印</font></caption>
-        <tr>
-            <td bgcolor="#8080FF" width=45% align=center><strong>輸入教師代號</strong></td>
-        </tr>
-        <?php
-        for ($i = 1; $i <= 10; $i++) {
-            echo "<tr><td align=center>$i .<input type=text name=\"s_no_$i\" size=20 ></td></tr>";
-        }
-        ?>
-        <tr><td  colspan="3" align=center><input type=submit name=teakey value="產生借書條碼"></td></tr>
+        <tr><td  colspan="3" align=center><input type=submit name=key value="產生圖書條碼(無分類號)"></td></tr>
     </table>
 </form>
 </center>

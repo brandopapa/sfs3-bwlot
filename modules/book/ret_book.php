@@ -1,6 +1,6 @@
 <?php  
                                                                                                                              
-// $Id: ret_book.php 6912 2012-09-24 07:11:40Z hsiao $
+// $Id: ret_book.php 8723 2016-01-02 06:00:38Z qfon $
 
 // --系統設定檔  
 include "book_config.php";  
@@ -36,17 +36,30 @@ if(!checkid(substr($PHP_SELF,1))){
 	include "footer.php"; 
 	exit;
 }
+
 include "header.php";
 $book_flag = 0;
 if($book_id != ""){
-	$query = "SELECT borrow.bookch1_id, borrow.book_id, borrow.out_date, borrow.in_date,borrow.b_num,stud_base.stud_id, stud_base.stud_name,  book.book_name, book.book_author FROM borrow ,stud_base ,book where  borrow.stud_id = stud_base.stud_id and  borrow.book_id = book.book_id and in_date IS NULL and  borrow.book_id= '$book_id'";
-	$result = mysql_query($query);
-	if (mysql_num_rows($result) >0 ){
-		$row = mysql_fetch_array($result);
-		$stud_id = $row["stud_id"];
-		$stud_name = $row["stud_name"];
-		$book_name = $row["book_name"];	
-		$b_num = $row["b_num"];	
+///mysqli
+$query = "SELECT borrow.bookch1_id, borrow.book_id, borrow.out_date, borrow.in_date,borrow.b_num,stud_base.stud_id, stud_base.stud_name,  book.book_name, book.book_author FROM borrow ,stud_base ,book where  borrow.stud_id = stud_base.stud_id and  borrow.book_id = book.book_id and in_date IS NULL and  borrow.book_id= ?";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->bind_result($bookch1_id, $book_id, $out_date, $in_date,$b_num,$stud_id, $stud_name,  $book_name, $book_author);
+$stmt->fetch();
+$stmt->close();
+	//$query = "SELECT borrow.bookch1_id, borrow.book_id, borrow.out_date, borrow.in_date,borrow.b_num,stud_base.stud_id, stud_base.stud_name,  book.book_name, book.book_author FROM borrow ,stud_base ,book where  borrow.stud_id = stud_base.stud_id and  borrow.book_id = book.book_id and in_date IS NULL and  borrow.book_id= '$book_id'";
+	//$result = mysql_query($query);
+	
+	//if (mysql_num_rows($result) >0 ){
+	if ($b_num >0 ){
+		//$row = mysql_fetch_array($result);
+		//$stud_id = $row["stud_id"];
+		//$stud_name = $row["stud_name"];
+		//$book_name = $row["book_name"];	
+		//$b_num = $row["b_num"];	
 		$query = "update borrow set in_date='".$now."' where b_num='$b_num'";
 		mysql_query($query);
 
@@ -78,7 +91,7 @@ function setfocus() {
 if ($book_flag)
 {
 if ($stud_name !="")
-	echo "<table><tr><td>讀者：$stud_id -- $stud_name</td><td>已還書名：$book_name</td></tr></table>";
+	echo "<table><tr><td>讀者：$stud_id -- $stud_name</td><td>已還書名：$book_name</td></tr></table>";	
 	$query = "SELECT book.bookch1_id, book.book_id, book.book_name, book.book_num, borrow.stud_id,borrow.b_num,book.book_author,borrow.out_date, borrow.in_date FROM book , borrow where  book.book_id = borrow.book_id  and borrow.stud_id= '$stud_id' order by borrow.in_date ,borrow.out_date desc LIMIT 0, 10 ";
 	$result = mysql_query($query)or die ($query);
 

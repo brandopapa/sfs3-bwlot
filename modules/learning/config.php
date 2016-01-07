@@ -1,6 +1,6 @@
 <?php
 
-// $Id: config.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: config.php 8705 2015-12-29 03:03:33Z qfon $
 
 require_once "./module-cfg.php";
 /* 學務系統設定檔 */
@@ -112,7 +112,7 @@ if($_SESSION['session_who'] =="學生"){
 //檢查目前學年
 function stud_ye($stud_id){
 	global $CONN;
-
+    $stud_id=substr($stud_id,0,7);
 	$rs_sn=$CONN->Execute("select curr_class_num from stud_base where stud_id='$stud_id'") or trigger_error("SQL語法錯誤 ", E_USER_ERROR);
 	$stud_year= substr($rs_sn->fields["curr_class_num"],0,1);
 

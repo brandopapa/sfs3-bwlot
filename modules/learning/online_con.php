@@ -1,5 +1,5 @@
 <?php
-// $Id: online_con.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: online_con.php 8705 2015-12-29 03:03:33Z qfon $
 // --系統設定檔
 include "config.php"; 
 session_start();
@@ -41,6 +41,7 @@ if($key=='取消'){
 
 if($key=='當館主'){
 	//檢查是否有館主
+	$p_sn=intval($p_sn);
 	$sqlstr = "select * from test_online where p_sn='$p_sn' " ;
 	$result = mysql_query($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256);
 	$row= mysql_fetch_array($result);
@@ -96,6 +97,7 @@ if($key=='當館主'){
 }
 if($key=='挑戰去'){
 	//檢查是否有館主
+	$p_sn=intval($p_sn);
 	$sqlstr = "select * from test_online where p_sn='$p_sn'" ;
 	$result = mysql_query($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256);
 	$row= mysql_fetch_array($result);

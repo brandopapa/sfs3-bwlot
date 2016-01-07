@@ -1,6 +1,6 @@
 <?php
 
-// $Id: book_new.php 6803 2012-06-22 07:56:42Z smallduh $
+// $Id: book_new.php 8723 2016-01-02 06:00:38Z qfon $
 
 
 // --系統設定檔
@@ -128,20 +128,44 @@ if ($_POST['key'] == "確定新增"){
 		}
 		else {
 			//檢查是否超過一萬本
+			
+			/*
 			$sql_select = "select max(book_id)as mm from book where bookch1_id ='$_POST[bookch1_id]' AND length(book_id)>8";
 			$result = mysql_query ($sql_select,$conID) or die($sql_select);
 			$row = mysql_fetch_array($result);
-
+            */
+			
+///mysqli
+$sql_select = "select max(book_id)as mm from book where bookch1_id =? AND length(book_id)>8";
+$mysqliconn = get_mysqli_conn();
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_select);
+$stmt->bind_param('s',$_POST[bookch1_id]);
+$stmt->execute();
+$stmt->bind_result($row[0]);
+$stmt->fetch();
+$stmt->close();
+			
 			if($row[0]) {
 				$is_over_10000=1;
 			} else {
 				$is_over_10000=0;
+				
+			  $sql_select = "select max(book_id)as mm from book where bookch1_id =?";
+              $stmt = "";
+              $stmt = $mysqliconn->prepare($sql_select);
+              $stmt->bind_param('s',$_POST['bookch1_id']);
+              $stmt->execute();
+              $stmt->bind_result($book_id);
+              $stmt->fetch();
+              $stmt->close();
+				/*
 				$sql_select = "select max(book_id)as mm from book where bookch1_id ='{$_POST['bookch1_id']}'";
 				$result = mysql_query ($sql_select,$conID) or die($sql_select);
 				$row = mysql_fetch_array($result);
-
+                */  
 			}			
-			$book_id = $row["mm"];
+			//$book_id = $row["mm"];
 			$bb = explode (".",$book_id );
 			if($is_over_10000) $book_id= $bb[0].".".substr(intval($bb[1]+100001),1,5); else $book_id= $bb[0].".".substr(intval($bb[1]+10001),1,4);
 			$dd="";
@@ -176,9 +200,11 @@ if(!empty($book_class)){
 
 //  $sql_select = "select max(book_id)as mm from book where bookch1_id ='$_POST[bookch1_id]'";
 	//先檢查有沒有超過一萬本
+ 
   $sql_select = "select max(book_id)as mm from book where bookch1_id ='$bookch1_id' AND length(book_id)>8";
   $result = mysql_query ($sql_select,$conID) or die($sql_select);
   $row = mysql_fetch_array($result);
+ 
   if($row[0]) {
 	$is_over_10000="本分類存書本數超過一萬本，編碼增加為5碼！";
 	} else {

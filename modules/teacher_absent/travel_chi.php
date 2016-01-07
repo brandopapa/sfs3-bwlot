@@ -54,7 +54,8 @@ class teacher_absent_course{
 	function process() {
 
 		if($_POST['form_act']=='OK') $this->add();
-		
+		if($_POST['form_act']=='id_select') $this->add2();
+
 		$this->all();
 	}
 	//顯示
@@ -84,7 +85,7 @@ class teacher_absent_course{
 	//產生連結頁面
 	//$this->links= new Chi_Page($this->tol,$this->size,$this->page);
 	}
-	//列印畫面
+	//分月列印畫面
 	function add(){
 
 		foreach ($_POST['pMonth'] as $pMon){ 
@@ -111,6 +112,31 @@ class teacher_absent_course{
 		$this->smarty->display($tpl);
 		die();
 	}
+  //分筆列印畫面
+	function add2(){
+		//print_r($_POST);die();
+		foreach ($_POST['prnID'] as $pID){ 
+			$MM[]=(int)$pID;
+			}
+		if (count($MM)==0) backe('未選擇記錄!!');
+		$SQL="select a.*,count(c_id) as Num from teacher_absent a
+		left join teacher_absent_course b  
+		ON a.id=b.a_id and  b.travel='1' 
+		where a.teacher_sn='{$this->SN}'  and a.abs_kind='52' 
+		and a.id in (".join(",",$MM)." )  group by a.id  ";
+		$SQL.=" order by a.start_date ";
+		$rs=$this->CONN->Execute($SQL) or die($SQL);
+		$arr=$rs->GetArray();
+		$this->all=$arr;//出差單列表(含未申請領經費)
+		$this->Sub=$this->getMon($arr);//取經費單據
+		
+		$tpl = dirname (__file__)."/templates/teacher_chi_prt.htm";
+		$this->smarty->assign("this",$this);
+		$this->smarty->assign("SN",$this->SN);
+		$this->smarty->display($tpl);
+		die();
+	}
+
 	//取單據
 	function getMon($arr){
 		foreach($arr as $ary) {
@@ -131,13 +157,18 @@ class teacher_absent_course{
 	function SelMonth($name){
 		//$M=array();
 		$str='';
+		$Y=date("Y");//今年
+		$Y1=date("Y")-1;//去年
+		$M=date("m");
 		for($i=10;$i>=1;$i--){
-			$A=date("Y-m",strtotime("-".$i." Months")); 
-			$M[$A]=$A;
+			if ($M <= $i) {$YY=$Y1;$MM=($M+12)-$i;}
+			if ($M > $i) {$YY=$Y;$MM=$M-$i;}
+			$A=$YY.'-'.sprintf("%02d",$MM);
+			$Mon[$A]=$A;
 			$str.="<label><input type='checkbox' name='{$name}[]' value='{$A}' />{$A}</label>&nbsp;&nbsp;\n";
 			if ($i==6)$str.="<br>";
-		}
-		//print_r($M);
+			}
+		//print_r($Mon);
 		return $str;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: sfs_case_score.php 8617 2015-12-02 02:22:46Z chiming $
+// $Id: sfs_case_score.php 8722 2016-01-02 05:55:37Z qfon $
 
 //給student_sn和ss_id算出該生此科的學期總成績
 function seme_score($student_sn,$ss_id,$sel_year="",$sel_seme=""){
