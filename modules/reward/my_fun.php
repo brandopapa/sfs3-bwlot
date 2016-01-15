@@ -1,6 +1,6 @@
 <?php
 
-// $Id: my_fun.php 7787 2013-11-27 01:56:06Z smallduh $
+// $Id: my_fun.php 8767 2016-01-13 13:15:56Z qfon $
 
 
 function cal_rew($sel_year,$sel_seme,$stud_id) {
@@ -9,6 +9,7 @@ function cal_rew($sel_year,$sel_seme,$stud_id) {
 	$reward_year_seme=$sel_year.$sel_seme;
 	$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 	//2013.12.27 取得 student_sn , 以便即時統計時立即加入 student_sn
+	$stud_id=substr($stud_id,0,7);
 	$sql="select student_sn from stud_seme where stud_id='$stud_id' and seme_year_seme='$seme_year_seme'";
 	$res=$CONN->Execute($sql);
 	$student_sn=$res->fields['student_sn'];

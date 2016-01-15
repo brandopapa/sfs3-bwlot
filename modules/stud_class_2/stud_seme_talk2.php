@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_seme_talk2.php 7042 2012-12-14 08:17:07Z smallduh $
+// $Id: stud_seme_talk2.php 8740 2016-01-07 03:32:07Z qfon $
 
 // 載入設定檔
 include "config.php";
@@ -119,11 +119,11 @@ if(!$c_curr_seme)
 //儲存後到下一筆
 if ($chknext)
 	$stud_id = $nav_next;	
-	$query = "select a.stud_id,a.stud_name from stud_base a,stud_seme b where a.stud_id=b.stud_id and a.stud_id='$stud_id' and a.stud_study_cond<>0  and  b.seme_year_seme='$c_curr_seme' and b.seme_class='$class_num'";
+	$query = "select a.stud_id,a.stud_name from stud_base a,stud_seme b where a.student_sn=b.student_sn and a.stud_id=b.stud_id and a.stud_id='$stud_id' and a.stud_study_cond<>0  and  b.seme_year_seme='$c_curr_seme' and b.seme_class='$class_num'";
 	$res = $CONN->Execute($query) or die($res->ErrorMsg());
 	//未設定或改變在職狀況或刪除記錄後 到第一筆
 	if ($stud_id =="" || $res->RecordCount()==0) {	
-		$temp_sql = "select a.stud_id,a.stud_name from stud_base a,stud_seme b where a.stud_id=b.stud_id  and  a.stud_study_cond<>0 and  b.seme_year_seme='$c_curr_seme' and b.seme_class='$class_num' order by b.seme_num ";
+		$temp_sql = "select a.stud_id,a.stud_name from stud_base a,stud_seme b where a.student_sn=b.student_sn and a.stud_id=b.stud_id  and  a.stud_study_cond<>0 and  b.seme_year_seme='$c_curr_seme' and b.seme_class='$class_num' order by b.seme_num ";
 		$res2 = $CONN->Execute($temp_sql) or die($temp_sql);
 		$stud_id = $res2->fields[0];
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Id: my_fun.php 7448 2013-08-29 14:16:21Z hami $
+// $Id: my_fun.php 8756 2016-01-13 12:46:10Z qfon $
 
 function year_seme_menu($sel_year,$sel_seme) {
 	global $CONN;
@@ -44,6 +44,9 @@ function month_menu($month,$arr) {
 function class_menu($sel_year,$sel_seme,$c_year,&$class_id) {
 	global $CONN,$class_year;
 
+	$c_year=intval($c_year);
+	$sel_year=intval($sel_year);
+	$sel_seme=intval($sel_seme);
 	$class_str=($c_year)?"and c_year='$c_year'":"";
 	$sql="select class_id,c_year,c_name from school_class where enable='1' and year='$sel_year' and semester='$sel_seme' $class_str order by class_id";
 	$rs=$CONN->Execute($sql);
@@ -106,6 +109,7 @@ function course_menu($class_dis) {
 //教師名字陣列依姓名排列
 function my_teacher_array($agent_sn){
 	global $CONN;
+	$agent_sn=intval($agent_sn);
 	$not_in=(empty($agent_sn))?"":"and a.teacher_sn <> '$agent_sn'";
 	$query="select a.teacher_sn,a.name,d.title_name from teacher_base a,teacher_post c, teacher_title d WHERE 
 	a.teach_condition=0  AND c.teacher_sn=a.teacher_sn AND c.teach_title_id=d.teach_title_id  order by  d.rank";
@@ -123,6 +127,7 @@ function my_teacher_array($agent_sn){
 //取得教師職稱
 function teacher_post_k($teacher_sn){
 	global $CONN;
+	$teacher_sn=intval($teacher_sn);
 	$query="select * from teacher_post where teacher_sn=$teacher_sn ";
 		$result = mysql_query($query) or die ($query);
 		$row = mysql_fetch_array($result);

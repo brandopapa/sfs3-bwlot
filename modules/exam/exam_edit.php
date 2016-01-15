@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: exam_edit.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: exam_edit.php 8742 2016-01-08 13:57:14Z qfon $
 
 // --系統設定檔
 include "exam_config.php";
@@ -11,6 +11,9 @@ if(!checkid(substr($_SERVER[PHP_SELF],1))){
 	include "footer.php"; 
 	exit;
 }
+
+//mysqli
+$mysqliconn = get_mysqli_conn();
 
 $exam_id=$_GET[exam_id];
 if($exam_id=='')
@@ -43,21 +46,56 @@ if ($_POST[key] =="確定刪除") {
 	if (is_dir($e_path))
 		exec( "rm -rf $e_path", $val );
 	//刪除作業	
+	/*
 	$sql_update = " delete from exam ";
 	$sql_update .= " where exam_id='$exam_id' ";
 	$CONN->Execute($sql_update)  or die ($sql_update);
+	*/
+
+///mysqli	
+$sql_update = " delete from exam ";
+$sql_update .= " where exam_id=? ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('s', $exam_id);
+$stmt->execute();
+$stmt->close();
+///mysqli
 	
 	//刪除學生上傳記錄
+	/*
 	$sql_update = " delete from exam_stud ";	
 	$sql_update .= " where exam_id='$exam_id' ";
 	$CONN->Execute($sql_update)  or die ($sql_update);
+	*/
+///mysqli	
+$sql_update = " delete from exam_stud ";	
+$sql_update .= " where exam_id=? ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('s', $exam_id);
+$stmt->execute();
+$stmt->close();
+///mysqli
 	header ("Location: exam.php");
 	exit;
 }
 if ($_POST[key] =="修改"){
+	/*
 	$sql_update = "update exam set exam_id='$_POST[exam_id]',exam_name='$_POST[exam_name]',exam_memo='$_POST[exam_memo]',exam_isopen='$_POST[exam_isopen]',e_kind_id='$_POST[e_kind_id]' ,teach_id='$_SESSION[session_log_id]',teach_name='$_SESSION[session_tea_name]' ";
 	$sql_update .= " where exam_id='$_POST[exam_id]' ";	
 	$CONN->Execute($sql_update)  or die ($sql_update);  
+	*/
+	
+///mysqli	
+$sql_update = "update exam set exam_id=?,exam_name=?,exam_memo=?,exam_isopen=?,e_kind_id=? ,teach_id='$_SESSION[session_log_id]',teach_name='$_SESSION[session_tea_name]' ";
+$sql_update .= " where exam_id=? ";	
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('ssssss',$_POST[exam_id],$_POST[exam_name],$_POST[exam_memo],$_POST[exam_isopen],$_POST[e_kind_id],$_POST[exam_id]);
+$stmt->execute();
+$stmt->close();
+///mysqli	
 	header ("Location: exam.php");
 	exit;
 }
@@ -114,7 +152,7 @@ include "header.php";
 <tr>
 	<td>
 		開始展示<br>
-		<input type="checkbox" name="exam_isopen" value="1" <? echo $exam_isopen ?>>
+		<input type="checkbox" name="exam_isopen" value="1" <?php echo $exam_isopen ?>>
 	</td>
 </tr>
 
@@ -132,4 +170,4 @@ include "header.php";
 </table>
 </form>
 
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

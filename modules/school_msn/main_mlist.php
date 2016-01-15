@@ -17,6 +17,7 @@ if ($_POST['act']=='del') {
  //刪電子圖文
  if ($set=='my_pic') {
   foreach($_POST['id'] as $id) {
+	    $id=intval($id);
      	$query="select * from sc_msn_board_pic where id='$id'"; 
  		 	$result=mysql_query($query);
   		$row=mysql_fetch_array($result,1);
@@ -31,6 +32,7 @@ if ($_POST['act']=='del') {
  //刪其他的
  } else {
   foreach($_POST['id'] as $id) {
+	    $id=intval($id);
     	$query="select * from sc_msn_data where id='$id'"; //不能用 idnumber , 一封訊息傳給多人時, 會用同一 個idnumber, 然後也對應同一個檔案
  		 	$result=mysql_query($query);
   		$row=mysql_fetch_array($result,1);

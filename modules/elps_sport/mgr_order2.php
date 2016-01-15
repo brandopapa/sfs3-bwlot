@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_order2.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_order2.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //認證
 sfs_check();
@@ -187,7 +187,7 @@ if ($_GET[txt]=='open') include_once 'chi_text.js';
 <INPUT TYPE='hidden' name='item' value='<?=$arr_1[id]?>'>
 <INPUT TYPE='hidden' name='sitem' value='<?=$item?>'>
 <INPUT TYPE='hidden' name='act' value=''>
-<?
+<?php
 //echo "<PRE>";print_r($arr_2);
 ///初賽顯示//$arr_1;
 echo"<div style='color:#800000;font-size:10pt; '><FONT COLOR='blue'>■".$A_Name."</FONT><BR> 共 <B>$A_nu</B> 名/隊 參賽 , 每組 <B>$A_one</B> 名 , 錄取 <B>$A_go</B> 名 $arr_1[imemo] 進決賽。<BR></div>";

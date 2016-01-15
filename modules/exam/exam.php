@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: exam.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: exam.php 8742 2016-01-08 13:57:14Z qfon $
 // --系統設定檔
 include "exam_config.php";
 // --認證 session
@@ -123,8 +123,10 @@ $sel1->do_select();
 $sql_select = "select exam.*,exam_kind.class_id  from exam,exam_kind ";
 $sql_select .=" where exam.e_kind_id=exam_kind.e_kind_id and exam.teach_id ='$_SESSION[session_log_id]' and exam_kind.class_id like '$curr_year_seme%' ";
 if ($e_kind_id !="-1")
+{
 $e_kind_id=intval($e_kind_id);
 $sql_select .= " and exam.e_kind_id='$e_kind_id' ";
+}
 $sql_select .=" order by exam_kind.class_id ";
 $result = $CONN->Execute($sql_select)or die ($sql_select);
 $i=0;
@@ -174,4 +176,4 @@ while (!$result->EOF) {
 <hr size=1 width=80%>
 <a href="exam_new.php">新增作業</a>
  
-<? include "footer.php"; 
+<?php include "footer.php"; 

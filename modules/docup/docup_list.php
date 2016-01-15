@@ -1,6 +1,6 @@
 <?php
 
-//$Id: docup_list.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: docup_list.php 8754 2016-01-13 12:44:14Z qfon $
 
 include "docup_config.php";
 if ($is_standalone!="1") head("文件資料庫");   
@@ -15,6 +15,7 @@ if ($is_standalone!="1") head("文件資料庫");
 <?php
 $post_office_p = room_kind();
 while (list($tid, $tname) = each($post_office_p)){
+	$tid=intval($tid);
 	$sql_select = "select count(docup_p_id) as cc ,sum(docup_p_count) as ccc from docup_p where doc_kind_id ='$tid'";
 	$result = $CONN->Execute($sql_select) or die ($sql_select);
 	$cc =$result->fields[0];

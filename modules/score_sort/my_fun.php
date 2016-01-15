@@ -9,6 +9,7 @@ extract($m_arr, EXTR_OVERWRITE);
 //由student_sn得到學生的班級座號姓名
 function student_sn_to_classinfo2($student_sn,$viewyear,$seme){
     global $CONN;
+	$student_sn=intval($student_sn);
     $rs_sn=$CONN->Execute("select stud_id from stud_base where student_sn='$student_sn'");
     $stud_id=$rs_sn->fields["stud_id"];
     //$seme_year_seme=sprintf("%03d",$viewyear).curr_seme();	
@@ -50,7 +51,7 @@ function student_sn_to_classinfo2($student_sn,$viewyear,$seme){
     settype($year,"integer");
     settype($stud_sex,"integer");
 
-    $year_class_site_sex=array($year,$class,$site,$stud_sex,$stud_name,$stud_pid);
+    $year_class_site_sex=array($year,$class,$site,$stud_sex,$stud_name,$stud_pid,$stud_id);
     return $year_class_site_sex;
 }
 
@@ -174,7 +175,8 @@ function ss_id_scope_name($ss_id,$sel_year,$class_id)
 
 //由ss_id找出相同領域名稱的ss_id
 function  ss_id_to_scope_id($ss_id,$sel_year,$class_id){
-    global $CONN;
+    global $CONN;  
+	    $ss_id=intval($ss_id);
         $sql3="select link_ss from score_ss where ss_id=$ss_id";
         $rs3=$CONN->Execute($sql3);
         $subject_id = $rs3->fields["link_ss"];		
@@ -1544,14 +1546,14 @@ else
 		
 		$main0.="<center><div class='CSSTableGenerator' style='width:600px;height:$pl px;'>";
 		$main0.="<table >";
-		$main0.="<tr><td>補救順位</td><td>年級</td><td>班級</td><td>座號</td><td>姓名</td><td>成績</td><td>名次</td><td>PR值</td><td>PR值曲線</td></tr>";
+		$main0.="<tr><td>補救順位</td><td>年級</td><td>班級</td><td>座號</td><td>姓名</td><td>成績</td><td>名次</td><td>PR值</td><td>PR值曲線</td><td>學號</td></tr>";
 				
 			
 		$main.= "<center><table width=90% border=1><tr>";
 		
-		$main.= "<td width=5% align=middle>補救順位</td><td width=12% align=middle>身分證字號</td><td>年級</td><td width=8% align=middle>班級</td><td width=8% align=middle>座號</td><td width=10% align=middle>姓名</td><td width=10% align=middle>成績</td><td width=5% align=middle>名次</td><td width=5% align=middle>PR值</td></tr>";
+		$main.= "<td width=5% align=middle>補救順位</td><td width=12% align=middle>身分證字號</td><td>年級</td><td width=8% align=middle>班級</td><td width=8% align=middle>座號</td><td width=10% align=middle>姓名</td><td width=10% align=middle>成績</td><td width=5% align=middle>名次</td><td width=5% align=middle>PR值</td><td width=5% align=middle>學號</td><td width=5% align=middle>備註</td></tr>";
 		
-		$csvmain.="補救順位,身分證字號,年級,班級,座號,姓名,成績,名次,PR值\r\n";
+		$csvmain.="補救順位,身分證字號,年級,班級,座號,姓名,成績,名次,PR值,學號,備註\r\n";
 
 		$m=0;
 		
@@ -1648,15 +1650,15 @@ else
 </td></tr></table>   
   
 			
-			</td></tr>";
+			<td>".$sa[6]."</td></td></tr>";
 			
-			$main.= "<tr><td align=middle>".$k."</td><td align=middle>".$sa[5]."</td><td align=middle>".$sa[0]."</td><td align=middle>".$sa[1]."</td><td align=middle>".$sa[2]."</td><td align=middle>".$sa[4]."</td><td align=middle>".round($tscore[$k],2)."</td><td align=middle>".$ym[$k]."</td><td align=middle>".$pr_value[$k]."</td></tr>";
+			$main.= "<tr><td align=middle>".$k."</td><td align=middle>".$sa[5]."</td><td align=middle>".$sa[0]."</td><td align=middle>".$sa[1]."</td><td align=middle>".$sa[2]."</td><td align=middle>".$sa[4]."</td><td align=middle>".round($tscore[$k],2)."</td><td align=middle>".$ym[$k]."</td><td align=middle>".$pr_value[$k]."</td><td align=middle>".$sa[6]."</td><td align=middle></td></tr>";
 			
 			
 			
-			$csvmain.=$k.",".$sa[5].",".$sa[0].",".$sa[1].",".$sa[2].",".$sa[4].",".round($tscore[$k],2).",".$ym[$k].",".$pr_value[$k]."\r\n";
+			$csvmain.=$k.",".$sa[5].",".$sa[0].",".$sa[1].",".$sa[2].",".$sa[4].",".round($tscore[$k],2).",".$ym[$k].",".$pr_value[$k].",".$sa[6]."\r\n";
  			
-			$excelmain.=$k.",".$sa[5].",".$sa[0].",".$sa[1].",".$sa[2].",".$sa[4].",".round($tscore[$k],2).",".$ym[$k].",".$pr_value[$k]." ".",\n";
+			$excelmain.=$k.",".$sa[5].",".$sa[0].",".$sa[1].",".$sa[2].",".$sa[4].",".round($tscore[$k],2).",".$ym[$k].",".$pr_value[$k].",".$sa[6]." ".",\n";
 		     
 		}//for2
         

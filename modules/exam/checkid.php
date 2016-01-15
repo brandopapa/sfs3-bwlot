@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: checkid.php 8702 2015-12-28 06:43:07Z qfon $
+// $Id: checkid.php 8743 2016-01-08 14:02:58Z qfon $
 //載入設定檔
 if ($isload != 1)
 	include "exam_config.php";
@@ -73,9 +73,9 @@ include "header.php";
        }
       // --></script>
       <center><font color="#0080FF" size="3" face="標楷體">本項服務需查驗帳號密碼，若造成您的不便，敬請見諒</font></center>
-      <form action="<? echo $PHP_SELF ?>" method="POST" name="checkid">
+      <form action="<?php echo $PHP_SELF ?>" method="POST" name="checkid">
       
-      <?
+      <?php
        if ($error_time != '')
         {
           if ($error_time < 3 )
@@ -110,7 +110,7 @@ include "header.php";
                    </tr>
                    <tr>
                        <td align="center" colspan="2">
-                     <input type="hidden" name="error_time" value="<? echo $error_time ?>">
+                     <input type="hidden" name="error_time" value="<?php echo $error_time ?>">
                      <input  type="submit" name="B1" value="登入"> 
                      &nbsp;&nbsp;<input type="button"  value= "回上頁" onclick="history.back()">
                      </td>
@@ -122,4 +122,4 @@ include "header.php";
         </form>
       </table>
      </center></div>
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

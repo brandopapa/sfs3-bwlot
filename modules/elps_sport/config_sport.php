@@ -1,5 +1,5 @@
 <?php
-//$Id: config_sport.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: config_sport.php 8769 2016-01-13 14:16:55Z qfon $
 //$sport_GO_num=array(8=>1,7=>1,6=>2,5=>2,4=>3,3=>3,2=>4,1=>4);
 //$sport_GO_num6=array(6=>1,5=>1,4=>2,3=>2,2=>3,1=>3);
 //前為比賽人數
@@ -417,20 +417,20 @@ function btt() {
 <INPUT TYPE='text' NAME='ifo' value='' size='30' disabled
 style=' border-width: 0px; background-color:White; font-size:12pt;color:red;'>
 </FORM>
-<?
+<?php
 	}
 function btr($img,$word="重新選擇填寫") {
 ?><input TYPE='image' align='top' border=0 SRC='<?=$img?>' 
 onclick="this.form.reset();return false;" alt='<?=$word?>' 
 onmouseover="ShowText.ifo.value='<?=$word?>';" onmouseout="ShowText.ifo.value='';">
-<?
+<?php
 	}
 function bt($act,$word,$img) {
 ?>
 <input TYPE='image' align='top' border=0 SRC='<?=$img?>' 
 onclick=" if (window.confirm('<?=$word?>？')){this.form.act.value='<?=$act?>';this.form.sumit();}return false;" alt='<?=$word?>' onmouseover="ShowText.ifo.value='<?=$word?>';" onmouseout="ShowText.ifo.value='';">
 
-<?
+<?php
 	}
 
 ?>

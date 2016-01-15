@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: bro_book.php 8723 2016-01-02 06:00:38Z qfon $
+// $Id: bro_book.php 8753 2016-01-13 12:40:19Z qfon $
 
 // --系統設定檔  
 include "book_config.php";
@@ -12,6 +12,7 @@ $stud_id = $_REQUEST['stud_id'];
 
 if ($book_id == "33" || $book_id == "333333")
 	header("Location: bro_book.php");
+
 if (!$un_limit_ip) {
 	//檢查是否為內部 IP 
 	if (!check_home_ip($man_ip))
@@ -26,7 +27,12 @@ if(!checkid(substr($PHP_SELF,1))){
 	include "footer.php";
 	exit;
 }
+
 include "header.php";
+
+//mysqli		
+$mysqliconn = get_mysqli_conn();
+
 /*
 //刪除
 if ($sel == "del")
@@ -72,23 +78,63 @@ if ($book_id != ""){
 	$row= mysql_fetch_array($result);
 	if($row["counter"]>=$amount_limit_s) echo "<script language=\"Javascript\"> alert (\"本學生未歸還借書數：{$row['counter']}，已經達到模組變數設定的限制數： $amount_limit_s 本了。\\n\\n 請將欲借出的圖書收回！\")</script>";
 	else {
+		
 		$query = "select book_id,bookch1_id,book_name,book_author from book where book_id='$book_id' and book_isout=0 and book_isborrow=0";
 		$result = mysql_query($query)or die ($query); 
+		
+//mysqli		
+$query = "select book_id,bookch1_id,book_name,book_author from book where book_id=? and book_isout=0 and book_isborrow=0";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->bind_result($book_id,$bookch1_id,$book_name,$book_author);
+$stmt->fetch();
+$stmt->close();
+//mysqli	
+		
 		//$temp_bb = "<font color=red><b>找不到這本書或已被借出</b></font>";
 		$temp_bb = "<script language=\"Javascript\"> alert (\"找不到這本書或已被借出了！\")</script>";
-		if ( mysql_num_rows($result) >0){
+		//if ( mysql_num_rows($result) >0){
+		if(!empty($book_name)){
+			/*
 			$row= mysql_fetch_array($result);
 			$bookch1_id = $row["bookch1_id"];
 			$book_id = $row["book_id"];	
 			$book_name = $row["book_name"];	
 			$book_author = $row["book_author"];
+			*/
 			$temp_bb ="<table><tr><td>$book_id</td><td>$book_name</td><td>$book_authod</td></tr></table>" ;
 			//借書登記
+			/*
 			$query = "insert into borrow(stud_id, bookch1_id, book_id, out_date,curr_class_num) values ('$stud_id', '$bookch1_id', '$book_id', '".$now."','$curr_class_num')";
 			$result = mysql_query($query)or die ($query);
+			*/
+//mysqli			
+$query = "insert into borrow(stud_id, bookch1_id, book_id, out_date,curr_class_num) values (?, ?, ?, '".$now."',?)";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('ssss',check_mysqli_param($stud_id),check_mysqli_param($bookch1_id),check_mysqli_param($book_id),check_mysqli_param($curr_class_num));
+$stmt->execute();
+$stmt->close();
+//mysqli	
+		
 			//設定已借出
+			/*
 			$query = "update book set book_isout=1 where book_id='$book_id'";
 			$result = mysql_query($query)or die ($query);
+			*/
+	
+//mysqli			
+$query = "update book set book_isout=1 where book_id=?";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->close();
+//mysqli	
+		
+			
 			$reader_flag = 1 ;
 		}
 	}

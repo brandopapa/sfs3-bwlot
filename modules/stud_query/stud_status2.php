@@ -1,6 +1,6 @@
 <?php
 
-// $Id: stud_status2.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: stud_status2.php 8758 2016-01-13 12:49:42Z qfon $
 
 include "stud_query_config.php";
 //¥Ø«e¯Z¯Å
@@ -23,6 +23,8 @@ foot();
 function list_class_stu($year,$semester){
 	global $menu_p,$CONN ,$school_kind_name;
 	$toolbar=&make_menu($menu_p);
+	$year=intval($year);
+	$semester=intval($semester);
 	$sql_select = "select class_sn,class_id,c_year,c_name,c_kind,c_sort from school_class where enable='1' and year='$year' and semester='$semester' order by c_year,c_sort";
 	$recordSet=$CONN->Execute($sql_select) or die($sql_select);
 

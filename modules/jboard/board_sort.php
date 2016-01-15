@@ -49,8 +49,6 @@ $stmt = $mysqliconn->prepare($sql_select);
 $stmt->bind_param('s', $bk_id);
 $stmt->execute();
 $stmt->bind_result($bb_id,$bkk_id,$b_open_date,$b_days,$b_unit,$b_title,$b_name,$b_sub,$b_con,$b_hints,$b_url,$b_post_time,$b_own_id,$b_is_intranet,$b_is_marquee,$b_signs,$b_is_sign,$teacher_sn,$b_sort,$top_days);
-//$stmt->fetch();
-//$stmt->close();
 
 while ($stmt->fetch()) {
 	if ($b_is_intranet == "1") //內部文件

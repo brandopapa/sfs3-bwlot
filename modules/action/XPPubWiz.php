@@ -33,7 +33,7 @@ $nday = date("Y-m-d") ;
 
 	Version: 1.0b
 
-	CVS Version: $Id: XPPubWiz.php 8136 2014-09-23 08:11:33Z smallduh $
+	CVS Version: $Id: XPPubWiz.php 8761 2016-01-13 12:56:24Z qfon $
 
 	$Log: XPPubWiz.php,v $
 	Revision 1.1.2.1  2006-12-06 00:35:49  prolin
@@ -88,7 +88,8 @@ $cfg = array(
 	);
 
 
-
+//mysqli
+$mysqliconn = get_mysqli_conn();	
 
 
 // Determine page/step to display, as this script contains a four-step wizard:
@@ -246,11 +247,22 @@ if ($step == 'options') {
             move_uploaded_file($_FILES['Iact_icon']['tmp_name'],  $updir . $Iact_icon_name);
          }
      
+	 /*
          $sqlstr = "insert into $tbname (act_ID,act_date,act_name,act_info,act_icon,act_dir,act_index,act_postdate,act_auth,act_view)
             values ( '0', '$_SESSION[Iact_date]', '$_SESSION[Iact_name]' ,'$_SESSION[Iact_info]', '$Iact_icon_name', '$_SESSION[dirstr]', '$Iact_index_name', '$nday' , '$_SESSION[Iuser]','0') " ;
          //if($debug) echo "$sqlstr <br>" ;
          $result = $CONN->Execute( $sqlstr) or user_error("Åª¨ú¥¢±Ñ¡I<br>$sqlstr",256) ;   
-          
+       */   
+//mysqli
+$sqlstr = "insert into $tbname (act_ID,act_date,act_name,act_info,act_icon,act_dir,act_index,act_postdate,act_auth,act_view)
+            values ( '0', '$_SESSION[Iact_date]', '$_SESSION[Iact_name]' ,'$_SESSION[Iact_info]', ?, '$_SESSION[dirstr]', ?, ? , '$_SESSION[Iuser]','0') " ;
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('sss', check_mysqli_param($Iact_icon_name),check_mysqli_param($Iact_index_name),check_mysqli_param($nday));
+$stmt->execute();
+$stmt->close();
+///mysqli	
+		  
         
         
   }	    

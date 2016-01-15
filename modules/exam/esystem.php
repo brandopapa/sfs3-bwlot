@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: esystem.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: esystem.php 8741 2016-01-07 06:30:22Z qfon $
 
 /***********************
  系統相關設定檢測
@@ -67,8 +67,22 @@ switch ($_POST[key]) {
 				}
 			}
 			else {
+//mysqli
+$mysqliconn = get_mysqli_conn();	
+$query3  = "insert into exam_stud_data (stud_id,stud_num,stud_pass) values('".$result2->fields[stud_id]."','$stud_num',?)";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query3);
+$stmt->bind_param('s', $default_pass);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+				
+				/*
 				$query3  = "insert into exam_stud_data (stud_id,stud_num,stud_pass) values('".$result2->fields[stud_id]."','$stud_num','$default_pass')";
 				$CONN->Execute($query3) or die($query3);
+				*/
+				
+				
 				$addnum++;
 			}
 			$result2->MoveNext();

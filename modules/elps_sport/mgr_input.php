@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_input.php 8400 2015-04-22 07:21:18Z chiming $
+//$Id: mgr_input.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //認證
 sfs_check();
@@ -221,7 +221,7 @@ switch (pKey){ //循迴
 可分為<?=$all_col?>組。
 </TD></TR>
 <TR><TD style='font-size:9pt;' width=80% valign=top>
-<?
+<?php
 
 for ($a=1;$a<=$all_col ;$a++){
 	$tmp_str='';$y=0;

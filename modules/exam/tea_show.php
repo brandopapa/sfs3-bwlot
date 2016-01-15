@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: tea_show.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: tea_show.php 8742 2016-01-08 13:57:14Z qfon $
 //載入設定檔
 include "exam_config.php";
 //session_start();
@@ -13,6 +13,9 @@ if ($stud_id=='')
 	$stud_id = $_POST[stud_id];
 //評量處理
 include "header.php";
+//mysqli
+$mysqliconn = get_mysqli_conn();
+
 if($_SESSION[session_log_id]<>'') {
 	if($_POST[key] == '按下評量') {
 		$_POST[exam_id]=intval($_POST[exam_id]);
@@ -24,12 +27,28 @@ if($_SESSION[session_log_id]<>'') {
 			$tea_comment = $_POST[$temp];
 			$temp = "tea_grade_".$stud_id;
 			$tea_grade = intval($_POST[$temp]);
-		
+		    /*
 			$query2 = "update exam_stud set tea_comment='$tea_comment' ";
 			if ($tea_grade !="")
 				$query2 .= ",tea_grade=$tea_grade";
 			$query2 .= " where exam_id= '$_POST[exam_id]' and stud_id ='$stud_id' ";
 			$CONN->Execute($query2) ;
+			*/
+			
+			$query2 = "update exam_stud set tea_comment=? ";
+			if ($tea_grade !="")
+				$query2 .= ",tea_grade=$tea_grade";
+			$query2 .= " where exam_id= '$_POST[exam_id]' and stud_id ='$stud_id' ";
+	
+///mysqli	
+$stmt = "";
+$stmt = $mysqliconn->prepare($query2);
+$stmt->bind_param('s', $tea_comment);
+$stmt->execute();
+$stmt->close();
+///mysqli
+			
+			
 			$result->MoveNext();
 		}
 		echo "評量已更新!!";
@@ -40,7 +59,6 @@ if($_SESSION[session_log_id]<>'') {
 	if($_GET[key] == 'del'){
 		
 ///mysqli	
-$mysqliconn = get_mysqli_conn();
 $stmt = "";
 if ($stud_id <> "") {
     $stmt = $mysqliconn->prepare("select f_name from exam_stud where stud_id=? and exam_id='$exam_id'");
@@ -59,8 +77,19 @@ $stmt->close();
 		$f_name= $upload_path."e_".$exam_id."/".$stud_id."_".$res->fields[0];
 		//echo $f_name;exit;
 		*/
-		$query = "delete from exam_stud where stud_id='$stud_id' and exam_id='$exam_id'";
-		$CONN->Execute($query);
+         $exam_id=intval($exam_id);
+		//$query = "delete from exam_stud where stud_id='$stud_id' and exam_id='$exam_id'";		
+		//$CONN->Execute($query);
+		
+///mysqli	
+$query = "delete from exam_stud where stud_id=? and exam_id='$exam_id'";		
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $stud_id);
+$stmt->execute();
+$stmt->close();
+///mysqli
+		
 		if(file_exists ($f_name))
        	        	unlink($f_name);
 	}		
@@ -69,8 +98,20 @@ $stmt->close();
 
 //優良註記
 if (isset($_GET[cool])){
-	$sql_update = "update exam_stud set cool = '$_GET[cool]' where exam_id= '$exam_id' and stud_id = '$stud_id' ";
-	$result = $CONN->Execute($sql_update) or die ($sql_update);
+	$exam_id=intval($exam_id);
+	//$sql_update = "update exam_stud set cool = '$_GET[cool]' where exam_id= '$exam_id' and stud_id = '$stud_id' ";
+	//$result = $CONN->Execute($sql_update) or die ($sql_update);
+///mysqli	
+$sql_update = "update exam_stud set cool = ? where exam_id= '$exam_id' and stud_id = ? ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('ss', $_GET[cool],$stud_id);
+$stmt->execute();
+$stmt->close();
+///mysqli
+	
+	
+	
 }
 
 //作業名稱處理
@@ -113,7 +154,6 @@ echo "<td>刪除</td>";
 }
 
 echo "</tr>\n";
-
 
 //作品展示
 $exam_id=intval($exam_id);
@@ -262,4 +302,4 @@ if ($_SESSION[session_log_id] == $teach_id){
 圖示：<img src="images/cool.gif"> -- <font size =+2><i>贊 </i></font>喔！
 <hr width=300 size=1>
 <a href="exam_list.php">回作業列表區</a>
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

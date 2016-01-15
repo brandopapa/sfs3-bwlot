@@ -1,5 +1,5 @@
 <?php
-// $Id: spec_class_count.php 8683 2015-12-25 03:01:02Z qfon $
+// $Id: spec_class_count.php 8765 2016-01-13 13:11:12Z qfon $
 
 include "config.php";
 
@@ -37,6 +37,7 @@ if ($stud_spe_kind>0)
    $find_spe.=" and stud_spe_kind='".intval($stud_spe_kind)."'";
 if ($stud_spe_class_kind>0)
    $find_spe.=" and stud_spe_class_kind='".intval($stud_spe_class_kind)."'";
+
 /*
 if ($stud_spe_class_kind==0)//決定是否要尋找特殊班班別
    $find_spe="a.stud_spe_kind='$stud_spe_kind'";//不
@@ -152,6 +153,7 @@ echo "</tr></table>";
 foot();
 function find_parents($student_sn,$kind){
 	global $CONN ;
+	    $student_sn=intval($student_sn);
         $sql_select = "select fath_name, moth_name from stud_domicile where student_sn='$student_sn'";
         $recordSet=$CONN->Execute($sql_select) or die($sql_select);
         return $recordSet->FetchRow();

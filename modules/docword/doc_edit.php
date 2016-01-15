@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_edit.php 8716 2015-12-31 08:46:04Z qfon $
+// $Id: doc_edit.php 8746 2016-01-08 15:41:01Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -26,16 +26,41 @@ if ($doc1_id == "") {
 	exit;
 }
 
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+
 if ($key =="修改"){
-	$query = "update sch_doc1 set doc1_year_limit='$doc1_year_limit',doc1_kind='$doc1_kind',doc1_date='$doc1_date',doc1_date_sign='$doc1_date_sign',doc1_unit='$doc1_unit',doc1_word='$doc1_word',doc1_main='$doc1_main',doc1_unit_num1='$doc1_unit_num1',doc1_infile_date='$doc1_infile_date',doc_stat='$doc_stat',doc1_end_date='$doc1_end_date',teach_id='$session_log_id' where doc1_id='$doc1_id'";	
-	mysql_query($query)or die ($query);
+	//$query = "update sch_doc1 set doc1_year_limit='$doc1_year_limit',doc1_kind='$doc1_kind',doc1_date='$doc1_date',doc1_date_sign='$doc1_date_sign',doc1_unit='$doc1_unit',doc1_word='$doc1_word',doc1_main='$doc1_main',doc1_unit_num1='$doc1_unit_num1',doc1_infile_date='$doc1_infile_date',doc_stat='$doc_stat',doc1_end_date='$doc1_end_date',teach_id='$session_log_id' where doc1_id='$doc1_id'";	
+	//mysql_query($query)or die ($query);
+///mysqli
+$query = "update sch_doc1 set doc1_year_limit=?,doc1_kind=?,doc1_date=?,doc1_date_sign=?,doc1_unit=?,doc1_word=?,doc1_main=?,doc1_unit_num1=?,doc1_infile_date=?,doc_stat=?,doc1_end_date=?,teach_id=? where doc1_id=?";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('sssssssssssss',$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_infile_date,$doc_stat,$doc1_end_date,$session_log_id,$doc1_id);
+$stmt->execute();
+$stmt->close();
+
+///mysqli		
+	
+	
 	echo "<h1><center>編號 : $doc1_id 修改成功!!</center></h1></body></html>";		
 	redir( "$PHP_SELF?doc1_id=$doc1_id" , 1);
 	exit;			
 }
 if ($key == "刪除"){
-	$query = "delete from sch_doc1 where doc1_id = '$doc1_id' ";
-	mysql_query($query)or die ($query);
+	//$query = "delete from sch_doc1 where doc1_id = '$doc1_id' ";
+	//mysql_query($query)or die ($query);
+///mysqli
+$query = "delete from sch_doc1 where doc1_id =?  ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$doc1_id);
+$stmt->execute();
+$stmt->close();
+
+///mysqli		
+	
+	
 	echo "<h1><center>編號 : $doc1_id 已刪除!!</center></h1></body></html>";		
 	redir( "doc1_list.php" , 1);
 	exit;			
@@ -43,13 +68,11 @@ if ($key == "刪除"){
 
  ///mysqli	
 $sql_select = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1 where doc1_id=? ";
-$mysqliconn = get_mysqli_conn();
 $stmt = "";
 $stmt = $mysqliconn->prepare($sql_select);
 $stmt->bind_param('s',$doc1_id);
 $stmt->execute();
 $stmt->bind_result($doc1_id,$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$doc1_unit_num2,$teach_id,$doc1_k_id,$doc_stat,$doc1_end_date,$doc1_infile_date,$do_teacher );
-
 $stmt->fetch();
 $stmt->close();
 ///mysqli

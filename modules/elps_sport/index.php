@@ -1,5 +1,6 @@
 <?php
-//$Id: index.php 5310 2009-01-10 07:57:56Z hami $
+
+//$Id: index.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 
 //認證
@@ -10,4 +11,5 @@ head("運動會競賽檢錄系統");
 include_once "menu.php";
 //佈景結尾
 foot();
+
 ?>

@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_prt.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_prt.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //ป{รา
 sfs_check();
@@ -59,7 +59,7 @@ function add2(n) {
 
 //-->
 </SCRIPT>
-<?
+<?php
 
 //echo "<FORM METHOD=POST ACTION='$PHP_SELF' name='f1'>\n<INPUT TYPE='hidden' name='act' value=''>";
 if ($_GET[mid]!='') echo item_list($_GET[mid]);

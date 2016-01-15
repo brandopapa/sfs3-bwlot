@@ -1,5 +1,5 @@
 <?php
-//$Id: doc_search.php 8643 2015-12-16 06:34:25Z hsiao $
+//$Id: doc_search.php 8754 2016-01-13 12:44:14Z qfon $
 // --系統設定檔
 include "docup_config.php";
 if ($is_standalone != "1")
@@ -47,7 +47,7 @@ if ($is_standalone != "1")
                         $stmt = "";
                         $sql_select = "SELECT count(*)  FROM docup_p p ,docup d where p.docup_p_id = d.docup_p_id and ";
                         if ($doc_kind_id != "") {
-                            $stmt = $mysqliconn->prepare('SELECT count(*)  FROM docup_p p ,docup d where p.docup_p_id = d.docup_p_id and doc_kind_id=' . $doc_kind_id . ' and docup_name like ?');
+                            $stmt = $mysqliconn->prepare('SELECT count(*)  FROM docup_p p ,docup d where p.docup_p_id = d.docup_p_id and doc_kind_id=' . intval($doc_kind_id) . ' and docup_name like ?');
                             $sql_select .= " doc_kind_id='$doc_kind_id' and ";
                             $stmt->bind_param('s', $s_str);
                         } else {
@@ -56,7 +56,6 @@ if ($is_standalone != "1")
                         }
                         //$sql_select .= "($tempstr) ";
                         $stmt->execute();
-
                         $stmt->bind_result($tol_num);
                         $stmt->fetch();
                         $stmt->close();

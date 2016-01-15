@@ -111,7 +111,9 @@ function board_getFileArray($b_id){
         global $CONN;
         $res_arr=array();
         $i=0;
+		
         if ($b_id) {
+			        $b_id=intval($b_id);
         			$query="select org_filename,new_filename from jboard_files where b_id='$b_id'";
               $res=$CONN->Execute($query) or die($query);
               if ($res->RecordCount()>0) {
@@ -197,6 +199,7 @@ function DelImgNotInHTML() {
 	global $b_con,$sPath,$b_id,$CONN; //內容
 	
 	//先取得所有的圖檔
+	$b_id=intval($b_id);
 	$sql="select filename from jboard_images where b_id='$b_id'";
 	$res=$CONN->Execute($sql);
 	$files_check=$res->GetRows();
@@ -224,6 +227,7 @@ function DelImgNotInHTML() {
  		//若檔案未驗證存在, 刪除
  		foreach ($files_check as $v) {
  		 if ($v['filename']!="") {
+			 $b_id=intval($b_id);
  		    $sql="delete from jboard_images where b_id='$b_id' and filename='".$v['filename']."'";
  		    $CONN->Execute($sql) or die ($sql);
  		 }
@@ -291,6 +295,11 @@ function get_board_kind_setup($chk) {
    $setup=$res->fetchRow();
    
    return $setup;
+}
+
+function check_mysqli_param($param){
+	if (!isset($param))$param="";
+	return $param;
 }
 
 ?>

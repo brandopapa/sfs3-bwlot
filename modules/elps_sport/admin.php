@@ -52,7 +52,7 @@ else {$link2="mid=$_GET[mid]"; print_menu($school_menu_p3,$link2);}
 <table border=0 width='100%' style='font-size:11pt;'  cellspacing=1 cellpadding=0 bgcolor=silver>
 <tr bgcolor=white>
 <TD width=100% colspan=4>
-□編修選項<?
+□編修選項<?php
 echo "<img src='images/dia_bluve.gif'><A HREF='$_SERVER[PHP_SELF]?tb=add'>新增選項</A>
 <img src='images/dia_bluve.gif'><A HREF='?tb=gp'>分類編修</A>
 <img src='images/dia_bluve.gif'><A HREF='?tb=kkey'>索引值調整</A>

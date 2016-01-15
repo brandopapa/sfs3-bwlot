@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_stu.1.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_stu.1.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //ป{รา
 sfs_check();
@@ -228,7 +228,7 @@ switch (pKey){ //ด`ฐj
 
 //-->
 </script>
-<?
+<?php
 echo "<FORM METHOD=POST ACTION='$PHP_SELF' name='f1'>
 <INPUT TYPE='hidden' name='main_id' value='$_GET[mid]'>
 <INPUT TYPE='hidden' name='act' value=''>

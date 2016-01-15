@@ -48,7 +48,6 @@ if ($_POST['key']=="確定刪除"){
 	$CONN->Execute($query);
 	
 	//把所有附檔刪除
-	$b_id=intval($b_id);
 	$query="select * from jboard_files where b_id='$b_id'";
 	$res=$CONN->Execute($query);
 	if ($res->RecordCount()>0) {
@@ -57,7 +56,6 @@ if ($_POST['key']=="確定刪除"){
 	    unlink($Download_Path.$sFile);
 	  }
 	}
-	$b_id=intval($b_id);
 	$query= "delete from jboard_files where b_id = '$b_id'";
 	$CONN->Execute($query);
 	

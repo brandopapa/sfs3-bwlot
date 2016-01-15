@@ -1,5 +1,5 @@
 <?php
-	// $Id: stud_move_list.php 7712 2013-10-23 13:31:11Z smallduh $
+	// $Id: stud_move_list.php 8759 2016-01-13 12:50:36Z qfon $
 	//新增一個 zipfile
 	$ttt= new easyZIp;
 	$ttt->setPath($oo_path);
@@ -17,6 +17,7 @@
 	$temp_sty["year"]=strval($today[0]-1911);
 	$temp_sty["month"]=strval($today[1]);
 	$sex_arr=array("1"=>"男","2"=>"女");
+	$move_id=intval($move_id);
 	$query="select * from stud_move where move_id='$move_id'";
 	$res=$CONN->Execute($query);
 	$move_year_seme=$res->fields[move_year_seme];

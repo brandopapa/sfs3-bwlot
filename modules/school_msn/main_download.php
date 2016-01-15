@@ -4,7 +4,7 @@ header('Content-type: text/html; charset=utf-8');
 include_once ('config.php');
 include_once ('my_functions.php');
 
-$file_name=$_GET['set']; // 檔名
+$file_name=$_GET['set']; // �???
 
 
 if (!isset($_SESSION['MSN_LOGIN_ID'])) {
@@ -14,11 +14,25 @@ if (!isset($_SESSION['MSN_LOGIN_ID'])) {
 
 mysql_query("SET NAMES 'utf8'");
 
-$query="select filename_r,file_download from sc_msn_file where filename='".$file_name."'";
-$result=mysql_query($query);
+//$query="select filename_r,file_download from sc_msn_file where filename='".$file_name."'";
+//$result=mysql_query($query);
+///mysqli
+$query="select filename_r,file_download from sc_msn_file where filename=?";
+$mysqliconn = get_mysqli_conn("sc_msn_file");
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$file_name);
+$stmt->execute();
+$stmt->bind_result($filename_r,$file_download);
+$stmt->fetch();
+$stmt->close();
+///mysqli
 
-if (mysql_num_rows($result)) {
-list($filename_r,$file_download)=mysql_fetch_row($result);
+//if (mysql_num_rows($result)) {
+if ($filename_r) {
+$result=array($filename_r,$file_download);
+list($filename_r,$file_download)=$result;	
+//list($filename_r,$file_download)=mysql_fetch_row($result);
 //$filename_r=addslashes($filename_r);
 $file_download+=1;
 $query="update sc_msn_file set file_download='".$file_download."' where filename='".$file_name."'";
@@ -27,7 +41,7 @@ mysql_query($query);
  exit();
 }
 
-ini_set(‘memory_limit’, ’500M’);
+ini_set(??memory_limit??, ??500M??);
 
 
 $file_path = $download_path;

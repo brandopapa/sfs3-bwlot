@@ -134,8 +134,20 @@ exit();
 }
 
 if ($_POST['set']=="updatting") {
+//mysqli
+$mysqliconn = get_mysqli_conn();
+$query="update sc_msn_online set state=?,sound=?,sound_kind=? where teach_id='".$_SESSION['MSN_LOGIN_ID']."'";
+$stmt="";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('sss',$_POST['state'],$_POST['sound'],$_POST['sound_kind']);
+$stmt->execute();
+$stmt->close();
+//mysqli
+	/*
 	$query="update sc_msn_online set state='".$_POST['state']."',sound='".$_POST['sound']."',sound_kind='".$_POST['sound_kind']."' where teach_id='".$_SESSION['MSN_LOGIN_ID']."'";
   mysql_query($query);
+  */
+ 
 ?>
 <Script language="JavaScript">
 	opener.window.location.reload(); //父視窗更新

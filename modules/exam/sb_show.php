@@ -36,7 +36,7 @@
 Scratch §@«~¨q
 <p align="center">
 <applet code="ScratchApplet" codebase="./" name="ProjectApplet" width="482" height="387" align="middle" archive="ScratchApplet.jar" id="ProjectApplet" style="display:block">
-<param name="project" value="../../../<? echo $_GET["uu"] ?>">
+<param name="project" value="../../../<?php echo $_GET["uu"] ?>">
 </applet>
 </p>
 </div>

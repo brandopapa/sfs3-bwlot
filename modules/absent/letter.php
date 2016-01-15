@@ -1,6 +1,6 @@
 <?php
 
-// $Id: letter.php 8713 2015-12-31 03:25:24Z hsiao $
+// $Id: letter.php 8762 2016-01-13 12:58:06Z qfon $
 
 	//新增一個 zipfile 實例
 	$ttt = new EasyZip;
@@ -23,9 +23,9 @@
 	$sql="select * from school_room where room_id='3'";
 	$rs=$CONN->Execute($sql);
 	$temp_arr["room_name"] = $rs->fields['room_name'];
-
-	$student_sn=intval($student_sn);
-  //基本資料改由 student_sn 為條件取得 by smallduh 2012.10.05
+	
+   //基本資料改由 student_sn 為條件取得 by smallduh 2012.10.05
+    $student_sn=intval($student_sn);
 	$sql="select * from stud_base where student_sn='$student_sn'";
 	
 	//$sql="select * from stud_base where stud_id='$One'";
@@ -53,6 +53,8 @@
 	$temp_arr["guardian_name"] = $rs->fields['guardian_name'];
 
 	//取得該班有幾節課
+	$sel_year=intval($sel_year);
+	$sel_seme=intval($sel_seme);
 	$sql = "select sections from score_setup where year = '$sel_year' and semester='$sel_seme' and class_year='$year_name'";
 	$rs=$CONN->Execute($sql) or trigger_error("SQL語法錯誤： $sql", E_USER_ERROR);
 	$all_sections = $rs->fields['sections'];

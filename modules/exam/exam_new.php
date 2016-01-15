@@ -1,9 +1,10 @@
 <?php
                                                                                                                              
-// $Id: exam_new.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: exam_new.php 8742 2016-01-08 13:57:14Z qfon $
 
 // --系統設定檔
 include "exam_config.php";
+
 if(!checkid(substr($_SERVER[PHP_SELF],1))){
 	$go_back=1; //回到自已的認證畫面  
 	include "header.php";
@@ -11,14 +12,27 @@ if(!checkid(substr($_SERVER[PHP_SELF],1))){
 	include "footer.php"; 
 	exit;
 }
+
 $curr_class_id = sprintf("%03s%d",curr_year(),curr_seme());
 $session_tea_name = addslashes($_SESSION['session_tea_name']);
 if($_POST[key] =='新增'){
 	$temp_arr = $_POST[e_kind_id];
 	for ($i=0 ;$i<count($temp_arr);$i++) {
-		$sql_insert = "insert into exam (exam_id,exam_name,exam_memo,exam_isopen,exam_isupload,e_kind_id,teach_id,teach_name)values ('','$_POST[exam_name]','$_POST[exam_memo]','$_POST[exam_isopen]','$_POST[exam_isupload]','$temp_arr[$i]','$_SESSION[session_log_id]','$session_tea_name')";
- 		$CONN->Execute($sql_insert) or die($sql_insert);
-//		echo $sql_insert;
+		
+		//$sql_insert = "insert into exam (exam_id,exam_name,exam_memo,exam_isopen,exam_isupload,e_kind_id,teach_id,teach_name)values ('','$_POST[exam_name]','$_POST[exam_memo]','$_POST[exam_isopen]','$_POST[exam_isupload]','$temp_arr[$i]','$_SESSION[session_log_id]','$session_tea_name')";
+ 		//$CONN->Execute($sql_insert) or die($sql_insert);
+
+//mysqli
+$mysqliconn = get_mysqli_conn();	
+$sql_insert = "insert into exam (exam_id,exam_name,exam_memo,exam_isopen,exam_isupload,e_kind_id,teach_id,teach_name)values ('',?,?,?,?,'$temp_arr[$i]','$_SESSION[session_log_id]','$session_tea_name')";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_insert);
+$stmt->bind_param('ssss', $_POST[exam_name],$_POST[exam_memo],$_POST[exam_isopen],$_POST[exam_isupload]);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+		
+		//		echo $sql_insert;
  	}
 header("Location: exam.php");
   
@@ -112,6 +126,6 @@ function checkok()
 
 </table>
 </form>
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>
 
 

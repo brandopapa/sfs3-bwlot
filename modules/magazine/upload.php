@@ -1,5 +1,5 @@
 <?php
-//$Id: upload.php 8670 2015-12-24 06:39:10Z qfon $
+//$Id: upload.php 8745 2016-01-08 14:33:50Z qfon $
   include_once( "config.php") ;
   include_once( "../../include/PLlib.php") ;
   
@@ -10,8 +10,12 @@ if (!ini_get('register_globals')) {
 	extract( $_GET );
 	extract( $_SERVER );
 }
-  $chap_num=intval($chap_num);
-  if (!$chap_num)  header("location:paper_list.php") ;
+
+//mysqli	
+$mysqliconn = get_mysqli_conn();
+
+  if (!$chap_num)header("location:paper_list.php") ;
+  
   
   $nday = date("mdhi-") ;
   $savepath = $basepath .$book_path . "/" .$chap_path . "/" ;
@@ -41,13 +45,28 @@ if (!ini_get('register_globals')) {
         move_uploaded_file($_FILES['pic_file']['tmp_name'], $savepath . $pic_fn);
         dosmalljpg($savepath ,  $pic_fn) ;
      }
-
+     /*
      $sqlstr =  "insert into  magazine_paper (id,chap_num,tmode,title,author,type_name,
                  teacher,parent,doc,classnum,class_name , pwd,pic_name) 
                  values ('0','$chap_num','$cmode','$txt_title' , '$txt_author', '$txt_type' ,
                  '$txt_teacher', '$txt_parent' ,'$txt_doc' ,'$classnum' , '$class_year_p[$classnum]' ,'$txt_pwd' ,'$pic_fn') " ;   
      //$sqlstr = stripslashes($sqlstr);             
      $CONN->Execute($sqlstr) ;   
+	 */
+	 
+
+//mysqli	
+$chap_num=intval($chap_num);
+$sqlstr =  "insert into  magazine_paper (id,chap_num,tmode,title,author,type_name,
+            teacher,parent,doc,classnum,class_name , pwd,pic_name) 
+            values ('0','$chap_num',?,?,?,?,?,?,?,?, '$class_year_p[$classnum]' ,? ,'$pic_fn') " ;   
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('sssssssss',$cmode,$txt_title,$txt_author,$txt_type,$txt_teacher,$txt_parent,$txt_doc,$classnum,$txt_pwd);
+$stmt->execute();
+$stmt->close();
+//mysqli
+	
      header("location:paper_list.php?book_num=$book_num&chap_num=$chap_num") ;
 
 }
@@ -77,7 +96,7 @@ if (!ini_get('register_globals')) {
       if ($old_pic_name) $pic_fn = $old_pic_name ;  //保留舊圖檔名
      }
           
- 
+     /*
      $sqlstr =  "update magazine_paper set chap_num='$chap_num', tmode ='$cmode',
                  title='$txt_title',author='$txt_author',type_name='$txt_type',
                  teacher ='$txt_teacher' ,parent ='$txt_parent',
@@ -87,17 +106,35 @@ if (!ini_get('register_globals')) {
      $sqlstr .=  " where id = $paper_id  " ;      
      //$sqlstr = stripslashes($sqlstr); 
      //echo $sqlstr ;
-                 
-     $CONN->Execute($sqlstr) ;     
+	   $CONN->Execute($sqlstr) ; 
+	 */
+	 
+	 //mysqli
+     $chap_num=intval($chap_num);
+     $paper_id=intval($paper_id);	 
+     $sqlstr =  "update magazine_paper set chap_num='$chap_num', tmode =?,title=?,author=?,type_name=?,teacher =? ,parent =?,classnum =?, class_name ='$class_year_p[$classnum]' , pic_name ='$pic_fn' ,doc = ? " ;   
+
+     if ($txt_pwd) $sqlstr .=  " ,pwd=? " ;           
+     $sqlstr .=  " where id = $paper_id  " ;      
+
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('ssssssss',$cmode,$txt_title,$txt_author,$txt_type,$txt_teacher,$txt_parent,$classnum,$txt_doc);
+if ($txt_pwd)$stmt->mbind_param('s',$txt_pwd);
+$stmt->execute();
+$stmt->close();
+//mysqli
+	 
      header("location:paper_list.php?book_num=$book_num&chap_num=$chap_num") ;    
     
   }    
   
 //-----------------------------------------------------------------    
-//取得期別、單元    
+//取得期別、單元  
+  $chap_num=intval($chap_num);  
   $sqlstr =  "select a.* ,b.book_path ,b.ed_begin,b.ed_end  ,b.setpasswd , b.is_fin
               from magazine_chap a ,magazine b  
-              where  a.id = $chap_num  and a.book_num= b.id " ;   
+              where  a.id = '$chap_num'  and a.book_num= b.id " ;   
   $result = $CONN->Execute($sqlstr) ;
   while ($row= $result->FetchRow()) {
     $chap_name = $row["chap_name"] ;
@@ -115,6 +152,8 @@ if (!ini_get('register_globals')) {
      redir ("paper_list.php" ,2) ;
      exit ;
   } 
+  
+  
 ?>
 <html>
 <head>
@@ -128,7 +167,7 @@ function chk_empty(item) {
 
 function check() { 
    var errors='' ;
-   <? 
+   <?php
     //編修模式
     if ($paper_id) echo "var editmode = 1 ;\n" ;
     else echo "var editmode= false ; \n" ;
@@ -188,8 +227,9 @@ function check() {
 
 <?php
   // 編修-----------------------------------------------------------
-  $paper_id=intval($paper_id);
+  
   if ($paper_id) {
+	$paper_id=intval($paper_id);
     $sqlstr =  "select * from magazine_paper  where  id = $paper_id  " ;   
     $result = $CONN->Execute($sqlstr);
     while ($row= $result->FetchRow()) {
@@ -219,14 +259,14 @@ function check() {
     }
             
 ?>      
-<form method="post" action="<? echo $self_php ?>" enctype="multipart/form-data" name="myform" onSubmit="check();return document.returnValue">
+<form method="post" action="<?php echo $self_php ?>" enctype="multipart/form-data" name="myform" onSubmit="check();return document.returnValue">
   <div align="center">
-    <h2>第<? echo " $book_num 期 $chap_name 編修" ?> </h2>
+    <h2>第<?php echo " $book_num 期 $chap_name 編修" ?> </h2>
     <table width="80%" border="1" cellspacing="0" cellpadding="4" bgcolor="#FFCC99" bordercolorlight="#333333" bordercolordark="#FFFFFF">
       <tr> 
         <td width="15%">標題：</td>
         <td colspan="3"> 
-          <input type="text" name="txt_title" value="<? echo $title ?>" size="40">
+          <input type="text" name="txt_title" value="<?php echo $title; ?>" size="40">
         </td>
       </tr>
       <tr> 
@@ -247,7 +287,7 @@ function check() {
         </td>
         <td width="10%">作者：</td>
         <td width="41%"> 
-          <input type="text" name="txt_author" value="<? echo $author ?>">
+          <input type="text" name="txt_author" value="<?php echo $author; ?>">
         </td>
       </tr>
 <?php
@@ -256,14 +296,14 @@ if ($cmode < 2) { // 文章、圖檔有
       <tr> 
         <td width="15%">指導教師：</td>
         <td width="34%"> 
-          <input type="text" name="txt_teacher" value="<? echo $teacher ?>">
+          <input type="text" name="txt_teacher" value="<?php echo $teacher; ?>">
         </td>
         <td width="10%">家長：</td>
         <td width="41%"> 
-          <input type="text" name="txt_parent" value="<? echo $parent ?>">
+          <input type="text" name="txt_parent" value="<?php echo $parent; ?>">
         </td>
       </tr>
-<?
+<?php
 }
 ?>      
       <tr> 
@@ -286,7 +326,7 @@ if ($cmode < 2) { // 文章、圖檔有
             <input type="file" name="pic_file" size="40">
             <font color="#FF0000" size="2">(jpg、png格式)</font></p>
           <p>圖檔說明：<br>
-            <textarea name="txt_doc" cols="60" rows="4"><? echo $doc ?></textarea>
+            <textarea name="txt_doc" cols="60" rows="4"><?php echo $doc; ?></textarea>
           </p>
         </td>
       </tr>
@@ -320,23 +360,23 @@ else
             <font color="#FF0000" size="2">(100*100以內的小圖，可省略)</font> </p>
           <p>文章修改：<br>
 
-            <textarea name="txt_doc" cols="60" rows="15"><? echo $doc ?></textarea>
+            <textarea name="txt_doc" cols="60" rows="15"><?php echo $doc; ?></textarea>
           </p>
         </td>
       </tr>
-<?
+<?php
 }
 ?>      
     </table>
     <p> 
       <input type="submit" name="Submit" value="確定更改">
       <input type="reset" name="Submit2" value="重設">
-      <input type="hidden" name="chap_num" value="<? echo $chap_num ?>">
-      <input type="hidden" name="cmode" value="<? echo $cmode ?>">
-      <input type="hidden" name="book_path" value="<? echo $book_path ?>">
-      <input type="hidden" name="chap_path" value="<? echo $chap_path ?>">
-      <input type="hidden" name="old_pic_name" value="<? echo $pic_name ?>">
-      <input type="hidden" name="paper_id" value="<? echo $paper_id ?>">
+      <input type="hidden" name="chap_num" value="<?php echo $chap_num; ?>">
+      <input type="hidden" name="cmode" value="<?php echo $cmode; ?>">
+      <input type="hidden" name="book_path" value="<?php echo $book_path; ?>">
+      <input type="hidden" name="chap_path" value="<?php echo $chap_path; ?>">
+      <input type="hidden" name="old_pic_name" value="<?php echo $pic_name; ?>">
+      <input type="hidden" name="paper_id" value="<?php echo $paper_id; ?>">
     </p>
   </div>
 </form>    
@@ -360,9 +400,9 @@ else
       exit ;        
     }    
 ?>
-<form method="post" action="<? echo $self_php ?>" enctype="multipart/form-data" name="myform" onSubmit="check();return document.returnValue">
+<form method="post" action="<?php echo $self_php ?>" enctype="multipart/form-data" name="myform" onSubmit="check();return document.returnValue">
   <div align="center">
-    <h2>第<? echo " $book_num 期 $chap_name 上傳" ?> </h2>
+    <h2>第<?php echo " $book_num 期 $chap_name 上傳" ?> </h2>
     <table width="80%" border="1" cellspacing="0" cellpadding="4" bgcolor="#FFCC99" bordercolorlight="#333333" bordercolordark="#FFFFFF">
       <tr> 
         <td width="17%">標題：</td>
@@ -404,7 +444,7 @@ if ($cmode < 2) {
           <input type="text" name="txt_parent">
         </td>
       </tr>
-<?
+<?php
 }
 ?>      
       <tr> 
@@ -469,10 +509,10 @@ else{
     <p> 
       <input type="submit" name="Submit" value="確定上傳">
       <input type="reset" name="Submit2" value="重設">
-      <input type="hidden" name="chap_num" value="<? echo $chap_num ?>">
-      <input type="hidden" name="cmode" value="<? echo $cmode ?>">
-      <input type="hidden" name="book_path" value="<? echo $book_path ?>">
-      <input type="hidden" name="chap_path" value="<? echo $chap_path ?>">
+      <input type="hidden" name="chap_num" value="<?php echo $chap_num; ?>">
+      <input type="hidden" name="cmode" value="<?php echo $cmode; ?>">
+      <input type="hidden" name="book_path" value="<?php echo $book_path; ?>">
+      <input type="hidden" name="chap_path" value="<?php echo $chap_path; ?>">
     </p>
   </div>
 </form>  

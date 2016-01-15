@@ -1,6 +1,6 @@
 <?php
 
-// $Id: trans_main.php 8207 2014-11-18 01:06:34Z smallduh $
+// $Id: trans_main.php 8762 2016-01-13 12:58:06Z qfon $
 	//新增一個 EasyZip 實例
 	$ttt = new EasyZip;
 	$ttt->setPath($oo_path);
@@ -31,6 +31,8 @@
 
 	//將 content.xml 的 tag 取代
 	//取得該班有幾節課
+	$sel_year=intval($sel_year);
+	$sel_seme=intval($sel_seme);
 	$sql = "select sections,class_year from score_setup where year = '$sel_year' and semester='$sel_seme'";
 	$rs=$CONN->Execute($sql) or trigger_error("SQL語法錯誤： $sql", E_USER_ERROR);
 	while (!$rs->EOF) {

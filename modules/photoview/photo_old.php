@@ -1,5 +1,5 @@
 <?php
-// $Id: photo_old.php 8711 2015-12-31 02:19:05Z qfon $
+// $Id: photo_old.php 8744 2016-01-08 14:30:27Z qfon $
   require "config.php";
   
   sfs_check();
@@ -258,12 +258,12 @@ function gotourl(id,selpage,dirstr) {
 
 
 
-<?
+<?php
 }  
 ?>  
 
 </form>
 
-<?
+<?php
   foot() ;
 ?>  

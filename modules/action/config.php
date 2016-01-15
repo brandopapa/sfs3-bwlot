@@ -1,6 +1,6 @@
 <?php
 
-// $Id: config.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: config.php 8761 2016-01-13 12:56:24Z qfon $
 
 require_once "./module-cfg.php";
 
@@ -24,6 +24,12 @@ $m_arr =& get_module_setup("action");
 extract($m_arr, EXTR_OVERWRITE);
 
 $PHP_SELF = $_SERVER["PHP_SELF"] ;
+
+
+function check_mysqli_param($param){
+	if (!isset($param))$param="";
+	return $param;
+}
 
  //°µÁY¹Ï
  function ImageResized( $filename_src , $small_image ,$w ,$h ,$GD2=0 ) {

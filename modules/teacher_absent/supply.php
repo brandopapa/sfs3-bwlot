@@ -1,5 +1,5 @@
 <?php
-//$Id: supply.php 8689 2015-12-25 03:09:57Z qfon $
+//$Id: supply.php 8756 2016-01-13 12:46:10Z qfon $
 include "config.php";
 head("代課列表");
 $tool_bar=make_menu($school_menu_p);
@@ -9,7 +9,7 @@ $abs_kind_arr=tea_abs_kind();
 //選擇學期
 $year_seme_menu=year_seme_menu($sel_year,$sel_seme);
 //選擇教師
-$leave_teacher_menu=teacher_menu("teacher_sn",$_POST[teacher_sn]); 
+$leave_teacher_menu=teacher_menu("teacher_sn",intval($_POST[teacher_sn])); 
 //選擇假別
 $abs_kind=tea_abs($_POST[abs_kind],$abs_kind_arr); 
 //選擇月份
@@ -26,12 +26,14 @@ $d_check4_menu=d_make_menu("是否確定",$_POST[d_check4] , $check_arr,"d_check4",1
 
 if ($_POST[deputy]) {
 	list($c_id,$v)=each($_POST[deputy]);
+	    $c_id=intval($c_id);
 		$query="update teacher_absent_course set status='1',deputy_date='".date("Y-m-d H:i:s")."' where c_id='$c_id'";
 	
 		$CONN->Execute($query);
 
 } elseif ($_POST[deputy_c]) {
 	list($c_id,$v)=each($_POST[deputy_c]);
+	    $c_id=intval($c_id);
 		$query="update teacher_absent_course set status='0',deputy_date='".date("Y-m-d H:i:s")."' where c_id='$c_id'";
 
 		$CONN->Execute($query);
@@ -40,6 +42,8 @@ if ($_POST[deputy]) {
 
 $today=date("Y-m-d",mktime(date("m"),date("d"),date("Y")));
 //條件
+$sel_year=intval($sel_year);
+$sel_seme=intval($sel_seme);
 $query1.=" and year='$sel_year' and semester='$sel_seme' ";
 
 if ($_POST[teacher_sn]) {

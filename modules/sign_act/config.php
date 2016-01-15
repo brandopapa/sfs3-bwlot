@@ -1,6 +1,6 @@
 <?php
 
-// $Id: config.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: config.php 8764 2016-01-13 13:08:50Z qfon $
 include_once "../../include/config.php";
 
 require_once "./module-cfg.php";
@@ -23,7 +23,10 @@ $PHP_SELF = $_SERVER["PHP_SELF"] ;
 // 請注意!!!!! 這裡只能使用 include_once 或 include
 //---------------------------------------------------
 
-
+function check_mysqli_param($param){
+	if (!isset($param))$param="";
+	return $param;
+}
 
 //取得所在目錄的校名文字檔(school_name.txt)
 function get_school_name($school_name ,$school_list) {

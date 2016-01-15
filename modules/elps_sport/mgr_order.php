@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_order.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_order.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //ป{รา
 sfs_check();
@@ -436,7 +436,7 @@ function showtalk1() {
 
 </TD></TR>
 <TR><TD style='font-size:10pt;' width=80% valign=top>
-<?
+<?php
 for ($a=1;$a<=$all_col ;$a++){
 	$tmp_str='';$y=0;
 	$LimtA=($a-1)*$limit;

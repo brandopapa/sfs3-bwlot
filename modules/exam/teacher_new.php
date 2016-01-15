@@ -14,10 +14,22 @@ include "header.php";
 }
 if($key =='·s¼W')
 {
-$sql_insert = "insert into stud_base (stud_id,stud_name,stud_pass,tea_school,tea_img) values ('$stud_id','$stud_name','$stud_pass','$tea_school','$tea_img')";
+//mysqli
+$mysqliconn = get_mysqli_conn();	
+$sql_insert = "insert into stud_base (stud_id,stud_name,stud_pass,tea_school,tea_img) values (?,?,?,?,?)";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_insert);
+$stmt->bind_param('sssss', $stud_id,$stud_name,$stud_pass,$tea_school,$tea_img);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	
+//$sql_insert = "insert into stud_base (stud_id,stud_name,stud_pass,tea_school,tea_img) values ('$stud_id','$stud_name','$stud_pass','$tea_school','$tea_img')";
 // Insert: 
-  $result = mysql_query ($sql_insert,$conID) or die($sql_insert);  
-  if ($result) 
+  //$result = mysql_query ($sql_insert,$conID) or die($sql_insert);  
+ 
+  //if ($result) 
+  if ($mysqliconn->affected_rows==1){
   include "stud_base.php";
   exit;
 }
@@ -82,6 +94,6 @@ $sql_insert = "insert into stud_base (stud_id,stud_name,stud_pass,tea_school,tea
 </tr>
 </table>
 </form>
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>
 
 

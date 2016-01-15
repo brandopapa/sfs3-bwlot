@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board_config.php 7779 2013-11-20 16:09:00Z smallduh $
+// $Id: board_config.php 8752 2016-01-13 12:38:48Z qfon $
 
 /* 學務系統設定檔 */
 require_once "../../include/config.php";
@@ -141,5 +141,10 @@ function board_checkid($chk){
 	}
 	else
 		return false;
+}
+
+function check_mysqli_param($param){
+	if (!isset($param))$param="";
+	return $param;
 }
 ?>

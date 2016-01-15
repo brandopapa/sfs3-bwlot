@@ -34,6 +34,7 @@ $sel_seme=substr($SETUP['now_year_seme'],-1);
 //補考學期的年級
 $Cyear=$Now_Cyear-($curr_year-$sel_year);
 
+
 //取得學期課程設定
 //抓取本學期所有課程設定(領域－分科) 3維陣列 $scope_subject[scope][][]
 // $data[scope][subject_id][subject]=分科名稱
@@ -214,7 +215,8 @@ if ($_POST['act']=='start_test') {
  	//檢查各分科試題夠不夠
  				$stop=0;		
  				$stop_info="";		
-	      foreach ($scope_subject[$scope] as $subject_id=>$V) {    
+ 				//此生若為班級課程 , 仍用 ALL 課程 來檢驗,因為試題只能一份, 某領域不及格,所有分科都要考 2016.01.06	      
+	      foreach ($scope_subject['ALL'][$scope] as $subject_id=>$V) {    
 	     	  $now_subject_ss_id=$V['ss_id'];
 					//本分科若不及格
 					if ($ss_score[$now_subject_ss_id]<60) {

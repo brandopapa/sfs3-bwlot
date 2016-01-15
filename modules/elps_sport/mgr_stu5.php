@@ -1,8 +1,10 @@
 <?php
-//$Id: mgr_stu5.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_stu5.php 8769 2016-01-13 14:16:55Z qfon $
+$mid=intval($mid);
 $SQL="select *  from sport_item where mid='$mid' and enterclass like '$class_num_1%' and skind=0 and sportkind=5 order by  kind, enterclass ";
 $rs=$CONN->Execute($SQL) or die($SQL);
 $arr=$rs->GetArray();//取項目與報名數
+
 
 for($i=0; $i<$rs->RecordCount(); $i++) {	//取項目迴圈
 	$S_Name=$sportclass[$arr[$i][enterclass]].$sportname[$arr[$i][item]].$itemkind[$arr[$i][kind]];

@@ -1,5 +1,5 @@
 <?php
-//$Id: teach.1.php 7202 2013-03-08 01:08:06Z chiming $
+//$Id: teach.1.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //ป{รา
 //sfs_check();
@@ -113,7 +113,7 @@ switch (pKey){ //ด`ฐj
 
 //-->
 </script>
-<?
+<?php
 echo "<FORM METHOD=POST ACTION='$PHP_SELF' name='f1'>\n
 <INPUT TYPE='hidden' name='mid' value='$_GET[mid]'>
 <INPUT TYPE='hidden' name='act' value=''>";

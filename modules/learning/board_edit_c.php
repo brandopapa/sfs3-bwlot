@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: board_edit_c.php 8705 2015-12-29 03:03:33Z qfon $
+// $Id: board_edit_c.php 8763 2016-01-13 13:02:47Z qfon $
 
 // --系統設定檔
 include "config.php"; 
@@ -36,7 +36,7 @@ if ($key == "確定修改"){
 		else	
 			copy($_FILES[b_upload][tmp_name] , ($USR_DESTINATION.$b_store));
 	}
-
+    $b_id=intval($b_id);
 	$sql_update .= " where b_id='$b_id' " ;
 	mysql_query($sql_update) or die ($sql_update);
 	

@@ -222,16 +222,20 @@ if ($_POST['act']=='output_resit_name') {
   
 	foreach ($stud_sn as $student_sn) {
     
-    /* $seme_class 用於搜尋分科任課教師
-    //取得學生當學期的班級座號
+    
+    //取得學生當學期的班級座號 , 做出 $class_id (2016.01.06 因應班級課程)
     $sql_class_num="select seme_class from stud_seme where student_sn='".$student_sn."' and seme_year_seme='".$seme_year_seme."'";
  	  $res_class_num=$CONN->Execute($sql_class_num);
  	  if ($res_class_num->RecordCount()==1) {
  	    $seme_class=$res_class_num->fields['seme_class'];
+     	$class_year=substr($seme_class,0,1);
+     	$class_num=substr($seme_class,1,2);			  
+	    $class_id=sprintf("%03d_%d_%02d_%02d",$sel_year,$sel_seme,$class_year,$class_num);
  	  } else {
  	    $seme_class="";
+ 	    $class_id="ALL";
  	  }
- 	  */
+ 	  
  	  
  	  //讀取學生所有分科成績
  	  $ss_score=array();
@@ -251,15 +255,18 @@ if ($_POST['act']=='output_resit_name') {
 	  $memo=array();
 	  foreach ($ss_link as $v=>$S) {
 	  	${$S}=$fin_score[$student_sn][$S][$seme_year_seme]['score'];
+	  	//某領域不及格, 檢查分科細目
 	   if ($fin_score[$student_sn][$S][$seme_year_seme]['score']<60) {
 	     $put_it=1;
 	     $resit_number++;
 	     $resit_scope.="【".$v;
 	     
 	     //讀取分科
+	     //此生是否為班級課程 , 若無則用 ALL 課程
+	     $target_id=(count($scope_subject[$class_id][$S])>0)?$class_id:"ALL"; 
 	     $resit_subject="";
-	     if (count($scope_subject[$S])>1) {
-	      foreach ($scope_subject[$S] as $V) {
+	     if (count($scope_subject[$target_id][$S])>1) {
+	      foreach ($scope_subject[$target_id][$S] as $V) {
     
 	     	  $now_subject_ss_id=$V['ss_id'];
 					if ($ss_score[$now_subject_ss_id]<60) {

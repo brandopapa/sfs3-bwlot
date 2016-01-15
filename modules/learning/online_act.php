@@ -1,5 +1,5 @@
 <?php
-// $Id: online_act.php 8705 2015-12-29 03:03:33Z qfon $
+// $Id: online_act.php 8763 2016-01-13 13:02:47Z qfon $
 // --系統設定檔
 include "config.php"; 
 session_start();
@@ -202,6 +202,7 @@ for ($i= 1 ; $i <= ($n_games*2-1) ;$i++){
 if($my_games>=$n_games ){
 	$badge=$poke=rand(1,151);
 	$msg_c="<img src='images/win.gif'><font color=red face=標楷體 size=7>恭喜你獲得徵章，繼續努力吧！</font>";
+	$p_sn=intval($p_sn);
 	$sql_update = "update test_online set h_who='', g_who=''  where p_sn='$p_sn' "; 	
 	mysql_query($sql_update) or die ($sql_update);	
 	$sql_insert = "INSERT INTO test_badge (  stud_id , who , badge , type , a_stud_id , a_who , up_date , teacher_sn ) 

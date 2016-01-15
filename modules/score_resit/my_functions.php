@@ -54,11 +54,11 @@ function get_year_seme_scope($year,$semester,$class_year) {
 			foreach ($ss_link as $scope) {
 				$paper_setup=get_paper_sn($seme_year_seme,$class_year,$scope);
 				if ($paper_setup['sn']>0) {
-				foreach ($scope_main[$scope] as $k=>$v) {
+				foreach ($scope_main['ALL'][$scope] as $k=>$v) {
 			  	$sql="select count(*) as num from resit_exam_items where paper_sn='".$paper_setup['sn']."' and subject='".$v['subject']."'";
 			    $res=$CONN->Execute($sql) or user_error("Åª¨ú¿ù»~! $sql",256);
 			    $num=$res->fields['num'];
-			    $scope_main[$scope][$k]['items']=$num;
+			    $scope_main['ALL'][$scope][$k]['items']=$num;
 				} // end foreach
 			  } // end if
 			} // end foreach

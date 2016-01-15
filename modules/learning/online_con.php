@@ -1,5 +1,5 @@
 <?php
-// $Id: online_con.php 8705 2015-12-29 03:03:33Z qfon $
+// $Id: online_con.php 8763 2016-01-13 13:02:47Z qfon $
 // --系統設定檔
 include "config.php"; 
 session_start();
@@ -33,6 +33,7 @@ if ($_SESSION[session_log_id] != ""){
 $c_title= "<font size=6 face=標楷體 color=#800000><b>$s_title</b> </font>";	
 
 if($key=='取消'){
+	$p_sn=intval($p_sn);
 	$sql_update = "update test_online set h_who='' ,h_stud_id='',h_sid=0,h_sid1=0,h_sid2=0,h_sid3=0,h_sid4=0,h_sid5=0 ,h_name='',p_games='0'   where p_sn='$p_sn' "; 	
 	mysql_query($sql_update) or die ($sql_update);	
 	Header ("Location: online_con.php");
@@ -172,6 +173,7 @@ while ($row = $result->FetchRow() ) {
 	$r_a[3]=' □' ;	
 
 //取得各道館資料
+$open=intval($open);
 $sqlstr = "select * from test_online where  p_sn <= $open  " ;
 $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;
 $status="";
@@ -193,6 +195,7 @@ while ($row = $result->FetchRow() ) {
 	}
 }
 //取得各道館資料
+$open=intval($open);
 $sqlstr = "select * from test_online where  p_sn <= $open  " ;
 $result =$CONN->Execute($sqlstr) or user_error("讀取失敗！<br>$sqlstr",256) ;
 $s_unit.="<table align='center'  border='0' cellpadding='3' cellspacing='3' width='100%' >";
@@ -291,6 +294,7 @@ while ($row = $result->FetchRow() ) {
 	}
 	//自己對戰
 	if($h_who==$g_who and $h_stud_id==$g_stud_id){
+		$p_sn=intval($p_sn);
 		$sql_update = "update test_online set h_who='' ,h_stud_id='',h_sid=0,h_sid1=0,h_sid2=0,h_sid3=0,h_sid4=0,h_sid5=0 ,h_name='',p_games='0' ,g_who='' ,g_stud_id='',g_sid=0,g_sid1=0,g_sid2=0,g_sid3=0,g_sid4=0,g_sid5=0 ,g_name='',att_time='0000-00-00 00:00:00' ,h_att='0',h_games='0',h_win='0',h_attack='0'   ,g_att='0',g_games='0',g_win='0',g_attack='0' ,err='0' where p_sn='$p_sn' "; 	
 		mysql_query($sql_update) or die ($sql_update);	
 	}

@@ -1,7 +1,8 @@
 <?php                                                                                                                             
-// $Id: ekind_new.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: ekind_new.php 8742 2016-01-08 13:57:14Z qfon $
 // --系統設定檔
 include "exam_config.php";
+
 
 //判斷是否為管理者 $perr_man 陣列設定在 exam_config.php
 $man_flag = false;
@@ -9,6 +10,7 @@ $man_flag = false;
 $man_flag = checkid($_SERVER[SCRIPT_FILENAME],1) ;
 
 $curr_class_id = $_POST[curr_class_id];
+
 if($curr_class_id =='')
 	$curr_class_id = 1;
 if (!$man_flag) {	
@@ -25,16 +27,32 @@ if(!checkid(substr($_SERVER[PHP_SELF],1))){
 	exit;
 }
 
+//mysqli
+$mysqliconn = get_mysqli_conn();	
+
+
 if($_POST[key] =='新增'){
 	$curr_class_name = $_POST[curr_class_name];
 	for ($i=0 ;$i <count($_POST[curr_class_name]);$i++) {
 		$class_id = sprintf("%04d%d%02d",$_POST[curr_year],$_POST[curr_class_id],$curr_class_name[$i]);
 		$result = $CONN->Execute("select class_id from exam_kind where class_id ='$class_id'");
 		if ($result->RecordCount() ==0) {
+			/*
 			$sql_insert = "insert into exam_kind (e_kind_id,e_kind_memo,e_kind_open,e_upload_ok,teach_id,teach_name,class_id)
                  		values ('$_POST[e_kind_id]','$_POST[e_kind_memo]','$_POST[e_kind_open]','$_POST[e_upload_ok]','$_SESSION[session_log_id]','$_SESSION[session_tea_name]','$class_id')";
   			$CONN->Execute($sql_insert) or die($sql_insert); 
-  		}
+             */
+//mysqli
+$sql_insert = "insert into exam_kind (e_kind_id,e_kind_memo,e_kind_open,e_upload_ok,teach_id,teach_name,class_id)
+               values (?,?,?,?,'$_SESSION[session_log_id]','$_SESSION[session_tea_name]',?)";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_insert);
+$stmt->bind_param('sssss', $_POST[e_kind_id],$_POST[e_kind_memo],$_POST[e_kind_open],$_POST[e_upload_ok],$class_id);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+		
+		}
   		
   	}
   	//目前年班 curr_year() ->學年度 $curr_class_year ->年級 
@@ -54,8 +72,21 @@ if($_POST[key] =='新增'){
 			$res = $CONN->Execute($query);
 			if ($res->EOF){
 	  			$stud_num = substr($result->fields[1],-2);
-  				$query = "insert into exam_stud_data (stud_id,stud_pass,stud_num) values ('$stud_id','$default_pass','$stud_num')";
+  				/*
+				$query = "insert into exam_stud_data (stud_id,stud_pass,stud_num) values ('$stud_id','$default_pass','$stud_num')";
   				$CONN->Execute($query) or die($query);
+				*/
+//mysqli
+$query = "insert into exam_stud_data (stud_id,stud_pass,stud_num) values ('$stud_id',?,'$stud_num')";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $default_pass);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+			
+			
+			
 			}
 			$result->MoveNext();
   		}
@@ -120,13 +151,13 @@ include "header.php";
 
 <tr>
 	<td>是否開放展示</td><td>
-		<input type="checkbox" name="e_kind_open" value=1  <? echo $e_kind_open; ?>> 是
+		<input type="checkbox" name="e_kind_open" value=1  <?php echo $e_kind_open; ?>> 是
 	</td>
 </tr>
 
 <tr>
 	<td>是否開放上傳</td><td>
-		<input type="checkbox" name="e_upload_ok" value=1  <? echo $e_upload_ok; ?>> 是
+		<input type="checkbox" name="e_upload_ok" value=1  <?php echo $e_upload_ok; ?>> 是
 	</td>
 </tr>
 
@@ -139,7 +170,7 @@ include "header.php";
 </tr>
 <tr>
 	<td colspan=2 align=center>
-	<input type="hidden" name=curr_year value="<? echo sprintf("%03s%d",curr_year(),curr_seme()); ?>">
+	<input type="hidden" name=curr_year value="<?php echo sprintf("%03s%d",curr_year(),curr_seme()); ?>">
 	<input type="submit" name=key value="新增">
 	&nbsp;&nbsp;<input type="button"  value= "回上頁" onclick="history.back()">
 	</td>
@@ -147,4 +178,4 @@ include "header.php";
 
 </table>
 </form>
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

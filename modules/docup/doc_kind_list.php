@@ -1,6 +1,6 @@
 <?php
 
-//$Id: doc_kind_list.php 8621 2015-12-04 01:44:25Z hami $
+//$Id: doc_kind_list.php 8754 2016-01-13 12:44:14Z qfon $
 
 include "docup_config.php";
 if ($is_standalone!="1") head("文件資料庫");
@@ -35,6 +35,7 @@ else if (isset($_POST[newkey])){
 $state_kind = "<select name=\"doc_kind_id\"  size=1 onchange=\"document.kindform.submit()\"> ";
 $post_office_p = room_kind();
 while (list($tid, $tname) = each($post_office_p)){
+	$tid=intval($tid);
 	$sql_select = "select count(docup_p_id) as cc from docup_p where doc_kind_id ='$tid'";
 	$result = $CONN->Execute($sql_select) or die ($sql_select);
 	$cc =$result->fields[0];	
@@ -59,6 +60,7 @@ $state_kind .= "</select>";
     <td  bgcolor="#008000" align="center"><font color="#FFFFFF">文件數</font></td>
   </tr> 
 <?php
+$doc_kind_id=intval($doc_kind_id);
 $sql_select = "select * from docup_p  where doc_kind_id=$doc_kind_id order by docup_p_name ";
 $result = $CONN->Execute($sql_select);
 if ($result->RecordCount() >0){

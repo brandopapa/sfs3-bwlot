@@ -1,5 +1,5 @@
 <?php
-//$Id: book_say_up.php 8723 2016-01-02 06:00:38Z qfon $
+//$Id: book_say_up.php 8753 2016-01-13 12:40:19Z qfon $
 include "book_config.php";
 
 if (!checkid($_SERVER[SCRIPT_FILENAME],1)){
@@ -10,18 +10,43 @@ if (!checkid($_SERVER[SCRIPT_FILENAME],1)){
 }
 $postBtn = "½T©w";
 
+//mysqli
+$mysqliconn = get_mysqli_conn();
+
 if ($_POST[do_key]==$postBtn){
 	//­×§ï
 	$bs_title = AddSlashes($_POST[bs_title]);
 	$bs_con = AddSlashes($_POST[bs_con]);
 	if ($_POST[bs_id]<>''){
+		/*
 		$sql_update = "update book_say set bs_title='$_POST[bs_title]',bs_con='$_POST[bs_con]',us_id='$_SESSION[session_tea_sn]' where bs_id='$_POST[bs_id]'";
 		$CONN->Execute($sql_update) or trigger_error($sql_update,E_USER_ERROR);
+	     */
+///mysqli
+$sql_update = "update book_say set bs_title=?,bs_con=?,us_id='$_SESSION[session_tea_sn]' where bs_id=?";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('sss', $_POST[bs_title],$_POST[bs_con],$_POST[bs_id]);
+$stmt->execute();
+$stmt->close();
+///mysqli
+	
 	}
 	else {
+		/*
 		$sql_insert = "insert into book_say (bs_title,bs_con,us_id) values ('$_POST[bs_title]','$_POST[bs_con]','$_SESSION[session_tea_sn]')";
 		$CONN->Execute($sql_insert) or trigger_error($sql_update,E_USER_ERROR);
-
+        */
+///mysqli
+$sql_insert = "insert into book_say (bs_title,bs_con,us_id) values (?,?,'$_SESSION[session_tea_sn]')";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_insert);
+$stmt->bind_param('ss', $_POST[bs_title],$_POST[bs_con]);
+$stmt->execute();
+$stmt->close();
+///mysqli
+		
+		
 	}
 
 	header("Location: booksay_edit.php");

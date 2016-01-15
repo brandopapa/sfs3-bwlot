@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: show_owner.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: show_owner.php 8743 2016-01-08 14:02:58Z qfon $
 
 //載入設定檔
 include "exam_config.php";
@@ -246,4 +246,4 @@ while (!$result->EOF) {
 圖示：<img src="images/cool.gif"> -- <font size =+2><i>贊 </i></font>喔！
 <hr width=300 size=1>
 <a href="exam_list.php">回作業列表區</a>
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

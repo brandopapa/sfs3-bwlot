@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: bro_tea_book.php 8723 2016-01-02 06:00:38Z qfon $
+// $Id: bro_tea_book.php 8753 2016-01-13 12:40:19Z qfon $
 
 // --系統設定檔  
 include "book_config.php";
@@ -99,11 +99,35 @@ $stmt->close();
 		$temp_bb ="<table><tr><td>$book_id</td><td>$book_name</td><td>$book_author</td></tr></table>";
 
 		//借書登記
+		/*
 		$query = "insert into borrow (stud_id, bookch1_id, book_id, out_date) values ('$teach_id', '$bookch1_id', '$book_id', '".$now."')";
 		$result = mysql_query($query)or die ($query);
+		*/
+//mysqli			
+$query = "insert into borrow (stud_id, bookch1_id, book_id, out_date) values (?, ?, ?, '".$now."')";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('sss',$teach_id,$bookch1_id,$book_id);
+$stmt->execute();
+$stmt->close();
+//mysqli				
+		
+		
 		//設定已借出
+		/*
 		$query = "update book set book_isout=1 where book_id='$book_id'";
 		$result = mysql_query($query)or die ($query);
+		*/
+//mysqli			
+$query = "update book set book_isout=1 where book_id=?";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$book_id);
+$stmt->execute();
+$stmt->close();
+//mysqli			
+		
+		
 		$reader_flag = 1 ;
 	//}
 }

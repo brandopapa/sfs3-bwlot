@@ -667,7 +667,7 @@ if (empty($friendly_print) && empty($save_csv) && empty($excel) && empty($excel2
 		 if(empty($sel_seme))$class_id=$class_idx.$ig;
 		 
        $main.=sortview($sel_year,$sel_seme,$class_id,$subject1,$stage,$chart_kind,$percent,3,$rate,$scopeall);	
-       $main.="補救順位,身分證字號,年級,班級,座號,姓名,成績,名次,PR值,備註\n";
+       $main.="補救順位,身分證字號,年級,班級,座號,姓名,成績,名次,PR值,學號,備註\n";
 		 
 	  }
 	 
@@ -763,13 +763,13 @@ elseif($excel2)
 		$x->filename=$year_seme."_".$c_year."_".$c_name."_scoresort.xls";
 		$x->setBorderStyle(1);
 		$x->addSheet('ScoreSort');
-		$x->items[0]=array('補救順位','身分證字號','年級','班級','座號','姓名','成績','名次','PR值','備註');
+		$x->items[0]=array('補救順位','身分證字號','年級','班級','座號','姓名','成績','名次','PR值','學號','備註');
 		
 		$da=explode("\n",$main);
 
          for ($i = 0; $i < count($da)-1; $i++) {
 	     $ba=explode(",",$da[$i]);
-         $x->items[]=array($ba[0],$ba[1],$ba[2],$ba[3],$ba[4],$ba[5],$ba[6],$ba[7],$ba[8],$ba[9]);
+         $x->items[]=array($ba[0],$ba[1],$ba[2],$ba[3],$ba[4],$ba[5],$ba[6],$ba[7],$ba[8],$ba[9],$ba[10]);
          }
 		
 		

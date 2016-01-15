@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_in.php 6805 2012-06-22 08:00:32Z smallduh $
+// $Id: doc_in.php 8746 2016-01-08 15:41:01Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -20,9 +20,24 @@ else
 //-----------------------------------
 $add_kind = array("0"=>"自動取得最後一個文號", "1"=>"參考上筆累加","2"=>"全部手動輸入");
 
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+
 if ($key =="登錄公文"){
-	$query = "insert into sch_doc1 (doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,teach_id,doc1_k_id) values ('$doc1_id','$doc1_year_limit','$doc1_kind','$doc1_date','$doc1_date_sign','$doc1_unit','$doc1_word','$doc1_main','$doc1_unit_num1','$session_log_id','0')";
-	mysql_query($query);
+	//$query = "insert into sch_doc1 (doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,teach_id,doc1_k_id) values ('$doc1_id','$doc1_year_limit','$doc1_kind','$doc1_date','$doc1_date_sign','$doc1_unit','$doc1_word','$doc1_main','$doc1_unit_num1','$session_log_id','0')";
+	//mysql_query($query);
+///mysqli
+$query = "insert into sch_doc1 (doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,teach_id,doc1_k_id) values (?,?,?,?,?,?,?,?,?,?,'1')";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('ssssssssss',$doc1_id,$doc1_year_limit,$doc1_kind,$doc1_date,$doc1_date_sign,$doc1_unit,$doc1_word,$doc1_main,$doc1_unit_num1,$session_log_id);
+$stmt->execute();
+$stmt->close();
+
+///mysqli	
+	
+	
+	
 }
 
 include "header.php";

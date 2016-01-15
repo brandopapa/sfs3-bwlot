@@ -1,4 +1,4 @@
-<?
+<?php
 include "config.php";
 ?><html>
 <meta http-equiv="Content-Type" content="text/html; Charset=Big5">
@@ -14,7 +14,7 @@ include "config.php";
 	}
 </script>
 <body>
-<?
+<?php
 echo " <CENTER><B>".$SCHOOL_BASE[sch_cname_s]."競賽成績查閱系統</B></CENTER>";
 ($_GET[mid]!='') ? mmid2($_GET[mid]):mmid2();
 if ($_GET[mid]!='' && $_GET[item]=='') echo item_list($_GET[mid]);
@@ -39,7 +39,7 @@ if ($arr_1=='' && $arr_2=='') return '尚無資料！';
 <table border=0 width='100%' style='font-size:11pt;'  cellspacing=1 cellpadding=0 bgcolor=silver>
 <tr bgcolor=white><td width =50% valign=top>
 
-<?
+<?php
 ///初賽顯示//$arr_1;
 ($arr_2=='')? $tmp_word='':$tmp_word="進決賽";
 echo"<div style='color:#800000;'><FONT COLOR='blue'>■".$A_Name."</FONT><BR> 共 <B>$A_nu</B> 名(隊)參賽,每組<B>$A_one</B>名,錄取<B>$A_go</B>名 <B>$arr_1[imemo]</B>$tmp_word。</div>";
@@ -71,7 +71,7 @@ unset($tmp_str);
 
 </TABLE></td><td width =50% valign=top>
 
-<?
+<?php
 ///////////////決賽顯示處理 ///////////////////////
 
 if ($arr_2!=''){
@@ -117,7 +117,7 @@ echo"</table>";
 }
 ?>
 </td></tr></table>
-<?
+<?php
 }
 #####################   列示主要項目  ###########################
 function Co_GP($lg,$nu){//組距,編號

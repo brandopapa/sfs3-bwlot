@@ -1,6 +1,6 @@
 <?php
 
-//$Id: doc_list.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: doc_list.php 8754 2016-01-13 12:44:14Z qfon $
 
 include "docup_config.php";
 $doc_kind_id = $_POST[doc_kind_id];
@@ -21,7 +21,7 @@ if($_SESSION[session_tea_sn] !=""){
 }
 
 if ($is_standalone!="1") head("文件資料庫");
-
+$doc_kind_id=intval($doc_kind_id);
 $sql_select = "select docup_p_id,docup_p_name from docup_p\n";
 $sql_select .= "where doc_kind_id = '$doc_kind_id' ";
 $result = $CONN->Execute($sql_select);
@@ -34,7 +34,7 @@ while (!$result->EOF) {
 }
 
 $state_kind .= "</select>\n <input type=hidden name=doc_kind_id value=$doc_kind_id>";
-
+$docup_p_id=intval($docup_p_id);
 $sql_select="select docup_p_name from docup_p where docup_p_id=$docup_p_id";
 $result = $CONN->Execute($sql_select);
 $state_name = $result->fields["state_name"];	
@@ -56,6 +56,7 @@ echo "&nbsp;&nbsp;<a href=\"doc_add.php?docup_p_id=$docup_p_id \">新增文件</a> |
   </tr> 
 <?php
 //$sql_sel = "select * from docup where docup_p_id = '$docup_p_id' order by docup_id desc";
+$docup_p_id=intval($docup_p_id);
 $sql_sel = "select * from docup where docup_p_id = '$docup_p_id' order by docup_name ";
 $result = $CONN->Execute($sql_sel);
 //if ($result->RecordCount()>0)

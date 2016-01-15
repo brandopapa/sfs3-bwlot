@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board_edit.php 8714 2015-12-31 05:14:22Z qfon $
+// $Id: board_edit.php 8752 2016-01-13 12:38:48Z qfon $
 
 // --系統設定檔
 include "board_config.php";
@@ -9,7 +9,7 @@ include "board_config.php";
 //session_register("session_log_id");
 $bk_id = $_REQUEST['bk_id'];
 $b_id = $_REQUEST['b_id'];
-
+/*
 if(!board_checkid($bk_id)){
 
 	$go_back=1; //回到自已的認證畫面
@@ -35,6 +35,7 @@ if ($result->EOF && !checkid($_SERVER['SCRIPT_FILENAME'],1)){
 	echo "沒有權限修改本公告";
 	exit;
 }
+*/
 
 // 刪除檔案
 if ($_GET['act'] == 'del_file'){
@@ -92,19 +93,39 @@ $board_is_public = $row["board_is_public"];
 if ($_POST['key'] == "確定修改"){
 
 	$b_post_time = mysql_date();
+	
+	/*
 	$sql_update = "update board_p set b_open_date='{$_POST['b_open_date']}', " .
 			"b_days='{$_POST['b_days']}',b_unit='$b_unit', b_sub='{$_POST['b_sub']}'," .
 			"b_con='{$_POST['b_con']}', b_url='{$_POST['b_url']}' ,b_post_time='$b_post_time'," .
 			"b_is_intranet='{$_POST['b_is_intranet']}',b_is_sign='{$_POST['b_is_sign']}',b_is_marquee='{$_POST['b_is_marquee']}' ";
+	*/
+	
+	//mysqli
+	$sql_update = "update board_p set b_open_date=?, " .
+			"b_days=?,b_unit='$b_unit', b_sub=?," .
+			"b_con=?, b_url=? ,b_post_time='$b_post_time'," .
+			"b_is_intranet=?,b_is_sign=?,b_is_marquee=? ";
+	//mysqli
+	
 	$b_store = $bk_id."_".$b_id."_".$_FILES[b_upload][name];
 	$b_old_store = $bk_id."_".$b_id."_".$b_old_upload;
+	
 	if ($_POST['del_sign']=='1'){
 		$sql_update .= ",b_signs='' ";
 	}
+	$b_id=intval($b_id);
 	$sql_update .= " where b_id='$b_id' " ;
 
-	$CONN->Execute($sql_update) or die ($sql_update);
-
+	//$CONN->Execute($sql_update) or die ($sql_update);
+	
+//mysqli	
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('ssssssss',check_mysqli_param($_POST['b_open_date']),check_mysqli_param($_POST['b_days']),check_mysqli_param($_POST['b_sub']),check_mysqli_param($_POST['b_con']),check_mysqli_param($_POST['b_url']),check_mysqli_param($_POST['b_is_intranet']),check_mysqli_param($_POST['b_is_sign']),check_mysqli_param($_POST['b_is_marquee']));
+$stmt->execute();
+$stmt->close();
+///mysqli		
 
 		$fileCount = count($_FILES);
 		if ($fileCount > 0){

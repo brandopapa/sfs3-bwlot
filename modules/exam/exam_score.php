@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: exam_score.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: exam_score.php 8743 2016-01-08 14:02:58Z qfon $
 
 //¸ü¤J³]©wÀÉ
 include "exam_config.php";
@@ -151,4 +151,4 @@ foreach ( $score_stud as $sit_no => $stud_name )   {
 ?>
 </table>
 
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

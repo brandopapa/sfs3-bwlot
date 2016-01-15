@@ -1,5 +1,5 @@
 <?php                                                                                                                             
-// $Id: teacher_edit.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: teacher_edit.php 8743 2016-01-08 14:02:58Z qfon $
 
 if (!$isload)
 {
@@ -14,6 +14,10 @@ if ($session_tea_img != "1")
 
 include "header.php";
 }
+
+//mysqli	
+$mysqliconn = get_mysqli_conn();
+
 if ($sel =="delete")
   {
         echo "<form action=\"$PHP_SELF\" method=\"post\">\n"; 
@@ -27,23 +31,54 @@ if ($sel =="delete")
   }  
   if ($key =="確定刪除")
   {
+     /*
         $sql_update = " delete from stud_base ";
 	$sql_update .= " where stud_id='$stud_id' ";
 	$result = mysql_query ($sql_update,$conID)  or die ($sql_update);  
+	*/
+	
+//mysqli	
+$sql_update = " delete from stud_base ";
+$sql_update .= " where stud_id=? ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('s', $stud_id);
+$stmt->execute();
+$stmt->close();
+//mysqli
+	
 	include "stud_base.php";	
 	exit;
   }
   if ($key =="修改")
   {
+	/*
 	$sql_update = "update stud_base set stud_id='$stud_id',stud_name='$stud_name',stud_pass='$stud_pass',tea_school='$tea_school',tea_img='$tea_img' ";
 	$sql_update .= " where stud_id='$stud_id' ";
 	$result = mysql_query ($sql_update,$conID)  or die ($sql_update);  
+	*/
 	//echo $sql_update;
+
+//mysqli	
+$sql_update = "update stud_base set stud_id=?,stud_name=?,stud_pass=?,tea_school=?,tea_img=? ";
+$sql_update .= " where stud_id=? ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('ssssss', $stud_id,$stud_name,$stud_pass,$tea_school,$tea_img,$stud_id);
+$stmt->execute();
+$stmt->close();
+//mysqli
+	
+	
+	
+	
+	
+	
 	include "stud_base.php";
 	exit;
   }
+  
 ///mysqli	
-$mysqliconn = get_mysqli_conn();
 $stmt = "";
 $stmt = $mysqliconn->prepare("select stud_id,stud_name,stud_pass,tea_school,tea_img from stud_base where stud_id=?");
 $stmt->bind_param('s', $stud_id);
@@ -110,12 +145,12 @@ while ($row = mysql_fetch_array($result)) {
 </tr>
 <tr>
 	<td>管理者<br>
-		是 <input type="checkbox" name="tea_img" value="1" <? echo $tea_img ?> > 
+		是 <input type="checkbox" name="tea_img" value="1" <?php echo $tea_img ?> > 
 	</td>
 </tr>
 <tr>
 	<td>
-	<input type="hidden" name=stud_id value="<? echo $stud_id; ?>">
+	<input type="hidden" name=stud_id value="<?php echo $stud_id; ?>">
 	<input type="submit" name=key value="修改">
 	&nbsp;&nbsp;<input type="button"  value= "回上頁" onclick="history.back()">
 	</td>
@@ -124,4 +159,4 @@ while ($row = mysql_fetch_array($result)) {
 </table>
 
 
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

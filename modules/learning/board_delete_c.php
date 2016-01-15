@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: board_delete_c.php 8705 2015-12-29 03:03:33Z qfon $
+// $Id: board_delete_c.php 8763 2016-01-13 13:02:47Z qfon $
 
 // --系統設定檔
 include	"config.php"; 
@@ -17,6 +17,7 @@ if ($key=="確定刪除"){
 	if(file_exists ($USR_DESTINATION.$b_store))
 		unlink($USR_DESTINATION.$b_store);
 	// $query= "delete from board_c where b_id = '$b_id'";
+	$b_id=intval($b_id);
 	$query= "UPDATE unit_c SET b_days = '0' ,b_edit_time='$b_post_time' ,update_ip='{$_SERVER['REMOTE_ADDR']}',b_edit_id='$b_edit_id'  where b_id = '$b_id'";  //刪除
 
 	mysql_query($query);

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: eduh_count.php 5310 2009-01-10 07:57:56Z hami $
+// $Id: eduh_count.php 8765 2016-01-13 13:11:12Z qfon $
 
 include "config.php";
 
@@ -40,7 +40,10 @@ function list_eduh($year,$semester,$count_num){
         //select_yearseme_form 結束
 
 
-        //找出學期設定之班級
+        //找出學期設定之班級	
+		$year=intval($year);
+        $semester=intval($semester);
+		
         $sql_select = "select class_id ,teacher_1 from school_class where year='$year' and semester='$semester' order by c_year,c_sort";
        	$record_class=$CONN->Execute($sql_select) or die($sql_select);
         $num_class=$record_class->RecordCount();//班級小計

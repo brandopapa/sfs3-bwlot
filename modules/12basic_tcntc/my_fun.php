@@ -236,13 +236,14 @@ function get_student_score_balance($sn)
 
 function get_student_fault($sn_array)
 {
-	global $CONN,$fault_none,$fault_warning,$fault_peccadillo,$fault_semester;
+	global $CONN,$fault_none,$fault_warning,$fault_peccadillo,$fault_semester,$fault_date_limit;
 	$fault=array();
-	$fault_semester_list=implode(',',$fault_semester);	
+	//$fault_semester_list=implode(',',$fault_semester);	
 	foreach($sn_array as $student_sn){
 		$fault_count=0;
 		//抓取學生未銷過的獎懲紀錄
-		$sql="SELECT reward_year_seme,reward_kind FROM reward WHERE student_sn='$student_sn' AND reward_kind<0 AND reward_cancel_date='0000-00-00' AND reward_year_seme IN ($fault_semester_list) ORDER BY reward_year_seme";
+		//$sql="SELECT reward_year_seme,reward_kind FROM reward WHERE student_sn='$student_sn' AND reward_kind<0 AND reward_cancel_date='0000-00-00' AND reward_year_seme IN ($fault_semester_list) ORDER BY reward_year_seme";
+		$sql="SELECT reward_year_seme,reward_kind FROM reward WHERE student_sn='$student_sn' AND reward_kind<0 AND reward_cancel_date='0000-00-00' AND reward_date<='$fault_date_limit' ORDER BY reward_year_seme";  //  2016-1-6 改為以日期限定
 		$res=$CONN->Execute($sql) or user_error("讀取失敗！<br>$sql",256);
 		while(!$res->EOF)
 		{
@@ -366,7 +367,7 @@ function get_student_reward_list($work_year)
 
 function get_student_association()
 {
-	global $CONN,$work_year,$association_semester_score_qualtified,$association_semester_score,$association_score_max;
+	global $CONN,$work_year,$association_semester_score_qualtified,$association_semester_score,$association_score_max,$association_date_limit;
 	$association=array();
 	//$sql="SELECT * FROM association where student_sn IN (select student_sn from stud_seme where seme_year_seme='$work_year_seme' and seme_class like '$graduate_year%') ORDER BY student_sn,seme_year_seme,score";
 	$sql="SELECT * FROM association where student_sn IN (select student_sn from 12basic_tcntc where academic_year='$work_year') ORDER BY student_sn,seme_year_seme,score";
@@ -398,7 +399,7 @@ function get_student_association()
 
 function get_student_service()
 {
-	global $CONN,$work_year,$service_semester_minutes,$service_semester_score,$service_score_max;
+	global $CONN,$work_year,$service_semester_minutes,$service_semester_score,$service_score_max,$service_date_limit;
 	$service=array();
 	//$sql="SELECT a.student_sn,a.minutes,b.year_seme FROM stud_service_detail a INNER JOIN stud_service b ON a.item_sn=b.sn WHERE a.student_sn IN (select student_sn from stud_seme where seme_year_seme='$work_year_seme' and seme_class like '$graduate_year%') ORDER BY student_sn,year_seme";
 	$sql="SELECT a.student_sn,a.minutes,b.year_seme,b.confirm FROM stud_service_detail a INNER JOIN stud_service b ON a.item_sn=b.sn WHERE a.student_sn IN (select student_sn from 12basic_tcntc where academic_year='$work_year') ORDER BY student_sn,year_seme";

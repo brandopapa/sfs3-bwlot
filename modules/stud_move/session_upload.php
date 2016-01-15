@@ -13,7 +13,7 @@ $session_id = session_id();
 $useragent = $_SERVER['HTTP_USER_AGENT'];
 $curr_seme = $_GET['curr_seme'];
 $target_page = $SFS_PATH_HTML . 'modules/stud_move/stud_move_upload.php';
-if (function_exists('curl_ini')) {
+if (function_exists('curl_init')) {
     $ch = curl_init();
     $options = array(
         CURLOPT_URL => "https://oidc.tc.edu.tw/api/real-ip",

@@ -1,8 +1,8 @@
 <?php                                                                                                                             
-// $Id: ekind_edit.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: ekind_edit.php 8742 2016-01-08 13:57:14Z qfon $
 // --系統設定檔
 include "exam_config.php";
-
+/*
 //判別是否為系統管理者
 $man_flag =  checkid($_SERVER[SCRIPT_FILENAME],1);
 
@@ -16,6 +16,7 @@ $e_kind_id = $_GET[e_kind_id];
 if ($e_kind_id =='')
 	$e_kind_id = $_POST[e_kind_id];
 
+
 if(!checkid(substr($_SERVER[PHP_SELF],1))){
 	$go_back=1; //回到自已的認證畫面  
 	include "header.php";
@@ -23,6 +24,12 @@ if(!checkid(substr($_SERVER[PHP_SELF],1))){
 	include "footer.php"; 
 	exit;
 }
+*/
+
+echo "ok";
+//mysqli
+$mysqliconn = get_mysqli_conn();
+
 
 //刪除處理
 if ($_GET[sel] =="delete"){
@@ -88,11 +95,26 @@ if ($_POST[key] =="確定刪除"){
 
 //修改處理
 if ($_POST[key] =="修改"){
+	$e_kind_id=intval($e_kind_id);
 	$class_id = $_POST[curr_year].$_POST[curr_class_year].$_POST[curr_class_name];
+	/*
 	$sql_update = "update exam_kind set e_kind_memo='$_POST[e_kind_memo]',e_kind_open='$_POST[e_kind_open]' ,e_upload_ok='$_POST[e_upload_ok]' ,class_id='$class_id'";
 	$sql_update .= " where e_kind_id='$e_kind_id' ";
 //	echo $sql_update;exit;
 	$result = $CONN->Execute($sql_update)  or die ($sql_update);  
+	*/
+	
+//mysqli
+$sql_update = "update exam_kind set e_kind_memo=?,e_kind_open=? ,e_upload_ok=? ,class_id=?";
+$sql_update .= " where e_kind_id='$e_kind_id' ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('ssss', $_POST[e_kind_memo],$_POST[e_kind_open],$_POST[e_upload_ok],$class_id);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	
+
 	header ("Location: ekind.php");
 }
 
@@ -169,13 +191,13 @@ $temp_class = substr($_GET[class_id],5); //取得班級
 
 <tr>
 	<td>是否開放展示作業<br>
-		<input type="checkbox" name="e_kind_open" value=1  <? echo $e_kind_open; ?>>
+		<input type="checkbox" name="e_kind_open" value=1  <?php echo $e_kind_open; ?>>
 	</td>
 </tr>
 
 <tr>
 	<td>是否開放上傳作業<br>
-		<input type="checkbox" name="e_upload_ok" value=1  <? echo $e_upload_ok; ?>>
+		<input type="checkbox" name="e_upload_ok" value=1  <?php echo $e_upload_ok; ?>>
 	</td>
 </tr>
 
@@ -186,8 +208,8 @@ $temp_class = substr($_GET[class_id],5); //取得班級
 </tr>
 <tr>
 	<td>
-	<input type="hidden" name=e_kind_id value="<? echo $e_kind_id; ?>">
-	<input type="hidden" name=curr_year value="<? echo substr($_GET[class_id],0,4); ?>">
+	<input type="hidden" name=e_kind_id value="<?php echo $e_kind_id; ?>">
+	<input type="hidden" name=curr_year value="<?php echo substr($_GET[class_id],0,4); ?>">
 	<input type="submit" name=key value="修改">
 	&nbsp;&nbsp;<input type="button"  value= "回上頁" onclick="history.back()">
 	</td>
@@ -195,4 +217,4 @@ $temp_class = substr($_GET[class_id],5); //取得班級
 
 </table>
 
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

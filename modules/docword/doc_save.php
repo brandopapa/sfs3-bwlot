@@ -1,6 +1,6 @@
 <?php
 
-// $Id: doc_save.php 8716 2015-12-31 08:46:04Z qfon $
+// $Id: doc_save.php 8746 2016-01-08 15:41:01Z qfon $
 
 //載入設定檔
 include "docword_config.php";
@@ -21,13 +21,15 @@ else
 
 $year = date("Y")-1911;
 
+///mysqli	
+$mysqliconn = get_mysqli_conn();
+
 // 重新設定保存年限
 if ($resetkey != ""){
 	//$query = "select doc1_id,doc1_year_limit from sch_doc1 where doc1_k_id=0 and doc1_infile_date = '$doc1_infile_date' ";
 	$query = "select doc1_id,doc1_year_limit from sch_doc1 where doc1_k_id=0 and doc1_infile_date = ? ";
 
-	///mysqli	
-$mysqliconn = get_mysqli_conn();
+///mysqli	
 $stmt = "";
 $stmt = $mysqliconn->prepare($query);
 $stmt->bind_param('s',$doc1_infile_date);
@@ -50,16 +52,29 @@ $stmt->bind_result($doc1_id,$doc1_year_limit);
 else if($do_kind == "resign") {
 	$query = "update sch_doc1 set doc_stat='1' ,doc1_infile_date ='' where doc1_id ='$doc1_id' ";
 	mysql_query ($query);
+	
 }
 //歸檔處理
 else if ($doc1_id !=""){
 	if (strlen($doc1_id)<= $max_doc) //當年度公文可簡化輸入
 		$doc1_id = sprintf ("%d%0$max_doc"."s",$year,$doc1_id);
-	$query = "update sch_doc1 set doc_stat='2' , doc1_infile_date='$doc1_infile_date' ";
+	//$query = "update sch_doc1 set doc_stat='2' , doc1_infile_date='$doc1_infile_date' ";
+	$query = "update sch_doc1 set doc_stat='2' , doc1_infile_date=? ";
 	if ($doc1_year_limit !="")
 		$query .=",doc1_year_limit='$doc1_year_limit'";
 	$query .=" where doc1_id='$doc1_id'"; 
-	mysql_query ($query) or die($query);
+	//mysql_query ($query) or die($query);
+	
+	
+///mysqli	
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s',$doc1_infile_date);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	
+	
 }
 include "header.php";
 prog(1); //上方menu (在 docword_config.php 中設定)
@@ -134,7 +149,6 @@ $doc_unit_p = doc_unit();
 
 ///mysqli
 $query = "select doc1_id,doc1_year_limit,doc1_kind,doc1_date,doc1_date_sign,doc1_unit,doc1_word,doc1_main,doc1_unit_num1,doc1_unit_num2,teach_id,doc1_k_id,doc_stat,doc1_end_date,doc1_infile_date,do_teacher from sch_doc1 where  doc1_infile_date=? and doc_stat = '2' order by doc1_id";	
-//$mysqliconn = get_mysqli_conn();
 $stmt = "";
 $stmt = $mysqliconn->prepare($query);
 $stmt->bind_param('s',$doc1_infile_date);

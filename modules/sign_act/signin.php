@@ -1,5 +1,5 @@
 <?php
-// $Id: signin.php 8681 2015-12-25 02:59:43Z qfon $
+// $Id: signin.php 8764 2016-01-13 13:08:50Z qfon $
 
 include "config.php";
 
@@ -14,6 +14,10 @@ $PHP_SELF = $_SERVER['PHP_SELF'] ;
 $did = $_GET['did'] ;  
 $Submit = $_POST['Submit'] ;
 $do = $_GET['do'] ;
+
+//mysqli
+$mysqliconn = get_mysqli_conn();	
+
 
 if ($did > 0) {
   
@@ -48,18 +52,47 @@ if ($Submit=="新增") {
            $group_row[$i] .= "##" .  $data[$i][$f] ;
    }     
    $groupdata = implode("," , $group_row ) ;
-      
+   
+/*   
    $sqlstr = " insert into sign_act_data  
             (did ,pid,school_name,team_id,set_passwd,data ) 
              values (0,'$id','$school_name', '$team_name','$op', '$groupdata' ) " ;
              
 
    $result =  $CONN->Execute($sqlstr) ;  
+*/
+
+   
+//mysqli
+$sqlstr = " insert into sign_act_data  
+            (did ,pid,school_name,team_id,set_passwd,data ) 
+             values (0,?,?,?,?,?) " ;
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('sssss', check_mysqli_param($id),check_mysqli_param($school_name),check_mysqli_param($team_name),check_mysqli_param($op),check_mysqli_param($groupdata));
+$stmt->execute();
+$stmt->close();
+///mysqli	
+   
+   
+   
+   
   
   //設定密碼
   if ($my_passwd) { 
+  /*
       $sqlstr = " update sign_act_data  set set_passwd ='$my_passwd' where school_name ='$school_name' and pid ='$id' " ;
-      $result =  $CONN->Execute($sqlstr) ;     
+      $result =  $CONN->Execute($sqlstr) ; 
+   */
+//mysqli
+$sqlstr = " update sign_act_data  set set_passwd =? where school_name =? and pid =? " ;
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('sss', check_mysqli_param($my_passwd),check_mysqli_param($school_name),check_mysqli_param($id));
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	  
       $_SESSION['School_passwd'] = $my_passwd ; 
       $passwd =  $my_passwd ; 
   }
@@ -86,14 +119,39 @@ if ($Submit=="修改") {
 
    }     
    $groupdata = implode("," , $group_row ) ;
-      
+    /*  
    $sqlstr = " update sign_act_data set team_id ='$team_name' ,data ='$groupdata',set_passwd ='$op'  where did = '$did' " ;
-   $result = $CONN->Execute($sqlstr) ;  
+   $result = $CONN->Execute($sqlstr) ; 
+    */
+//mysqli
+$sqlstr = " update sign_act_data set team_id =? ,data =?,set_passwd =?  where did = ? " ;
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('ssss', check_mysqli_param($team_name),check_mysqli_param($groupdata),check_mysqli_param($op),check_mysqli_param($did));
+$stmt->execute();
+$stmt->close();
+///mysqli	
+
+
+   
    
   //設定密碼
   if ($my_passwd) { 
+      /*
       $sqlstr = " update sign_act_data  set set_passwd ='$my_passwd' where school_name ='$school_name' and pid ='$id' " ;
-      $result =  $CONN->Execute($sqlstr) ;      
+      $result =  $CONN->Execute($sqlstr) ; 
+      */
+//mysqli
+$sqlstr = " update sign_act_data  set set_passwd =? where school_name =? and pid =? " ;
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('sss', check_mysqli_param($my_passwd),check_mysqli_param($school_name),check_mysqli_param($id));
+$stmt->execute();
+$stmt->close();
+///mysqli	
+
+
+	  
       $_SESSION['School_passwd'] = $my_passwd ; 
       $passwd =  $my_passwd ; 
   }  
@@ -102,8 +160,20 @@ if ($Submit=="修改") {
 }
 
 if ($do=="del") {
+	/*
    $sqlstr = "delete  from sign_act_data  where did = $did " ;
-   $result =  $CONN->Execute($sqlstr) ;  
+   $result =  $CONN->Execute($sqlstr) ; 
+    */
+//mysqli
+$sqlstr = "delete  from sign_act_data  where did = ? " ;
+$stmt = "";
+$stmt = $mysqliconn->prepare($sqlstr);
+$stmt->bind_param('s', $did);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+
+   
 }	
 if ($do=="add") {
   $pid = $_GET['id'] ;     
@@ -149,8 +219,8 @@ else
 function showdata($pid , $school_name) {
   	
   global $CONN, $team_set_arr ,$member_set_arr ,$fields_set_arr ,$PHP_SELF , $max_team ,$have_team ,$def_passwd , $set_passwd ,$max_each;      
-  $pid=intval($pid);
   //報名單總類 ===============================
+  $pid=intval($pid);
   $sqlstr = " select * from  sign_act_kind where  id ='$pid' " ;
 
   $result =  $CONN->Execute($sqlstr) ; 

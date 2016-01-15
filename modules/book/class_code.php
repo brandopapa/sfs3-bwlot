@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: class_code.php 8723 2016-01-02 06:00:38Z qfon $
+// $Id: class_code.php 8753 2016-01-13 12:40:19Z qfon $
 
 // --系統設定檔
 include "book_config.php";
@@ -18,12 +18,27 @@ if(!checkid(substr($_SERVER['PHP_SELF'],1))){
 }
 if ($_POST['key'] =="製作圖書證"){
 	echo "<html><body><table border=1 cellPadding=5 cellSpacing=10 ><tr>";
-	$_POST[class_id]=intval($_POST[class_id]);
+//mysqli		
+$mysqliconn = get_mysqli_conn();
+$query = "select stud_id,stud_name from stud_base  where curr_class_num like ? and stud_study_cond =0 order by curr_class_num";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$_POST[class_id]="$_POST[class_id]%";
+$stmt->bind_param('s',$_POST[class_id]);
+$stmt->execute();
+$stmt->bind_result($stud_id,$stud_name);
+
+//mysqli	
+    /*
 	$query = "select stud_id,stud_name from stud_base  where curr_class_num like '$_POST[class_id]%' and stud_study_cond =0 order by curr_class_num";
-	$result = mysql_query ($query,$conID) or die ($query);             
-	while ($row= mysql_fetch_array($result)){
-		$core = $row["stud_id"];
-		$topname = "$school_sshort_name"."--".$row["stud_name"];
+	$result = mysql_query ($query,$conID) or die ($query);
+	*/
+	//while ($row= mysql_fetch_array($result)){
+	while ($stmt->fetch()) {
+		//$core = $row["stud_id"];
+		$core = $stud_id;
+		//$topname = "$school_sshort_name"."--".$row["stud_name"];
+		$topname = "$school_sshort_name"."--".$stud_name;
 		echo "<td align=center nowrap ><font size=2>$topname<BR>";
 		barcode($core);
 		echo "<br>$core</font></td>\n";

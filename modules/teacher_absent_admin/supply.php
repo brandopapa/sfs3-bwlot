@@ -29,6 +29,8 @@ $d_class_dis_menu=d_make_menu("選擇方式",$_POST[class_dis] , $c_course_kind,"cla
 $d_check4_menu=d_make_menu("是否確定",$_POST[d_check4] , $check_arr,"d_check4",1); 
 
 //條件
+$sel_year=intval($sel_year);
+$sel_seme=intval($sel_seme);
 $query1.=" and year='$sel_year' and semester='$sel_seme' ";
 
 if ($_POST[teacher_sn]) {

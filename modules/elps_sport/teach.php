@@ -1,5 +1,5 @@
 <?php
-//$Id: teach.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: teach.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //認證
 //sfs_check();
@@ -227,7 +227,7 @@ $img_sex=array(1=>"<img src='images/boy.gif' width=15 >",2=>"<img src='images/gi
 <INPUT TYPE=button  value="將鉤選者加入點選的項目" onclick=" bb('選好了嗎？','add_stu');" class=bu1></TD></TR><TR>
 <TD style='font-size:11pt;' >
 <FONT COLOR='red'>註：隊長限一人</FONT><BR>
-<?
+<?php
 for($i=0; $i<$rs->RecordCount(); $i++) {
 $stu_num=substr($arr[$i][curr_class_num],3,2);
 echo "<INPUT TYPE='checkbox' NAME='stu[".$arr[$i][student_sn]."_".$arr[$i][curr_class_num]."]' value='".$arr[$i][stud_name]."'><FONT  COLOR='".$color_sex[$arr[$i][stud_sex]]."'>".$img_sex[$arr[$i][stud_sex]].$stu_num.$arr[$i][stud_name]."</FONT>\n";

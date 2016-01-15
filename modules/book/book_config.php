@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: book_config.php 7794 2013-12-03 03:39:50Z infodaes $
+// $Id: book_config.php 8753 2016-01-13 12:40:19Z qfon $
 
 	/** 學務管理設定 **/
 	require_once "../../include/config.php";
@@ -68,6 +68,11 @@ while(!$res->EOF){
 	$res->MoveNext();
 }
 return $say_file;
+}
+
+function check_mysqli_param($param){
+	if (!isset($param))$param="";
+	return $param;
 }
 
 ?>

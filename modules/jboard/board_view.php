@@ -13,6 +13,9 @@ $page = $_REQUEST['topage'];
 
 $module_manager=checkid($_SERVER['SCRIPT_FILENAME'],1);
 
+//把過期置頂取消
+$CONN->Execute("UPDATE `jboard_p` SET b_sort = '100',top_days='0' WHERE (to_days(b_open_date) + top_days) < to_days(now( )) and top_days>0");
+
 //登出
 if ($_GET[logout]== "yes"){
 	session_start();

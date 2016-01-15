@@ -15,6 +15,11 @@ if ($m_arr["club_enable"]!="1"){
 }
 
 
+function check_mysqli_param($param){
+	if (!isset($param))$param="";
+	return $param;
+}
+
 //取得目前學年度
 $curr_year=curr_year();
 $curr_seme=curr_seme();
@@ -28,8 +33,20 @@ $STUD=get_student($_SESSION['session_tea_sn'],$c_curr_seme);
 //按下儲存時的動作
 if ($_POST['mode']=='save' and $_POST['student_sn']==$_SESSION['session_tea_sn']) {
  foreach ($_POST['stud_feedback'] as $club_sn=>$stud_fb) {
-     $query="update association set stud_feedback='$stud_fb' where club_sn='$club_sn' and student_sn='".intval($_POST['student_sn'])."' and seme_year_seme='$c_curr_seme'"; 
-     if (mysql_query($query)) {
+     //$query="update association set stud_feedback='$stud_fb' where club_sn='$club_sn' and student_sn='".intval($_POST['student_sn'])."' and seme_year_seme='$c_curr_seme'"; 
+     
+//mysqli
+$mysqliconn = get_mysqli_conn();
+$query="update association set stud_feedback=? where club_sn=? and student_sn='".intval($_POST['student_sn'])."' and seme_year_seme='$c_curr_seme'"; 
+$stmt="";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('ss',check_mysqli_param($stud_fb),check_mysqli_param($club_sn));
+$stmt->execute();
+$stmt->close();
+//mysqli
+	 
+	 //if (mysql_query($query)) {
+	 if ($mysqliconn->affected_rows==1){	 
 			 $INFO="資料己於 ".date('Y-m-d H:i:s')."儲存完畢!";
      } else {
        $INFO="Error! query=".$query;

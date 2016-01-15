@@ -1,5 +1,5 @@
 <?php
-//$Id: booksay_edit.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: booksay_edit.php 8753 2016-01-13 12:40:19Z qfon $
 include "book_config.php";
 if (!checkid($_SERVER[SCRIPT_FILENAME],1)){
 	include "header.php";
@@ -7,10 +7,15 @@ if (!checkid($_SERVER[SCRIPT_FILENAME],1)){
 	include "footer.php";
 	exit;
 }
+
+
+
 if ($_GET[do_key]=='delete'){
+    $_GET[bs_id]=intval($_GET[bs_id]);
 	$query="delete from book_say where bs_id='$_GET[bs_id]'";
 	$CONN->Execute($query);
 
+	
 }
 
 include "header.php";

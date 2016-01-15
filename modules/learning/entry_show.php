@@ -1,4 +1,5 @@
-<?php                                                                                                                       
+<?php             
+$m_id=intval($m_id);                                                                                                          
 $query = "select  * from unit_c  where b_id='$m_id'  and b_days > 0 ";
 $result = mysql_query($query);
 $row= mysql_fetch_array($result);

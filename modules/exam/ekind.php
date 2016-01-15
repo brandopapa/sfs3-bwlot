@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: ekind.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: ekind.php 8742 2016-01-08 13:57:14Z qfon $
 
 /***********************
  每學期班級資料列表
@@ -39,7 +39,7 @@ if($_POST[curr_year_seme]=='')	//預設本學期
 else
 	$curr_year_seme = $_POST[curr_year_seme];
 
-$e_kind_id = $_GET[e_kind_id];
+$e_kind_id = intval($_GET[e_kind_id]);
 
 //全部展示處理
 if ($_GET[sel_open] !="") {
@@ -183,4 +183,4 @@ while ($row = mysql_fetch_array($result)) {
 <hr size=1 width=80%>
 <a href="ekind_new.php">新增班級</a>
  
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

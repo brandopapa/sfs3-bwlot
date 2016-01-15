@@ -1,5 +1,5 @@
 <?php 
-// $Id: view.php 8711 2015-12-31 02:19:05Z qfon $
+// $Id: view.php 8744 2016-01-08 14:30:27Z qfon $
   include "config.php" ;
 
   $id = intval($_GET['id']) ;
@@ -107,7 +107,7 @@ scrollbar-shadow-color:black ;
 </table>
 <table width="95%" border="0" cellspacing="0" cellpadding="4" align="center" bordercolorlight="#00CC00" bordercolordark="#CCCCFF">
   <tr>
-<?
+<?php
 
   function get_smaill_list($updir){
      //取得小圖列表

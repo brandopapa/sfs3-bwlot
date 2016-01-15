@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: tea_upload.php 8673 2015-12-25 02:23:33Z qfon $
+// $Id: tea_upload.php 8743 2016-01-08 14:02:58Z qfon $
 
 //系統設定檔
 include "exam_config.php";
@@ -9,6 +9,10 @@ if ($exam_id=='')
 	$exam_id = $_GET[exam_id];
 
 $e_kind_id = $_POST[e_kind_id];
+
+//mysqli
+$mysqliconn = get_mysqli_conn();	
+
 
 
 // 檢查檔案 (zip 格式)
@@ -108,17 +112,44 @@ if ($_POST[key] == "上傳作業") {
 		//$sql_update = "delete from  exam_stud \n";
 		//$sql_update .= "where stud_id='$s_stud_id' and exam_id='$exam_id'";
 		//$result = mysql_query ($sql_update);
+		
 		$query = "select stud_id from exam_stud where stud_id='$s_stud_id' and exam_id='$exam_id'";
 		$result= $CONN->Execute($query);
 		//學生坐號
 		$stud_num = substr($_SESSION[session_curr_class_num] ,-2);
 		if ($result->RecordCount()== 0 ) { //新增資料		
+			/*
 			$sql_insert = "insert into exam_stud (exam_id,stud_id,stud_name,stud_num,memo,f_name,f_size,f_ctime) values ('$exam_id','$s_stud_id','$s_stud_name','$stud_num','$_POST[memo] ','$ff_name ','$f_size','$now')";
 			$CONN->Execute($sql_insert)or die ($sql_insert);
+			*/
+//mysqli
+$sql_insert = "insert into exam_stud (exam_id,stud_id,stud_name,stud_num,memo,f_name,f_size,f_ctime) values ('$exam_id','$s_stud_id','$s_stud_name','$stud_num',?,'$ff_name ','$f_size','$now')";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_insert);
+$stmt->bind_param('s', $_POST[memo]);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+			
+			
+			
 		}
 		else {
+			/*
 			$query = "update exam_stud set memo='$_POST[memo]',f_name='$ff_name',f_size='$f_size',f_ctime='$now'  where stud_id='$s_stud_id' and exam_id='$exam_id'";
 			$CONN->Execute($query)or die ($query);
+			*/
+//mysqli
+$query = "update exam_stud set memo=?,f_name='$ff_name',f_size='$f_size',f_ctime='$now'  where stud_id='$s_stud_id' and exam_id='$exam_id'";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $_POST[memo]);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+		
+		
+		
 		}
 		$m_path = $e_path."/".$s_stud_id;
 		//如為目錄則刪除整個目錄
@@ -183,7 +214,7 @@ if ($_SESSION[session_tea_name] !="")
 else
 	echo "<h3>學員：$_SESSION[session_stud_name] </h3>";
 ?>
-<h3>上傳 <font color=red><? echo stripslashes ($_GET[exam_name]); ?></font> 作業</h3>
+<h3>上傳 <font color=red><?php echo stripslashes ($_GET[exam_name]); ?></font> 作業</h3>
 <table>
 
 <tr>

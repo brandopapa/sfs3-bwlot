@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_prt.1.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_prt.1.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 //認證
 sfs_check();
@@ -106,7 +106,7 @@ echo $sportclass[$item_info[enterclass]].$sportname[$item_info[item]].$itemkind[
 <?php
 echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_info[passera]</B>名".$item_info[imemo]."。";
 ?>
-</FONT></td><td width='30%'>日期：<?echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
+</FONT></td><td width='30%'>日期：<?php echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
 </td></tr></table>
 
 <table cellPadding='0' border=1 cellSpacing='1' width='90%' align=center style='border-collapse:collapse;font-size:14pt;' >
@@ -119,7 +119,7 @@ echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_inf
 <td width='15%'><b>名次</b></td>
 <td width='15%'><b>備註</b></td>
 </tr>
-<?
+<?php
 $AA=Count($arr);
 //print_r($arr);
 for ($i=0;$i<$AA;$i++) {
@@ -207,7 +207,7 @@ echo $sportclass[$item_info[enterclass]].$sportname[$item_info[item]].$itemkind[
 <?php
 echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_info[passera]</B>名 ".$item_info[imemo]." 。";
 ?>
-</FONT></td><td width='30%'>日期：<?echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
+</FONT></td><td width='30%'>日期：<?php echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
 </td></tr></table>
 
 <table cellPadding='0' border=1 cellSpacing='0' width='90%' align=center  style='border-collapse:collapse;font-size:14pt;'>
@@ -220,7 +220,7 @@ echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_inf
 <td width='15%'><b>名次</b></td>
 <td width='15%'><b>備註</b></td>
 </tr>
-<?
+<?php
 
 for ($a=1;$a<=$sport_group;$a++) {
 	$LimtA=($a-1)*$item_info[playera];
@@ -272,7 +272,7 @@ echo"<tr bgcolor=white align='center'>
 }//end $a
 ?>
 </table>
-<?
+<?php
 
 }
 
@@ -291,7 +291,7 @@ function print_class($mid,$Spk){
 .t4 {position:absolute;left: 630px;font-size:11pt;}
 -->
 </style>
-<?
+<?php
 
 $Spk = str_replace("a","",$Spk);
 $all_class=split("_",$Spk);
@@ -461,7 +461,7 @@ echo "第&nbsp;<B>".$Spk."&nbsp;</B>組";
 <?php
 echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_info[passera]</B>名<B>".$item_info[imemo]."</B> 。";
 ?>
-</FONT></td><td width='30%'>日期：<?echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
+</FONT></td><td width='30%'>日期：<?php echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
 </td></tr></table>
 
 <table cellPadding='0' cellSpacing='0' border='1'  width='90%' align=center style='border-collapse:collapse;font-size:14pt;'>
@@ -474,7 +474,7 @@ echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_inf
 <td width='15%'><b>名次</b></td>
 <td width='15%'><b>備註</b></td>
 </tr>
-<?
+<?php
 $AA=Count($arr);
 $start_key=$sport_GO_num[$AA];
 
@@ -524,7 +524,7 @@ echo"<tr bgcolor=white align='center'>
 <br>
 <BR><BR>
 <!--第二張---->
-<?
+<?php
 
 echo"<CENTER><H3> ".$SCHOOL_BASE[sch_cname_s].$item_info[title]."<BR>";
 echo $sportkind_name[$item_info[sportkind]]."檢錄記錄表</H3></CENTER>";
@@ -544,7 +544,7 @@ echo "第&nbsp;<B>".$Spk."&nbsp;</B>組";
 <?php
 echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_info[passera]</B>名 ".$item_info[imemo]." 。";
 ?>
-</FONT></td><td width='30%'>日期：<?echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
+</FONT></td><td width='30%'>日期：<?php echo"<B>".substr($item_info[sporttime],0,11)."</B>";?>
 </td></tr></table>
 
 <table cellPadding='0' border=1 cellSpacing='0' width='90%' align=center style='border-collapse:collapse;font-size:14pt;'>
@@ -557,7 +557,7 @@ echo"共<B>$sport_group</B>組，每組<B>$item_info[playera]</B>人，錄取<B>$item_inf
 <td width='15%'><b>名次</b></td>
 <td width='15%'><b>備註</b></td>
 </tr>
-<?
+<?php
 $start_ok=0;
 unset($y);
 for ($i=1;$i<9;$i++) {
@@ -600,7 +600,7 @@ echo"<tr bgcolor=white align='center'>
 <td width='200' class=td2><b style='font-size:10pt'>
 ■記錄員：</b></td></tr>
 </table></CENTER>
-<?
+<?php
 
 }
 #####################   跳遠檢錄單  ###########################
@@ -647,7 +647,7 @@ echo $sportclass[$item_info[enterclass]].$sportname[$item_info[item]].$itemkind[
 <?php
 echo"全<B>1</B>組，每組<B> $item_info[playera] </B>人，錄取<B> $item_info[passera] </B>名".$item_info[imemo]."。";
 ?>
-</FONT></td><td width='30%'><?
+</FONT></td><td width='30%'><?php
 echo"日期：<B>".substr($item_info[sporttime],0,11)."</B>";
 ?>
 </td></tr></table>
@@ -659,7 +659,7 @@ echo"日期：<B>".substr($item_info[sporttime],0,11)."</B>";
 <td width='9%' rowspan='2'><b>決賽<br>成績</b></td><td width='7%' rowspan='2'><b>名次</b></td></tr>
 <tr bgcolor=white align='center'><td width='9%'>成績1</td><td width='9%'>成績2</td><td width='9%'>成績3</td>
 <td width='9%'>初賽</td><td width='9%'>成績1</td><td width='9%'>成績2</td><td width='9%'>成績3</td></tr>
-<?
+<?php
 
 for ($i=0;$i<(count($arr)+5);$i++) {
 	($arr[$i][cname]=='') ? $V_i='&nbsp;':$V_i=$i+1;
@@ -678,7 +678,7 @@ echo"
 <td width='33%'><b><font face='標楷體'>裁判:</font></b></td>
 <td width='34%'><b><font face='標楷體'>記錄員:</font></b></td>
 </tr>
-</table></body><?
+</table></body><?php
 	}
 #####################   跳高檢錄單  ###########################
 function print_high($mid,$item){
@@ -708,7 +708,7 @@ echo $sportkind_name[$item_info[sportkind]]."檢錄記錄表</H3></CENTER>";
 <table align='center' border='0' width='80%'>
 
 <tr width='100%'><td align='right' width='20%'>■組別：</td>
-<td ><?echo $sportclass[$item_info[enterclass]].$sportname[$item_info[item]].$itemkind[$item_info[kind]];?>
+<td ><?php echo $sportclass[$item_info[enterclass]].$sportname[$item_info[item]].$itemkind[$item_info[kind]];?>
 全<B>1</B>組</td>
 <td width='30%'>比賽地點：<?=$item_info[place]?></td>
 </tr>
@@ -731,7 +731,7 @@ echo"日期：<B>".substr($item_info[sporttime],0,11)."</B>";
 <td width='9%' colspan='3'>&nbsp;</td><td width='9%' colspan='3'>&nbsp;</td><td width='9%' colspan='3'>&nbsp;</td>
 <td width='9%' colspan='3'>&nbsp;</td><td width='9%' colspan='3'>&nbsp;</td><td width='9%' colspan='3'>&nbsp;</td>
 <td width='9%' colspan='3'>&nbsp;</td><td width='9%' colspan='3'>&nbsp;</td></tr>
-<?$line=1;
+<?php $line=1;
 for ($i=0;$i<(count($arr)+3);$i++) {
 	($arr[$i][cname]=='') ? $V_i='&nbsp;':$V_i=$i+1;
 	($arr[$i][cname]=='') ? $Cname="&nbsp;":$Cname=$arr[$i][cname];
@@ -757,7 +757,7 @@ echo
 <td width='33%' align='center'><b><font face='標楷體'>裁判:</font></b></td>
 <td width='34%' align='center'><b><font face='標楷體'>記錄員:</font></b></td>
 </tr></table></body>
-<?
+<?php
 }
 
 

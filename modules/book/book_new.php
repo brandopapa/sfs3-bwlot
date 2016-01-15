@@ -1,6 +1,6 @@
 <?php
 
-// $Id: book_new.php 8723 2016-01-02 06:00:38Z qfon $
+// $Id: book_new.php 8753 2016-01-13 12:40:19Z qfon $
 
 
 // --系統設定檔
@@ -174,11 +174,33 @@ $stmt->close();
 			else
 				$dd=$book_id;
 		}
-
+         /*
 		$sql_insert = "insert into book (bookch1_id,book_id,book_name,book_author,book_maker,book_myear,book_bind,book_price,book_content,book_isborrow,book_isbn,book_buy_date)values ('$_POST[bookch1_id]','$dd','$_POST[book_name]','$_POST[book_author]','$_POST[book_maker]','$_POST[book_myear]','$_POST[book_bind]','$_POST[book_price]','$_POST[book_content]','$_POST[book_isborrow]','$_POST[book_isbn]','$_POST[book_buy_date]')";
 		mysql_query($sql_insert,$conID) or die ($sql_insert);
+		*/
+///mysqli
+$sql_insert = "insert into book (bookch1_id,book_id,book_name,book_author,book_maker,book_myear,book_bind,book_price,book_content,book_isborrow,book_isbn,book_buy_date)values (?,'$dd',?,?,?,?,?,?,?,?,?,?)";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_insert);
+$stmt->bind_param('sssssssssss', check_mysqli_param($_POST[bookch1_id]),check_mysqli_param($_POST[book_name]),check_mysqli_param($_POST[book_author]),check_mysqli_param($_POST[book_maker]),check_mysqli_param($_POST[book_myear]),check_mysqli_param($_POST[book_bind]),check_mysqli_param($_POST[book_price]),check_mysqli_param($_POST[book_content]),check_mysqli_param($_POST[book_isborrow]),check_mysqli_param($_POST[book_isbn]),check_mysqli_param($_POST[book_buy_date]));
+$stmt->execute();
+$stmt->close();
+///mysqli	
+		
+		
+		/*
 		$query = "update  bookch1 set tolnum = tolnum + 1 where bookch1_id = '$_POST[bookch1_id]'";
 		mysql_query($query,$conID) or die($query);
+		*/
+		 //mysqli
+		 $query = "update  bookch1 set tolnum = tolnum + 1 where bookch1_id = ?";
+         $stmt = "";
+         $stmt = $mysqliconn->prepare($query);
+         $stmt->bind_param('s',$_POST[bookch1_id]);
+         $stmt->execute();
+         $stmt->close();
+		 //mysqli
+		
 		$myMsg=$myMsg.$_POST[book_name]."，書籍編號：".$dd."已新增完成！\\n";
 	}
 	$isPosted="yes";

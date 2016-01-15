@@ -101,15 +101,34 @@ if ($_POST['key'] == "確定修改"){
 	$b_post_time = mysql_date();
 	//$b_unit = $board_name;  
   $b_sort=($_POST['top_days']==0)?"100":"99";
+    /*
 	$sql_update = "update jboard_p set bk_id='".$_POST['bk_id']."',b_open_date='{$_POST['b_open_date']}', " .
 			"b_days='{$_POST['b_days']}',b_unit='$b_unit', b_sub='{$_POST['b_sub']}'," .
 			"b_con='{$_POST['b_con']}', b_url='{$_POST['b_url']}' ,b_post_time='$b_post_time'," .
 			"b_is_intranet='{$_POST['b_is_intranet']}',b_is_sign='{$_POST['b_is_sign']}',b_is_marquee='{$_POST['b_is_marquee']}' ,b_sort='$b_sort',top_days='{$_POST['top_days']}'";
+	*/
+	//mysqli
+	$sql_update = "update jboard_p set bk_id=?,b_open_date=?, " .
+			"b_days=?,b_unit='$b_unit', b_sub=?," .
+			"b_con=?, b_url=? ,b_post_time='$b_post_time'," .
+			"b_is_intranet=?,b_is_sign=?,b_is_marquee=? ,b_sort='$b_sort',top_days=?";
+    //mysqli
+		
 	if ($_POST['del_sign']=='1'){
 		$sql_update .= ",b_signs='' ";
 	}
+	$b_id=intval($b_id);
 	$sql_update .= " where b_id='$b_id' " ;
-	$CONN->Execute($sql_update) or die ($sql_update);
+	//$CONN->Execute($sql_update) or die ($sql_update);
+	
+//mysqli	
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('ssssssssss',check_mysqli_param($_POST['bk_id']),check_mysqli_param($_POST['b_open_date']),check_mysqli_param($_POST['b_days']),check_mysqli_param($_POST['b_sub']),check_mysqli_param($_POST['b_con']),check_mysqli_param($_POST['b_url']),check_mysqli_param($_POST['b_is_intranet']),check_mysqli_param($_POST['b_is_sign']),check_mysqli_param($_POST['b_is_marquee']),check_mysqli_param($_POST['top_days']));
+$stmt->execute();
+$stmt->close();
+///mysqli			
+	
 
   //處理圖片必須先取得  $b_id, $sPath ,$b_con 全域變數
   $sPath = $USR_IMG_TMP.'images/';

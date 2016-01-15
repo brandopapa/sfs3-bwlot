@@ -34,7 +34,9 @@
 				  /* 將檔名複製到檔案區, 並更成新檔名  2014.09.30 */
 				  copy($_FILES["resourceFile_$i"]['tmp_name'],$Download_Path.$new_filename); 				  
 				  $query="insert into jboard_files (b_id,org_filename,new_filename,filesize,filetype) values ('$b_id','$org_filename','$new_filename','$sFilesize','$sFiletype')";
-				  $CONN->Execute($query) or die ($query);				  
+				  $CONN->Execute($query) or die ($query);
+
+				  
 				  }
 				}
 			}

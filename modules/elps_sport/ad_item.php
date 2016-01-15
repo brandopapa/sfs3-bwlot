@@ -1,5 +1,5 @@
 <?php
-//$Id: ad_item.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: ad_item.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 sfs_check();
 
@@ -176,7 +176,7 @@ include_once"chi_text.js";
 
 ?>
 
-<?
+<?php
 btt();
 ?>
 
@@ -186,7 +186,7 @@ btt();
 <form method="post" action="<?=$_SERVER[PHP_SELF]?>" name="f1">
 <tr bgcolor=#f2f2f2>
 <td width=100% colspan=4 ><img src='images/21.gif'>&nbsp;<B>單項修改</B>
-<?btr("images/ch_back2.gif","重新填寫");bt('item_update','寫好送出','images/ch_save.gif')?>
+<?php btr("images/ch_back2.gif","重新填寫");bt('item_update','寫好送出','images/ch_save.gif')?>
 <INPUT TYPE='button' value='返回上頁' onclick="location='<?=$_SERVER[PHP_SELF]?>?mid=<?=$mid?>';">
 <INPUT TYPE='hidden' name='act' value=''>
 </td>
@@ -200,11 +200,11 @@ btt();
 <tr bgcolor=white>
 <td width=20% nowrap>組別</td>
 <td width=30% nowrap>
-<? set_sport_selectb("enterclass",$sportclass,$arr[0][enterclass]);?>
-<? set_sport_selectb("item",$sportname,$arr[0][item]);?>
+<?php set_sport_selectb("enterclass",$sportclass,$arr[0][enterclass]);?>
+<?php set_sport_selectb("item",$sportname,$arr[0][item]);?>
 <td width=20% nowrap>名稱/類別</td>
 <td width=30% nowrap><? set_sport_selectb("kind",$itemkind,$arr[0][kind]);?>
-<? set_sport_selectb("sportkind",$sportkind_name,$arr[0][sportkind]);?>
+<?php set_sport_selectb("sportkind",$sportkind_name,$arr[0][sportkind]);?>
 </td>
 </tr>
 <tr bgcolor=white>
@@ -236,7 +236,7 @@ btt();
 <tr bgcolor=white>
 <td width=20% nowrap>相關賽程</td>
 <td width=80% nowrap colspan=3>
-<?
+<?php
 $net_item=get_next_item($arr[0][id]);
 $TTTT="<B style='color:blue;'>".$sportclass[$net_item[enterclass]].$sportname[$net_item[item]].$itemkind[$net_item[kind]]."</B>";
 $FFFF="<B style='color:blue;'>無相關比賽</B>";
@@ -247,7 +247,7 @@ echo ($net_item=='') ? $FFFF:$TTTT ;
 <B style='color:red;'>※若有相關賽程，請小心修改。</B>
 
    	  
-<?
+<?php
 }
 
 #####################   新增表單1  ###########################
@@ -391,7 +391,7 @@ onclick=\"add(this.value);\">$value";
 <p align='center'>程式設計:二林國小紀明村</td> 
 </tr>
 </table>
-</table> <?
+</table> <?php
 }
 
 
@@ -522,17 +522,17 @@ echo "<TABLE border=0 width=100% style='font-size:11pt;'  cellspacing=1 cellpadd
 ?>
 
 <tr bgcolor=#ffffff ><TD width=100%>
-<FONT COLOR='#990000'>調整作業：</FONT><?btt();?>
+<FONT COLOR='#990000'>調整作業：</FONT><?php btt();?>
 <FORM METHOD=POST ACTION='<?=$PHP_SELF?>' name='f1'>
 <INPUT TYPE='hidden' name=act value=''>
 <INPUT TYPE='hidden' name=mid value='<?=$mid?>'>
 <div style="margin-left: 40pt;background-color:#F2F2F2">
-<?bt('time_change1','採用方式１將鉤選項目變更時間','images/00_check.gif')?>
+<?php bt('time_change1','採用方式１將鉤選項目變更時間','images/00_check.gif')?>
 方式1：將鉤選者
 <INPUT TYPE='radio' NAME='ttime' value='a'>增加
 <INPUT TYPE='radio' NAME='ttime' value='d'>減少
 <INPUT TYPE='text' NAME='time_valve1' class=ipmei size=6>
-<?
+<?php
 $gg=array('1'=>'年','2'=>'月','3'=>'日','4'=>'時','5' =>'分');
 $gg1=array('MONTH'=>'月','DAY'=>'日','HOUR'=>'時','MINUTE' =>'分');
 //$gg1=array(m=>"MONTH",d=>"DAY",h=>"HOUR"=>"時",MINUTE =>"分");
@@ -540,16 +540,16 @@ $gg1=array('MONTH'=>'月','DAY'=>'日','HOUR'=>'時','MINUTE' =>'分');
 set_sport_selectb("ttimea",$gg1);
 ?>
 <BR>
-<?bt('time_change2','採用方式２將鉤選項目變更時間','images/00_check.gif')?>
+<?php bt('time_change2','採用方式２將鉤選項目變更時間','images/00_check.gif')?>
 
-方式2：改變鉤選者的<?set_sport_selectb("Ttimeb",$gg);?>改變為 
+方式2：改變鉤選者的<?php set_sport_selectb("Ttimeb",$gg);?>改變為 
 <INPUT TYPE='text' NAME='time_valve2' class=ipmei size=6><BR>
-<?btr("images/ch_back2.gif");?>
+<?php btr("images/ch_back2.gif");?>
 
 </div>
 </TD></TR><tr bgcolor=#ffffff ><TD width=100% nowrap style='font-size:10pt;'>
 <FONT COLOR='#990000'>資料格式：</FONT>項目-開始時間..結束時間<BR>
-<?
+<?php 
 	//2004-12-05 05:06:00
 for($i=0; $i<$rs->RecordCount(); $i++) {
 	$Ta=split("[- :]",$arr[$i][sporttime]);

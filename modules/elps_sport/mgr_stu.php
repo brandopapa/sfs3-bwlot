@@ -1,5 +1,5 @@
 <?php
-//$Id: mgr_stu.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: mgr_stu.php 8769 2016-01-13 14:16:55Z qfon $
 include_once "config.php";
 //認證
 sfs_check();
@@ -231,7 +231,7 @@ $img_sex=array(1=>"<img src='images/boy.gif' width=15 >",2=>"<img src='images/gi
 ?><TABLE border=0 width=100%><TR><TD width=30%><img src='images/12.gif'><B>本班學生列表</B></TD><TD width=70%><INPUT TYPE='reset' value='重新選擇' class=bu1>&nbsp;
 <INPUT TYPE=button  value="將鉤選者加入點選的項目" onclick=" bb('選好了嗎？','add_stu');" class=bu1></TD></TR><TR><TD style='font-size:10pt;' colspan=2>
 <FONT COLOR='red'>註：隊長限一人</FONT><BR>
-<?
+<?php
 for($i=0; $i<$rs->RecordCount(); $i++) {
 $stu_num=substr($arr[$i][curr_class_num],3,2);
 echo "<INPUT TYPE='checkbox' NAME='stu[".$arr[$i][student_sn]."_".$arr[$i][curr_class_num]."]' value='".$arr[$i][stud_name]."'><FONT  COLOR='".$color_sex[$arr[$i][stud_sex]]."'>".$img_sex[$arr[$i][stud_sex]].$stu_num.$arr[$i][stud_name]."</FONT>\n";
@@ -242,7 +242,7 @@ if ($i%8==7 && $i!=0) echo "<BR>";
 echo "</TD></TR><TR><TD colspan=2>";
 ?>
 
-<?
+<?php
 echo "<hr color=#800000 SIZE=1></TD></TR></TABLE>";
 
 }

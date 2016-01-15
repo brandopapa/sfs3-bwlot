@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: show_seat.php 6807 2012-06-22 08:08:30Z smallduh $
+// $Id: show_seat.php 8743 2016-01-08 14:02:58Z qfon $
 
 /// --系統設定檔
 include "exam_config.php";
@@ -92,4 +92,4 @@ for ($i=$class_rows;$i>=1;$i--) {
 
 ?>
   </table>    
-<? include "footer.php"; ?>
+<?php include "footer.php"; ?>

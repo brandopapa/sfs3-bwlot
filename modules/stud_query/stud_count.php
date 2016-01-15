@@ -20,6 +20,8 @@ echo $main  ;
 function list_class_stu($year,$semester){
 	global $menu_p,$CONN ,$school_kind_name;
 	//$toolbar=&make_menu($menu_p);
+	$year=intval($year);
+	$semester=intval($semester);
 	$sql_select = "select class_sn,class_id,c_year,c_name,c_kind,c_sort from school_class where enable='1' and year='$year' and semester='$semester' order by c_year,c_sort";
 	$recordSet=$CONN->Execute($sql_select) or die($sql_select);
 

@@ -1,5 +1,5 @@
 <?php
-//$Id: readme.php 5310 2009-01-10 07:57:56Z hami $
+//$Id: readme.php 8769 2016-01-13 14:16:55Z qfon $
 include "config.php";
 
 head("競賽報名");
@@ -56,7 +56,7 @@ else {$link2="mid=$_GET[mid]&item=$_GET[item]&sitem=$_GET[sitem]"; print_menu($s
 2.加入輸出程序表。
 3.成績展示。</FONT>
 </PRE>
-<?
+<?php
 
 foot();
 

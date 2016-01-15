@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: stud_chg.php 6807 2012-06-22 08:08:30Z smallduh $
+// $Id: stud_chg.php 8741 2016-01-07 06:30:22Z qfon $
 
 //載入設定檔
 include "exam_config.php";
@@ -10,6 +10,9 @@ if ($_SESSION[session_stud_id] == "" ){
 	include "checkid.php";
 	exit;
 }
+
+//mysqli
+$mysqliconn = get_mysqli_conn();
 
 if ($_POST[key] == "修改") {
 	$stud_sit_num = sprintf("%X-%X",$_POST[seat_col],$_POST[seat_row]);
@@ -22,8 +25,31 @@ if ($_POST[key] == "修改") {
 		exit;
 	}
 	
+	
+//mysqli
+$sql_update = "update exam_stud_data set stud_pass=?,stud_sit_num=?,stud_num=?,stud_memo=?, stud_c_time=? where stud_id ='$_SESSION[session_stud_id]' ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('sssss', $stud_pass,$stud_sit_num,$_POST[stud_num],$_POST[stud_memo],$stud_c_time);
+$stmt->execute();
+$stmt->close();
+
+ if ($mysqliconn->affected_rows==1){
+	
+	 	$str ="你的新密碼為&nbsp;<B><font color=red size=4 >$stud_pass</font></b>";
+		$str .=" , 三秒鐘後回到首頁";
+		echo $str;
+		redir( "exam_list.php" ,3);
+		exit;	
+	 
+ }
+
+///mysqli	
+	
+	/*
 	$sql_update = "update exam_stud_data set stud_pass='$stud_pass',stud_sit_num='$stud_sit_num',stud_num='$_POST[stud_num]',stud_memo='$_POST[stud_memo]', stud_c_time='$stud_c_time' where stud_id ='$_SESSION[session_stud_id]' ";
 	$result_ok = $CONN->Execute($sql_update) or die($sql_update);
+	
 	if ($result_ok) {
 		$str ="你的新密碼為&nbsp;<B><font color=red size=4 >$stud_pass</font></b>";
 		$str .=" , 三秒鐘後回到首頁";
@@ -31,7 +57,7 @@ if ($_POST[key] == "修改") {
 		redir( "exam_list.php" ,3);
 		exit;	
 	}
-	
+	*/
 	
 }
 

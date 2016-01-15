@@ -26,6 +26,9 @@ if ($_GET['act']=='test') {
 
 
 if ($_GET['act']=='GetPages') {
+	//把過期置頂取消
+  $CONN->Execute("UPDATE `jboard_p` SET b_sort = '100',top_days='0' WHERE (to_days(b_open_date) + top_days) < to_days(now( )) and top_days>0");
+
   	 //應傳入的條件
 	 $bk_id=$_GET['bk_id'];
 	 $page_count=$_GET['page_count'];  //每頁幾筆 
@@ -314,13 +317,13 @@ $stmt->close();
        $stmt = $mysqliconn->prepare($sql_sync);
        $stmt->bind_param('ss',$bk_id,$bk_id);
        $stmt->execute();
-       $stmt->bind_result($bk_id,$synchronize_days);
+       $stmt->bind_result($bk_idx,$synchronize_days);
        ///mysqli
 		
  		//while ($row=$res->fetchRow()) {		
    		  //$SYNC[]=array('bk_id'=>$row['bk_id'],'days'=>$row['synchronize_days']); //同步板區 id
  		while ($stmt->fetch()) {
-	   	$SYNC[]=array('bk_id'=>$bk_id,'days'=>$synchronize_days); //同步板區 id
+	   	$SYNC[]=array('bk_id'=>$bk_idx,'days'=>$synchronize_days); //同步板區 id
 		}
 	}
 	 //同步呈現的板區

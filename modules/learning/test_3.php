@@ -102,6 +102,7 @@ if($my_sco==5){
 
 		//¨C©Û¦©1¤À
 		$total= $total - 1 ;  
+		$s_id=intval($s_id);
 		$sql_update = "update test_score set total='$total' ";
 		$sql_update .= " where s_id='$s_id' " ;
 		mysql_query($sql_update) or die ($sql_update);

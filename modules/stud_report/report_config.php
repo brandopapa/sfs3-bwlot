@@ -25,6 +25,7 @@ function get_score_rule_arr(){
 //取得年度課程名稱陣列
 function rep_get_ss_name($ss_id,$subject_name_arr){
         global $CONN;
+		$ss_id=intval($ss_id);
         $query = "select * from score_ss where  ss_id='$ss_id'";
         $res = $CONN->Execute($query);
 	$ss_id=$res->fields[ss_id];

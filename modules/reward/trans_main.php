@@ -1,6 +1,6 @@
 <?php
 
-// $Id: trans_main.php 7709 2013-10-23 12:24:27Z smallduh $
+// $Id: trans_main.php 8767 2016-01-13 13:15:56Z qfon $
 include "../../include/sfs_oo_zip2.php";
 	//新增一個 zipfile 實例
 	$ttt = new EasyZip;
@@ -47,6 +47,8 @@ include "../../include/sfs_oo_zip2.php";
 	}
 
 	//取得班級陣列
+	$sel_year=intval($sel_year);
+	$sel_seme=intval($sel_seme);
 	$query="select class_id,c_name from school_class where year='$sel_year' and semester='$sel_seme' order by class_id";
 	$res=$CONN->Execute($query);
 	while (!$res->EOF) {

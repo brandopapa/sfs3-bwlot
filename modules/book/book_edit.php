@@ -1,6 +1,6 @@
 <?php
                                                                                                                              
-// $Id: book_edit.php 8723 2016-01-02 06:00:38Z qfon $
+// $Id: book_edit.php 8753 2016-01-13 12:40:19Z qfon $
 
 // --系統設定檔
 include "book_config.php";
@@ -22,6 +22,9 @@ $bookch1_id = $_REQUEST['bookch1_id'];
 $qbook_name = $_REQUEST['qbook_name'];
 $showpage = $_REQUEST['showpage'];
 
+//mysqli
+$mysqliconn = get_mysqli_conn();
+
 if(!checkid(substr($_SERVER['PHP_SELF'],1))){
 	$go_back=1; //回到自已的認證畫面  
 	include "header.php";
@@ -35,21 +38,53 @@ if ($_REQUEST['key'] == "回書目修改區"){
 	exit;
 }
 if ($_POST['key'] == "確定刪除"){
+	/*
 	$query = "delete from book where book_id = '$book_id'";
 	mysql_query($query,$conID) or die($query);
+	*/
+///mysqli
+$query = "delete from book where book_id = ?";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $book_id);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	
+	/*
 	$query = "update  bookch1 set tolnum = tolnum -1 where bookch1_id = '$bookch1_id'";
 	mysql_query($query,$conID) or die($query);
+	*/
+///mysqli
+$query = "update  bookch1 set tolnum = tolnum -1 where bookch1_id = ?";
+$stmt = "";
+$stmt = $mysqliconn->prepare($query);
+$stmt->bind_param('s', $bookch1_id);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	
 	$ss = sprintf("%s%s?book_id=%s&bookch1_id=%s&page=%d&qbook_name=%s&showpage=%s",$path_html,"$store_path/book_input.php",$book_id,$bookch1_id,$page,$qbook_name,$showpage );
 	header("Location: ".$ss);
 }
 if ($_POST['key'] == "確定修改"){
+	/*
 	$sql_update = "update book set  bookch1_id='$_POST[bookch1_id]',book_name='$_POST[book_name] ',book_author='$_POST[book_author]',book_maker='$_POST[book_maker] ',book_myear='$_POST[book_myear]',book_bind='$_POST[book_bind]',book_price='$_POST[book_price]',book_content='$_POST[book_content] ',book_isborrow='$_POST[book_isborrow]',book_isbn='$_POST[book_isbn]' where book_id='$_POST[book_id]' ";
 	mysql_query($sql_update,$conID) or die ($sql_update);
+    */
+///mysqli
+$sql_update = "update book set  bookch1_id=?,book_name=?,book_author=?,book_maker=?,book_myear=?,book_bind=?,book_price=?,book_content=?,book_isborrow=?,book_isbn=? where book_id=? ";
+$stmt = "";
+$stmt = $mysqliconn->prepare($sql_update);
+$stmt->bind_param('sssssssssss', $_POST[bookch1_id],$_POST[book_name],$_POST[book_author],$_POST[book_maker],$_POST[book_myear],$_POST[book_bind],$_POST[book_price],$_POST[book_content],$_POST[book_isborrow],$_POST[book_isbn],$_POST[book_id]);
+$stmt->execute();
+$stmt->close();
+///mysqli	
+	
 }
 
  ///mysqli
 $sql_select = "select bookch1_id,book_id,book_name,book_author,book_maker,book_myear,book_bind,book_price,book_content,book_isborrow,book_isbn,book_isout,book_buy_date from book where book_id =?"; 
-$mysqliconn = get_mysqli_conn();
 $stmt = "";
 $stmt = $mysqliconn->prepare($sql_select);
 $stmt->bind_param('s',$book_id);
