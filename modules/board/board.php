@@ -1,6 +1,6 @@
 <?php
 
-// $Id: board.php 8752 2016-01-13 12:38:48Z qfon $
+// $Id: board.php 8778 2016-01-15 03:57:07Z hsiao $
 
 // --系統設定檔
 include	"board_config.php";
@@ -10,10 +10,6 @@ session_start();
 $teach_id=$_SESSION[session_log_id];
 
 $bk_id = $_REQUEST['bk_id'];
-
-//mysqli
-$mysqliconn = get_mysqli_conn();
-
 
 if(!board_checkid($bk_id)){
 
@@ -43,6 +39,8 @@ $b_title = addslashes($row["title_name"]); //職稱
 ///mysqli
 $query = "select board_name,board_date,board_k_id,board_last_date,board_is_upload,board_is_public,board_admin from board_kind ";
 $query .= "where bk_id =? ";
+
+$mysqliconn = get_mysqli_conn("board_kind");
 $stmt = "";
 $stmt = $mysqliconn->prepare($query);
 $stmt->bind_param('s', $bk_id);
@@ -68,8 +66,6 @@ $row = $result->fetchRow();
 if ($_POST['key'] == "確定公告"){
 	$b_post_time = mysql_date();
 	$b_upload_name = $_FILES['b_upload']['name'];
-	print_r($b_upload_name);
-/*	
 	$sql_insert = "insert into board_p(bk_id,b_open_date,b_days,b_unit,b_title,b_name," .
 			"b_sub,b_con,b_upload,b_url,b_own_id,b_post_time,b_is_intranet,teacher_sn,b_is_sign,b_is_marquee)values " .
 			"('{$_POST['bk_id']}','{$_POST['b_open_date']}','{$_POST['b_days']}'," .
@@ -80,24 +76,6 @@ if ($_POST['key'] == "確定公告"){
 	$CONN->Execute($sql_insert) or die ($sql_insert);
 	//echo $sql_insert;
 	$b_id = $CONN->Insert_ID();
-*/
-//mysqli	
-
-	$sql_insert = "insert into board_p(bk_id,b_open_date,b_days,b_unit,b_title,b_name," .
-			"b_sub,b_con,b_upload,b_url,b_own_id,b_post_time,b_is_intranet,teacher_sn,b_is_sign,b_is_marquee)values " .
-			"(?,?,?," .
-			"'$b_unit','$b_title','$b_name',?,?," .
-			"'$b_upload_name',?,'{$_SESSION['session_log_id']}',now()," .
-			"?,'{$_SESSION['session_tea_sn']}',?,?)";
-$stmt = "";
-$stmt = $mysqliconn->prepare($sql_insert);
-$stmt->bind_param('sssssssss',check_mysqli_param($_POST['bk_id']),check_mysqli_param($_POST['b_open_date']),check_mysqli_param($_POST['b_days']),check_mysqli_param($_POST['b_sub']),check_mysqli_param($_POST['b_con']),check_mysqli_param($_POST['b_url']),check_mysqli_param($_POST['b_is_intranet']),check_mysqli_param($_POST['b_is_sign']),check_mysqli_param($_POST['b_is_marquee']));
-$stmt->execute();
-$b_id=mysqli_stmt_insert_id($stmt);
-$stmt->close();
-///mysqli		
-
-    
 	$fileCount = count($_FILES);
 		if ($fileCount > 0){
 			//上傳檔案
@@ -126,9 +104,7 @@ $stmt->close();
 
 
 	if (!$error_flag)
-	{
-		//Header ("Location: board_view.php?bk_id=$bk_id");
-	}
+		Header ("Location: board_view.php?bk_id=$bk_id");
 }
 
 //是否有獨立的界面

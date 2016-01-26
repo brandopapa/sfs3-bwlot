@@ -9,6 +9,6 @@ $SFS_VER_DECLARE="3.1";
 $SFS_VER_STATUS="beta";
 
 // 打包日期
-$SFS_BUILD_DATE="2016-01-14 00:10(stable)";
+$SFS_BUILD_DATE="2016-01-16 00:10(stable)";
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-  // $Id: fixed.php 8726 2016-01-05 01:07:37Z qfon $
+  // $Id: fixed.php 8775 2016-01-14 07:36:54Z qfon $
   require "config.php" ;
  
 
@@ -285,7 +285,7 @@ $stmt->bind_result($ID,$even_T,$even_doc,$unitId,$user,$even_date,$even_mode,$re
       if ($_SESSION['session_log_id'] ) 
          //if (!strnatcasecmp($nb[userid] , $_SESSION['session_log_id']) and ($rep_mode <> 2))
            if (!strnatcasecmp($userid , $_SESSION['session_log_id']) and ($rep_mode <> 2))          
-	        $edit_link = "<a href=\"fixedadmin.php?do=edit&id=$ID]\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ; 
+	        $edit_link = "<a href=\"fixedadmin.php?do=edit&id=$ID\"><img src=\"images/edit.gif\" alt='修改通報內容' title='修改通報內容' border=\"0\"> </a>\n" ; 
            
       /*
       else     

@@ -57,24 +57,11 @@ if ($_POST['act']=='登入') {
 $log_id=$_POST['log_id']; 
 $log_pass=pass_operate($_POST['log_pass']);
 if ($IS_UTF8==0) mysql_query("SET NAMES 'latin1'");
-//$query="select teacher_sn, login_pass from teacher_base where teach_condition=0 and teach_id='$log_id' and login_pass='$log_pass' and teach_id<>''";
-//$result=mysql_query($query);
+$query="select teacher_sn, login_pass from teacher_base where teach_condition=0 and teach_id='$log_id' and login_pass='$log_pass' and teach_id<>''";
+$result=mysql_query($query);
 
- ///mysqli
-$query="select teacher_sn, login_pass from teacher_base where teach_condition=0 and teach_id=? and login_pass=? and teach_id<>''";
-$mysqliconn = get_mysqli_conn();
-$stmt = "";
-$stmt = $mysqliconn->prepare($query);
-$stmt->bind_param('ss',$log_id,$log_pass);
-$stmt->execute();
-$stmt->bind_result($teacher_sn, $login_pass);
-$stmt->fetch();
-$stmt->close();
+if (mysql_num_rows($result)) {
 
-///mysqli
-
-//if (mysql_num_rows($result)) {
-if ($teacher_sn) {
 	$_SESSION['MSN_LOGIN_ID']=$log_id;
 	//記錄上線
    mysql_query("SET NAMES 'utf8'");
