@@ -90,7 +90,7 @@ function cal_abs($sel_year,$sel_seme){
 	$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
 	$a_array=stud_abs_kind();
 	$abs_array=array("事假"=>"1","病假"=>"2","曠課"=>"3","集會"=>"4","公假"=>"5","其他"=>"6","喪假"=>"6");
-	$query="update stud_seme_abs set abs_days='' where seme_year_seme='$seme_year_seme'";
+	$query="update stud_seme_abs set abs_days='',abs_days_5day_7section='' where seme_year_seme='$seme_year_seme'";
 	$CONN->Execute($query) or trigger_error("SQL語法錯誤：$query", E_USER_ERROR);
 	$sql="select class_year,sections from score_setup where year='$sel_year' and semester='$sel_seme'";
 	$rs=$CONN->Execute($sql) or trigger_error("SQL語法錯誤：$sql", E_USER_ERROR);
