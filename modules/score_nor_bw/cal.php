@@ -181,7 +181,7 @@ function cal_rew($sel_year,$sel_seme) {
 	
 	$reward_year_seme=$sel_year.$sel_seme;
 	$seme_year_seme=sprintf("%03d",$sel_year).$sel_seme;
-	$CONN->Execute("update stud_seme_rew set sr_num='' where seme_year_seme='$seme_year_seme'");
+	$CONN->Execute("update stud_seme_rew set sr_num='',sr_num_5day='' where seme_year_seme='$seme_year_seme'");
 	$sql="select *,DATE_FORMAT(reward_date,'%w') as date_w from reward where reward_year_seme='$reward_year_seme' and stud_id <> '' and (reward_cancel_date='0000-00-00' or reward_cancel_date is null) order by stud_id,reward_kind";
 	$rs=$CONN->Execute($sql) or trigger_error("SQL»yªk¿ù»~¡G$sql", E_USER_ERROR);
 	if ($rs) {
