@@ -74,7 +74,7 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		if($absence_data[$grade91]=='') $absence_data[$grade91]=0;
 		
 		$data.="<div style='margin:20px 0;'>";
-		$data.="<span style='font-size:18pt;'>二、品德服務：</span><br><span style='font-size:15pt;'>1.獎勵紀錄：大功\4.5分、小功\1.5分、嘉獎0.5分，最高12分。<br>2.出缺席紀錄：每學期無曠課者得1分。<br>3.無記過紀錄：無警告以上紀錄者(含銷過後)5分、銷過後無累積至小過(含)以上者1分。</span>";
+		$data.="<span style='font-size:18pt;'>二、品德服務：</span><br><span style='font-size:15pt;'>1.獎勵紀錄：大功\4.5分、小功\1.5分、嘉獎0.5分，最高15分。<br>2.出缺席紀錄：每學期無曠課者得1分。<br>3.無記過紀錄：無警告以上紀錄者(含銷過後)5分、銷過後無累積至小過(含)以上者1分。</span>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th rowspan='2'>年級</th><th rowspan='2'>學期</th><th colspan='3'>獎勵紀錄</th><th>出缺席</th><th colspan='3'>懲處紀錄</th></tr>";
 		$data.="<tr align='center'><th>大功\</th><th>小功\</th><th>嘉獎</th><th>節數</th><th>警告</th><th>小過</th><th>大過</th></tr>";
