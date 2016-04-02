@@ -48,19 +48,33 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$stud_disadvantage=$final_data[$student_sn]['score_disadvantage'];		//經濟弱勢
 		$guardian_name=$domicile_data[$student_sn]['guardian_name'];		//監護人
 		if($student_data[$student_sn]['stud_tel_2']!='') $stud_telphone=$student_data[$student_sn]['stud_tel_2']; elseif($student_data[$student_sn]['stud_tel_3']!='') $stud_telphone=$student_data[$student_sn]['stud_tel_3']; else $stud_telphone=$student_data[$student_sn]['stud_tel_1'];		//聯絡電話
-		$stud_score=$final_data[$student_sn]['score_disadvantage']+$final_data[$student_sn]['score_remote']+$final_data[$student_sn]['score_nearby']+$final_data[$student_sn]['score_reward']+$final_data[$student_sn]['score_absence']+$final_data[$student_sn]['score_fault']+$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex']+$final_data[$student_sn]['score_competetion']+$final_data[$student_sn]['score_fitness'];		//可得分數
+		$balance_all_score=$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex'];		//均衡學習分數合計
+		
+		$reward_competetion_fitness_score=$final_data[$student_sn]['score_reward']+$final_data[$student_sn]['score_competetion']+$final_data[$student_sn]['score_fitness'];		//獎勵+競賽+體適能分數
+		if ($reward_competetion_fitness_score < $reward_competetion_fitness_score_max) $reward_competetion_fitness_score=$reward_competetion_fitness_score; else $reward_competetion_fitness_score=$reward_competetion_fitness_score_max;		//判斷獎勵+競賽+體適能分數是否超過25分
+		
+		$stud_score=$final_data[$student_sn]['score_disadvantage']+$final_data[$student_sn]['score_remote']+$final_data[$student_sn]['score_nearby']+$final_data[$student_sn]['score_absence']+$final_data[$student_sn]['score_fault']+$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex']+$reward_competetion_fitness_score;
+		
+		//$stud_score=$final_data[$student_sn]['score_disadvantage']+$final_data[$student_sn]['score_remote']+$final_data[$student_sn]['score_nearby']+$final_data[$student_sn]['score_reward']+$final_data[$student_sn]['score_absence']+$final_data[$student_sn]['score_fault']+$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex']+$final_data[$student_sn]['score_competetion']+$final_data[$student_sn]['score_fitness'];		//可得分數
 		$addr_zip=$student_data[$student_sn]['addr_zip']?'('.$student_data[$student_sn]['addr_zip'].')':'';
 		$stud_address=$student_data[$student_sn]['stud_addr_2']?$student_data[$student_sn]['stud_addr_2']:$student_data[$student_sn]['stud_addr_1'];		//通訊處
-		$data.="<div style='margin:20px 0;'>";
-		$data.="<span style='font-size:18pt;'>一、學生基本資料：</span>";
+    $data.="<div style='margin:18px 0;'>";
+		$data.="<span style='font-size:16pt;'>一、學生基本資料：</span>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:15pt; border-collapse:collapse;' bordercolor='#111111'>";
-		$data.="<tr align='center'><th>姓名</th><th>出生年月曰</th><th>性別</th><th>身分證號</th><th>監護人</th><th>聯絡電話</th><th>備註</th></tr>";
-		$data.="<tr align='center'><td>{$stud_name}</td><td>{$stud_birth}</td><td>{$stud_sex}</td><td>{$stud_person_id}</td><td>{$guardian_name}</td><td>{$stud_telphone}</td><td></td></tr>";
-		$data.="<tr align='center'><th>畢(肄)業學校</th><th>就讀班級</th><th>畢業學年度</th><th>就近入學</th><th>偏遠小校</th><th>經濟弱勢</th><th>得分</th></tr>";
-		$data.="<tr align='center'><td>{$stud_school_name}</td><td>{$stud_seme_class}</td><td>{$stud_graduation_year}</td><td>{$stud_school_nature}</td><td>{$stud_school_remote}</td><td>{$stud_disadvantage}</td><td>{$stud_score}</td></tr>";
-		$data.="<tr align='center'><th>通訊處</th><td align='left' colspan='6'>{$addr_zip}{$stud_address}</td></tr>";
+		$data.="<tr align='center'><th>學校</th><th>班級</th><th>姓名</th><th>出生年月曰</th><th>性別</th><th>身分證號</th><th>監護人</th><th>聯絡電話</th>";
+		$data.="<tr align='center'><td>{$stud_school_name}</td><td>{$stud_seme_class}</td><td>{$stud_name}</td><td>{$stud_birth}</td><td>{$stud_sex}</td><td>{$stud_person_id}</td><td>{$guardian_name}</td><td>{$stud_telphone}</td></tr>";
 		$data.="</table></div>";
-		//表二：品德服務
+
+		//表二超額比序項目積分
+		$data.="<div style='margin:18px 0;'>";
+		$data.="<span style='font-size:16pt;'>二、超額比序項目積分：</span><br><span style='font-size:14pt;'>1.獎勵紀錄、競賽成績、體適能三項最高採計25分。</span>";
+		$data.="<span style='font-size:14pt;'></span>";
+		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:15pt; border-collapse:collapse;' bordercolor='#111111'>";
+		$data.="<tr align='center'><th>經濟弱勢</th><th>就近入學</th><th>出缺席紀錄</th><th>無記過紀錄</th><th>均衡學習</th><th>偏遠小校</th><th>獎勵紀錄</th><th>競賽成績</th><th>體適能</th><th>小計</th></tr>";
+	  $data.="<tr align='center'><td>{$stud_disadvantage}</td><td>{$stud_school_nature}</td><td>{$final_data[$student_sn]['score_absence']}</td><td>{$final_data[$student_sn]['score_fault']}</td><td>{$balance_all_score}</td><td>{$stud_school_remote}</td><td>{$final_data[$student_sn]['score_reward']}</td><td>{$final_data[$student_sn]['score_competetion']}</td><td>{$final_data[$student_sn]['score_fitness']}</td><td>{$stud_score}</td></tr>";
+		$data.="</table></div>";
+		
+		//表三：品德服務
 		$f = explode(",",$reward_semester);
 		$grade71=substr($f[0],1,-1);
 		$grade72=substr($f[1],1,-1);
@@ -73,13 +87,11 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		if($absence_data[$grade82]=='') $absence_data[$grade82]=0;
 		if($absence_data[$grade91]=='') $absence_data[$grade91]=0;
 		
-		$data.="<div style='margin:20px 0;'>";
-		$data.="<span style='font-size:18pt;'>二、品德服務：</span><br><span style='font-size:15pt;'>1.獎勵紀錄：大功\4.5分、小功\1.5分、嘉獎0.5分，最高15分。<br>2.出缺席紀錄：每學期無曠課者得1分。<br>3.無記過紀錄：無警告以上紀錄者(含銷過後)5分、銷過後無累積至小過(含)以上者1分。</span>";
+		$data.="<div style='margin:18px 0;'>";
+                 $data.="<span style='font-size:16pt;'>三、品德服務：</span><br><span style='font-size:14pt;'>1.獎勵紀錄：大功\4.5分、小功\1.5分、嘉獎0.5分，最高15分。<br>2.出缺席紀錄：每學期無曠課者得1分。<br>3.無記過紀錄：無警告以上紀錄者(含銷過後)5分、銷過後無累積至小過(含)以上者1分。</span>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th rowspan='2'>年級</th><th rowspan='2'>學期</th><th colspan='3'>獎勵紀錄</th><th>出缺席</th><th colspan='3'>懲處紀錄</th></tr>";
 		$data.="<tr align='center'><th>大功\</th><th>小功\</th><th>嘉獎</th><th>節數</th><th>警告</th><th>小過</th><th>大過</th></tr>";
-		//$data.="<tr align='center'><td>7-1</td><td>{$grade71}</td><td>{$reward_data[$grade71][9]}</td><td>{$reward_data[$grade71][3]}</td><td>{$reward_data[$grade71][1]}</td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td></tr>";
-		//$data.="<tr align='center'><td>7-2</td><td>{$grade72}</td><td>{$reward_data[$grade72][9]}</td><td>{$reward_data[$grade72][3]}</td><td>{$reward_data[$grade72][1]}</td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td></tr>";
 		$data.="<tr align='center'><td>7-1</td><td>{$grade71}</td><td>{$reward_data[$grade71][9]}</td><td>{$reward_data[$grade71][3]}</td><td>{$reward_data[$grade71][1]}</td><td>{$absence_data[$grade71]}</td><td>{$reward_data[$grade71][-1]}</td><td>{$reward_data[$grade71][-3]}</td><td>{$reward_data[$grade71][-9]}</td></tr>";
 		$data.="<tr align='center'><td>7-2</td><td>{$grade72}</td><td>{$reward_data[$grade72][9]}</td><td>{$reward_data[$grade72][3]}</td><td>{$reward_data[$grade72][1]}</td><td>{$absence_data[$grade72]}</td><td>{$reward_data[$grade72][-1]}</td><td>{$reward_data[$grade72][-3]}</td><td>{$reward_data[$grade72][-9]}</td></tr>";
 		$data.="<tr align='center'><td>8-1</td><td>{$grade81}</td><td>{$reward_data[$grade81][9]}</td><td>{$reward_data[$grade81][3]}</td><td>{$reward_data[$grade81][1]}</td><td>{$absence_data[$grade81]}</td><td>{$reward_data[$grade81][-1]}</td><td>{$reward_data[$grade81][-3]}</td><td>{$reward_data[$grade81][-9]}</td></tr>";
@@ -89,9 +101,9 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
   	$data.="<tr align='center'><th colspan='2'>合計</th><td>".($reward_data[$grade71][9]+$reward_data[$grade72][9]+$reward_data[$grade81][9]+$reward_data[$grade82][9]+$reward_data[$grade91][9])."</td><td>".($reward_data[$grade71][3]+$reward_data[$grade72][3]+$reward_data[$grade81][3]+$reward_data[$grade82][3]+$reward_data[$grade91][3])."</td><td>".($reward_data[$grade71][1]+$reward_data[$grade72][1]+$reward_data[$grade81][1]+$reward_data[$grade82][1]+$reward_data[$grade91][1])."</td><td>".($absence_data[$grade71]+$absence_data[$grade72]+$absence_data[$grade81]+$absence_data[$grade82]+$absence_data[$grade91])."</td><td>".($reward_data[$grade71][-1]+$reward_data[$grade72][-1]+$reward_data[$grade81][-1]+$reward_data[$grade82][-1]+$reward_data[$grade91][-1]-$reward_data['fault_cancel'][-1])."</td><td>".($reward_data[$grade71][-3]+$reward_data[$grade72][-3]+$reward_data[$grade81][-3]+$reward_data[$grade82][-3]+$reward_data[$grade91][-3]-$reward_data['fault_cancel'][-3])."</td><td>".($reward_data[$grade71][-9]+$reward_data[$grade72][-9]+$reward_data[$grade81][-9]+$reward_data[$grade82][-9]+$reward_data[$grade91][-9]-$reward_data['fault_cancel'][-9])."</td></tr>";
 		$data.="<tr align='center'><th colspan='2'>得分</th><td colspan='3'>{$final_data[$student_sn]['score_reward']}</td><td>{$final_data[$student_sn]['score_absence']}</td><td colspan='3'>{$final_data[$student_sn]['score_fault']}</td></tr>";
 		$data.="</table></div>";
-		//表三：多元學習
-		$data.="<div style='margin:20px 0;'>";
-		$data.="<span style='font-size:18pt;'>三、多元學習：</span><br><span style='font-size:15pt;'>1.圴衡學習：藝術與人文、健康與體育、綜合活動學期總平均成績及格者，每一領域給3分。<br>2.體適能：任一項成績達門檻標準者得3分，最高得6分。<br>3.競賽表現：最高7分。</span>";
+		//表四：多元學習
+		$data.="<div style='margin:18px 0;'>";
+                $data.="<span style='font-size:16pt;'>四、多元學習：</span><br><span style='font-size:14pt;'>1.均衡學習：藝術與人文、健康與體育、綜合活動學期總平均成績及格者，每一領域給3分。<br>2.體適能：任一項成績達門檻標準者得3分，最高採計6分。<br>3.競賽表現：最高採計9分。</span>";
 		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th rowspan='2'>年級</th><th rowspan='2'>學期</th><th colspan='3'>均衡學習</th><th colspan='5'>體適能</th></tr>";
 		$data.="<tr align='center'><th>藝術與人文</th><th>健康與體育</th><th>綜合活動</th><th>坐姿前彎<br>(cm)[%]</th><th>立定跳遠<br>(cm)[%]</th><th>仰臥起坐<br>(次)[%]</th><th>心肺適能<br>(秒)[%]</th><th>獎章</th></tr>";
@@ -103,7 +115,7 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$data.="<tr align='center'><th colspan='2'>平均</th><td>{$balance['art']['avg']}</td><td>{$balance['health']['avg']}</td><td>{$balance['complex']['avg']}</td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td>{$fitness_medal[$fitness['avg']['medal']]}</td></tr>";
 		$data.="<tr align='center'><th colspan='2'>得分</th><td>{$final_data[$student_sn]['score_balance_art']}</td><td>{$final_data[$student_sn]['score_balance_health']}</td><td>{$final_data[$student_sn]['score_balance_complex']}</td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td bgcolor='#D6D3D6'></td><td>{$final_data[$student_sn]['score_fitness']}</td></tr>";
 		$data.="</table><br>";
-		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:14pt; border-collapse:collapse;' bordercolor='#111111'>";
+		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:12pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th>NO</th><th>範圍</th><th>性質</th><th>競賽名稱</th><th>證書日期</th><th>主辦單位</th><th>證書字號</th><th>名次</th><th>得分</th><th>採記</th></tr>";
 		for($i=1; $i<=count($competetion); $i++) {
 			if($competetion[$i]['squad']==2 && $competetion[$i]['mark']=='V') $team="(".$squad_team[$competetion[$i]['weight']].")"; else $team="";
@@ -112,13 +124,13 @@ if($selected_stud && $_POST['act']=='輸出成績證明單') {
 		$data.="<tr align='center'><th colspan='8'>合計</th><td>{$final_data[$student_sn]['score_competetion']}</td><td bgcolor='#D6D3D6'></td></tr>";
 		$data.="</table>";
 		$data.="</div>";
-		//四：簽名、核章
-		$data.="<div style='margin:20px 0 0 0;'><span style='font-size:18pt;'>學生簽名：　　　　　　　　　家長簽名：　　　　　　　　　學校核章：</span></div>";
+		//五：簽名、核章
+		$data.="<div style='margin:12px 0 0 0;'><span style='font-size:16pt;'>學生簽名：　　　　　　　　　家長簽名：　　　　　　　　　學校核章：</span></div>";
 		$data.="</div></div>";
 		//附件、獎懲明細
 		$data.="<div align='center' style='{$p_break}'><div style='text-align:left;width:1000px;line-height:30px;'>";
 		$data.="<span style='font-size:16pt;'>附件、獎懲明細：</span>";
-		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:13pt; border-collapse:collapse;' bordercolor='#111111'>";
+		$data.="<table border='2' cellpadding='3' cellspacing='0' style='width:100%; font-size:12pt; border-collapse:collapse;' bordercolor='#111111'>";
 		$data.="<tr align='center'><th>NO</th><th>年級</th><th>學期別</th><th>獎懲日期</th><th>獎懲類別</th><th>獎懲事由</th><th>獎懲依據</th><th>銷過日期</th><th>採記</th></tr>";
 		$n=1;
 		for($i=1; $i<=count($reward_list); $i++) {
