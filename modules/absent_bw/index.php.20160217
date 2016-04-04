@@ -1,6 +1,6 @@
 <?php
 
-// $Id: index.php 8478 2015-08-06 15:39:00Z smallduh $
+// $Id: index.php 7871 2014-02-12 01:56:14Z smallduh $
 
 /* 取得設定檔 */
 include_once "config.php";
@@ -443,9 +443,9 @@ function &signForm($sel_year,$sel_seme,$class_id,$thisOne=array(),$One=""){
                                 <td rowspan='6' align='center'>$seme_num</td>
                                 <td rowspan='6'>$stud_name</td>";
                         else
-                                $data.="<tr bgcolor='#FFFFFF'>";
+                                $data.="<tr bgcolor='$day_bgcolor'>";
                         $data.="
-                        <td align='center' bgcolor='$day_bgcolor'><a href='$_SERVER[SCRIPT_NAME]?class_id=$class_id&this_date=$did'>".$did."<br>(".$weekN[$dd[wday]-1].")</a></td>
+                        <td align='center'><a href='$_SERVER[SCRIPT_NAME]?class_id=$class_id&this_date=$did'>".$did."<br>(".$weekN[$dd[wday]-1].")</a></td>
                         $uf
                         $sections_data
                         $df

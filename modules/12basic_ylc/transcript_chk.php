@@ -103,7 +103,11 @@ if($selected_stud && $_POST['act']=='輸出積分審查表') {
 				</td>";
 		$data.="</tr>";
 		//積分
-		$stud_score=$final_data[$student_sn]['score_disadvantage']+$final_data[$student_sn]['score_remote']+$final_data[$student_sn]['score_nearby']+$final_data[$student_sn]['score_reward']+$final_data[$student_sn]['score_absence']+$final_data[$student_sn]['score_fault']+$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex']+$final_data[$student_sn]['score_competetion']+$final_data[$student_sn]['score_fitness'];		//積分
+		$reward_competetion_fitness_score=$final_data[$student_sn]['score_reward']+$final_data[$student_sn]['score_competetion']+$final_data[$student_sn]['score_fitness'];		//獎勵+競賽+體適能分數
+		if ($reward_competetion_fitness_score < $reward_competetion_fitness_score_max) $reward_competetion_fitness_score=$reward_competetion_fitness_score; else $reward_competetion_fitness_score=$reward_competetion_fitness_score_max;		//判斷獎勵+競賽+體適能分數是否超過25分
+		
+		$stud_score=$final_data[$student_sn]['score_disadvantage']+$final_data[$student_sn]['score_remote']+$final_data[$student_sn]['score_nearby']+$final_data[$student_sn]['score_absence']+$final_data[$student_sn]['score_fault']+$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex']+$reward_competetion_fitness_score;
+		//$stud_score=$final_data[$student_sn]['score_disadvantage']+$final_data[$student_sn]['score_remote']+$final_data[$student_sn]['score_nearby']+$final_data[$student_sn]['score_reward']+$final_data[$student_sn]['score_absence']+$final_data[$student_sn]['score_fault']+$final_data[$student_sn]['score_balance_health']+$final_data[$student_sn]['score_balance_art']+$final_data[$student_sn]['score_balance_complex']+$final_data[$student_sn]['score_competetion']+$final_data[$student_sn]['score_fitness'];		//積分
 		$data.="<tr align='left'><th width='8%' align='center' style='padding:30px 10px;'>積分</th><td width='46%' style='padding:20px 10px;'>未含會考及志願序積分：<u>&nbsp;&nbsp;&nbsp;".$stud_score."&nbsp;&nbsp;&nbsp;</u>分</td><td width='46%' style='padding:20px 10px;' colspan='2'>未含會考及志願序積分：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>分</td></tr>";
 		//審查人員核章
 		$data.="<tr align='left'>";
