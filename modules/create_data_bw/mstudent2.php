@@ -283,15 +283,35 @@ if ($do_key=="批次建立資料")
 						$stud_tel_2 = trim ($tt[13]);
 						$stud_mschool_name = trim ($tt[14]);
 						$zip_id = trim($tt[10]);
-						$addr = $zip_arr[$tt[10]].trim(addslashes($tt[12]));
-						
+						//$addr = $zip_arr[$tt[10]].trim(addslashes($tt[12]));
+						//***********************Start***********************
+						//20160907 改掉郵遞區號取回鄉鎮市區又回頭放回住址多此一舉的做法
+						//Update by Brando Chang
+						//***************************************************
+						$addr = trim(addslashes($tt[12]));
+						//***********************End***********************
 						//20120825新增欄位   戶籍遷入日期、學生行動電話、連絡地址、監護人、監護人行動電話
 						$addr_move_in=trim($tt[15]);
 						$stud_tel_3 = trim ($tt[16]);
 						$stud_addr_2 = trim(addslashes($tt[17]));
 						$stud_addr_2 = $stud_addr_2?$stud_addr_2:$addr;	
 						$guardian_name=trim($tt[18]);
-						$guardian_hand_phone=trim($tt[19]);							
+						$guardian_hand_phone=trim($tt[19]);	
+						
+						//***********************Start***********************
+						//20160907新增欄位   20父親手機 21父親職業 22父親公司 23父親公司電話 24母親手機 25母親職業 26母親公司 27母親公司電話
+						//Update by Brando Chang
+						//***************************************************
+						$fath_hand_phone=trim($tt[20]);
+						$fath_occupation=trim($tt[21]);
+						$fath_unit=trim($tt[22]);
+						$fath_phone=trim($tt[23]);
+						$moth_hand_phone=trim($tt[24]);
+						$moth_occupation=trim($tt[25]);
+						$moth_unit=trim($tt[26]);
+						$moth_phone=trim($tt[27]);
+						//***********************End***********************
+						
 						$edu_key =  hash('sha256', strtoupper($stud_person_id));
 						//拆解地址
 						$addr_arr = change_addr($addr);
@@ -331,7 +351,13 @@ if ($do_key=="批次建立資料")
 							$student_sn= $resss->fields[0];
 
 							//加入家庭狀況資料
-							$query = "replace into stud_domicile (stud_id,fath_name,moth_name,guardian_name,guardian_hand_phone,student_sn) values('$stud_id','$fath_name','$moth_name','$guardian_name','$guardian_hand_phone','$student_sn')";
+							//$query = "replace into stud_domicile (stud_id,fath_name,moth_name,guardian_name,guardian_hand_phone,student_sn) values('$stud_id','$fath_name','$moth_name','$guardian_name','$guardian_hand_phone','$student_sn')";
+							//***********************Start***********************
+							//20160907新增欄位   20父親手機 21父親職業 22父親公司 23父親公司電話 24母親手機 25母親職業 26母親公司 27母親公司電話
+							//Update by Brando Chang
+							//***************************************************
+							$query = "replace into stud_domicile (stud_id,fath_name,moth_name,guardian_name,guardian_hand_phone,student_sn,fath_hand_phone,fath_occupation,fath_unit,fath_phone,moth_hand_phone,moth_occupation,moth_unit,moth_phone) values('$stud_id','$fath_name','$moth_name','$guardian_name','$guardian_hand_phone','$student_sn','$fath_hand_phone','$fath_occupation','$fath_unit','$fath_phone','$moth_hand_phone','$moth_occupation','$moth_unit','$moth_phone')";
+							//***********************End***********************							
 							if (!$CONN->Execute($query))
 								$con_temp .= "$stud_id - $stud_name 新增家庭狀況資料失敗! <br>";
 							//加入學年學期資料
