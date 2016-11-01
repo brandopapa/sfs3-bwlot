@@ -169,14 +169,17 @@ if ($year_name && $me) {
 			$curr_sort = 255;
 	}
 	$hchk=($_POST[athome])?"checked":"";
+	$hchk2=($_POST[finishstud])?"checked":"";
 	$study_str=($_POST[athome])?"'0','15'":"'0'";
+	$study_finish=($_POST[finishstud])? $study_str.=",'5'" :$study_str;
 	$athome_chk="<input type='checkbox' name='athome' OnChange='this.form.submit()' $hchk>包含在家自學學生";
+	$finish_chk="<input type='checkbox' name='finishstud' OnChange='this.form.submit()' $hchk2>包含畢業學生";
 }
 
 //--------------階段下拉選單 結束
 
 // 上方選單
-$top_str = "<form action=\"$_SERVER[PHP_SELF]\" name=\"myform\" method=\"post\">$year_seme_menu $class_year_menu $class_year_name_menu $select_ss_bar $select_stage_bar $athome_chk</form>";
+$top_str = "<form action=\"$_SERVER[PHP_SELF]\" name=\"myform\" method=\"post\">$year_seme_menu $class_year_menu $class_year_name_menu $select_ss_bar $select_stage_bar $athome_chk $finish_chk</form>";
 
 if($curr_sort){
 	$main="<table bgcolor=#000000 border=0 cellpadding=2 cellspacing=1>
