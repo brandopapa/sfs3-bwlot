@@ -358,7 +358,9 @@ function list_teacher_table($sel_year,$sel_seme,$teacher_sn="",$set_class_id="",
 	//$sections= 7 ;
 	*/
 	if($sections==0)
-		trigger_error("請先設定 $sel_year 學年 $sel_seme 學期 [成績設定]項目,再操作課表設定<br><a href=\"$SFS_PATH_HTML/modules/every_year_setup/score_setup.php\">進入設定</a>",E_USER_ERROR);
+		trigger_error("請先設定 ".$sel_year." 學年 ".$sel_seme." 學期 [成績設定]項目,再操作課表設定<br><a href='".$SFS_PATH_HTML."modules/every_year_setup/score_setup.php'>進入設定</a>",E_USER_ERROR);
+		//
+		//trigger_error("請先設定 $sel_year 學年 $sel_seme 學期 [成績設定]項目,再操作課表設定<br><a href=\"$SFS_PATH_HTML/modules/every_year_setup/score_setup.php\">進入設定</a>",E_USER_ERROR);
 
   //----------------------------------------------------------
 	//班級選單

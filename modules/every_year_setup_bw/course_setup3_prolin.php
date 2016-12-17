@@ -43,7 +43,9 @@ if(empty($sel_seme))$sel_seme = curr_seme(); //目前學期
 if($error==1){
 	$act="error";
 	$error_title="無年級和班級設定";
-	$error_main="找不到第 ".$sel_year." 學年度，第 ".$sel_seme." 學期的年級、班級設定，故您無法使用此功能。<ol><li>請先到『<a href='".$SFS_PATH_HTML."modules/every_year_setup/class_year_setup.php'>班級設定</a>』設定年級以及班級資料。<li>以後記得每一學期的學期出都要設定一次喔！</ol>";
+	$error_main="找不到第 ".$sel_year." 學年度，第 ".$sel_seme." 學期的年級、班級設定，故您無法使用此功能。<ol><li>請先到『<a href='".$SFS_PATH_HTML."modules/every_year_setup_bw/class_year_setup.php'>班級設定</a>』設定年級以及班級資料。<li>以後記得每一學期的學期出都要設定一次喔！</ol>";
+	//20161217 Update by Brando
+	//$error_main="找不到第 ".$sel_year." 學年度，第 ".$sel_seme." 學期的年級、班級設定，故您無法使用此功能。<ol><li>請先到『<a href='".$SFS_PATH_HTML."modules/every_year_setup/class_year_setup.php'>班級設定</a>』設定年級以及班級資料。<li>以後記得每一學期的學期出都要設定一次喔！</ol>";
 }
 
 //執行動作判斷
@@ -393,7 +395,9 @@ function list_class_table($sel_year,$sel_seme,$class_id="",$mode=""){
 	$sm=&get_all_setup("",$sel_year,$sel_seme,$the_class[year]);
 	$sections=$sm[sections];
 	if($sections==0)
-		trigger_error("請先設定 $sel_year 學年 $sel_seme 學期 [成績設定]項目,再操作課表設定<br><a href=\"$SFS_PATH_HTML/modules/every_year_setup/score_setup.php\">進入設定</a>",E_USER_ERROR);
+		trigger_error("請先設定 ".$sel_year." 學年 ".$sel_seme." 學期 [成績設定]項目,再操作課表設定<br><a href='".$SFS_PATH_HTML."modules/every_year_setup_bw/score_setup.php'>進入設定</a>",E_USER_ERROR);
+		//20161217 Update by Brando
+		//trigger_error("請先設定 $sel_year 學年 $sel_seme 學期 [成績設定]項目,再操作課表設定<br><a href=\"$SFS_PATH_HTML/modules/every_year_setup/score_setup.php\">進入設定</a>",E_USER_ERROR);
 
 	//年級與班級選單
 	$class_select=&get_class_select($sel_year,$sel_seme,"","class_id","jumpMenu",$class_id);
