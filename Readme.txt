@@ -1,5 +1,5 @@
 
-$Id: Readme.txt 5310 2009-01-10 07:57:56Z hami $
+# 私立福智國中 SFS3
 
-�аѦ�  WEB_INSTALL_README �����w�˻����C
+網管人員:dev管理  張國華
 
