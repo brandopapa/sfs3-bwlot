@@ -1,0 +1,2 @@
+於stud_seme_talk 資料表新增訪談方式 -- by infodaes 2014-08-24 
+ALTER TABLE `stud_seme_talk` ADD `interview_method` varchar(10) AFTER `interview`;

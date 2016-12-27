@@ -12,12 +12,10 @@ $old_error_handler = set_error_handler("error_die");
 $SFS_PATH = "/home/sfs6/dev2.sfs3.bwsh.kindn.es";
 
 //學務管理首頁程式 URL (設定時，保留最後的 "/" )
-//$SFS_PATH_HTML ="http://dev2.sfs3.bwsh.kindn.es/"; 
-$SFS_PATH_HTML = "http://sfs3.bwlot.us/";
+$SFS_PATH_HTML ="http://dev2.sfs3.bwsh.kindn.es/"; 
 
 //學校首頁 URL
-//$HOME_URL ="http://dev2.sfs3.bwsh.kindn.es/";
-$HOME_URL = "http://sfs3.bwlot.us/";
+$HOME_URL ="http://dev2.sfs3.bwsh.kindn.es/";
 
 //學校IP 範圍
 /*半個c class 設定 (起始IP 與 結束IP 以 - 隔開)
@@ -118,8 +116,8 @@ $DEFAULT_STUD_LOG_PASS = "1111";
 $DEFAULT_FAM_LOG_PASS = "3333";
 
 //上課日數設定
-//$weekN = array('一','二','三','四','五');
-$weekN = array('一','二','三','四','五','六','日');
+$weekN = array('一','二','三','四','五');
+
 
 //----一些名稱選項
 $school_kind_name=array("幼稚園","一年","二年","三年","四年","五年","六年","一年","二年","三年","一年","二年","三年");
@@ -135,7 +133,7 @@ $class_name_kind_3=array("","忠","孝","仁","愛","信","義","和","平");
 
 
 //------------底下設定勿改
-require "$SFS_PATH/include/sfs_API.php"; //系統核心函式庫
+require "$SFS_PATH/include2/sfs_API.php"; //系統核心函式庫
 //重新認證檔案url
 $rlogin = $SFS_PATH."/rlogin.php";
 
@@ -145,7 +143,7 @@ $conID = @mysql_connect ("$mysql_host","$mysql_user","$mysql_pass") or trigger_e
 
 //ADODB 物件
 require_once("$SFS_PATH/pnadodb/adodb.inc.php"); # load code common to ADODB
-require_once("$SFS_PATH/include/sfs_case_ado.php"); # 函式庫
+require_once("$SFS_PATH/include2/sfs_case_ado.php"); # 函式庫
 
 $DB_TYPE = 'mysql';
 $CONN = &ADONewConnection($DB_TYPE);  # create a connection
