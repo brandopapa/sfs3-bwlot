@@ -60,7 +60,7 @@ $absence_score_max=5;
 //均衡學習單一領域及格積分得分
 $balance_score=3;
 $balance_score_max=9;
-$balance_semester=array('1031','1032','1041','1042','1051');
+$balance_semester=array('1031','1032','1041','1042','1051');     //取國1~國3上
 $balance_area=array('health','art','complex');
 /*
 //社團積分得分(中投)
@@ -92,7 +92,7 @@ $race_score_max=9;
 $fitness_score_one=3;
 $fitness_score_one_max=6;
 $fitness_addon=array('gold'=>0,'silver'=>0,'copper'=>0);
-$fitness_semester="'1021','1022','1031','1032','1041'";
+$fitness_semester="'1031','1032','1041','1042','1051'";		//取國1~國3上
 $fitness_score_max=6;
 $fitness_medal=array('gold'=>'金','silver'=>'銀','copper'=>'銅','no'=>'--');
 

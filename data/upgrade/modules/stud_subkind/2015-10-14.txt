@@ -1,0 +1,2 @@
+增加ext1 ext2 欄位成功  -- by infodaes (2015-10-14)
+ALTER TABLE `stud_subkind_ref` ADD `ext1_title` VARCHAR(20) NULL , ADD `ext2_title` VARCHAR(20) NULL , ADD `ext1` TEXT NULL , ADD `ext2` TEXT NULL ;

@@ -1,0 +1,2 @@
+取消 `stud_base` 資料表 stud_sex 欄位的 unsign 設定 -- by smallduh 2015-08-18 
+ALTER TABLE `stud_base` CHANGE `stud_sex` `stud_sex` TINYINT( 3 ) NULL DEFAULT NULL;
