@@ -1207,23 +1207,18 @@
 </table:table-row>
 <table:table-row>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17a">
-<text:span text:style-name="T16a">倫理道德</text:span>
-<text:span text:style-name="T17a">(</text:span>
-<text:span text:style-name="T16a">孝經</text:span>
-<text:span text:style-name="T17a">/</text:span>
-<text:span text:style-name="T16a">德討</text:span>
-<text:span text:style-name="T17a">)</text:span>
+<text:p text:style-name="P17">
+<text:span text:style-name="T7">德育實踐檢討</text:span>
 </text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生命主軸-德討/孝經加權}</text:p>
+<text:p text:style-name="P17">{生命主軸-德育實踐檢討加權}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.A2" table:value-type="string">
-<text:p text:style-name="P17">{生命主軸-德討/孝經等第}</text:p>
+<text:p text:style-name="P17">{生命主軸-德育實踐檢討等第}</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Table5.B2.4.1" table:value-type="string">
-<text:p text:style-name="P17">{生命主軸-德討/孝經努力程度}</text:p>
+<text:p text:style-name="P17">{生命主軸-德育實踐檢討努力程度}</text:p>
 </table:table-cell>
 </table:table-row>
 <table:table-row>
