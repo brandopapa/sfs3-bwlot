@@ -1,6 +1,6 @@
 <?php
 //$Id: function.php 7018 2012-11-30 02:11:40Z chiming $
-
+include "config.php";
 //標籤格式化
 function make_list($array=array(),$txt="",$other_title="",$other=array(),$table=true){
 
@@ -54,7 +54,7 @@ function get_mark($data=array(),$other=""){
 
 //取得學校資料
 function get_school_base_array(){
-        global $CONN;
+        global $CONN,$draw_img_width,$draw_img_height,$sign_1_form,$sign_2_form,$sign_3_form,$sign_1_name,$sign_2_name,$sign_3_name,$SFS_PATH_HTML,$UPLOAD_PATH,$UPLOAD_URL;
         $sql_select = "select * from school_base";
         $recordSet=$CONN->Execute($sql_select);
         $school_data = $recordSet->FetchRow();
@@ -67,7 +67,85 @@ function get_school_base_array(){
         $school['學校地址']=$school_data["sch_addr"];
         $school['學校電話']=$school_data["sch_phone"];
         $school['學校傳真']=$school_data["sch_fax"];
-
+		
+        //取得校長名稱  20170109 add by Brando
+        //$sql_select = "select name from teacher_base as a,teacher_post as b where b.teach_title_id=1 and a.teacher_sn=b.teacher_sn order by b.update_time desc Limit 1";
+        /*
+        $sql_select = "select name from teacher_base as a left join teacher_post as b on a.teacher_sn=b.teacher_sn";
+        $sql_select = $sql_select." where b.teach_title_id=1";   //職稱:校長
+        $sql_select = $sql_select." and b.post_kind=1";          //職別代碼:校長
+        $sql_select = $sql_select." and a.teach_condition=0";    //在職
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+        $school['校長']=$school_data["name"];
+        */
+        
+        
+        //取得教務主任名稱 20170109 add by Brando
+        //$sql_select = "select name from teacher_base as a,teacher_post as b where b.teach_title_id=2 and a.teacher_sn=b.teacher_sn order by b.update_time desc Limit 1";
+        /*
+        $sql_select = "select name from teacher_base as a left join teacher_post as b on a.teacher_sn=b.teacher_sn";
+        $sql_select = $sql_select." where b.teach_title_id=2";   //職稱:教務主任
+        $sql_select = $sql_select." and b.post_kind=3";          //職別代碼:主任
+        $sql_select = $sql_select." and a.teach_condition=0";    //在職
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+        $school['教務主任']=$school_data["name"];
+        */
+        
+        //取得學務主任名稱 20170109 add by Brando
+        //$sql_select = "select name from teacher_base as a,teacher_post as b where b.teach_title_id=2 and a.teacher_sn=b.teacher_sn order by b.update_time desc Limit 1";
+        /*
+        $sql_select = "select name from teacher_base as a left join teacher_post as b on a.teacher_sn=b.teacher_sn";
+        $sql_select = $sql_select." where b.teach_title_id=3";   //職稱:學務主任
+        $sql_select = $sql_select." and b.post_kind=3";          //職別代碼:主任
+        $sql_select = $sql_select." and a.teach_condition=0";    //在職
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+        $recordSet=$CONN->Execute($sql_select);
+        $school_data = $recordSet->FetchRow();
+        $school['學務主任']=$school_data["name"];
+        */
+        
+        //取得簽章 20170109 add by Brando
+        //if ($draw_img_width=='') $draw_img_width="3.1cm";
+        //if ($draw_img_height=='') $draw_img_height="0.8cm";
+        //校長簽章檔
+        if ($sign_1_form=="" || $sign_1_form==1) {
+			if (is_file($UPLOAD_PATH."school/title_img/title_1")){
+				$title_img = $SFS_PATH_HTML.$UPLOAD_URL."school/title_img/title_1";
+				$sign_1 = $title_img;
+			}
+        } elseif ($sign_1_form==2) {
+        	$sign_1=$sign_1_name;
+        }
+        $school['SIGN1']=$sign_1;
+        //教務主任簽章檔
+        if ($sign_2_form=="" || $sign_2_form==1) {
+        	if (is_file($UPLOAD_PATH."school/title_img/title_2")){
+        		$title_img = $SFS_PATH_HTML.$UPLOAD_URL."school/title_img/title_2";
+        		$sign_2 = $title_img;
+        		//$sign_2 = "<draw:image draw:style-name=\"fr2\" draw:name=\"signature2\" text:anchor-type=\"paragraph\" svg:x=\"0.73cm\" svg:y=\"0.344cm\" svg:width=\"$draw_img_width\" svg:height=\"$draw_img_height\" draw:z-index=\"1\" xlink:href=\"$title_img\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>";
+        	}
+        } elseif ($sign_2_form==2) {
+        	$sign_2=$sign_2_name;
+        }
+        $school['SIGN2']=$sign_2;
+        
+        //學務主任簽章檔
+        if ($sign_3_form=="" || $sign_3_form==1) {
+        	if (is_file($UPLOAD_PATH."school/title_img/title_3")){
+        		$title_img = $SFS_PATH_HTML.$UPLOAD_URL."school/title_img/title_3";
+				$sign_3 = $title_img;
+        		//$sign_3 = "<draw:image draw:style-name=\"fr3\" draw:name=\"signature3\" text:anchor-type=\"paragraph\" svg:x=\"0.723cm\" svg:y=\"0.344cm\" svg:width=\"$draw_img_width\" svg:height=\"$draw_img_height\" draw:z-index=\"2\" xlink:href=\"$title_img\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>";
+        	}
+        } elseif ($sign_3_form==2) {
+        	$sign_3=$sign_3_name;
+        }
+        $school['SIGN3']=$sign_3;
+        
         return $school;
 }
 
