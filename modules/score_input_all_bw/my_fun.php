@@ -260,7 +260,8 @@ function class_id_2_student_sn($class_id){
 //本校目前學年與學期下拉式選單
 function select_year_seme($id,$col_name){
     global $CONN;
-    $sql="select * from school_class";
+    //20170117 Update by Brando put order in here
+    $sql="select * from school_class order by year desc,semester";
     $rs=$CONN->Execute($sql);
 
     $option="<option value=''>選擇學年度</option>\n";
@@ -286,7 +287,8 @@ function select_year_seme($id,$col_name){
 //本校目前年級下拉式選單
 function select_school_class($id,$col_name,$sel_year,$sel_seme){
     global $CONN;
-    $sql="select * from school_class where year=$sel_year and semester=$sel_seme";
+    //20170117 Update by Brando put order in here
+    $sql="select * from school_class where year=$sel_year and semester=$sel_seme order by c_year";
     $rs=$CONN->Execute($sql);
     $school_kind_name=array("幼稚園","一年","二年","三年","四年","五年","六年","一年","二年","三年","一年","二年","三年");
     $option="<option value=''>選擇年級</option>\n";
@@ -311,7 +313,8 @@ function select_school_class($id,$col_name,$sel_year,$sel_seme){
 function select_school_class_name($c_year,$id,$col_name,$sel_year,$sel_seme){
     global $CONN;
     if(empty($c_year)) $c_year=1;
-    $sql="select * from school_class where year=$sel_year and semester=$sel_seme and c_year=$c_year";
+    //20170117 Update by Brando put order in here
+    $sql="select * from school_class where year=$sel_year and semester=$sel_seme and c_year=$c_year order by c_sort";
     $rs=$CONN->Execute($sql);
     $option="<option value=''>選擇班級</option>\n";
     $i=0;
