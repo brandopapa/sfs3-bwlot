@@ -431,7 +431,7 @@
 		</style:style>
 		<style:style style:name="P18" style:family="paragraph"
 			style:parent-style-name="Standard">
-			<style:properties fo:color="#000080"
+			<style:properties fo:color="#000000"
 				style:font-name="標楷體" fo:font-size="14pt" style:text-underline="none"
 				style:text-underline-color="font-color" style:font-name-asian="標楷體"
 				style:font-size-asian="14pt" style:font-weight-asian="bold"
