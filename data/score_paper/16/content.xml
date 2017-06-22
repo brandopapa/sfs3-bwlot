@@ -432,8 +432,10 @@
 		<style:style style:name="P18" style:family="paragraph"
 			style:parent-style-name="Standard">
 			<style:properties fo:color="#000080"
-				style:font-name="標楷體" style:text-underline="none"
+				style:font-name="標楷體" fo:font-size="14pt" style:text-underline="none"
 				style:text-underline-color="font-color" style:font-name-asian="標楷體"
+				style:font-size-asian="14pt" style:font-weight-asian="bold"
+				style:font-size-complex="14pt" style:font-weight-complex="bold"
 				fo:text-align="center" style:justify-single-word="false" />
 		</style:style>
 		<style:style style:name="P19" style:family="paragraph"
@@ -1442,7 +1444,7 @@
 				</table:table-cell>
 				<table:table-cell table:style-name="Table4.D2"
 					table:number-columns-spanned="2" table:value-type="string">
-					<text:p text:style-name="P18"></text:p>
+					<text:p text:style-name="P18">{導師}</text:p>
 				</table:table-cell>
 				<table:covered-table-cell />
 			</table:table-row>

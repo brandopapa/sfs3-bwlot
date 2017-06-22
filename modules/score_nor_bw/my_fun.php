@@ -844,14 +844,32 @@ class data_student {
 	function get_class_leader_data($student_sn="") {
 		global $CONN;
 		$sql="select c.seme,c.kind,IFNULL(c.title,'---') as title from chc_leader c left join association a on a.student_sn = c.student_sn and a.seme_year_seme = c.seme where c.student_sn='$student_sn' order by c.seme,c.kind";
-    $res = $CONN->Execute($sql) or die("Sql error, ".$sql);
+    	$res = $CONN->Execute($sql) or die("Sql error, ".$sql);
+    	$seme_index_next='';
+    	$title_append_next='';
 		while(!$res->EOF) {
+			$seme_index = $res->fields['seme'];
+			$title_append= $res->fields['title'];
 			if ($res->fields['kind'] == '0'){
-			  $this->title_arr[$res->fields['seme']]['class_title']= $res->fields['title'];
-		  }
-		  else{
-		  	$this->title_arr[$res->fields['seme']]['club_title']= $res->fields['title'];
-		  }
+				//20170621 update by Brando for multiple class_title in a seme year
+				if ($seme_index_next==$seme_index) {
+					$this->title_arr[$res->fields['seme']]['class_title'] = ($title_append_next=='') ? $title_append : $title_append_next.'; '.$title_append;
+				} else {
+					$this->title_arr[$res->fields['seme']]['class_title'] = $title_append;
+				}
+				//$this->title_arr[$res->fields['seme']]['class_title'] = ($seme_index_next==$seme_index) ? $title_append_next.','.$title_append : $title_append;
+		  	}
+		  	else {
+		  		//20170621 update by Brando for multiple club_title in a seme year
+		  		if ($seme_index_next==$seme_index) {
+		  			$this->title_arr[$res->fields['seme']]['club_title'] = ($title_append_next=='') ? $title_append : $title_append_next.'; '.$title_append;
+		  		} else {
+		  			$this->title_arr[$res->fields['seme']]['club_title'] = $title_append;
+		  		}
+		  		//$this->title_arr[$res->fields['seme']]['club_title']= $title_arr[$res->fields['seme']]['class_title'].','.$res->fields['title'];
+		  	}
+		  	$seme_index_next = $seme_index;
+		  	$title_append_next = $title_append;
 			$res->MoveNext();
 		}
 	}	
