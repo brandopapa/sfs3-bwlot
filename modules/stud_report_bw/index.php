@@ -210,9 +210,17 @@ switch($do_key) {
 			//照片  http://localhost/sfs3/data/photo/student/90/90002
 			//原SXW內的XML定義==>  <draw:image draw:style-name="fr1" draw:name="Graphic1" text:anchor-type="as-char" svg:width="1.956cm" svg:height="2.565cm" draw:z-index="0" xlink:href="#Pictures/sample.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
 			$stud_photo_file="$UPLOAD_PATH/photo/student/$stud_study_year/$stud_id";
+			//20170729 add by Brando Chang
+			$stud_photo_img = $SFS_PATH_HTML.$UPLOAD_URL."/photo/student/$stud_study_year/$stud_id";
 	//echo "<BR>".$stud_photo_file.'====>'.file_exists($stud_photo_file);
 			if(file_exists($stud_photo_file)){
-				$data_arr[$stud_id]['photo']="$stud_id.jpg";
+				//20170729 Update by Brando Chang
+				//$data_arr[$stud_id]['photo']="$stud_id.jpg";
+				$data_arr[$stud_id]['photo'] = $stud_photo_img;
+				//20170729 Brando Chang move from context.xml
+				//<draw:image draw:style-name="fr2" draw:name="圖形1" text:anchor-type="as-char" svg:width="2.66cm" svg:height="3.487cm" draw:z-index="3" xlink:href="#Pictures/100000000000019D000001C1D53AE018.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" />
+				// end
+				
 				//'<draw:image draw:style-name="fr1" draw:name="Graphic1" text:anchor-type="as-char" svg:width="1.956cm" svg:height="2.565cm" draw:z-index="0" xlink:href="#Pictures/'.$stud_id.'.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>';
 	
 			} else {
